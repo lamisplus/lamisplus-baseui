@@ -3,7 +3,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import {
-  Form,
   Alert
 } from 'reactstrap';
 import { 
@@ -14,9 +13,7 @@ from '@material-ui/core';
 import { FaUserPlus } from "react-icons/fa";
 import { TiWarningOutline } from "react-icons/ti";
   import { makeStyles } from '@material-ui/core/styles';
-  import SearchInput from 'components/SearchBox/SearchInput';
   import Title from 'components/Title/CardTitle';
-  import DataTableList from 'components/patient/PatientList'
   import PatientList from 'components/patient/PatientSearch'
 
   const useStyles = makeStyles(theme => ({

@@ -19,7 +19,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import SearchInput from 'components/SearchBox/SearchInput';
 import Title from 'components/Title/CardTitle';
 import CheckInList from './CheckInList';
-import CheckInListPage from './CheckInListPage';
+
 
 const useStyles = makeStyles(theme => ({
     card: {

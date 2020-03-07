@@ -6,7 +6,6 @@ import {
   Form,
   Row,
   Alert,
-  Button,
 } from 'reactstrap';
 import { makeStyles } from '@material-ui/core/styles';
 import { TiWarningOutline } from "react-icons/ti";
@@ -17,12 +16,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import {
-    FaUserPlus,
-} from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import { MdDashboard } from 'react-icons/md';
 import SearchTestOrder from 'components/Hiv/SearchForm/SearchEnrolledPatients';
 
 const useStyles = makeStyles(theme => ({

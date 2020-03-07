@@ -1,7 +1,6 @@
 import Avatar from 'components/Avatar';
 import { UserCard } from 'components/Card';
 import Notifications from 'components/Notifications';
-// import SearchInput from 'components/SearchInput';
 import { notificationsData } from 'demos/header';
 import withBadge from 'hocs/withBadge';
 import React from 'react';
@@ -12,7 +11,6 @@ import {
   MdExitToApp,
   MdHelp,
   MdNotificationsActive,
-  MdNotificationsNone,
   MdPersonPin,
 } from 'react-icons/md';
 import {
@@ -31,18 +29,18 @@ import bn from 'utils/bemnames';
 
 const bem = bn.create('header');
 
-const MdNotificationsActiveWithBadge = withBadge({
-  size: 'md',
-  color: 'primary',
-  style: {
-    top: -10,
-    right: -10,
-    display: 'inline-flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  children: <small>2</small>,
-})(MdNotificationsActive);
+// const MdNotificationsActiveWithBadge = withBadge({
+//   size: 'md',
+//   color: 'primary',
+//   style: {
+//     top: -10,
+//     right: -10,
+//     display: 'inline-flex',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   children: <small>2</small>,
+// })(MdNotificationsActive);
 
 class Header extends React.Component {
   state = {
@@ -75,7 +73,7 @@ class Header extends React.Component {
   };
 
   render() {
-    const { isNotificationConfirmed } = this.state;
+    // const { isNotificationConfirmed } = this.state;
 
     return (
       <Navbar light expand className={bem.b('bg-white')}>
@@ -91,7 +89,6 @@ class Header extends React.Component {
         <Nav navbar className={bem.e('nav-right')}>
           <NavItem className="d-inline-flex">
             <NavLink id="Popover1" className="position-relative">
-              
             </NavLink>
             <Popover
               placement="bottom"

@@ -24,7 +24,6 @@ import {
 import TablePagination from '@material-ui/core/TablePagination';  
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {url} from 'axios/url';
 import SearchTestOrder from 'components/Laboratory/SearchForm/SearchTestOrder';
 
 const useStyles = makeStyles({  
