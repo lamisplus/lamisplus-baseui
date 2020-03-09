@@ -5,7 +5,7 @@ import { saveForm, selectError, FormEdit, Errors, FormBuilder } from 'react-form
 import {Card,CardContent,} from '@material-ui/core';
 
 const Create = props => {
-  const [res, setRes] = React.useState("sad");
+  const [res, setRes] = React.useState([]);
   return (
     <Page title="Form Builder" >
    <Card >
@@ -14,15 +14,14 @@ const Create = props => {
       <hr />
       <Errors errors={props.errors} />
       <FormBuilder form={{display: 'form'}} saveText={'Create Form'} onChange={(schema) => {
-        console.log(schema);
-        const dd = schema.toString;
-        setRes(dd);
-        
+        console.log(JSON.stringify(schema));
+        setRes(JSON.stringify(schema));
         }} />
       <br></br>
       <div>
   <h4>Json Form</h4>
-        {res}
+      
+        
       </div>
     </CardContent>
     </Card>

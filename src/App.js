@@ -28,7 +28,7 @@ const ViewResult = React.lazy(() => import('components/Laboratory/ViewResult'));
 const TestResult = React.lazy(() => import('components/Laboratory/TestResult'));
 const PatientsPage = React.lazy(() => import('components/patient/PatientsPage'));
 const FormBuilder = React.lazy(() => import('components/FormManager/FormBuilder'));
-
+const ViewForm = React.lazy(() => import('components/FormManager/ViewForm'));
 /* Pharmacy page loading */
 /* Pharmacy page loading */
 const PharmacyPage = React.lazy(() => import('components/Pharmacy/PharmacyPage'));
@@ -163,7 +163,7 @@ class App extends React.Component {
                 <Route exact path="/enroll-patient-dashboard" component={EnrolledPatientsDashboard} />
 
                 <Route exact path="/form-builder" component={FormBuilder} />
-
+                <Route exact path="/view-form" component={ViewForm} />
                 
                {/* The rout to that DataTabel */}
                <Route exact path="/data-table1" component={DataTable1} />
