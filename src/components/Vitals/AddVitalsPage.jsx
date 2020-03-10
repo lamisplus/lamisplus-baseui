@@ -19,7 +19,6 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import Spinner from 'react-bootstrap/Spinner';
 // React Notification
 import { toast } from "react-toastify";
-import { ToastContainer } from "react-toastify";
 //Date Picker
 import 'react-widgets/dist/css/react-widgets.css';
 import { DateTimePicker } from 'react-widgets';
@@ -139,16 +138,13 @@ export default function AddVitalsPage(props) {
                             />
                             </FormGroup>
                             </Col>
-                            
                             <Col md={6}>
                             <FormGroup>
                                 <Label for="middleName">Pulse(bpm)</Label>
-                                
                                 <Input type="text" name="pulse" id="pulse" placeholder=" " value={formDataForVitals.pulse}
                                     onChange={onChangeFormdata}/>
                             </FormGroup>
                             </Col>
-                            
                         </Row>
                         <Row form>
                             <Col md={6}>
@@ -159,11 +155,9 @@ export default function AddVitalsPage(props) {
                                     onChange={onChangeFormdata}/>
                             </FormGroup>
                             </Col>
-                            
                             <Col md={6}>
                             <FormGroup>
                                 <Label for="middleName">Temparature (C)</Label>
-                                
                                 <Input type="text" name="temperature" id="temperature" placeholder="" value={formDataForVitals.temperature}
                                     onChange={onChangeFormdata}/>
                             </FormGroup>
@@ -180,19 +174,15 @@ export default function AddVitalsPage(props) {
                             <Col md={6}>
                             <FormGroup>
                                 <Label for="middleName">Systolic(mmhg)</Label>
-                                
                                 <Input type="text" name="systolic" id="systolic" placeholder=""  value={formDataForVitals.systolic}
                                     onChange={onChangeFormdata}/>
                             </FormGroup>
                             </Col>
-                            
-                           
                         </Row>
                         <Row form>
                         <Col md={6}>
                             <FormGroup>
                                 <Label for="middleName">Weight Kg</Label>
-                                
                                 <Input type="text" name="bodyWeight" id="bodyWeight" placeholder="" value={formDataForVitals.bodyWeight}
                                     onChange={onChangeFormdata}/>
                             </FormGroup>

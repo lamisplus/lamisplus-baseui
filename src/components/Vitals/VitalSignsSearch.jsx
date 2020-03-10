@@ -10,19 +10,14 @@ import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import axios from 'axios';  
-// import {
-//     MdCheckCircle,
-// } from 'react-icons/md';
-import {
-    IoMdEye
-} from 'react-icons/io';
+
 import {
     MdAddBox
 } from 'react-icons/md';
 import {
     FaUserCheck
 } from 'react-icons/fa';
-import {Link} from 'react-router-dom';
+
 import { Modal, ModalBody,  ModalHeader} from 'reactstrap';
 import AddVitalsPage from 'components/Vitals/AddVitalsPage';
 import AssignClinician from 'components/Vitals/AssignClinician';

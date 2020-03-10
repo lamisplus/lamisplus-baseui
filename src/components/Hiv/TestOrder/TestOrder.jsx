@@ -95,8 +95,7 @@ export default function ConsultationPage(props) {
     //const [tests, setTests] = React.useState([]);
     const [left, setLeft] = React.useState([]);
     const [right, setRight] = React.useState([]);
-    const [showLoading, setShowLoading] = useState(false);  
-    const [errorMessage, setErrorMessage] = useState('');
+    const [showLoading, setShowLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
 
     const leftChecked = intersection(checked, left);

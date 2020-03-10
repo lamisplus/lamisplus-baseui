@@ -14,7 +14,6 @@ import {
     FaPencilAlt
 } from 'react-icons/fa';
 import {Col, Form, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row} from 'reactstrap';
-import AddVitalsPage from 'components/Vitals/AddVitalsPage';
 import {Card, CardContent} from '@material-ui/core';
 import MatButton from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';

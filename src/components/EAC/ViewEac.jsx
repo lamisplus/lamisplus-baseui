@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import {
     Button,
     Form,
-    Alert
 } from 'reactstrap';
 import {
     Card,
@@ -12,7 +11,6 @@ import {
     Typography,
 }
     from '@material-ui/core';
-import { TiWarningOutline } from "react-icons/ti";
 
 import { makeStyles } from '@material-ui/core/styles';
 import SearchInput from 'components/SearchBox/SearchInput';
@@ -21,8 +19,7 @@ import ViewEacSearch from 'components/EAC/ViewEacSearch';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import {MdKeyboardBackspace} from 'react-icons/md';
-// import ViewStatusSearch from './ViewStatusSearch';
+
 
 const useStyles = makeStyles(theme => ({
 

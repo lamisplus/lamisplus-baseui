@@ -6,8 +6,7 @@ import {
   Col,
   Form,
   Row,
-  FormGroup,
-  Button,Modal, ModalHeader, ModalBody, ModalFooter,Label,Input
+  Button,Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 import { MdSave, MdViewList} from 'react-icons/md';
 import {TiArrowBack} from 'react-icons/ti';

@@ -9,7 +9,6 @@ import {
     Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input,
 } from 'reactstrap';
 import { makeStyles } from '@material-ui/core/styles';
-import { TiWarningOutline } from "react-icons/ti";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -52,10 +51,9 @@ const rows = [
 
 const PendingPrescription = (props) => {
     const classes = useStyles();
-    const [modal, setModal] = useState(false);
     const [modal2, setModal2] = useState(false);
 
-    const toggle = () => setModal(!modal);
+
     const toggle2 = () => setModal2(!modal2);
     return (
         <Page title="Index Contact Tracking" >

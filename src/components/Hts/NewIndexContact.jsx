@@ -1,9 +1,8 @@
 import Page from 'components/Page';
 import React from 'react';
 import {
-    Button,
     Form,
-    Alert, Row, Col, FormGroup, Label, Input
+    Row, Col, FormGroup, Label, Input
 } from 'reactstrap';
 import {
     Card,
@@ -16,14 +15,9 @@ import Title from 'components/Title/CardTitle';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import {DateTimePicker} from 'react-widgets';
-import Spinner from 'react-bootstrap/Spinner';
 import MatButton from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
-import {Link} from 'react-router-dom';
-import {MdKeyboardBackspace} from 'react-icons/md';
-
 const useStyles = makeStyles(theme => ({
 
     card: {
