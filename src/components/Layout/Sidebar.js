@@ -75,7 +75,8 @@ const navItems = [
   { to: '/dashboard', name: 'Dashboard', exact: true, Icon: MdDashboard },
   { to: '/patients', name: 'Registration', exact: false, Icon: FaUsers },
   { to: '/checkin', name: 'Check In', exact: false, Icon: FaXRay },
-  // { to: '/testpage', name: 'Test Page', exact: false, Icon: FaXRay },
+   { to: '/form-builder', name: 'Form Builder', exact: false, Icon: FaXRay },
+   { to: '/view-form', name: 'View Form', exact: false, Icon: FaXRay },
   // { to: '/testpage2', name: 'Test Page 2', exact: false, Icon: FaXRay },
 ];
 const PagesHts = [

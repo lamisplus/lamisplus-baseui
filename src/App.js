@@ -27,7 +27,8 @@ const CollectedSample = React.lazy(() => import('components/Laboratory/Collected
 const ViewResult = React.lazy(() => import('components/Laboratory/ViewResult'));
 const TestResult = React.lazy(() => import('components/Laboratory/TestResult'));
 const PatientsPage = React.lazy(() => import('components/patient/PatientsPage'));
-
+const FormBuilder = React.lazy(() => import('components/FormManager/FormBuilder'));
+const ViewForm = React.lazy(() => import('components/FormManager/ViewForm'));
 /* Pharmacy page loading */
 /* Pharmacy page loading */
 const PharmacyPage = React.lazy(() => import('components/Pharmacy/PharmacyPage'));
@@ -77,6 +78,7 @@ const DataTable1 = React.lazy(() => import('pages/DataTable/DataTable1'));
 const DataTable2 = React.lazy(() => import('pages/DataTable/DataTable2'));
 const TestPage = React.lazy(() => import('pages/TestPage'));
 const TestPage2 = React.lazy(() => import('pages/TestPage2'));
+
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
 };
@@ -159,6 +161,10 @@ class App extends React.Component {
                 <Route exact path="/eac-search" component={EacSearch}/>
                 <Route exact path="/view-eac" component={ViewEac}/>
                 <Route exact path="/enroll-patient-dashboard" component={EnrolledPatientsDashboard} />
+
+                <Route exact path="/form-builder" component={FormBuilder} />
+                <Route exact path="/view-form" component={ViewForm} />
+                
                {/* The rout to that DataTabel */}
                <Route exact path="/data-table1" component={DataTable1} />
                <Route exact path="/data-table2" component={DataTable2} />
