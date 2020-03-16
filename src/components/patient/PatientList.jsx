@@ -27,10 +27,12 @@ import {
 import {
   MdDeleteForever
 } from 'react-icons/md';
-
 import axios from 'axios';
 import {url} from 'axios/url';
+import * as actions from "../../store/actions/patients/patients";
+import {connect} from 'react-redux';
   
+
 
 const useStyles = makeStyles({  
   root: {  
@@ -59,8 +61,10 @@ const StyledTableRow = withStyles(theme => ({
 
   
 
-export default function PatientList(props) {  
-  const classes = useStyles();  
+function PatientList(props) { 
+
+  const classes = useStyles(); 
+  
   const [page, setPage] = React.useState(0);  
   const [data, setData] = useState([]);   
   const [rowsPerPage, setRowsPerPage] = React.useState(5);  
@@ -86,11 +90,20 @@ export default function PatientList(props) {
     setPage(0);  
   };  
 
-  
+  useEffect(() => {
+    props.fetchAllPatients()
+}, [])//componentDidMount
   
   return (  
 
-    <Paper className={classes.root}>  
+    <Paper className={classes.root}> 
+    <br/>
+    <button onClick={props.fetchPatients}> Fetch Users  </button> 
+    <br/>
+    {props.patients.length === 0 ? <p>There is no User</p>
+      :props.patients.map(patient => <p>{patient.email} - {patient.first_name}</p>) 
+      }
+    <br/>
 
       <TableContainer className={classes.container}>  
 
@@ -118,7 +131,7 @@ export default function PatientList(props) {
 
           <TableBody>  
 
-            {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {  
+            {props.patientsList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {  
               return (  
 
                 <StyledTableRow >  
@@ -163,7 +176,7 @@ export default function PatientList(props) {
             })}  
 
           </TableBody>  
-        </Table>  
+        </Table> 
 
       </TableContainer>  
 
@@ -190,3 +203,16 @@ export default function PatientList(props) {
   );  
 
 } 
+
+
+const mapStateToProps = state => ({
+  
+  patientsList: state.patients.list
+})
+
+const mapActionToProps = {
+  fetchAllPatients: actions.fetchAll,
+  deletePatient: actions.Delete
+}
+
+export default connect(mapStateToProps, mapActionToProps)(PatientList);

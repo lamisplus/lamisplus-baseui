@@ -2,19 +2,15 @@ import Page from 'components/Page';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import {
-  Alert
-} from 'reactstrap';
-import { 
-    Card,
-    CardContent,   
-}
+import { Alert } from 'reactstrap';
+import { Card,CardContent }
 from '@material-ui/core';
 import { FaUserPlus } from "react-icons/fa";
 import { TiWarningOutline } from "react-icons/ti";
-  import { makeStyles } from '@material-ui/core/styles';
-  import Title from 'components/Title/CardTitle';
-  import PatientList from 'components/patient/PatientSearch'
+import { makeStyles } from '@material-ui/core/styles';
+import Title from 'components/Title/CardTitle';
+import PatientList from 'components/patient/PatientSearch';
+
 
   const useStyles = makeStyles(theme => ({
     card: {
@@ -26,10 +22,13 @@ import { TiWarningOutline } from "react-icons/ti";
     
   }));
 
-const PatientPage = () => {
+const PatientPage = (props) => {
     const classes = useStyles();
+
   return (
+    
     <Page title="Patients" >
+      
         <Alert color="primary">
             <TiWarningOutline 
                 size="30"
@@ -58,5 +57,7 @@ const PatientPage = () => {
 </Page>
   );
 };
+
+
 
 export default PatientPage;

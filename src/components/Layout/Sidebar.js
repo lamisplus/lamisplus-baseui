@@ -9,7 +9,7 @@ import {
   MdPages,
   MdAirlineSeatFlat,
 } from 'react-icons/md';
-import { GiTreeBeehive} from 'react-icons/gi';
+// import { GiTreeBeehive} from 'react-icons/gi';
 import { FaUserPlus, FaVials, FaXRay, FaUserMd, FaUsers} from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import {
@@ -55,21 +55,7 @@ const PageGeneralClinic = [
   { to: '/vital-signs', name: 'Vital Signs', exact: false, Icon: MdAirlineSeatFlat },
   { to: '/consultation', name: 'Consultation', exact: false, Icon: FaUserMd },
 ];
-const PagesAnc = [
-  { to: '/index-Search', name: 'Index Contract Tracking', exact: false, Icon: GiTreeBeehive },
-  { to: '/hts-list', name: 'Risk Assesment', exact: false, Icon: GiTreeBeehive },
-];
-const PagesHiv = [
-  { to: '/enrollment-list', name: 'Enrollment', exact: false, Icon: GiTreeBeehive },
-  
-  
-  // { to: '/case-management', name: 'Case Management', exact: false, Icon: GiTreeBeehive },
-  // { to: '/pmtct', name: 'PMTCT', exact: false, Icon: GiTreeBeehive },
 
-  { to: '/client-status', name: 'Client Status Update', exact: false, Icon: GiTreeBeehive },
-  { to: '/eac-search', name: 'EAC', exact: false, Icon: GiTreeBeehive },
-  { to: '/democ-Search', name: 'Differentiated Care', exact: false, Icon: GiTreeBeehive },
-];
 
 const navItems = [
   { to: '/dashboard', name: 'Dashboard', exact: true, Icon: MdDashboard },
@@ -79,11 +65,7 @@ const navItems = [
    { to: '/view-form', name: 'View Form', exact: false, Icon: FaXRay },
   // { to: '/testpage2', name: 'Test Page 2', exact: false, Icon: FaXRay },
 ];
-const PagesHts = [
-  { to: '/index-Search', name: 'Risk Assessment ', exact: false, Icon: GiTreeBeehive },
 
-  
-];
 //Make it a main menu { to: '/hts-list', name: 'HTS', exact: false, Icon: GiTreeBeehive },
 // { to: '/index-Search', name: 'Index Contract Tracking', exact: false, Icon: GiTreeBeehive },
 const bem = bn.create('sidebar');
@@ -262,7 +244,7 @@ class Sidebar extends React.Component {
               </Typography>
             <Divider variant="middle" style={{backgroundColor: '#fff'}}/>
       {/* The HIV Menu  */}  
-            <NavItem
+            {/* <NavItem
               className={bem.e('nav-item')}
               onClick={this.handleClick('PagesHiv')}>
               <BSNavLink className={bem.e('nav-item-collapse')}>
@@ -300,7 +282,7 @@ class Sidebar extends React.Component {
               ))}
             </Collapse>
         {/* The HIV Menu  */}  
-          <NavItem
+          {/* <NavItem
                 className={bem.e('nav-item')}
                 onClick={this.handleClick('PagesAnc')}>
                 <BSNavLink className={bem.e('nav-item-collapse')}>
@@ -335,7 +317,7 @@ class Sidebar extends React.Component {
                     </BSNavLink>
                   </NavItem>
                 ))}
-              </Collapse>
+              </Collapse>  */}
           </Nav>
         </div>
       </aside>

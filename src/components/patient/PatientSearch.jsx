@@ -30,10 +30,7 @@ const SampleExpandedComponent = ({ data }) => (
    <b>  Date Of Registration:</b> {data.dateRegistration} </span> <br></br> <span><b>Date Of Birth:</b> {data.dob} </span>
    </div>
 );
-const handleDelete = () => {
-    
-  console.log('clicked');
-};
+
 const calculate_age = (dob) => {
   var today = new Date();
   var dateParts = dob.split("-");
@@ -143,6 +140,7 @@ const BasicTable = () => {
       subHeader
       subHeaderComponent={subHeaderComponentMemo}
       highlightOnHover={true}
+      
       striped={true}
       subHeaderAlign={'left'}
         noHeader={true}

@@ -2,14 +2,7 @@ import Page from 'components/Page';
 import React, { useState, useEffect } from 'react';
 import MatButton from '@material-ui/core/Button';
 import './PatientRegistrationPage.css'
-import {
-  Col,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-  Row,
-  Alert,
+import {Col,  Form,  FormGroup,Input, Label,Row,Alert,
 } from 'reactstrap';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -19,7 +12,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
-
 import {  Card,CardContent, }
 from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
@@ -27,23 +19,25 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { IoMdFingerPrint } from "react-icons/io";
 import { FaFileImport } from "react-icons/fa";
 import {FaPlusSquare} from 'react-icons/fa';
-import Spinner from 'react-bootstrap/Spinner';
-// import { withRouter } from 'react-router-dom';
-
-import axios from 'axios';
 import 'react-widgets/dist/css/react-widgets.css';
+import { useToasts } from "react-toast-notifications";
+import { connect } from "react-redux";
 //Date Picker
+import 'react-widgets/dist/css/react-widgets.css';
 import { DateTimePicker } from 'react-widgets';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import moment from 'moment';
 // React Notification
-import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Title from 'components/Title/CardTitle';
 import {url} from 'axios/url';
-// import CountryStates from './CountryStates';
+import * as actions from "../../store/actions/patients/patients";
+import {initialfieldState_patientRegsitration}  from './initailFieldState';
+import useForm from '../Functions/UseForm';
+
+
 //Dtate Picker package
 Moment.locale('en');
 momentLocalizer();
@@ -87,8 +81,8 @@ momentLocalizer();
 
 
 const PatientRegistration = (props) => {
+    // const [currentId, setCurrentId] = useState(0) ;
     const classes = useStyles();
-    const apiUrl = url+"patients";
     const apicountries = url+"countries";
     const apistate = url+"state/country/";
     //Getting List of Countries and State
@@ -99,80 +93,8 @@ const PatientRegistration = (props) => {
     const [relative, setRelative] = useState([{}]);
     const relationshipTypes = [{id:"1", name:"Father"},{id:"2", name:"Mother"},
     {id:"3", name:"Sister"},{id:"4", name:"Brother"}];
-
-    const [patient, setPatient] = useState({ 
-        hospitalNumber:'',
-        firstName: '',
-        lastName: '', 
-        email:'',
-        facilityId: '1',
-        dobEstimated:'',
-        educationId:'',
-        genderId:'',
-        maritalStatusId:'',
-        occupationId:'',
-        alternatePhoneNumber:'',
-        address1:'',
-        city:'',
-        countryId:'',
-        landmark:'',
-        provinceId:'',
-        zipCode:'',
-        stateId:'',
-        street:'',
-        dob:'',
-        dateRegistration: new Date()
-});  
-    //console.log(patient);  
-    const newDatenow = moment(patient.dateRegistration).format('DD-MM-YYYY');
-    const newDob = moment(patient.dob).format('DD-MM-YYYY');
-    //console.log(date2);
-    const [showLoading, setShowLoading] = useState(false);
-    //Saving of Patient Registration 
-    const savePatient = (e) => {
-      toast.info("Processing Registration");
-      setShowLoading(true);
-      e.preventDefault();
-      const data = { 
-        hospitalNumber: patient.hospitalNumber,           
-        dateRegistration: newDatenow,
-        facilityId: '1',
-        firstName: patient.firstName,
-        lastName:  patient.lastName, 
-        email:patient.email,
-        dob:newDob,
-        maritalStatusId:patient.maritalStatusId,
-        occupationId:patient.occupationId,
-        genderId:patient.genderId,
-        educationId:patient.educationId,           
-        address1:patient.address1,
-        city:'1',
-        countryId:'1',
-        zipCode:patient.zipCode,
-        stateId:'1',
-        street:patient.street,
-        provinceId: 1,
-        personRelatives: relatives,
-        titleId:1
-        };
-    console.log(data);
-
-      axios.post(apiUrl, data)
-        .then((result) => { 
-            toast.success("Patient Registration Successful!");         
-          setShowLoading(false);
-          props.history.push('/patients')
-          
-        }).catch((error) => {
-        setShowLoading(false)
-        }
-        );
-    };
-  //End of the Saving the Patient Registration
-    const onChange = (e) => {
-      e.persist();     
-      setPatient({...patient, [e.target.name]: e.target.value});
-    } 
+    const [patient, setPatient] = useState({  initialfieldState_patientRegsitration });  
+  
     //Get countries
     useEffect(() => {
         async function getCharacters() {
@@ -191,6 +113,8 @@ const PatientRegistration = (props) => {
       }, []);
 
 
+   //toast msg.
+    const { addToast } = useToasts()
     //Get States from selected country 
     const getStates = (e) => {
         setPatient({...patient, [e.target.name]: e.target.value});
@@ -249,13 +173,66 @@ const PatientRegistration = (props) => {
        
         }
 
+    // 
+    //validate({fullName:'jenny'})
+    const validate = (fieldValues = values) => {
+        let temp = { ...errors }
+        if ('hospitalNumber' in fieldValues)
+            temp.hospitalNumber = fieldValues.hospitalNumber ? "" : "This field is required."
+        if ('dateRegistration' in fieldValues)
+            temp.dateRegistration = fieldValues.dateRegistration ? "" : "This field is required."
+        if ('firstName' in fieldValues)
+            temp.firstName = fieldValues.firstName ? "" : "This field is required."
+        if ('lastName' in fieldValues)
+            temp.lastName = fieldValues.lastName ? "" : "This field is required."
+        if ('email' in fieldValues)
+            temp.email = (/^$|.+@.+..+/).test(fieldValues.email) ? "" : "Email is not valid."
+        setErrors({
+            ...temp
+        })
+
+        if (fieldValues === values)
+            return Object.values(temp).every(x => x === "")
+    }
+
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange,
+        resetForm
+    } = useForm(initialfieldState_patientRegsitration, validate)
+    
+    
+        // setValues({...values, dateRegistration: newDatenow});
+        //The Submit Button Implemenatation 
+        const handleSubmit = e => {
+            const newDatenow = moment(values.dateRegistration).format('DD-MM-YYYY');
+            //setValues({ dateRegistration: newDatenow});           
+            values['dateRegistration']= newDatenow;
+            values['personRelativeDTOList']= relatives;
+            console.log(values);
+            e.preventDefault()
+
+            
+            if (validate()) {
+                const onSuccess = () => {
+                    resetForm()
+                    addToast("Submitted successfully", { appearance: 'success' })
+                }
+                props.createPatient(values, onSuccess)
+           
+            }
+        }
+        
   return (
     <Page title="Patient Registration" >
         <ToastContainer autoClose={3000} />
         <Alert color="primary">
         All Information with Asterisks(*) are compulsory 
       </Alert>
-    <Form onSubmit={savePatient}>
+    <Form onSubmit={handleSubmit}>
          {/* First  row form entry  for Demographics*/}
         <Row>
         <Col xl={12} lg={12} md={12}>
@@ -280,7 +257,7 @@ const PatientRegistration = (props) => {
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="hospitalNumber">Patient Id</Label>
-                                <Input type="text" name="hospitalNumber" id="hospitalNumber" placeholder="Patient ID " value={patient.hospitalNumber} onChange={onChange} required/>
+                                <Input type="text" name="hospitalNumber" id="hospitalNumber" placeholder="Patient ID " value={values.hospitalNumber} onChange={handleInputChange} required/>
                             </FormGroup>
                             </Col>
                             
@@ -288,7 +265,7 @@ const PatientRegistration = (props) => {
                             <FormGroup>
                                 <Label for="middleName">Date Of Registration</Label>
                                 
-                                <DateTimePicker time={false} name="dateRegistration"  id="dateRegistration"   value={patient.dateRegistration}   onChange={value1 => setPatient({...patient, dateRegistration: value1})}
+                                <DateTimePicker time={false} name="dateRegistration"  id="dateRegistration"   value={values.dateRegistration}   onChange={value1 => setValues({...values, dateRegistration: value1})}
                                 defaultValue={new Date()} max={new Date()}
                                 
                                 required/>
@@ -300,20 +277,20 @@ const PatientRegistration = (props) => {
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="firstName">First Name</Label>
-                                <Input type="text" name="firstName" id="firstName" placeholder="First Name" value={patient.firstName} onChange={onChange} required/>
+                                <Input type="text" name="firstName" id="firstName" placeholder="First Name" value={values.firstName} onChange={handleInputChange} required/>
                             </FormGroup>
                             </Col>
                             
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="middleName">Other Name(s)</Label>
-                                <Input type="text" name="otherNames" id="otherNames" placeholder="Middle Name" value={patient.otherNames} onChange={onChange}/>
+                                <Input type="text" name="otherNames" id="otherNames" placeholder="Middle Name" value={values.otherNames} onChange={handleInputChange}/>
                             </FormGroup>
                             </Col>
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="lastName">Last Name </Label>
-                                <Input type="text" name="lastName" id="lastName" placeholder="Last Name" value={patient.lastName} onChange={onChange} required/>
+                                <Input type="text" name="lastName" id="lastName" placeholder="Last Name" value={values.lastName} onChange={handleInputChange} required/>
                             </FormGroup>
                             </Col>
                         </Row>
@@ -322,7 +299,7 @@ const PatientRegistration = (props) => {
                             <Col md={4}>
                                 <FormGroup>
                                     <Label for="maritalStatus">Gender</Label>
-                                    <Input type="select" name="genderId" id="genderId" value={patient.genderId} onChange={onChange} required>
+                                    <Input type="select" name="genderId" id="genderId" value={values.genderId} onChange={handleInputChange} required>
                                         <option value="1">Female</option>
                                         <option value="2">Male</option>
                                         
@@ -332,7 +309,7 @@ const PatientRegistration = (props) => {
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="occupation">Occupation</Label>
-                                <Input type="select" name="occupationId" id="occupationId" value={patient.occupationId} onChange={onChange}>
+                                <Input type="select" name="occupationId" id="occupationId" value={values.occupationId} onChange={handleInputChange}>
                                     <option value="1">Students</option>
                                     <option value="2">Business</option>
                                     <option value="3">Government</option>
@@ -342,7 +319,7 @@ const PatientRegistration = (props) => {
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="qualification">Hightest Qualification</Label>
-                                <Input type="select" name="educationId" onChange={onChange}>
+                                <Input type="select" name="educationId" onChange={handleInputChange}>
                                     <option value="1">PHD</option>
                                     <option value="2">MSC</option>
                                     <option value="3">BSC</option>
@@ -358,7 +335,7 @@ const PatientRegistration = (props) => {
                         <Col md={4}>
                             <FormGroup>
                                 <Label for="maritalStatus">Marital Status</Label>
-                                <Input type="select" name="maritalStatusId" id="maritalStatusId" value={patient.maritalStatusId} onChange={onChange}>
+                                <Input type="select" name="maritalStatusId" id="maritalStatusId" value={values.maritalStatusId} onChange={handleInputChange}>
                                     <option value="1">Single</option>
                                     <option value="2">Married</option>
                                     <option value="3">Divorce</option>
@@ -378,19 +355,19 @@ const PatientRegistration = (props) => {
                                         <Col md={4}>
                                         <FormGroup>
                                             <Label for="year">Year</Label>
-                                            <Input type="text" name="year" id="year" placeholder="Year" value={patient.Estimate} onChange={onChange} />
+                                            <Input type="text" name="year" id="year" placeholder="Year" value={patient.Estimate} onChange={handleInputChange} />
                                         </FormGroup>
                                         </Col>
                                         <Col md={4}>
                                         <FormGroup>
                                             <Label for="year">Months</Label>
-                                            <Input type="text" name="months" id="months" placeholder="Months" value={patient.EstimateMonths} onChange={onChange} />
+                                            <Input type="text" name="months" id="months" placeholder="Months" value={values.EstimateMonths} onChange={handleInputChange} />
                                         </FormGroup>
                                         </Col>
                                         <Col md={4}>
                                         <FormGroup>
                                             <Label for="year">Days</Label>
-                                            <Input type="text" name="days" id="days" placeholder="Days" value={patient.EstimateDays} onChange={onChange} />
+                                            <Input type="text" name="days" id="days" placeholder="Days" value={values.EstimateDays} onChange={handleInputChange} />
                                         </FormGroup>
                                         </Col>
                                 </Row>
@@ -423,20 +400,20 @@ const PatientRegistration = (props) => {
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="phoneNumber">Phone Number</Label>
-                                <Input type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone Number" value={patient.mobilePhoneNumber} 
-                                onChange={onChange} />
+                                <Input type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone Number" value={values.mobilePhoneNumber} 
+                                onChange={handleInputChange} />
                             </FormGroup>
                             </Col>
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="altPhoneNumber">Alt. Phone Number</Label>
-                                <Input type="text" name="alternatePhoneNumber" id="alternatePhoneNumber" placeholder="Alternative Number" value={patient.alternatePhoneNumber}  onChange={onChange}/>
+                                <Input type="text" name="alternatePhoneNumber" id="alternatePhoneNumber" placeholder="Alternative Number" value={values.alternatePhoneNumber}  onChange={handleInputChange}/>
                             </FormGroup>
                             </Col>
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="emailAddress">Email Address</Label>
-                                <Input type="email" name="email" id="email" placeholder="Email Address" value={patient.email} onChange={onChange}  />
+                                <Input type="email" name="email" id="email" placeholder="Email Address" value={values.email} onChange={handleInputChange}  />
                             </FormGroup>
                             </Col>
                         </Row>
@@ -459,7 +436,7 @@ const PatientRegistration = (props) => {
                                 <Col md={4}>
                                     <FormGroup>
                                         <Label for="country">Country</Label>
-                                            <Input type="select" name="countryId" id="countryId" value={patient.countryId}  onChange={getStates}>
+                                            <Input type="select" name="countryId" id="countryId" value={values.countryId}  onChange={getStates}>
                                                 {countries.map(({ label, value }) => (
                                                 <option key={value} value={value}>
                                                 {label}
@@ -473,7 +450,7 @@ const PatientRegistration = (props) => {
                                 <Col md={4}>
                                 <FormGroup>
                                     <Label for="stressAddress">State</Label>
-                                    <Input type="select" name="stateId" id="stateId" placeholder="Select State" value={patient.stateId} onChange={getProvinces}>
+                                    <Input type="select" name="stateId" id="stateId" placeholder="Select State" value={values.stateId} onChange={getProvinces}>
                                         {states.map(({ label, value }) => (
                                             <option key={value} value={value}>
                                             {label}
@@ -485,7 +462,7 @@ const PatientRegistration = (props) => {
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="lga">Province/District/LGA </Label>
-                                <Input type="select" name="provinceId" id="provinceId" placeholder="Select Province" value={patient.provinceId} onChange={onChange}>
+                                <Input type="select" name="provinceId" id="provinceId" placeholder="Select Province" value={values.provinceId} onChange={handleInputChange}>
                                         {provinces.map(({ label, value }) => (
                                             <option key={value} value={value}>
                                             {label}
@@ -502,14 +479,14 @@ const PatientRegistration = (props) => {
                         <Col md={4}>
                             <FormGroup>
                                 <Label for="city">Street Address</Label>
-                                <Input type="text" name="city" id="city" placeholder="City" value={patient.city}  onChange={onChange}/>
+                                <Input type="text" name="city" id="city" placeholder="City" value={values.city}  onChange={handleInputChange}/>
                             </FormGroup>
                             </Col>
                             
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="landMark">Land Mark</Label>
-                                <Input type="text" name="landmark" id="landmark" placeholder="Land Mark" value={patient.landmark}  onChange={onChange}/>
+                                <Input type="text" name="landmark" id="landmark" placeholder="Land Mark" value={values.landmark}  onChange={handleInputChange}/>
                             </FormGroup>
                             </Col>
                             
@@ -606,12 +583,7 @@ const PatientRegistration = (props) => {
                             </Row>
                             <Row>
                             <Col md={12}>
-                            {showLoading && 
-                                
-                                <Spinner animation="border" role="status">
-                                <span className="sr-only">Loading...</span>
-                                </Spinner> 
-                            } 
+                            
                             </Col> 
                             </Row>
                              <MatButton  
@@ -675,4 +647,14 @@ function RelativeList ({ relative, index, removeRelative, relationshipTypeName }
                 
     );
   } 
-export default PatientRegistration;
+
+  const mapStateToProps = state => ({
+    patientList: state.patients.list
+})
+
+const mapActionToProps = {
+    createPatient: actions.create,
+    updatePatient: actions.update
+}
+
+export default connect(mapStateToProps, mapActionToProps)(PatientRegistration);

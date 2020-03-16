@@ -212,7 +212,7 @@ export default function Medication(props) {
        
       }, []);
       function getDrugName(id) {
-        return drugOrder.find(x => x.value == id).label;
+        return drugOrder.find(x => x.value === id).label;
         //return 'drugNMw';
     }
   return (
