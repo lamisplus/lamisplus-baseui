@@ -12,7 +12,6 @@ import {
 import { TiWarningOutline } from "react-icons/ti";
 
 import { makeStyles } from '@material-ui/core/styles';
-import SearchInput from 'components/SearchBox/SearchInput';
 import VitalSignsSearch from 'components/Vitals/VitalSignsSearch'
 
 const useStyles = makeStyles(theme => ({
@@ -39,7 +38,6 @@ const PatientPage = () => {
                 <CardContent>
                     {/* Search Form Input Field */}
                     <Form>
-                        <SearchInput />
                     </Form>
                     <br/>
                     <VitalSignsSearch />

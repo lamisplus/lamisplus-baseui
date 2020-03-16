@@ -110,7 +110,6 @@ const PatientPage = () => {
                     </Form> */}
                     <br/>
                     <ViewVitalsSearch />
-                    
                 </CardContent>
             </Card>
             <Modal isOpen={modal} toggle={toggle} size='lg'>
