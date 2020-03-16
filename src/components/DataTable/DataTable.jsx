@@ -36,10 +36,7 @@ const rows = [
 
 export default function DataTableList(props) {
   const classes = useStyles();
-
   const [modal, setModal] = useState(false);
-
-
   const toggle = () => setModal(!modal);
 
 

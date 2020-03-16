@@ -11,7 +11,6 @@ import {
 from '@material-ui/core';
 import { TiWarningOutline } from "react-icons/ti";
 import { makeStyles } from '@material-ui/core/styles';
-import SearchInput from 'components/SearchBox/SearchInput';
 import Title from 'components/Title/CardTitle';
 import TableData from 'components/Consultation/DataTableList';
 
@@ -42,8 +41,6 @@ const ConsultationPage = () => {
                 <br/>
                 {/* Search Form Input Field */}
                 <Form>
-                    
-                    <SearchInput />
                 </Form>   
                 <br/>
                 <TableData />

@@ -110,8 +110,6 @@ export default function PatientList(props) {
 
               <StyledTableCell align="center">Action</StyledTableCell>  
 
- 
-
             </TableRow>  
 
           </TableHead>  

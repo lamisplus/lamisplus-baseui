@@ -11,7 +11,6 @@ import {
 from '@material-ui/core';
 import { TiWarningOutline } from "react-icons/ti";
 import { makeStyles } from '@material-ui/core/styles';
-import SearchInput from 'components/Consultation/SearchForm/SearchInput';
 import TableData from 'components/Consultation/DataTableList';
 
   const useStyles = makeStyles(theme => ({
@@ -37,10 +36,7 @@ const ConsultationPage = () => {
         <Card className={classes.cardBottom}>  
             <CardContent>
                 {/* Search Form Input Field */}
-                <Form>
-                    
-                    <SearchInput />
-                </Form>   
+
                 <br/>
                 <TableData />
                    

@@ -1,195 +1,250 @@
-import React, {useState, useEffect} from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Tooltip from '@material-ui/core/Tooltip';
+import React, { useState, useEffect } from 'react';
+import DataTable from 'react-data-table-component';
+import {Card, CardContent} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
-import axios from 'axios';  
-
-import {
-    MdAddBox
-} from 'react-icons/md';
-import {
-    FaUserCheck
-} from 'react-icons/fa';
-
-import { Modal, ModalBody,  ModalHeader} from 'reactstrap';
+import {AssignmentTurnedIn, Delete} from '@material-ui/icons';
+import {AddBox} from '@material-ui/icons';
 import AddVitalsPage from 'components/Vitals/AddVitalsPage';
-import AssignClinician from 'components/Vitals/AssignClinician';
+import './PatientSearch.css';
+import {
+    Input,
+    Form, ModalHeader, ModalBody, ModalFooter, Button, Modal, Alert, Row, Col, FormGroup, Label
+} from 'reactstrap';
+
 import {url} from 'axios/url';
-
-
-const useStyles = makeStyles({
-    table: {
-        minWidth: 650,
-    },
-    card: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-
-    },
-    cardBottom: {
-        marginBottom: 20
-    },
-    Select: {
-        height:45,
-        width: 350,
-    },
-
-    input: {
-        display: 'none',
-    },
-    
-});
-
-const StyledTableCell = withStyles(theme => ({
-    head: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    body: {
-      fontSize: 11,
-    },
-  }))(TableCell);
-  const StyledTableRow = withStyles(theme => ({
-    root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  }))(TableRow);
+import {ToastContainer} from 'react-toastify';
+import Spinner from 'react-bootstrap/Spinner';
+import MatButton from '@material-ui/core/Button';
+import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 
 
+/**Find table documentations at
+ import TablePagination from '@material-ui/core/TablePagination'; * 1.https://www.npmjs.com/package/react-data-table-component#storybook-dependencies----rootdirstoriespackagejson
+ import TableRow from '@material-ui/core/TableRow'; * 2. https://jbetancur.github.io/react-data-table-component/?path=/story/conditional-styling--conditional-cells */
+const FilterComponent = ({ filterText, onFilter, onClear }) => (
+    <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >
+        <Card>
+            <CardContent>
+                <Input
+                    type="search"
+                    placeholder="Search by Patient Name, Patient ID "
+                    className="cr-search-form__input pull-right"
+                    value={filterText} onChange={onFilter}
+                />
+            </CardContent>
+        </Card>
+    </Form>
+);
 
-export default function VitalsSigns(props) {
-    const classes = useStyles();
+const SampleExpandedComponent = ({ data }) => (
+    <div>
+    <span>
+   <b>  Date Of Registration:</b> {data.dateRegistration} </span> <br></br> <span><b>Date Of Birth:</b> {data.dob} </span>
+    </div>
+);
+const handleDelete = () => {
+    console.log('clicked');
+};
+
+
+const calculate_age = (dob) => {
+    var today = new Date();
+    var dateParts = dob.split("-");
+    var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+    var birthDate = new Date(dateObject);  // create a date object directly from `dob1` argument
+    console.log(dateObject);
+    console.log(birthDate);
+    var age_now = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate()))
+    {
+        age_now--;
+    }
+
+    if(age_now === 0){
+        return m + ' month(s)';
+    }
+    console.log(age_now);
+    return age_now + ' year(s)';
+}
+
+// const modalClickHandler2 = () => {
+//     setModal2(!modal2);
+// }
+const columns = ((modalClickHandler, modalClickHandler2) => [
+    {
+        name: 'Patient ID',
+        selector: 'hospitalNumber',
+        sortable: false,
+        Display: true,
+    },
+    {
+        name: 'Patient Name',
+        selector: 'name',
+        sortable: false,
+        cell: row => <span>{row.firstName} {row.lastName}</span>
+    },
+    {
+        name: 'Start Visit',
+        selector: 'dob',
+        sortable: false,
+    },
+    {
+        name: 'End Visit',
+        selector: 'dob',
+        sortable: false,
+    },
+    {
+        name: 'Action',
+        cell: () =>
+            <div>
+                <IconButton color="primary" onClick={modalClickHandler} aria-label="Take Vitals" title="Take Vitals">
+                    <AddBox title="Take Vitals"  aria-label="Take Vitals"/>
+                </IconButton>
+                <IconButton color="primary" onClick={modalClickHandler2}  aria-label="CheckIn Patient" title="Assign Clinician">
+                    <AssignmentTurnedIn title="Assign Clinician"  aria-label="Assign Clinician"/>
+                </IconButton>
+            </div>,
+        ignoreRowClick: true,
+        allowOverflow: true,
+        button: true,
+    },
+]);
+
+const customStyles = {
+    headCells: {
+        style: {
+            color: '#202124',
+            fontSize: '14px',
+            fontWeight: 'bold',
+        },
+    }
+};
+
+const BasicTable = () => {
+    const [filterText, setFilterText] = React.useState('');
+    const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
+    const [data, setData] = useState([])
+    const filteredItems = (!filterText && data) ? [] : data.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
 
     const [modal, setModal] = useState(false);
     const [modal2, setModal2] = useState(false);
 
     const toggle = () => setModal(!modal);
     const toggle2 = () => setModal2(!modal2);
-    //Get list of Visit/checkin patients API 
-    const [data, setData] = useState([]); 
-    const apipatient = url+"visits/datevisit";
-    useEffect(() => {    
-            const GetData = async () => {    
-            const result = await axios(apipatient);    
-            setData(result.data);    
-            }  
-            GetData();     
 
-    }, []); 
-    //get the user that need to be checked in 
-    const [patientrow, setpatientValue] = useState({checkInId:'', patientId:''});
-
-    const getUsermodal = (patientrow)=> {
-    // setuservalue(user);
-    setModal(!modal);
-
-    }
-    const getUsermodal2 = (patientrow)=> {
-        // setuservalue(user);
-        setModal2(!modal2);
-    
+    useEffect(() => {
+        async function fetchData() {
+            try{
+                const response = await fetch(url+"visits/datevisit/");
+                const result = await response.json();
+                setData(result);
+                console.log(result);
+            }catch(error){
+                setData([]);
+            }
         }
+        fetchData();
+
+    }, []);
+
+    const subHeaderComponentMemo = React.useMemo(() => {
+        const handleClear = () => {
+            if (filterText) {
+                setResetPaginationToggle(!resetPaginationToggle);
+                setFilterText('');
+            }
+        };
+
+        return <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />;
+    }, [filterText, resetPaginationToggle]);
 
     return (
-        <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="caption table">
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell>Hosiptal Num</StyledTableCell>
-                        <StyledTableCell align="center">Patient Name</StyledTableCell>
-                        <StyledTableCell align="center">Vital Signs</StyledTableCell>
-                        <StyledTableCell align="center">Clinician</StyledTableCell>
-                        <StyledTableCell align="center">Action</StyledTableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {data.map(row => (
-                        <StyledTableRow key={row.checkInId}>
-                            <TableCell component="th" scope="row">
-                            {row.hospitalNumber}
-                            </TableCell>
-                            <TableCell align="center">{row.firstName} {' '} {row.lastName}</TableCell>
-                            <TableCell align="center">
-                                {/* <Tooltip title="View Patient">
-                                    <Link to="/view-vitals">
-                                        <IconButton aria-label="Collect Sample">
-                                            <MdCheckCircle size={20}/>
-                                        </IconButton>
-                                    </Link>
-                                    
-                                </Tooltip> */}
-                                ---
-                            </TableCell>
-                            <TableCell align="center">
-                                {/* <Tooltip title="View Patient">
-                                    <Link to="/patient-registration">
-                                    <IconButton aria-label="Collect Sample">
-                                        <MdCheckCircle size={20}/>
-                                    </IconButton>
-                                    </Link>
-                                
-                            </Tooltip> */}
-                            ---
-                            </TableCell>
-                            <TableCell align="center">
-                                {/* <Tooltip title="View Patient Vitals">
-                                    <Link to="/view-vitals">
-                                        <IconButton aria-label="Collect Sample">
-                                            <IoMdEye size={20}/>
-                                        </IconButton>
-                                    </Link>
-                                </Tooltip> */}
-                                <Tooltip title="Add Vitals">
-                                        <IconButton aria-label="Collect Sample">
-                                            <MdAddBox size={20} 
-                                            onClick={() => {
-                                                getUsermodal(setpatientValue(row));
-
-                                                }} 
-                                            />
-                                        </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Assign Clinician">
-                                        <IconButton aria-label="Collect Sample">
-                                            <FaUserCheck size={20} 
-                                                onClick={() => {
-                                                    getUsermodal2(setpatientValue(row));
-
-                                                }}/>
-                                        </IconButton>
-                                </Tooltip>
-                            </TableCell>
-                        </StyledTableRow>
-                    ))}
-                    <Modal isOpen={modal} toggle={toggle} size='lg'>
-                        <ModalHeader toggle={toggle}>Add New Vitals</ModalHeader>
-                        <ModalBody>
-                           <AddVitalsPage patient={patientrow}/>
-                        </ModalBody>
-                    </Modal>
-                    <Modal isOpen={modal2} toggle={toggle2} >
-                        <ModalHeader toggle={toggle2}>Assign Clinician</ModalHeader>
-                        <ModalBody>
-                                <AssignClinician patientdetail={patientrow}/>
-                        </ModalBody>
-                        
-                    </Modal>
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <div>
+            <card>
+                <cardcontent>
+                    <DataTable
+                        columns={columns(toggle, toggle2)}
+                        data={filteredItems}
+                        customStyles={customStyles}
+                        pagination
+                        paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+                        subHeader
+                        subHeaderComponent={subHeaderComponentMemo}
+                        highlightOnHover={true}
+                        striped={true}
+                        subHeaderAlign={'left'}
+                        // noHeader={false}
+                        fixedHeader={true}
+                        expandableRows
+                        persistTableHead
+                        expandableRowsComponent={<SampleExpandedComponent />}/>
+                </cardcontent>
+            </card>
+            <Modal isOpen={modal} toggle={toggle} size="lg">
+                <ModalHeader toggle={toggle}>Take Patient Vitals</ModalHeader>
+                <ModalBody>
+                    <AddVitalsPage/>
+                </ModalBody>
+            </Modal>
+            <Modal isOpen={modal2} toggle={toggle2} size="lg" >
+                <ModalHeader toggle={toggle2}>Assign Clinician</ModalHeader>
+                <ModalBody>
+                    <form>
+                        <ToastContainer autoClose={2000} />
+                        <Card>
+                            <CardContent>
+                                <Row form>
+                                    <Col md={6}>
+                                        <FormGroup>
+                                            <Label for="middleName">Next POC </Label>
+                                            <Input type="select" name="appCodesetId">
+                                                <option value="1">General Clinic </option>
+                                                <option value="2">X-ray</option>
+                                                <option value="3">Private Clinic</option>
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
+                                    <Col md={6}>
+                                        <FormGroup>
+                                            <Label for="middleName">Available Clinician</Label>
+                                            <Input type="select" name="clinicianId" id="clinicianId">
+                                                <option value="6">Dr. Duadua</option>
+                                                <option value="6">Dr. Emeka</option>
+                                                <option value="6">Dr. Duadua</option>
+                                                <option value="1">Dr. Evans</option>
+                                                <option value="2">Dr. Dorcas</option>
+                                                <option value="3">Dr. Debora</option>
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                <MatButton
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    // className={classes.button}
+                                    startIcon={<SaveIcon />}>
+                                    Assign Clinician
+                                </MatButton>
+                                <MatButton
+                                    variant="contained"
+                                    color="default"
+                                    // className={classes.button}
+                                    startIcon={<CancelIcon />}>
+                                    Cancel
+                                </MatButton>
+                                </Row>
+                            </CardContent>
+                        </Card>
+                    </form>
+                </ModalBody>
+            </Modal>
+        </div>
     );
-}
+};
+
+export default BasicTable;

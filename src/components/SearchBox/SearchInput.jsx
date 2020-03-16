@@ -4,7 +4,6 @@ import {Card, CardContent} from '@material-ui/core';
 
 const SearchInput = () => {
   return (
-
     <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >
         <Card>
             <CardContent>
@@ -16,8 +15,6 @@ const SearchInput = () => {
             </CardContent>
         </Card>
     </Form>
-
-
   );
 };
 
