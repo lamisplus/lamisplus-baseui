@@ -68,16 +68,7 @@ function PatientList(props) {
   const [page, setPage] = React.useState(0);  
   const [data, setData] = useState([]);   
   const [rowsPerPage, setRowsPerPage] = React.useState(5);  
-  const apistate = url+"patients";
-      useEffect(() => {    
-        const GetData = async () => {    
-          const result = await axios(apistate);    
-          setData(result.data);  
-          console.log(result.data);   
-        }  
-        GetData();     
-
-}, []);   
+   
 
   const handleChangePage = (event, newPage) => {  
 
@@ -91,19 +82,15 @@ function PatientList(props) {
   };  
 
   useEffect(() => {
-    props.fetchAllPatients()
+    props.fetchAllPatients();
+    //setData(props.patientsList);
+
 }, [])//componentDidMount
   
   return (  
 
     <Paper className={classes.root}> 
-    <br/>
-    <button onClick={props.fetchPatients}> Fetch Users  </button> 
-    <br/>
-    {props.patients.length === 0 ? <p>There is no User</p>
-      :props.patients.map(patient => <p>{patient.email} - {patient.first_name}</p>) 
-      }
-    <br/>
+    
 
       <TableContainer className={classes.container}>  
 
@@ -209,8 +196,8 @@ const mapStateToProps = state => ({
 })
 
 const mapActionToProps = {
-  fetchAllPatients: actions.fetchAll,
-  deletePatient: actions.Delete
+  fetchAllPatients: actions.fetchAll
+  //deletePatient: actions.Delete
 }
 
 export default connect(mapStateToProps, mapActionToProps)(PatientList);

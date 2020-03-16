@@ -11,6 +11,8 @@ import {Button, Modal, ModalBody, ModalFooter, ModalHeader,
 } from 'reactstrap';
 import {url} from 'axios/url';
 import {Link} from 'react-router-dom';
+import * as actions from "../../store/actions/patients/patients";
+import {connect} from 'react-redux';
 
 /**Find table documentations at
  import TablePagination from '@material-ui/core/TablePagination'; * 1.https://www.npmjs.com/package/react-data-table-component#storybook-dependencies----rootdirstoriespackagejson
@@ -36,12 +38,9 @@ const SampleExpandedComponent = ({ data }) => (
    <b>  Date Of Registration:</b> {data.dateRegistration} </span> <br></br> <span><b>Date Of Birth:</b> {data.dob} </span>
     </div>
 );
-<<<<<<< HEAD
-=======
 const handleDelete = () => {
   console.log('clicked');
 };
->>>>>>> 95b16aedde5633f447767959ae12cefbf514fa1e
 
 const calculate_age = (dob) => {
   var today = new Date();
@@ -114,28 +113,19 @@ const customStyles = {
   }
 };
 
-const BasicTable = () => {
+const BasicTable = (props) => {
   const [filterText, setFilterText] = React.useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-  const [data, setData] = useState([])
-  const filteredItems = (!filterText && data) ? [] : data.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
+  // const [data, setData] = useState([])
+  const filteredItems = (!filterText && props.patientsList) ? [] : props.patientsList.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
   useEffect(() => {
-    async function fetchData() {
-      try{
-        const response = await fetch(url+"patients");
-        const result = await response.json();
-        setData(result);
-        console.log(result);
-      }catch(error){
-        setData([]);
-      }
-    }
-    fetchData();
+    props.fetchAllPatients();
+    //setData(props.patientsList);
 
-  }, []);
+}, [])//componentDidMount
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
@@ -149,27 +139,6 @@ const BasicTable = () => {
   }, [filterText, resetPaginationToggle]);
 
   return (
-<<<<<<< HEAD
-    <div>
-    <DataTable
-      columns={columns}
-      data={filteredItems}
-      customStyles={customStyles}
-      pagination
-      paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
-      subHeader
-      subHeaderComponent={subHeaderComponentMemo}
-      highlightOnHover={true}
-      
-      striped={true}
-      subHeaderAlign={'left'}
-        noHeader={true}
-        expandableRows
-        expandableRowsComponent={<SampleExpandedComponent />}
-    />
-
-</div>
-=======
       <div>
         <card>
           <cardContent>
@@ -191,7 +160,6 @@ const BasicTable = () => {
             expandableRowsComponent={<SampleExpandedComponent />}/>
           </cardContent>
         </card>
-
         <Modal isOpen={modal} toggle={toggle}>
           <ModalHeader toggle={toggle}>Achieve Patient</ModalHeader>
           <ModalBody>
@@ -205,10 +173,18 @@ const BasicTable = () => {
       </div>
 
 
->>>>>>> 95b16aedde5633f447767959ae12cefbf514fa1e
   );
 
 };
 
+const mapStateToProps = state => ({
+  
+  patientsList: state.patients.list
+})
 
-export default BasicTable;
+const mapActionToProps = {
+  fetchAllPatients: actions.fetchAll,
+  deletePatient: actions.Delete
+}
+
+export default connect(mapStateToProps, mapActionToProps)(BasicTable);

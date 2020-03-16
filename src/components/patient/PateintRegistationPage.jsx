@@ -225,7 +225,7 @@ const PatientRegistration = (props) => {
            
             }
         }
-        
+
   return (
     <Page title="Patient Registration" >
         <ToastContainer autoClose={3000} />
@@ -264,12 +264,8 @@ const PatientRegistration = (props) => {
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="middleName">Date Of Registration</Label>
-<<<<<<< HEAD
                                 
                                 <DateTimePicker time={false} name="dateRegistration"  id="dateRegistration"   value={values.dateRegistration}   onChange={value1 => setValues({...values, dateRegistration: value1})}
-=======
-                                <DateTimePicker time={false} name="dateRegistration"  id="dateRegistration"   value={patient.dateRegistration}   onChange={value1 => setPatient({...patient, dateRegistration: value1})}
->>>>>>> 95b16aedde5633f447767959ae12cefbf514fa1e
                                 defaultValue={new Date()} max={new Date()}
                                 required/>
                             </FormGroup>
@@ -345,7 +341,6 @@ const PatientRegistration = (props) => {
                                 <DateTimePicker time={false} name="dob"  dropUp onChange={value1 => setPatient({...patient, dob: value1})} max={new Date()} required/>
                             </FormGroup>
                             </Col>
-<<<<<<< HEAD
                             <Col md={4} >
                                 {/* Estimate Date of birth in a row  */}
                                 <Row form>
@@ -370,15 +365,6 @@ const PatientRegistration = (props) => {
                                 </Row>
                             </Col>           
                             <Col md={4}>
-=======
-                                        <Col md={4}>
-                                        <FormGroup>
-                                            <Label for="year">Age at Registration</Label>
-                                            <Input type="text" name="year" id="year" placeholder="Age" value={patient.Estimate} onChange={onChange} />
-                                        </FormGroup>
-                                        </Col>
-                            <Col md={3}>
->>>>>>> 95b16aedde5633f447767959ae12cefbf514fa1e
                             <FormGroup check>
                                 <Label></Label>
                                 <Input type="checkbox"/>Estimated Date of  Birth
@@ -429,7 +415,7 @@ const PatientRegistration = (props) => {
                                         <Col md={4}>
                                             <FormGroup>
                                                 <Label for="country">Country</Label>
-                                                <Input type="select" name="countryId" id="countryId" value={patient.countryId}  onChange={getStates}>
+                                                <Input type="select" name="countryId" id="countryId" value={values.countryId}  onChange={getStates}>
                                                     {countries.map(({ label, value }) => (
                                                         <option key={value} value={value}>
                                                             {label}
@@ -443,7 +429,7 @@ const PatientRegistration = (props) => {
                                         <Col md={4}>
                                             <FormGroup>
                                                 <Label for="stressAddress">State</Label>
-                                                <Input type="select" name="stateId" id="stateId" placeholder="Select State" value={patient.stateId} onChange={getProvinces}>
+                                                <Input type="select" name="stateId" id="stateId" placeholder="Select State" value={values.stateId} onChange={getProvinces}>
                                                     {states.map(({ label, value }) => (
                                                         <option key={value} value={value}>
                                                             {label}
@@ -455,7 +441,7 @@ const PatientRegistration = (props) => {
                                         <Col md={4}>
                                             <FormGroup>
                                                 <Label for="lga">Province/District/LGA </Label>
-                                                <Input type="select" name="provinceId" id="provinceId" placeholder="Select Province" value={patient.provinceId} onChange={onChange}>
+                                                <Input type="select" name="provinceId" id="provinceId" placeholder="Select Province" value={values.provinceId} onChange={handleInputChange}>
                                                     {provinces.map(({ label, value }) => (
                                                         <option key={value} value={value}>
                                                             {label}
@@ -472,14 +458,14 @@ const PatientRegistration = (props) => {
                                         <Col md={4}>
                                             <FormGroup>
                                                 <Label for="city">Street Address</Label>
-                                                <Input type="text" name="city" id="city" placeholder="City" value={patient.city}  onChange={onChange}/>
+                                                <Input type="text" name="city" id="city" placeholder="City" value={values.city}  onChange={handleInputChange}/>
                                             </FormGroup>
                                         </Col>
 
                                         <Col md={4}>
                                             <FormGroup>
                                                 <Label for="landMark">Land Mark</Label>
-                                                <Input type="text" name="landmark" id="landmark" placeholder="Land Mark" value={patient.landmark}  onChange={onChange}/>
+                                                <Input type="text" name="landmark" id="landmark" placeholder="Land Mark" value={values.landmark}  onChange={handleInputChange}/>
                                             </FormGroup>
                                         </Col>
 
@@ -495,80 +481,7 @@ const PatientRegistration = (props) => {
         </Row>
 
     {/* Third  row form entry  for Contact Address*/}
-<<<<<<< HEAD
-    <Row>
-        <Col xl={12} lg={12} md={12}>
-        <Card className={classes.cardBottom}>  
-                                         
-            <CardContent>
-            <Title > Address <br/></Title>
-                
-                        <Row form>
-                                <Col md={4}>
-                                    <FormGroup>
-                                        <Label for="country">Country</Label>
-                                            <Input type="select" name="countryId" id="countryId" value={values.countryId}  onChange={getStates}>
-                                                {countries.map(({ label, value }) => (
-                                                <option key={value} value={value}>
-                                                {label}
-                                                </option>
-                                                ))}
-                                            </Input>
 
-                                    </FormGroup>
-                                </Col>
-                                
-                                <Col md={4}>
-                                <FormGroup>
-                                    <Label for="stressAddress">State</Label>
-                                    <Input type="select" name="stateId" id="stateId" placeholder="Select State" value={values.stateId} onChange={getProvinces}>
-                                        {states.map(({ label, value }) => (
-                                            <option key={value} value={value}>
-                                            {label}
-                                            </option>
-                                        ))}
-                                    </Input>
-                                </FormGroup>
-                            </Col>
-                            <Col md={4}>
-                            <FormGroup>
-                                <Label for="lga">Province/District/LGA </Label>
-                                <Input type="select" name="provinceId" id="provinceId" placeholder="Select Province" value={values.provinceId} onChange={handleInputChange}>
-                                        {provinces.map(({ label, value }) => (
-                                            <option key={value} value={value}>
-                                            {label}
-                                            </option>
-                                        ))}
-                                    </Input>
-                            </FormGroup>
-                            </Col>
-                            
-                           
-                        </Row>
-                        
-                        <Row form>
-                        <Col md={4}>
-                            <FormGroup>
-                                <Label for="city">Street Address</Label>
-                                <Input type="text" name="city" id="city" placeholder="City" value={values.city}  onChange={handleInputChange}/>
-                            </FormGroup>
-                            </Col>
-                            
-                            <Col md={4}>
-                            <FormGroup>
-                                <Label for="landMark">Land Mark</Label>
-                                <Input type="text" name="landmark" id="landmark" placeholder="Land Mark" value={values.landmark}  onChange={handleInputChange}/>
-                            </FormGroup>
-                            </Col>
-                            
-                        </Row>
-                </CardContent>
-            </Card>
-            </Col>
-        </Row>
-=======
-
->>>>>>> 95b16aedde5633f447767959ae12cefbf514fa1e
          {/* fourth  row form entry  for Relatives*/}
          <Row>
             <Col xl={12} lg={12} md={12}>
@@ -728,7 +641,7 @@ function RelativeList ({ relative, index, removeRelative, relationshipTypeName }
 
 const mapActionToProps = {
     createPatient: actions.create,
-    updatePatient: actions.update
+    //updatePatient: actions.update
 }
 
 export default connect(mapStateToProps, mapActionToProps)(PatientRegistration);
