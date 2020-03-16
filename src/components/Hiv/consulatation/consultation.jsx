@@ -200,7 +200,6 @@ return (
                                 <Grid item xs='12'>
                                     <Typography className={classes.pos} color="textSecondary" >
                                     <FormGroup>
-                                    
                                     <Input type="textarea" name="present_consultation"  id="present_consultation" style={{height: '150px' }} value={consult.present_consultation}
                                     onChange={onChange}/>
                                     <br></br>

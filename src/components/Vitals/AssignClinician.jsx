@@ -173,8 +173,7 @@ export default function AssignClinician(props) {
                             variant="contained"
                             color="default"
                             className={classes.button}
-                            startIcon={<CancelIcon />}
-                        >
+                            startIcon={<CancelIcon />}>
                             Cancel
                         </MatButton>
                     </CardContent>

@@ -74,9 +74,9 @@ export default function AddVitalsPage(props) {
     //Save Vitals 
         const [vitals, setVitals] = useState({ 
                 formName: 'VITALS_SIGN_FORM', 
-                patientId: props.patient.patientId, 
+                // patientId: props.patient.patientId,
                 serviceName:'CLINICAL_SERVICE', 
-                visitId:props.patient.id, 
+                // visitId:props.patient.id,
                 dateEncounter:new Date() 
             }); 
         const [formDataForVitals, setformDataForVitals] = useState({pulse:"", respiratoryRate:"", temperature:"", diastolic:"", systolic:"", bodyWeight:"", height:""}) 
@@ -112,28 +112,22 @@ export default function AddVitalsPage(props) {
             }
             ); 
         };
-
     const onChangeFormdata = (e) => {
         e.persist();     
         setformDataForVitals({...formDataForVitals, [e.target.name]: e.target.value});
-        } 
-
-
+        }
     return (
-        
             <form className={classes.form} onSubmit={SaveVitals}>
-               
                 <Card className={classes.cardBottom}>
                     <CardContent>
-                        <Title >New Vitals Signs --- {props.patient.hospitalNumber}
-                        </Title>
-                        <br/>
-
+                        {/*<Title >New Vitals Signs --- {props.patient.hospitalNumber}*/}
+                        {/*</Title>*/}
+                        {/*<br/>*/}
                         <Row form>
                             <Col md={6}>
                             <FormGroup>
                                 <Label for="hospitalNumber">Date of Vitals</Label>
-                                <DateTimePicker time={false} name="dateEncounter"  id="dateEncounter"   value={vitals.dateEncounter}   onChange={value1 => setVitals({...vitals, dateEncounter: value1})}
+                                <DateTimePicker time={false} name="dateEncounter"  id="dateEncounter"   value={vitals.dateEncounter}onChange={value1 => setVitals({...vitals, dateEncounter: value1})}
                                 defaultValue={new Date()} max={new Date()}
                             />
                             </FormGroup>
@@ -150,7 +144,6 @@ export default function AddVitalsPage(props) {
                             <Col md={6}>
                             <FormGroup>
                                 <Label for="middleName">Respiratory Rate(bpm)</Label>
-                                
                                 <Input type="text" name="respiratoryRate" id="respiratoryRate" placeholder="" value={formDataForVitals.respiratoryRate}
                                     onChange={onChangeFormdata}/>
                             </FormGroup>
@@ -163,45 +156,40 @@ export default function AddVitalsPage(props) {
                             </FormGroup>
                             </Col>
                         </Row>
-                        <Row form> 
-                        <Col md={6}>
+                        <Row form>
+                        <Col md={3}>
                             <FormGroup>
-                                <Label for="hospitalNumber">Diastolic(mmHg)</Label>
-                                <Input type="text" name="diastolic" id="diastolic" placeholder=""  value={formDataForVitals.diastolic}
-                                    onChange={onChangeFormdata}/>
+                                <Label for="hospitalNumber">BloodPressure(mmHg)</Label>
+                                <Input type="text" name="diastolic" id="diastolic" placeholder="Sytolic" value={formDataForVitals.diastolic} onChange={onChangeFormdata}/>
                             </FormGroup>
-                            </Col>                          
-                            <Col md={6}>
+                        </Col>
+                            <Col md={3} style={{paddingTop: '10px'}}>
                             <FormGroup>
-                                <Label for="middleName">Systolic(mmhg)</Label>
-                                <Input type="text" name="systolic" id="systolic" placeholder=""  value={formDataForVitals.systolic}
+                                <Label for="hospitalNumber">{"  "}</Label>
+                                <Input type="text" name="diastolic" id="diastolic" placeholder="Diastolic"  value={formDataForVitals.diastolic}
                                     onChange={onChangeFormdata}/>
                             </FormGroup>
                             </Col>
-                        </Row>
-                        <Row form>
                         <Col md={6}>
                             <FormGroup>
-                                <Label for="middleName">Weight Kg</Label>
+                                <Label for="middleName">Body Weight Kg</Label>
                                 <Input type="text" name="bodyWeight" id="bodyWeight" placeholder="" value={formDataForVitals.bodyWeight}
                                     onChange={onChangeFormdata}/>
                             </FormGroup>
                             </Col>
+                        </Row>
+                            <Row>
                             <Col md={6}>
                             <FormGroup>
                                 <Label for="middleName">Height</Label>
-                                
                                 <Input type="text" name="height" id="height" placeholder="" value={formDataForVitals.height}
                                     onChange={onChangeFormdata}/>
                             </FormGroup>
                             </Col>
                         </Row>
-
-
                         <Row>
                             <Col md={12}>
-                            {showLoading && 
-                                
+                            {showLoading &&
                                 <Spinner animation="border" role="status">
                                 <span className="sr-only">Loading...</span>
                                 </Spinner> 
@@ -214,16 +202,14 @@ export default function AddVitalsPage(props) {
                                 variant="contained"
                                 color="primary"
                                 className={classes.button}
-                                startIcon={<SaveIcon />}
-                             >
+                                startIcon={<SaveIcon />}>
                                 Save
                         </MatButton>
                         <MatButton
                             variant="contained"
                             color="default"
                             className={classes.button}
-                            startIcon={<CancelIcon />}
-                        >
+                            startIcon={<CancelIcon />}>
                             Cancel
                         </MatButton>
                     </CardContent>

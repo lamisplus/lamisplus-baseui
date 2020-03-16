@@ -37,7 +37,6 @@ const handleDelete = () => {
 const calculate_age = (dob) => {
   var today = new Date();
   var dateParts = dob.split("-");
-
   var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]); 
   var birthDate = new Date(dateObject);  // create a date object directly from `dob1` argument
   console.log(dateObject);
@@ -85,15 +84,6 @@ const columns = [
   },
 ];
 
-/*{
-      
-  cell: () =>  <IconButton color="primary" onClick={handleDelete} aria-label="Archive Patient" title="Archive Patient">
-  <Delete />
-</IconButton>,
-  ignoreRowClick: true,
-  allowOverflow: true,
-  button: true,
-},*/
 const customStyles = {
   headCells: {
     style: {
@@ -128,7 +118,8 @@ const BasicTable = () => {
         }
     fetchData();     
   
-  }, []);   
+  }, []);
+
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
       if (filterText) {
