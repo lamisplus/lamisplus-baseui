@@ -71,13 +71,4 @@ RESPONSE if successful
       "message": "Registered successfully! "
     }
        
-Response if not successful 
-    {
-      status: 'false',
-      message: 'Duplicate in Hopsital Number'
-    }
-	OR 
-    {
-      status: 'false',
-      message: 'Please All Field are required'
-    }
+
