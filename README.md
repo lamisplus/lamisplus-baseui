@@ -73,7 +73,7 @@ RESPONSE if successful
       "message": "Registered successfully! "
     }
        
-RESPONSE if successful
+RESPONSE if not successful
     
     {
       "status": "failed",
