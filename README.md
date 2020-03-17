@@ -73,15 +73,16 @@ RESPONSE if successful
       "message": "Registered successfully! "
     }
        
-RESPONSE if not successful 
+RESPONSE if successful
+    
     {
-      status: 'false',
-      message: 'Duplicate in Hopsital Number'
+      "status": "failed",
+      "message": "Duplicate Hospital Number "
     }
-
-	OR 
+      
+    OR
 
     {
-      status: 'false',
-      message: 'Please All Field are required'
+      "status": "failed",
+      "message": "All field are required "
     }
