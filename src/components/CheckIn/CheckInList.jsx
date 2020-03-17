@@ -9,7 +9,7 @@ import {
     Input,
     Form, Modal, ModalHeader, ModalBody, ModalFooter, Button, Row, Col, FormGroup, Label
 } from 'reactstrap';
-import axios from 'axios';
+
 import {url} from 'axios/url';
 import {DateTimePicker} from 'react-widgets';
 import Moment from 'moment';
@@ -40,9 +40,7 @@ const SampleExpandedComponent = ({ data }) => (
    <b>  Date Of Registration:</b> {data.dateRegistration} </span> <br></br> <span><b>Date Of Birth:</b> {data.dob} </span>
     </div>
 );
-const handleDelete = () => {
-    console.log('clicked');
-};
+
 
 const calculate_age = (dob) => {
     var today = new Date();
