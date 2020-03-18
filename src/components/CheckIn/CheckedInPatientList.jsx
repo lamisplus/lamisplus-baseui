@@ -180,4 +180,13 @@ const BasicTable = () => {
     );
 };
 
+const mapStateToProps = state => ({
+  
+    patientsList: state.patients.list
+  })
+  
+  const mapActionToProps = {
+    fetchAllPatients: actions.fetchAll,
+    checkInPatient: checkInActions.create
+  }
 export default BasicTable;

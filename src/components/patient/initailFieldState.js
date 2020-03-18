@@ -24,4 +24,3 @@ export const initialfieldState_patientRegsitration = {
         age:''
 
 }
-
