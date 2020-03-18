@@ -103,7 +103,7 @@ const PatientRegistration = (props) => {
           const body = await response.json();          
           setCountries(body.map(({ name, id }) => ({ label: name, value: id })));
           const defaultCountryId = body.find(x => x.name === 'Nigeria').id;
-          setPatient({...patient, countryId: defaultCountryId});         
+          setValues({...values, countryId: defaultCountryId});         
           setStateByCountryId(defaultCountryId);
           }catch(error){
               console.log(error);
@@ -117,10 +117,9 @@ const PatientRegistration = (props) => {
     const { addToast } = useToasts()
     //Get States from selected country 
     const getStates = (e) => {
-        setPatient({...patient, [e.target.name]: e.target.value});
         const getCountryId = e.target.value;
         setStateByCountryId(getCountryId);
-        
+        setValues({...values, countryId: getCountryId});   
     }
 
     function setStateByCountryId (getCountryId) {
@@ -135,7 +134,7 @@ const PatientRegistration = (props) => {
 
     //fetch province
     const getProvinces = (e) => {
-        setPatient({...patient, [e.target.name]: e.target.value});
+        setValues({...values, [e.target.name]: e.target.value});
         const stateId = e.target.value;
         
         console.log(stateId);
@@ -178,6 +177,12 @@ const PatientRegistration = (props) => {
        
         }
 
+    const calculateAge = e => {
+       // ccnst calAge = moment().subtract(e.target.value, 'years');
+        const calculatedAge = moment().set({ 'month': 6, 'day': 15}).subtract(e.target.value, 'year').format('DD/MM/YYYY');
+        console.log(calculatedAge);
+        setValues({...values, dateOfBirth: new Date(calculatedAge)})
+    }
     // 
     //validate({fullName:'jenny'})
     const validate = (fieldValues = values) => {
@@ -200,6 +205,7 @@ const PatientRegistration = (props) => {
             return Object.values(temp).every(x => x === "")
     }
 
+    
     const {
         values,
         setValues,
@@ -213,10 +219,12 @@ const PatientRegistration = (props) => {
         // setValues({...values, dateRegistration: newDatenow});
         //The Submit Button Implemenatation 
         const handleSubmit = e => {
-            const newDatenow = moment(values.dateRegistration).format('DD-MM-YYYY');
+            const newDatenow = moment(values.regDate).format('DD-MM-YYYY');
+            const dateOfBirth = moment(values.dateOfBirth).format('DD-MM-YYYY');
             //setValues({ dateRegistration: newDatenow});           
             values['dateRegistration']= newDatenow;
             values['personRelativeDTOList']= relatives;
+            values['dob']=dateOfBirth;
             console.log(values);
             e.preventDefault()
 
@@ -274,7 +282,7 @@ const PatientRegistration = (props) => {
                             <FormGroup>
                                 <Label for="middleName">Date Of Registration</Label>
                                 
-                                <DateTimePicker time={false} name="dateRegistration"  id="dateRegistration"   value={values.dateRegistration}   onChange={value1 => setValues({...values, dateRegistration: value1})}
+                                <DateTimePicker time={false} name="regDate"  id="regDate"   value={values.regDate}   onChange={value1 => setValues({...values, regDate: value1})}
                                 defaultValue={new Date()} max={new Date()}
                                 required/>
                             </FormGroup>
@@ -347,7 +355,7 @@ const PatientRegistration = (props) => {
                             <Col md={4}>
                             <FormGroup >
                                 <Label>Date OF Birth</Label>
-                                <DateTimePicker time={false} name="dob"  dropUp onChange={value1 => setPatient({...patient, dob: value1})} max={new Date()} required/>
+                                <DateTimePicker time={false} name="dateOfBirth" id="dateOfBirth" dropUp onChange={value1 => setValues({...values, dateOfBirth: value1})} max={new Date()} required/>
                             </FormGroup>
                             </Col>
                             <Col md={4} >
@@ -356,7 +364,7 @@ const PatientRegistration = (props) => {
                                         <Col md={4}>
                                         <FormGroup>
                                             <Label for="year">Year</Label>
-                                            <Input type="text" name="year" id="year" placeholder="Year" value={patient.Estimate} onChange={handleInputChange} />
+                                            <Input type="text" name="year" id="year" placeholder="Year" value={values.Estimate} onChange={calculateAge} />
                                         </FormGroup>
                                         </Col>
                                         <Col md={4}>
