@@ -38,9 +38,15 @@ export const create = (data, onSuccess, onError) => dispatch => {
             if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
-             console.log(error.response.data.apierror.message);
-             const errormessage= error.response.data.apierror.message;
+             // console.log(error.response.data.apierror.message);
+             const errorCode = error.response.data.apierror ? error.response.data.apierror.status : error.response.data.status;
+             const errormessage= error.response.data.apierror ? error.response.data.apierror.message : error.response.data.message;
              onError(errormessage);
+             console.log(errorCode);
+             if (errorCode >= 500){
+               onError("Something went wrong, please contact adminstration!");
+             }
+            
             // console.log(error.response.apierror.status);
             // console.log(error.response.apierror.headers);
         } else if (error.request) {

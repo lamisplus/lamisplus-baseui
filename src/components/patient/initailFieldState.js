@@ -23,4 +23,3 @@ export const initialfieldState_patientRegsitration = {
         dateRegistration: new Date()
 
 }
-

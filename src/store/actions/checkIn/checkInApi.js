@@ -7,7 +7,7 @@ const baseUrl = url;
 
 export default {
 
-    patient(urlendpint = baseUrl + 'patients/') {
+    patient(urlendpint = baseUrl + 'visits/') {
         
         return {
             fetchAll: () => axios.get(urlendpint),
