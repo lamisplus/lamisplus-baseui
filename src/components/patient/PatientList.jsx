@@ -27,8 +27,6 @@ import {
 import {
   MdDeleteForever
 } from 'react-icons/md';
-import axios from 'axios';
-import {url} from 'axios/url';
 import * as actions from "../../store/actions/patients/patients";
 import {connect} from 'react-redux';
   

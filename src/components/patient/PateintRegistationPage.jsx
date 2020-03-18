@@ -137,12 +137,12 @@ const PatientRegistration = (props) => {
     const getProvinces = (e) => {
         setPatient({...patient, [e.target.name]: e.target.value});
         const stateId = e.target.value;
-        alert(stateId);
-        //console.log(stateId);
+        
+        console.log(stateId);
         async function getCharacters() {
             const response = await fetch("/api/province/state/"+stateId);
             const provinceList = await response.json();
-            
+            console.log(provinceList);
             setProvinces(provinceList.map(({ name, id }) => ({ label: name, value: id })));
           }
           getCharacters();
@@ -226,7 +226,11 @@ const PatientRegistration = (props) => {
                     resetForm()
                     addToast("Submitted successfully", { appearance: 'success' })
                 }
-                props.createPatient(values, onSuccess)
+                const onError = errstatus => {
+                    console.log(errstatus);
+                    addToast(errstatus, { appearance: 'warning' })
+                }
+                props.createPatient(values, onSuccess,onError)
            
             }
         }
@@ -420,7 +424,7 @@ const PatientRegistration = (props) => {
                                         <Col md={4}>
                                             <FormGroup>
                                                 <Label for="country">Country</Label>
-                                                <Input type="select" name="countryId" id="countryId" value={values.countryId}  onChange={getStates, handleInputChange}>
+                                                <Input type="select" name="countryId" id="countryId" value={values.countryId}  onChange={getStates}>
                                                     {countries.map(({ label, value }) => (
                                                         <option key={value} value={value}>
                                                             {label}
@@ -434,7 +438,7 @@ const PatientRegistration = (props) => {
                                         <Col md={4}>
                                             <FormGroup>
                                                 <Label for="stressAddress">State</Label>
-                                                <Input type="select" name="stateId" id="stateId" placeholder="Select State" value={values.stateId} onChange={getProvinces, handleInputChange}>
+                                                <Input type="select" name="stateId" id="stateId" placeholder="Select State" value={values.stateId} onChange={getProvinces}>
                                                     {states.map(({ label, value }) => (
                                                         <option key={value} value={value}>
                                                             {label}

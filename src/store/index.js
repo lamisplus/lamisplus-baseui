@@ -1,11 +1,12 @@
 import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
 
 import patientReducer from './reducers/patientReducer';
+import checkInReducer from './reducers/checkInReducer';
 import thunk from 'redux-thunk';
 
 const middleWare = [thunk]; 
 const reducer = combineReducers({
-    // users: userReducer,
+    checkinpatient: checkInReducer,
     patients: patientReducer
 });
 

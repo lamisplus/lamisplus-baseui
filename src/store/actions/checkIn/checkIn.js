@@ -1,5 +1,5 @@
-import api from "./patientApi";
-import { history } from '../../../history';
+import api from "./checkInApi";
+
 export const ACTION_TYPES = {
     CREATE: 'CREATE',
     UPDATE: 'UPDATE',
@@ -33,7 +33,6 @@ export const create = (data, onSuccess, onError) => dispatch => {
                 payload: res.data
             })
             onSuccess()
-            history.push("/");
         })
         .catch(error => {
             if (error.response) {
