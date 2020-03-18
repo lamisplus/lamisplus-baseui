@@ -43,6 +43,9 @@ const SampleExpandedComponent = ({ data }) => (
 
 
 const calculate_age = (dob) => {
+    if (!dob){
+        return 'Nil';
+    }
     var today = new Date();
     var dateParts = dob.split("-");
     var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
