@@ -103,7 +103,7 @@ const PatientRegistration = (props) => {
           const body = await response.json();          
           setCountries(body.map(({ name, id }) => ({ label: name, value: id })));
           const defaultCountryId = body.find(x => x.name === 'Nigeria').id;
-          setPatient({...patient, countryId: defaultCountryId});
+          setPatient({...patient, countryId: defaultCountryId});         
           setStateByCountryId(defaultCountryId);
           }catch(error){
               console.log(error);
@@ -120,6 +120,7 @@ const PatientRegistration = (props) => {
         setPatient({...patient, [e.target.name]: e.target.value});
         const getCountryId = e.target.value;
         setStateByCountryId(getCountryId);
+        
     }
 
     function setStateByCountryId (getCountryId) {
@@ -127,6 +128,7 @@ const PatientRegistration = (props) => {
             const response = await fetch(apistate+getCountryId);            
             const stateList = await response.json();
             setStates(stateList.map(({ name, id }) => ({ label: name, value: id })));
+            
           }
           getCharacters();
     }
@@ -135,9 +137,12 @@ const PatientRegistration = (props) => {
     const getProvinces = (e) => {
         setPatient({...patient, [e.target.name]: e.target.value});
         const stateId = e.target.value;
+        alert(stateId);
+        //console.log(stateId);
         async function getCharacters() {
             const response = await fetch("/api/province/state/"+stateId);
             const provinceList = await response.json();
+            
             setProvinces(provinceList.map(({ name, id }) => ({ label: name, value: id })));
           }
           getCharacters();
@@ -314,7 +319,7 @@ const PatientRegistration = (props) => {
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="qualification">Hightest Qualification</Label>
-                                <Input type="select" name="educationId" onChange={handleInputChange}>
+                                <Input type="select" name="educationId" value={values.educationId} onChange={handleInputChange}>
                                     <option value="1">PHD</option>
                                     <option value="2">MSC</option>
                                     <option value="3">BSC</option>
@@ -415,7 +420,7 @@ const PatientRegistration = (props) => {
                                         <Col md={4}>
                                             <FormGroup>
                                                 <Label for="country">Country</Label>
-                                                <Input type="select" name="countryId" id="countryId" value={values.countryId}  onChange={getStates}>
+                                                <Input type="select" name="countryId" id="countryId" value={values.countryId}  onChange={getStates, handleInputChange}>
                                                     {countries.map(({ label, value }) => (
                                                         <option key={value} value={value}>
                                                             {label}
@@ -429,7 +434,7 @@ const PatientRegistration = (props) => {
                                         <Col md={4}>
                                             <FormGroup>
                                                 <Label for="stressAddress">State</Label>
-                                                <Input type="select" name="stateId" id="stateId" placeholder="Select State" value={values.stateId} onChange={getProvinces}>
+                                                <Input type="select" name="stateId" id="stateId" placeholder="Select State" value={values.stateId} onChange={getProvinces, handleInputChange}>
                                                     {states.map(({ label, value }) => (
                                                         <option key={value} value={value}>
                                                             {label}

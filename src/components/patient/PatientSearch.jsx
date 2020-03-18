@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import {Card, CardContent} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,14 +9,10 @@ import {Button, Modal, ModalBody, ModalFooter, ModalHeader,
   Input,
   Form
 } from 'reactstrap';
-import {url} from 'axios/url';
 import {Link} from 'react-router-dom';
 import * as actions from "../../store/actions/patients/patients";
 import {connect} from 'react-redux';
 
-/**Find table documentations at
- import TablePagination from '@material-ui/core/TablePagination'; * 1.https://www.npmjs.com/package/react-data-table-component#storybook-dependencies----rootdirstoriespackagejson
- import TableRow from '@material-ui/core/TableRow'; * 2. https://jbetancur.github.io/react-data-table-component/?path=/story/conditional-styling--conditional-cells */
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
     <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >
       <Card>
@@ -38,9 +34,7 @@ const SampleExpandedComponent = ({ data }) => (
    <b>  Date Of Registration:</b> {data.dateRegistration} </span> <br></br> <span><b>Date Of Birth:</b> {data.dob} </span>
     </div>
 );
-const handleDelete = () => {
-  console.log('clicked');
-};
+
 
 const calculate_age = (dob) => {
   var today = new Date();

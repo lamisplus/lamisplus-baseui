@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
@@ -8,9 +8,8 @@ import './styles/formio.css';
 
 
 ReactDOM.render(
-    <Suspense fallback="loading">
-        <App />
-    </Suspense>,
+   
+        <App />,
     document.getElementById('root') 
     );
 
