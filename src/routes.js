@@ -7,6 +7,7 @@ import React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import './styles/reduction.scss';
 import SignIn from 'pages/SignPage';
+import { history } from './history';
 
 
 const DashboardPage = React.lazy(() => import('pages/DashboardPage'));
@@ -54,7 +55,7 @@ const getBasename = () => {
 class Routes extends React.Component {
   render() {
     return (
-      <BrowserRouter basename={getBasename()}>
+      <BrowserRouter basename={getBasename()} history={history}>
       
           <Switch>
           {/* <Route  path="/signin" component={SignInSide} /> */}        

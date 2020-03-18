@@ -4,6 +4,8 @@ import { Form, Input } from 'reactstrap';
 import {Card, CardContent} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Delete from '@material-ui/icons/Delete';
+import * as actions from "../../store/actions/patients/patients";
+import {connect} from 'react-redux';
 import {url} from 'axios/url';
 
 /**Find table documentations at
@@ -96,29 +98,20 @@ const customStyles = {
 };
 
 
-const BasicTable = () => {
+const CheckInList = (props) => {
   const [filterText, setFilterText] = React.useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-  const [data, setData] = useState([])
-  const filteredItems = data.filter(
+  //const [data, setData] = useState([])
+  const filteredItems = props.patientsList.filter(
     item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase()))
     || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase()))
     || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
   
-  useEffect(() => {    
-      async function fetchData() {
-          try{
-        const response = await fetch(url+"patients");
-        const result = await response.json(); 
-        setData(result);
-        console.log(result); 
-          }catch(error){
-
-          }
-        }
-    fetchData();     
+    useEffect(() => {
+      props.fetchAllPatients();
+      //setData(props.patientsList);
   
-  }, []);
+  }, [])//componentDidMount
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
@@ -153,4 +146,16 @@ const BasicTable = () => {
   );
 };
 
-export default BasicTable;
+
+const mapStateToProps = state => ({
+  
+  patientsList: state.checkinpatient.list
+})
+
+const mapActionToProps = {
+  fetchAllPatients: actions.fetchAll,
+  //deletePatient: actions.Delete
+}
+
+export default connect(mapStateToProps, mapActionToProps)(CheckInList);
+

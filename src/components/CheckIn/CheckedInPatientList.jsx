@@ -3,7 +3,6 @@ import DataTable from 'react-data-table-component';
 import {Card, CardContent} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import {Delete} from '@material-ui/icons';
-import {Edit} from '@material-ui/icons';
 import './PatientSearch.css';
 import {
     Input,
@@ -38,30 +37,28 @@ const SampleExpandedComponent = ({ data }) => (
    <b>  Date Of Registration:</b> {data.dateRegistration} </span> <br></br> <span><b>Date Of Birth:</b> {data.dob} </span>
     </div>
 );
-const handleDelete = () => {
-    console.log('clicked');
-};
 
-const calculate_age = (dob) => {
-    var today = new Date();
-    var dateParts = dob.split("-");
-    var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-    var birthDate = new Date(dateObject);  // create a date object directly from `dob1` argument
-    console.log(dateObject);
-    console.log(birthDate);
-    var age_now = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate()))
-    {
-        age_now--;
-    }
 
-    if(age_now === 0){
-        return m + ' month(s)';
-    }
-    console.log(age_now);
-    return age_now + ' year(s)';
-}
+// const calculate_age = (dob) => {
+//     var today = new Date();
+//     var dateParts = dob.split("-");
+//     var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+//     var birthDate = new Date(dateObject);  // create a date object directly from `dob1` argument
+//     console.log(dateObject);
+//     console.log(birthDate);
+//     var age_now = today.getFullYear() - birthDate.getFullYear();
+//     var m = today.getMonth() - birthDate.getMonth();
+//     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate()))
+//     {
+//         age_now--;
+//     }
+
+//     if(age_now === 0){
+//         return m + ' month(s)';
+//     }
+//     console.log(age_now);
+//     return age_now + ' year(s)';
+// }
 const columns = (modalClickHandler => [
     {
         name: 'Patient ID',

@@ -107,7 +107,7 @@ const customStyles = {
   }
 };
 
-const BasicTable = (props) => {
+const PatientTable = (props) => {
   const [filterText, setFilterText] = React.useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
   // const [data, setData] = useState([])
@@ -181,4 +181,4 @@ const mapActionToProps = {
   deletePatient: actions.Delete
 }
 
-export default connect(mapStateToProps, mapActionToProps)(BasicTable);
+export default connect(mapStateToProps, mapActionToProps)(PatientTable);

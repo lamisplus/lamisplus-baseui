@@ -10,10 +10,11 @@ import {
     Form, Modal, ModalHeader, ModalBody, ModalFooter, Button, Row, Col, FormGroup, Label
 } from 'reactstrap';
 
-import {url} from 'axios/url';
 import {DateTimePicker} from 'react-widgets';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
+import * as actions from "../../store/actions/patients/patients";
+import {connect} from 'react-redux';
 Moment.locale('en');
 momentLocalizer();
 
@@ -106,28 +107,19 @@ const customStyles = {
     }
 };
 
-const BasicTable = () => {
+const CheckiInListTable = (props) => {
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-    const [data, setData] = useState([])
-    const filteredItems = (!filterText && data) ? [] : data.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
+    // const [data, setData] = useState([])
+    const filteredItems = (!filterText && props.patientsList) ? [] : props.patientsList.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
 
     useEffect(() => {
-        async function fetchData() {
-            try{
-                const response = await fetch(url+"patients");
-                const result = await response.json();
-                setData(result);
-                console.log(result);
-            }catch(error){
-                setData([]);
-            }
-        }
-        fetchData();
-
-    }, []);
+        props.fetchAllPatients();
+        //setData(props.patientsList);
+    
+    }, [])//componentDidMount
 
     const subHeaderComponentMemo = React.useMemo(() => {
         const handleClear = () => {
@@ -198,4 +190,14 @@ const BasicTable = () => {
     );
 };
 
-export default BasicTable;
+const mapStateToProps = state => ({
+  
+  patientsList: state.patients.list
+})
+
+const mapActionToProps = {
+  fetchAllPatients: actions.fetchAll,
+  //deletePatient: actions.Delete
+}
+
+export default connect(mapStateToProps, mapActionToProps)(CheckiInListTable);
