@@ -24,7 +24,7 @@ The endpoint URL is localhost:8081/api/
 Method = POST
 REQUEST  localhost:8081/api/patients
 
-#Note : Required fields are : firstName, lastName, mobilePhoneNumber, dateRegistration, dob, hospitalNumber
+#Note : Required fields are : firstName, lastName, mobilePhoneNumber, dateRegistration, dob, hospitalNumber, countryId, stateId, provinceId
 
     {
         "alternatePhoneNumber": "string",
