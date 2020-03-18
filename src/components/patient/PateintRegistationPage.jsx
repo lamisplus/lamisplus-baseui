@@ -94,7 +94,45 @@ const PatientRegistration = (props) => {
     const relationshipTypes = [{id:"1", name:"Father"},{id:"2", name:"Mother"},
     {id:"3", name:"Sister"},{id:"4", name:"Brother"}];
     const [patient, setPatient] = useState({  initialfieldState_patientRegsitration });  
-  
+
+    
+    const findage = () => {
+        var dob = (new Date(document.getElementById("DATE_OF_BIRTH").value));
+        var today = new Date();
+        var dateParts = dob.split("-");
+        var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+        var birthDate = new Date(dateObject);
+        console.log(dateObject);
+        console.log(birthDate);
+        var age_now = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age_now--;
+        }
+
+        if (age_now === 0) {
+            return m + ' month(s)';
+        }
+        console.log(age_now);
+    }
+
+    const estimateddob = (yearofage) => {
+        const newage =values['age']= yearofage;
+        //console.log(newage);
+
+        var d = new Date();
+        var year = d.getFullYear();
+        var month = d.getMonth();
+        var day = d.getDate();
+        var c = new Date(year - newage, 6, 15);
+        //console.log(c); 
+        return c;
+        
+        //const newage =values['dob']= c;
+        //setValues({...values, dob: c}); 
+        const newageyear =values['dob']=== c;
+        console.log(newageyear);
+    }
     //Get countries
     useEffect(() => {
         async function getCharacters() {
@@ -215,6 +253,20 @@ const PatientRegistration = (props) => {
         resetForm
     } = useForm(initialfieldState_patientRegsitration, validate)
     
+    const handleDOBInput = e => {
+        const actualAge = values['age']
+
+        const newvar=moment(estimateddob(actualAge)).format('DD-MM-YYYY');
+        console.log(newvar)
+
+        //setValues({...values, dob:newvar})
+        values['dob']=newvar;
+
+        document.getElementById('dob').value = newvar
+        console.log(values)
+    
+    
+    }
     
         // setValues({...values, dateRegistration: newDatenow});
         //The Submit Button Implemenatation 
@@ -273,7 +325,7 @@ const PatientRegistration = (props) => {
                         <Row form>
                             <Col md={4}>
                             <FormGroup>
-                                <Label for="hospitalNumber">Patient Id</Label>
+                                <Label for="hospitalNumber">Patient Id *</Label>
                                 <Input type="text" name="hospitalNumber" id="hospitalNumber" placeholder="Patient ID " value={values.hospitalNumber} onChange={handleInputChange} required/>
                             </FormGroup>
                             </Col>
@@ -291,19 +343,19 @@ const PatientRegistration = (props) => {
                         <Row form>
                             <Col md={4}>
                             <FormGroup>
-                                <Label for="firstName">First Name</Label>
+                                <Label for="firstName">First Name *</Label>
                                 <Input type="text" name="firstName" id="firstName" placeholder="First Name" value={values.firstName} onChange={handleInputChange} required/>
                             </FormGroup>
                             </Col>
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="middleName">Other Name(s)</Label>
-                                <Input type="text" name="otherNames" id="otherNames" placeholder="Middle Name" value={values.otherNames} onChange={handleInputChange}/>
+                                <Input type="text" name="otherNames" id="otherNames" placeholder="Middle Name" value={values.otherNames} onChange={handleInputChange} />
                             </FormGroup>
                             </Col>
                             <Col md={4}>
                             <FormGroup>
-                                <Label for="lastName">Last Name </Label>
+                                <Label for="lastName">Last Name * </Label>
                                 <Input type="text" name="lastName" id="lastName" placeholder="Last Name" value={values.lastName} onChange={handleInputChange} required/>
                             </FormGroup>
                             </Col>
@@ -311,7 +363,7 @@ const PatientRegistration = (props) => {
                         <Row form>
                             <Col md={4}>
                                 <FormGroup>
-                                    <Label for="maritalStatus">Gender</Label>
+                                    <Label for="maritalStatus">Gender *</Label>
                                     <Input type="select" name="genderId" id="genderId" value={values.genderId} onChange={handleInputChange} required>
                                         <option value="1">Female</option>
                                         <option value="2">Male</option>
@@ -321,7 +373,7 @@ const PatientRegistration = (props) => {
                             <Col md={4}>
                             <FormGroup>
                                 <Label for="occupation">Occupation</Label>
-                                <Input type="select" name="occupationId" id="occupationId" value={values.occupationId} onChange={handleInputChange}>
+                                <Input type="select" name="occupationId" id="occupationId" value={values.occupationId} onChange={handleInputChange} >
                                     <option value="1">Students</option>
                                     <option value="2">Business</option>
                                     <option value="3">Government</option>
@@ -361,30 +413,20 @@ const PatientRegistration = (props) => {
                             <Col md={4} >
                                 {/* Estimate Date of birth in a row  */}
                                 <Row form>
-                                        <Col md={4}>
-                                        <FormGroup>
-                                            <Label for="year">Year</Label>
-                                            <Input type="text" name="year" id="year" placeholder="Year" value={values.Estimate} onChange={calculateAge} />
-                                        </FormGroup>
-                                        </Col>
-                                        <Col md={4}>
-                                        <FormGroup>
-                                            <Label for="year">Months</Label>
-                                            <Input type="text" name="months" id="months" placeholder="Months" value={values.EstimateMonths} onChange={handleInputChange} />
-                                        </FormGroup>
-                                        </Col>
-                                        <Col md={4}>
-                                        <FormGroup>
-                                            <Label for="year">Days</Label>
-                                            <Input type="text" name="days" id="days" placeholder="Days" value={values.EstimateDays} onChange={handleInputChange} />
-                                        </FormGroup>
-                                        </Col>
+                                <Col md={4}>
+                                    
+                                    <FormGroup>
+                                        <Label for="year">Age</Label>
+                                        <Input type="text" name="age"  placeholder="Age"  onChange={value1 => setValues({...values, dob: value1})} onChange={handleInputChange}/>
+                                    </FormGroup>
+                                    
+                                    </Col>
                                 </Row>
                             </Col>           
                             <Col md={4}>
                             <FormGroup check>
                                 <Label></Label>
-                                <Input type="checkbox"/>Estimated Date of  Birth
+                                <Input type="checkbox" id={estimateddob(values.age)} onChange={handleDOBInput} />Estimate Date of  Birth
                             </FormGroup>
                             </Col>
                         </Row>
