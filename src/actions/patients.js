@@ -27,7 +27,7 @@ export const fetchAll = () => dispatch => {
     })
     .catch(error =>
       dispatch({
-        type: ACTION_TYPES.ERROR,
+        type: ACTION_TYPES.PATIENTS_ERROR,
         payload: 'Something went wrong, please try again'
       })
     )
@@ -38,13 +38,13 @@ export const fetchById = id => dispatch => {
     .get(`${baseUrl}patients/${id}`)
     .then(response => {
       dispatch({
-        type: ACTION_TYPES.FETCH_BY_ID,
+        type: ACTION_TYPES.PATIENTS_FETCH_BY_ID,
         payload: response.data
       })
     })
     .catch(error =>
       dispatch({
-        type: ACTION_TYPES.ERROR,
+        type: ACTION_TYPES.PATIENTS_ERROR,
         payload: 'Something went wrong, please try again'
       })
     )
@@ -55,14 +55,14 @@ export const create = (data, onSuccess, onError) => dispatch => {
     .post(`${baseUrl}patients/`, data)
     .then(response => {
       dispatch({
-        type: ACTION_TYPES.CREATE,
+        type: ACTION_TYPES.PATIENTS_CREATE,
         payload: response.data
       })
       onSuccess()
     })
     .catch(error => {
       dispatch({
-        type: ACTION_TYPES.ERROR,
+        type: ACTION_TYPES.PATIENTS_ERROR,
         payload: 'Something went wrong, please try again'
       })
     })
@@ -73,13 +73,13 @@ export const update = (id, data) => dispatch => {
     .put(`${baseUrl}patients/${id}`, data)
     .then(response => {
       dispatch({
-        type: ACTION_TYPES.UPDATE,
+        type: ACTION_TYPES.PATIENTS_UPDATE,
         payload: response.data
       })
     })
     .catch(error => {
       dispatch({
-        type: ACTION_TYPES.ERROR,
+        type: ACTION_TYPES.PATIENTS_ERROR,
         payload: 'Something went wrong, please try again'
       })
     })
@@ -90,13 +90,13 @@ export const Delete = (id, onSuccess) => dispatch => {
     .delete(`${baseUrl}patients/${id}`)
     .then(response => {
       dispatch({
-        type: ACTION_TYPES.DELETE,
+        type: ACTION_TYPES.PATIENTS_DELETE,
         payload: response.data
       })
     })
     .catch(error => {
       dispatch({
-        types: ACTION_TYPES.ERROR,
+        types: ACTION_TYPES.PATIENTS_ERROR,
         payload: 'Something went wrong, please try again'
       })
     })

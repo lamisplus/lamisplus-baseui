@@ -5,16 +5,16 @@ const patientReducer = (state = { list: [] }, action) => {
     case ACTION_TYPES.PATIENTS_FETCH_ALL:
       return { ...state, list: action.payload }
 
-    case ACTION_TYPES.FETCH_BY_ID:
+    case ACTION_TYPES.PATIENTS_FETCH_BY_ID:
       return { ...state, list: action.payload }
 
-    case ACTION_TYPES.CREATE:
+    case ACTION_TYPES.PATIENTS_CREATE:
       return { ...state, list: action.payload }
 
-    case ACTION_TYPES.UPDATE:
+    case ACTION_TYPES.PATIENTS_UPDATE:
       return { ...state, list: action.payload }
 
-    case ACTION_TYPES.DELETE:
+    case ACTION_TYPES.PATIENTS_DELETE:
       return { ...state, list: action.payload }
 
     default:
