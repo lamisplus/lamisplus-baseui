@@ -1,15 +1,7 @@
-const CREATE = 'CREATE'
-const UPDATE = 'UPDATE'
-const DELETE = 'DELETE'
-const FETCH_ALL = 'FETCH_ALL'
-const ERROR = 'ERROR'
-const FETCH_BY_ID = 'FETCH_BY_ID'
-
-exports = {
-  CREATE,
-  UPDATE,
-  DELETE,
-  FETCH_ALL,
-  ERROR,
-  FETCH_BY_ID
-}
+export const CREATE = 'CREATE'
+export const UPDATE = 'UPDATE'
+export const DELETE = 'DELETE'
+export const FETCH_ALL = 'FETCH_ALL'
+export const ERROR = 'ERROR'
+export const FETCH_BY_ID = 'FETCH_BY_ID'
+export const PATIENTS_FETCH_ALL = 'PATIENTS_FETCH_ALL'

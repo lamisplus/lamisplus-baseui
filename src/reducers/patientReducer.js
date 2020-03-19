@@ -2,10 +2,10 @@ import * as ACTION_TYPES from '../actions/types'
 
 const patientReducer = (state = { list: [] }, action) => {
   switch (action.type) {
-    case ACTION_TYPES.FETCH_ALL:
+    case ACTION_TYPES.PATIENTS_FETCH_ALL:
       return { ...state, list: action.payload }
 
-    case ACTION_TYPES.FETCH_ALL:
+    case ACTION_TYPES.FETCH_BY_ID:
       return { ...state, list: action.payload }
 
     case ACTION_TYPES.CREATE:

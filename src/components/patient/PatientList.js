@@ -22,7 +22,8 @@ import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
 import { FaPencilAlt } from 'react-icons/fa'
 import { MdDeleteForever } from 'react-icons/md'
-import * as actions from '../../store/actions/patients/patients'
+// import * as actions from '../../store/actions/patients/patients'
+import { fetchAll } from '../../actions/patients'
 import { connect } from 'react-redux'
 
 const useStyles = makeStyles({
@@ -68,6 +69,7 @@ function PatientList (props) {
 
   useEffect(() => {
     props.fetchAllPatients()
+
     //setData(props.patientsList);
   }, []) //componentDidMount
 
@@ -147,7 +149,7 @@ const mapStateToProps = state => ({
 })
 
 const mapActionToProps = {
-  fetchAllPatients: actions.fetchAll
+  fetchAllPatients: fetchAll
   //deletePatient: actions.Delete
 }
 

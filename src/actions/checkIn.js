@@ -42,7 +42,7 @@ export const fetchById = id => dispatch => {
     })
     .catch(error =>
       dispatch({
-        type: ACTION_TYPES.GET_ERROR,
+        type: ACTION_TYPES.ERROR,
         payload: 'Something went wrong, please try again'
       })
     )

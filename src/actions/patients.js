@@ -15,11 +15,13 @@ import * as ACTION_TYPES from './types'
  */
 
 export const fetchAll = () => dispatch => {
+  console.log(baseUrl)
   axios
-    .get(`${baseUrl}visits/`)
+    .get(`${baseUrl}patients/`)
     .then(response => {
+      console.log(response.data)
       dispatch({
-        type: ACTION_TYPES.FETCH_ALL,
+        type: ACTION_TYPES.PATIENTS_FETCH_ALL,
         payload: response.data
       })
     })
@@ -33,7 +35,7 @@ export const fetchAll = () => dispatch => {
 
 export const fetchById = id => dispatch => {
   axios
-    .get(`${baseUrl}visits/${id}`)
+    .get(`${baseUrl}patients/${id}`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.FETCH_BY_ID,
@@ -42,7 +44,7 @@ export const fetchById = id => dispatch => {
     })
     .catch(error =>
       dispatch({
-        type: ACTION_TYPES.GET_ERROR,
+        type: ACTION_TYPES.ERROR,
         payload: 'Something went wrong, please try again'
       })
     )
@@ -50,7 +52,7 @@ export const fetchById = id => dispatch => {
 
 export const create = (data, onSuccess, onError) => dispatch => {
   axios
-    .post(`${baseUrl}visits/`, data)
+    .post(`${baseUrl}patients/`, data)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.CREATE,
@@ -68,7 +70,7 @@ export const create = (data, onSuccess, onError) => dispatch => {
 
 export const update = (id, data) => dispatch => {
   axios
-    .put(`${baseUrl}visits/${id}`, data)
+    .put(`${baseUrl}patients/${id}`, data)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.UPDATE,
@@ -85,7 +87,7 @@ export const update = (id, data) => dispatch => {
 
 export const Delete = (id, onSuccess) => dispatch => {
   axios
-    .delete(`${baseUrl}visits/${id}`)
+    .delete(`${baseUrl}patients/${id}`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.DELETE,
