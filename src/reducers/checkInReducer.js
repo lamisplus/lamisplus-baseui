@@ -5,16 +5,16 @@ import * as ACTION_TYPES from '../actions/types'
 
 const checkInReducer = (state = {}, action) => {
   switch (action.type) {
-    case ACTION_TYPES.FETCH_ALL:
+    case ACTION_TYPES.CHECKIN_FETCH_ALL:
       return [...state, action.payload]
 
-    case ACTION_TYPES.CREATE:
+    case ACTION_TYPES.CHECKIN_CREATE:
       return [...state, action.payload]
 
-    case ACTION_TYPES.UPDATE:
+    case ACTION_TYPES.CHECKIN_UPDATE:
       return [...state, action.payload]
 
-    case ACTION_TYPES.DELETE:
+    case ACTION_TYPES.CHECKIN_DELETE:
       return [...state, action.payload]
 
     default:

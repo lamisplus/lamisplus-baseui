@@ -30,7 +30,7 @@ import moment from 'moment'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Title from 'components/Title/CardTitle'
-import { url } from 'axios/url'
+import { url } from '../../api'
 import { create } from '../../actions/patients'
 import { initialfieldState_patientRegsitration } from './initailFieldState'
 import useForm from '../Functions/UseForm'
@@ -88,6 +88,10 @@ const PatientRegistration = props => {
     handleInputChange,
     resetForm
   } = useForm(initialfieldState_patientRegsitration, validate)
+
+  /**
+   * Initializing state properties
+   */
   const [countries, setCountries] = useState([])
   const [states, setStates] = useState([])
   const [provinces, setProvinces] = useState([])
@@ -117,9 +121,7 @@ const PatientRegistration = props => {
     if (age_now === 0) {
       return m + ' month(s)'
     }
-
     return m
-    // console.log(age_now)
   }
 
   const handleDateChange = e => {
@@ -128,33 +130,30 @@ const PatientRegistration = props => {
     console.log(age)
   }
 
-  const estimatedob = yearofage => {
-    const newage = (values['age'] = yearofage)
-    //console.log(newage);
-
+  /**
+   * Estimates the dob of an individual given
+   */
+  const estimatedob = age => {
+    const newage = (values['age'] = age)
     var d = new Date()
     var year = d.getFullYear()
     var month = d.getMonth()
     var day = d.getDate()
     var c = new Date(year - newage, 6, 15)
-    //console.log(c);
-    return c
 
-    //const newage =values['dob']= c;
-    //setValues({...values, dob: c});
-    const newageyear = values['dob'] === c
-    console.log(newageyear)
+    return c
   }
 
   /**
    * Handles UI behaviour on Age Input change
    */
   const onAgeInputChange = e => {
+    setDisplay(true)
+    setValues({ ...values, dobEstimated: 1 })
+
     if (e.target.value === '' || e.target.value === null) {
       setDisplay(false)
     }
-    setDisplay(true)
-    setValues({ ...values, dobEstimated: 1 })
     handleEstimation()
   }
 
