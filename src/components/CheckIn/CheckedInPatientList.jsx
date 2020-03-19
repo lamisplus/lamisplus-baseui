@@ -181,4 +181,4 @@ const CheckedInTable = (props) => {
 };
 
 
-export default BasicTable;
+export default CheckedInTable;

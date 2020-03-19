@@ -76,7 +76,7 @@ const columns = (modalClickHandler => [
     name: 'Age',
     selector: 'dob',
     sortable: false,
-    cell: row => <span>{row.dob !==null?calculate_age(row.dob):null }</span>
+    cell: row => <span>{row.dob }</span>
   },
   {
     name: 'Action',
