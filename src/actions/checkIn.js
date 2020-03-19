@@ -4,7 +4,7 @@ import * as ACTION_TYPES from './types'
 
 /**
  * @Actions
- * CRUD OPERATIONS
+ * CheckIn CRUD OPERATIONS
  * returns API response from server
  * =================================
  * fetchAll()
