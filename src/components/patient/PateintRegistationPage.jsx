@@ -155,11 +155,12 @@ const PatientRegistration = props => {
    * Handles UI behaviour on Age Input change
    */
   const onAgeInputChange = e => {
-    setDisplay(true)
-    handleEstimation()
     if (e.target.value === '' || e.target.value === null) {
       setDisplay(false)
     }
+    setDisplay(true)
+    setValues({ ...values, dobEstimated: 1 })
+    handleEstimation()
   }
 
   /**
