@@ -4,11 +4,7 @@ import {Card, CardContent} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import {Dashboard} from '@material-ui/icons';
 import './PatientSearch.css';
-import {
-  Input,
-  Form
-} from 'reactstrap';
-
+import {Input,Form} from 'reactstrap';
 import {url} from 'axios/url';
 import {Link} from 'react-router-dom';
 
@@ -109,7 +105,7 @@ const BasicTable = () => {
   const [filterText, setFilterText] = React.useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
   const [data, setData] = useState([])
-  const filteredItems = (!filterText && data) ? [] : data.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
+  const filteredItems = data.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
 
   useEffect(() => {
     async function fetchData() {

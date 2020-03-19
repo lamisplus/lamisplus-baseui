@@ -19,6 +19,7 @@ const VitalSignsPage = React.lazy(() => import('components/Vitals/VitalSignsPage
 /* Consultation page loading */
 const ConsultationPage = React.lazy(() => import('pages/ConsultationPage'));
 const ConsultationDashboardPage = React.lazy(() => import('components/Consultation/Dashboard'));
+
 /* Laboratory page loading */
 const LaboratoryPage = React.lazy(() => import('components/Laboratory/LaboratoryPage'));
 const TestOrder = React.lazy(() => import('components/Laboratory/TestOrder'));
@@ -41,7 +42,7 @@ const ViewVitalsPage = React.lazy(() => import('components/Vitals/ViewVitalsPage
 const AddVitalsPage = React.lazy(() => import('components/Vitals/AddVitalsPage'));
 // const CheckInModal = React.lazy(() => import('components/CheckIn/CheckInModal'));
 
-const EnrolledPatientsDashboard = React.lazy(() => import('components/Hiv/EnrolledPatientsDashboard'));
+const EnrolledPatientsDashboard = React.lazy(() => import('components/PatientConsultation/HomePage'));
 
 /* Sample table i design */
 
@@ -100,7 +101,7 @@ class Routes extends React.Component {
                 {/* <Route exact path="/checkin-modal" component={CheckInModal} /> */}
                 
                 {/* The rout to Hiv Module */}
-                <Route exact path="/enroll-patient-dashboard" component={EnrolledPatientsDashboard} />
+                <Route exact path="/patient-dashboard" component={EnrolledPatientsDashboard} />
                 <Route exact path="/form-builder" component={FormBuilder} />
                 <Route exact path="/view-form" component={ViewForm} />                
                {/* The rout to that DataTabel */}
