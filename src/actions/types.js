@@ -1,0 +1,15 @@
+const CREATE = 'CREATE'
+const UPDATE = 'UPDATE'
+const DELETE = 'DELETE'
+const FETCH_ALL = 'FETCH_ALL'
+const ERROR = 'ERROR'
+const FETCH_BY_ID = 'FETCH_BY_ID'
+
+exports = {
+  CREATE,
+  UPDATE,
+  DELETE,
+  FETCH_ALL,
+  ERROR,
+  FETCH_BY_ID
+}
