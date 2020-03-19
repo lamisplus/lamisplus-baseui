@@ -31,7 +31,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Title from 'components/Title/CardTitle'
 import { url } from 'axios/url'
-import * as actions from '../../store/actions/patients/patients'
+import { create } from '../../actions/patients'
 import { initialfieldState_patientRegsitration } from './initailFieldState'
 import useForm from '../Functions/UseForm'
 
@@ -931,7 +931,7 @@ const mapStateToProps = state => ({
 })
 
 const mapActionToProps = {
-  createPatient: actions.create
+  createPatient: create
   //updatePatient: actions.update
 }
 
