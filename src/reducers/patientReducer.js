@@ -2,19 +2,19 @@ import * as ACTION_TYPES from '../actions/types'
 
 const patientReducer = (state = { list: [] }, action) => {
   switch (action.type) {
-    case ACTION_TYPES.FETCH_ALL:
+    case ACTION_TYPES.PATIENTS_FETCH_ALL:
       return { ...state, list: action.payload }
 
-    case ACTION_TYPES.FETCH_ALL:
+    case ACTION_TYPES.PATIENTS_FETCH_BY_ID:
       return { ...state, list: action.payload }
 
-    case ACTION_TYPES.CREATE:
+    case ACTION_TYPES.PATIENTS_CREATE:
       return { ...state, list: action.payload }
 
-    case ACTION_TYPES.UPDATE:
+    case ACTION_TYPES.PATIENTS_UPDATE:
       return { ...state, list: action.payload }
 
-    case ACTION_TYPES.DELETE:
+    case ACTION_TYPES.PATIENTS_DELETE:
       return { ...state, list: action.payload }
 
     default:
