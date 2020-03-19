@@ -162,16 +162,18 @@ const CheckiInListTable = (props) => {
         handleInputChange,
         resetForm
     } = useForm(initialfieldState_checkInPatient, validate)
-
+    
     const handleSubmit = e => {
+        //
         setShowErrorMsg(false);
         const checkInDate = Moment(values.visitDate).format('DD-MM-YYYY');
-        const checkInTime = Moment(values.visitTime).format('HH:mm');
+        const checkInTime = Moment(values.visitTime).format('hh:mm A');
+        
         values['dateVisitStart']= checkInDate;
-        values['timeVisitStart']= checkInTime;
         values['patientId']= modal.patient.id;
+        values['timeVisitStart']=checkInTime;
         e.preventDefault()
-
+        console.log(values.visitTypeId);
         if (validate()) {
             const onSuccess = () => {
                 resetForm()
@@ -222,17 +224,17 @@ const CheckiInListTable = (props) => {
         </cardContent>
         </card>
             <Modal isOpen={modal.showModal} toggle={toggle} size="lg">
-                <ModalHeader toggle={toggle}>CheckIn Patient</ModalHeader>
+                <ModalHeader toggle={toggle}>CheckIn Patient 3</ModalHeader>
                 <ModalBody>
                 <Alert color="danger" isOpen={showErrorMsg} toggle={onDismiss}>
-     {errorMsg}
-    </Alert>
+                    {errorMsg}
+                </Alert>
                     <Row form>
                         <Col md={4}>
                             <FormGroup>
                                 <Label for="qualification">Visit Type</Label>
                                 <Input type="select" name="visitTypeId" id="visitTypeId" value={values.visitTypeId} onChange={handleInputChange} required>
-                                    <option value="2">Booked</option>
+                                    <option value="2" >Booked</option>
                                     <option value="3">Unbooked</option>
                                 </Input>
                             </FormGroup>
@@ -250,7 +252,33 @@ const CheckiInListTable = (props) => {
                                 <Label for="middleName">Time of Visit</Label>
                                 <DateTimePicker date={false} name="visitTime"  id="visitTime" value={values.visitTime}   onChange={value1 => setValues({...values, visitTime: value1})}
                                 defaultValue={new Date()} max={new Date()}
-                                required/>
+                                required/> 
+                                {/* <Input type="select" name="timeVisitStart" id="timeVisitStart" value={values.timeVisitStart} onChange={handleInputChange}>
+                                    <option value="12:00 AM">12:00 AM</option>
+                                    <option value="1:00 AM">1:00 AM</option>
+                                    <option value="2:00 AM">2:00 AM</option>
+                                    <option value="3:00 AM">3:00 AM</option>
+                                    <option value="4:00 AM">1:00 AM</option>
+                                    <option value="5:00 AM">2:00 AM</option>
+                                    <option value="6:00 AM">3:00 AM</option>
+                                    <option value="7:00 AM">1:00 AM</option>
+                                    <option value="8:00 AM">2:00 AM</option>
+                                    <option value="9:00 AM">3:00 AM</option>
+                                    <option value="10:00 AM">1:00 AM</option>
+                                    <option value="11:59 AM">11:59 AM</option>
+                                    <option value="12:00 PM">12:00 PM</option>
+                                    <option value="1:00 PM">1:00 PM</option>
+                                    <option value="2:00 PM">2:00 PM</option>
+                                    <option value="3:00 PM">3:00 PM</option>
+                                    <option value="4:00 PM">4:00 PM</option>
+                                    <option value="5:00 PM">5:00 PM</option>
+                                    <option value="6:00 PM">6:00 PM</option>
+                                    <option value="7:00 PM">7:00 PM</option>
+                                    <option value="8:00 PM">8:00 PM</option>
+                                    <option value="9:00 PM">9:00 PM</option>
+                                    <option value="10:00 PM">10:00 PM</option>
+                                    <option value="11:00 PM">11:59 PM</option>
+                                </Input>*/}
                             </FormGroup>
                         </Col>
                     </Row>

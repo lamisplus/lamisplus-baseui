@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Delete from '@material-ui/icons/Delete';
 import * as actions from "../../store/actions/patients/patients";
 import {connect} from 'react-redux';
-import {url} from 'axios/url';
+
 
 /**Find table documentations at
  * 1.https://www.npmjs.com/package/react-data-table-component#storybook-dependencies----rootdirstoriespackagejson

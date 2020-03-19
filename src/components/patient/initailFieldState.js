@@ -20,7 +20,6 @@ export const initialfieldState_patientRegsitration = {
         stateId:'',
         street:'',
         dob:'',
-        dateRegistration: new Date(),
-        age:''
+        dateRegistration: new Date()
 
 }

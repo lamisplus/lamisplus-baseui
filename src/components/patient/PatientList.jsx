@@ -189,7 +189,7 @@ function PatientList(props) {
 
 
 const mapStateToProps = state => ({
-  
+ // console.log(state)
   patientsList: state.patients.list
 })
 

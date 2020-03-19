@@ -1,6 +1,6 @@
 export const initialfieldState_checkInPatient = {
         dateVisitStart: new Date(), 
-        timeVisitStart: null, 
+        timeVisitStart: '', 
         visitTypeId:'', 
         patientId:'' 
 }

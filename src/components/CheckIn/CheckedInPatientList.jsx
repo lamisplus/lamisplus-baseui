@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import {Card, CardContent} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
-import {Delete} from '@material-ui/icons';
+import {Clear} from '@material-ui/icons';
 import './PatientSearch.css';
 import {
     Input,
@@ -86,7 +86,7 @@ const columns = (modalClickHandler => [
         name: 'Action',
         cell: () =>
             <div>
-                <IconButton color="primary" onClick={modalClickHandler} aria-label="Cancel CheckIn" title="Cancel CheckIn"> <Delete />
+                <IconButton color="primary" onClick={modalClickHandler} aria-label="Cancel CheckIn" title="Cancel CheckIn"> <Clear />
                 </IconButton>
             </div>,
         ignoreRowClick: true,
@@ -106,7 +106,7 @@ const customStyles = {
 };
 
 
-const BasicTable = () => {
+const CheckedInTable = (props) => {
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
     const [data, setData] = useState([])
@@ -165,11 +165,11 @@ const BasicTable = () => {
             <Modal isOpen={modal} toggle={toggle}>
                 <ModalHeader toggle={toggle}>Cancel Patient</ModalHeader>
                 <ModalBody>
-                    <p>
-                        Are you sure you want to cancel this visit?</p>
+                    
                     <Alert color="primary">
-                        <small><h6>Note: You can only cancel a patient without Encounter</h6></small>
+                        <small><h6>Note: You can only cancel a patient without Encounter</h6></small>                   
                     </Alert>
+                    <p>Are you sure you want to cancel this visit?</p>
                 </ModalBody>
                 <ModalFooter>
                     <Button color="primary" onClick={toggle}>Continue</Button>{' '}
@@ -180,13 +180,13 @@ const BasicTable = () => {
     );
 };
 
-const mapStateToProps = state => ({
+// const mapStateToProps = state => ({
   
-    patientsList: state.patients.list
-  })
+//     patientsList: state.patients.list
+//   })
   
-  const mapActionToProps = {
-    fetchAllPatients: actions.fetchAll,
-    checkInPatient: checkInActions.create
-  }
-export default BasicTable;
+//   const mapActionToProps = {
+//     fetchAllPatients: actions.fetchAll,
+//     //checkInPatient: checkInActions.create
+//   }
+export default CheckedInTable;
