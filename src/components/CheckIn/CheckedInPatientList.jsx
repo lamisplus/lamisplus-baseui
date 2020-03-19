@@ -180,13 +180,5 @@ const CheckedInTable = (props) => {
     );
 };
 
-// const mapStateToProps = state => ({
-  
-//     patientsList: state.patients.list
-//   })
-  
-//   const mapActionToProps = {
-//     fetchAllPatients: actions.fetchAll,
-//     //checkInPatient: checkInActions.create
-//   }
-export default CheckedInTable;
+
+export default BasicTable;
