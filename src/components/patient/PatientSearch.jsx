@@ -133,7 +133,7 @@ const PatientTable = (props) => {
   }, [filterText, resetPaginationToggle]);
 
   return (
-      <div>
+      <div class="searchTable">
         <card>
           <cardContent>
         <DataTable

@@ -76,16 +76,16 @@ const columns = [
   },
   {
     name: 'Start Visit',
-    selector: 'startVisit',
+    selector: 'dateVisitStart',
     sortable: false,
   },
   {
     name: 'Action',
-    cell: () =>
+    cell: row =>
         <div>
-          <IconButton color="primary"  aria-label="Archive Patient" title="Edit Patient">
-            <Link to={{ pathname: '/enroll-patient-dashboard', state: { getpatient: {}} }}>
-            <Dashboard title="Edit Patient"   aria-label="Edit Patient"/>
+          <IconButton color="primary"  aria-label="View Patient" title="View Patient">
+            <Link to={{ pathname: '/patient-dashboard', state: { getpatient: {row}} }}>
+            <Dashboard title="Patient Dashboard"   aria-label="View Patient"/>
             </Link>
           </IconButton>
         </div>,
