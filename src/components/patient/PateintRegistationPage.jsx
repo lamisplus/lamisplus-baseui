@@ -80,11 +80,10 @@ const PatientRegistration = props => {
   const classes = useStyles()
   const apicountries = url + 'countries'
   const apistate = url + 'state/country/'
+
   const {
     values,
     setValues,
-    errors,
-    setErrors,
     handleInputChange,
     resetForm
   } = useForm(initialfieldState_patientRegsitration)
@@ -103,9 +102,7 @@ const PatientRegistration = props => {
     { id: '3', name: 'Sister' },
     { id: '4', name: 'Brother' }
   ]
-
   const [display, setDisplay] = useState(false)
-
   const findAge = date => {
     var dob = new Date(date)
     var today = new Date()
@@ -186,7 +183,9 @@ const PatientRegistration = props => {
     }
     getCharacters()
   }, [])
-
+  useEffect(() => {
+    props.createPatient()
+}, )//componentDidMount
   //toast msg.
   const { addToast } = useToasts()
   //Get States from selected country
@@ -209,12 +208,11 @@ const PatientRegistration = props => {
   const getProvinces = e => {
     setValues({ ...values, [e.target.name]: e.target.value })
     const stateId = e.target.value
-
-    console.log(stateId)
     async function getCharacters () {
+
       const response = await fetch(`${url}province/` + stateId)
       const provinceList = await response.json()
-      console.log(provinceList)
+
       setProvinces(provinceList)
     }
     getCharacters()
@@ -265,31 +263,7 @@ const PatientRegistration = props => {
     setValues({ ...values, dateOfBirth: new Date(calculatedAge) })
   }
   //
-  //validate({fullName:'jenny'})
-  const validate = (fieldValues = values) => {
-    let temp = { ...errors }
-    if ('hospitalNumber' in fieldValues)
-      temp.hospitalNumber = fieldValues.hospitalNumber
-        ? ''
-        : 'This field is required.'
-    if ('dateRegistration' in fieldValues)
-      temp.dateRegistration = fieldValues.dateRegistration
-        ? ''
-        : 'This field is required.'
-    if ('firstName' in fieldValues)
-      temp.firstName = fieldValues.firstName ? '' : 'This field is required.'
-    if ('lastName' in fieldValues)
-      temp.lastName = fieldValues.lastName ? '' : 'This field is required.'
-    if ('email' in fieldValues)
-      temp.email = /^$|.+@.+..+/.test(fieldValues.email)
-        ? ''
-        : 'Email is not valid.'
-    setErrors({
-      ...temp
-    })
 
-    if (fieldValues === values) return Object.values(temp).every(x => x === '')
-  }
 
   // setValues({...values, dateRegistration: newDatenow});
   //The Submit Button Implemenatation
@@ -298,17 +272,19 @@ const PatientRegistration = props => {
     const dateOfBirth = moment(values.dateOfBirth).format('DD-MM-YYYY')
     //setValues({ dateRegistration: newDatenow});
     values['dateRegistration'] = newDatenow
-    values['personRelativeDTOList'] = relatives
+    values['personRelativesDTO'] = relatives
     values['dob'] = dateOfBirth
     values['provinceId'] = 502
     console.log(values)
     e.preventDefault()
 
     props.create(values)
+
   }
 
   return (
-    <Page title='Patient Registration'>
+  
+    <Page title='Patient Registration'> 
       <ToastContainer autoClose={3000} />
       <Alert color='primary'>
         All Information with Asterisks(*) are compulsory
@@ -399,7 +375,7 @@ const PatientRegistration = props => {
                         id='otherNames'
                         placeholder='Middle Name'
                         value={values.otherNames}
-                        onChange={handleInputChange}
+                       
                       />
                     </FormGroup>
                   </Col>
@@ -411,8 +387,7 @@ const PatientRegistration = props => {
                         name='lastName'
                         id='lastName'
                         placeholder='Last Name'
-                        value={values.lastName}
-                        onChange={handleInputChange}
+                        value={values.lastName}                        
                         required
                       />
                     </FormGroup>
@@ -427,7 +402,7 @@ const PatientRegistration = props => {
                         name='genderId'
                         id='genderId'
                         value={values.genderId}
-                        onChange={handleInputChange}
+                        
                         required
                       >
                         <option value='1'>Female</option>
@@ -443,7 +418,7 @@ const PatientRegistration = props => {
                         name='occupationId'
                         id='occupationId'
                         value={values.occupationId}
-                        onChange={handleInputChange}
+                        
                       >
                         <option value='1'>Students</option>
                         <option value='2'>Business</option>
@@ -457,8 +432,7 @@ const PatientRegistration = props => {
                       <Input
                         type='select'
                         name='educationId'
-                        value={values.educationId}
-                        onChange={handleInputChange}
+                        value={values.educationId}                      
                       >
                         <option value='1'>PHD</option>
                         <option value='2'>MSC</option>
@@ -478,7 +452,7 @@ const PatientRegistration = props => {
                         name='maritalStatusId'
                         id='maritalStatusId'
                         value={values.maritalStatusId}
-                        onChange={handleInputChange}
+                        
                       >
                         <option value='1'>Single</option>
                         <option value='2'>Married</option>
@@ -657,19 +631,17 @@ const PatientRegistration = props => {
                                 id='provinceId'
                                 placeholder='Select Province'
                                 value={values.provinceId}
-                                onChange={handleInputChange}
                               >
-                                {provinces.length > 0 ? (
+
+                                {provinces.length>0 ?
                                   provinces.map(({ id, name }) => (
-                                    <option key={id} value={id}>
-                                      {name}
-                                    </option>
-                                  ))
-                                ) : (
-                                  <option key='' value=''>
-                                    No Results Found
+                                  <option key={name} value={id}>
+                                    {name}
                                   </option>
-                                )}
+                                ))
+                                : <option key="" value=""> No Record Found</option>
+                              }
+                                
                               </Input>
                             </FormGroup>
                           </Col>
@@ -924,12 +896,11 @@ function RelativeList ({
 }
 
 const mapStateToProps = state => ({
+
   status: state.patients.status
+
 })
 
-// const mapActionToProps = {
-//   createPatient: create
-//   //updatePatient: actions.update
-// }
 
 export default connect(mapStateToProps, { create })(PatientRegistration)
+
