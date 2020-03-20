@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const useForm = (initialFieldValues, validate) => {
+const useForm = (initialFieldValues) => {
     const [values, setValues] = useState(initialFieldValues)
     const [errors, setErrors] = useState({})
 
@@ -11,7 +11,7 @@ const useForm = (initialFieldValues, validate) => {
             ...values,
             ...fieldValue
         })
-        validate(fieldValue)
+      
     }
 
     const resetForm = () => {
