@@ -1,18 +1,24 @@
 import * as ACTION_TYPES from '../actions/types'
 
-const patientReducer = (state = { list: [] }, action) => {
+const initialState = {
+  list: [],
+  status: 0,
+  patient: {}
+}
+
+const patientReducer = (state = initialState, action) => {
   switch (action.type) {
     case ACTION_TYPES.PATIENTS_FETCH_ALL:
       return { ...state, list: action.payload }
 
     case ACTION_TYPES.PATIENTS_FETCH_BY_ID:
-      return { ...state, list: action.payload }
+      return { ...state, patient: action.payload }
 
     case ACTION_TYPES.PATIENTS_CREATE:
-      return { ...state, list: action.payload }
+      return { ...state, status: action.payload }
 
     case ACTION_TYPES.PATIENTS_UPDATE:
-      return { ...state, list: action.payload }
+      return { ...state, updated: action.payload }
 
     case ACTION_TYPES.PATIENTS_DELETE:
       return { ...state, list: action.payload }

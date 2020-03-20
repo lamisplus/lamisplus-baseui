@@ -27,7 +27,7 @@ import Moment from 'moment'
 import momentLocalizer from 'react-widgets-moment'
 import moment from 'moment'
 // React Notification
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Title from 'components/Title/CardTitle'
 import { url } from '../../api'
@@ -87,7 +87,7 @@ const PatientRegistration = props => {
     setErrors,
     handleInputChange,
     resetForm
-  } = useForm(initialfieldState_patientRegsitration, validate)
+  } = useForm(initialfieldState_patientRegsitration)
 
   /**
    * Initializing state properties
@@ -212,12 +212,10 @@ const PatientRegistration = props => {
 
     console.log(stateId)
     async function getCharacters () {
-      const response = await fetch('/api/province/state/' + stateId)
+      const response = await fetch(`${url}province/` + stateId)
       const provinceList = await response.json()
       console.log(provinceList)
-      setProvinces(
-        provinceList.map(({ name, id }) => ({ label: name, value: id }))
-      )
+      setProvinces(provinceList)
     }
     getCharacters()
   }
@@ -302,20 +300,11 @@ const PatientRegistration = props => {
     values['dateRegistration'] = newDatenow
     values['personRelativeDTOList'] = relatives
     values['dob'] = dateOfBirth
+    values['provinceId'] = 502
     console.log(values)
     e.preventDefault()
 
-    if (validate()) {
-      const onSuccess = () => {
-        resetForm()
-        addToast('Submitted successfully', { appearance: 'success' })
-      }
-      const onError = errstatus => {
-        console.log(errstatus)
-        addToast(errstatus, { appearance: 'warning' })
-      }
-      props.createPatient(values, onSuccess, onError)
-    }
+    props.create(values)
   }
 
   return (
@@ -324,6 +313,7 @@ const PatientRegistration = props => {
       <Alert color='primary'>
         All Information with Asterisks(*) are compulsory
       </Alert>
+      {props.status === 201 && toast.success('Registration Successful')}
       <Form onSubmit={handleSubmit}>
         {/* First  row form entry  for Demographics*/}
         <Row>
@@ -669,11 +659,17 @@ const PatientRegistration = props => {
                                 value={values.provinceId}
                                 onChange={handleInputChange}
                               >
-                                {provinces.map(({ label, value }) => (
-                                  <option key={value} value={value}>
-                                    {label}
+                                {provinces.length > 0 ? (
+                                  provinces.map(({ id, name }) => (
+                                    <option key={id} value={id}>
+                                      {name}
+                                    </option>
+                                  ))
+                                ) : (
+                                  <option key='' value=''>
+                                    No Results Found
                                   </option>
-                                ))}
+                                )}
                               </Input>
                             </FormGroup>
                           </Col>
@@ -928,12 +924,12 @@ function RelativeList ({
 }
 
 const mapStateToProps = state => ({
-  patientList: state.patients.list
+  status: state.patients.status
 })
 
-const mapActionToProps = {
-  createPatient: create
-  //updatePatient: actions.update
-}
+// const mapActionToProps = {
+//   createPatient: create
+//   //updatePatient: actions.update
+// }
 
-export default connect(mapStateToProps, mapActionToProps)(PatientRegistration)
+export default connect(mapStateToProps, { create })(PatientRegistration)
