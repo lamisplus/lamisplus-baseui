@@ -56,9 +56,11 @@ export const create = (data) => dispatch => {
   axios
     .post(`${baseUrl}patients/`, data)
     .then(response => {
+      console.log(response)
+      console.log(response.status)
       dispatch({
         type: ACTION_TYPES.PATIENTS_CREATE,
-        payload: response.data
+        payload: response.status
       })
       // console.log(response.data)
     })
