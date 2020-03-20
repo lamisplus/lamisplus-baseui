@@ -43,6 +43,7 @@
     "react-dom": "^16.8.4",
     "react-formio": "^4.2.5",
     "react-ga": "^2.5.7",
+    "react-grid-layout": "^0.18.3",
     "react-hook-form": "^4.9.8",
     "react-i18next": "^11.3.3",
     "react-icons": "^3.5.0",

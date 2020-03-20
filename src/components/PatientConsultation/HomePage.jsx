@@ -6,10 +6,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
+
 // {/* Auto textfield complete */}
 import {
     MdDashboard,
@@ -18,20 +16,18 @@ import {
 import {GiFiles,GiTestTubes } from 'react-icons/gi';  
 import { FaBriefcaseMedical} from "react-icons/fa"; 
 //{/*  Check box list */}
-import { Line } from 'react-chartjs-2';
-import {
-    ViralLoad,Weight
-  } from 'demos/patientVIral';
-import PatientAlert from 'components/PatientDashboard/PatientAlert';
+
+import PatientChart from 'components/PatientConsultation/PatientChart';
 import PatientAllergies from 'components/PatientDashboard/PatientAllergies';
 import PatientVitals from 'components/PatientDashboard/PatientVitals';
-import PatientLabTest from 'components/PatientDashboard/PatientLabTest';
 import ClinicalHistory from 'components/PatientDashboard/ClinicalHistory';
 import Consultation from './consulatation/consultation';
 import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import TestOrder from './TestOrder/TestOrder';
 import Medication from './Medication/Medication';
 import ServiceForm from './ServiceForm/serviceForm';
+import { Nav, NavItem, NavLink, Badge, Card, CardBody, CardDeck } from 'reactstrap';
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -180,7 +176,7 @@ export default function ScrollableTabsButtonForce(props) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+ 
   return (
     <div className={classes.root}>
         <div className={classes.inforoot} >
@@ -210,58 +206,35 @@ export default function ScrollableTabsButtonForce(props) {
      
     </div>
       </AppBar>
+      <Nav pills style={{backgroundColor:'silver'}} light >
+        <NavItem>
+          <NavLink  title="Alerts"><i class="fa fa-bell"></i>&nbsp;  <Badge href="#" color="dark">0</Badge> </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink> <i class="fa fa-users"></i> &nbsp; Relationships &nbsp; <Badge href="#" color="dark">0</Badge></NavLink>
+        </NavItem>
+        
+        <NavItem className="mr-2">
+          <NavLink>  <span>Current Visit: {props.location.state.getpatient.row.dateVisitStart}</span> &nbsp; | &nbsp; Check Out &nbsp; <i class="fa fa-sign-out"></i> </NavLink>
+        </NavItem>
+        </Nav>
       {/* The DashBoad Tab  */}
       <TabPanel value={value} index={0}>
-            <Grid container spacing={2}>
-                <Grid item xs='6' >                    
-                    <PatientAlert height={cardHeight}/>   
-                </Grid>
-                <Grid item xs='6'>
-                    <PatientAllergies height={cardHeight} addstatus={false}/>   
-                </Grid>
-                <Grid item xs='6' >                    
-                    <PatientVitals height={cardHeight}/> 
-                </Grid>
-                <Grid item xs='6' >
-                                           
-                    <PatientLabTest height={cardHeight}/>
-                </Grid>
-                <Grid item xs='6' >
-               
-                    <Card className={classes.cardroot} style={cardHeight}>
-                        <CardContent>
-                            <Typography className={classes.title} color="primary" gutterBottom>
-                            Viral Load
-                            </Typography>
-                            <Line data={ViralLoad({ fill: false }, { fill: false })} style={{ height: 200 }}/>                      
-                        </CardContent>                      
-                    </Card>
-                </Grid>
-                <Grid item xs='6' >
-               
-                    <Card className={classes.cardroot} style={cardHeight}>
-                        <CardContent>
-                            <Typography className={classes.title} color="primary" gutterBottom>
-                            Weight 
-                            </Typography>
-                            <Line data={Weight({ fill: false }, { fill: false })}/>                      
-                        </CardContent>                      
-                    </Card>
-                </Grid>
-                <Grid item xs='12' >
-               
-                    <Card className={classes.cardroot} style={cardHeight}>
-                        <CardContent>
+      <CardDeck>
+         <PatientVitals  getpatientdetails={props.location.state } /> 
+        <PatientAllergies height={cardHeight} addstatus={false} /> 
+        <PatientAllergies height={cardHeight} addstatus={false} /> 
+      </CardDeck>
+      <br></br>
+    <PatientChart getpatientdetails={props.location.state} />
+    <br></br>
+    <Card>
+                        <CardBody>
                             <ClinicalHistory />                     
-                        </CardContent>                      
+                        </CardBody>                      
                     </Card>
-                </Grid>
-                
-                
-            </Grid> 
-
-      </TabPanel>
-{/* End of dashboard */}
+</TabPanel>
+    {/* End of dashboard */}
 
 {/* Begining of Service Form */}
 <TabPanel value={value} index={1}>
@@ -271,11 +244,9 @@ export default function ScrollableTabsButtonForce(props) {
 </TabPanel>     
  {/* Begining of consultation  */}
  <TabPanel value={value} index={2}>
-      <Grid container spacing={2}>
-                <Grid item xs='12'> 
+      
                 <ServiceForm getpatientdetails={props.location.state } height={cardHeight}/>
-                </Grid>
-        </Grid>
+              
 </TabPanel>
 
       <TabPanel value={value} index={3}>
@@ -290,8 +261,8 @@ export default function ScrollableTabsButtonForce(props) {
       <TabPanel value={value} index={5}>
       <Grid container spacing={7} > 
                 <Grid item xs='7'>                    
-                    <Card className={classes.cardroot}>
-                        <CardContent>
+                    <Card >
+                        <CardBody>
                             <Typography className={classes.title} color="primary" gutterBottom>
                             
                             </Typography>
@@ -304,13 +275,13 @@ export default function ScrollableTabsButtonForce(props) {
                                     </Grid>
                                     
                                 </Grid>                               
-                        </CardContent>                      
+                        </CardBody>                      
                         </Card>                     
                 </Grid>
                 
                 <Grid item xs='5'>                    
                     <Card >
-                        <CardContent>
+                        <CardBody>
                             <Typography className={classes.title} color="primary" gutterBottom>
                             Drug Order 
                             </Typography>
@@ -323,13 +294,13 @@ export default function ScrollableTabsButtonForce(props) {
                                     </Grid>
                                     
                                 </Grid>                               
-                        </CardContent>                      
+                        </CardBody>                      
                         </Card>                     
                 </Grid>
                 <br/>
                 <Grid item xs='7'>                    
                     <Card >
-                        <CardContent>
+                        <CardBody>
                             <Typography className={classes.title} color="primary" gutterBottom>
                             Drug Order 
                             </Typography>
@@ -342,7 +313,7 @@ export default function ScrollableTabsButtonForce(props) {
                                     </Grid>
                                     
                                 </Grid>                               
-                        </CardContent>                      
+                        </CardBody>                      
                         </Card>                     
                 </Grid>
              

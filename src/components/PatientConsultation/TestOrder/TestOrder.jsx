@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import { TiWarningOutline } from "react-icons/ti";
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-// import {
-//     FormGroup,
-//     } from 'reactstrap';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -19,17 +12,21 @@ import Paper from '@material-ui/core/Paper';
 import MatButton from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import {
+  Row,
     FormGroup,
     Input,
     Label,
     Alert,
+    Card,
+    CardBody,
+    CardHeader
   } from 'reactstrap';
 
   import {url} from 'axios/url';
   import axios from 'axios'; 
   import { toast } from "react-toastify";
   import Spinner from 'react-bootstrap/Spinner';
-
+  import moment from 'moment';
 const useStyles = makeStyles(theme => ({
     root: {
         margin: 'auto',
@@ -86,7 +83,7 @@ export default function ConsultationPage(props) {
    
    const PatientID = getpatient.row.patientId;
    const visitId = getpatient.row.id;
-   const saveTestUrl = url+"encounters/GENERAL_SERVICE/LABTEST_ORDER_FORM/"+PatientID; 
+   const saveTestUrl = url+"encounters"; 
 
     const classes = useStyles();
 
@@ -142,7 +139,7 @@ export default function ConsultationPage(props) {
     async function fetchTestGroup() {
       console.log('fetching test group');
         try{
-      const response = await fetch(url+'encounters/laboratory/labtest-group');
+      const response = await fetch(url+'laboratory/labtest-Group');
       const body = await response.json();
       console.log(body);         
      setTestGroup(body.map(({ category, id }) => ({ label: category, value: id })));
@@ -156,7 +153,7 @@ export default function ConsultationPage(props) {
   const getTestByTestGroup = (e) => {
     const testGroupId = e.target.value;
     async function fetchTests() {
-        const response = await fetch(url+"encounters/laboratory/"+testGroupId+"/labtest");
+        const response = await fetch(url+"laboratory/"+testGroupId+"/labtest");
         const testLists = await response.json();
         setLeft(testLists);
       }
@@ -171,7 +168,10 @@ const saveTestOrder = (e) => {
           patientId: PatientID, 
           visitId:visitId,
           formName: 'LABTEST_ORDER_FORM',
-          serviceName: 'GENERAL_SERVICE'
+          serviceName: 'GENERAL_SERVICE',
+          dateEncounter: moment(new Date()).format('DD-MM-YYYY'),
+          visitId: 1
+          
   }; 
   axios.post(saveTestUrl, data)
       .then((result) => {          
@@ -217,23 +217,17 @@ const saveTestOrder = (e) => {
 return (
 <form className={classes.form} onSubmit={saveTestOrder} >
     {/* The input search field  */}
-<Grid container spacing={2}>
-        <Grid item xs='12'>
+
             <Card className={classes.cardroot} >
-                    <CardContent>
-                        <Typography className={classes.title} color="primary" gutterBottom>
-                            Test Order
-                        </Typography>
+              <CardHeader> Test Order</CardHeader>
+                    <CardBody>
                         {successMessage ? 
                         <Alert color="primary">
-                <TiWarningOutline 
-                    size="25"
-                    className=" text-dark"/>  
                     {successMessage}
             </Alert> : ""
             }
                         <br/>
-                        <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
+                        <Row>
                             <FormGroup>
                                     <Label for="testGroup">Please Select Test Order</Label>
                                     <Input type="select" name="testGroup" onChange={getTestByTestGroup}>
@@ -245,9 +239,8 @@ return (
                                                 ))}
                                     </Input>
                                 </FormGroup> 
-                        </Grid>
-                        <br/>
-                        <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
+                        </Row>
+                        <Row>
                             <Grid item>{customList(left)}</Grid>
                             <Grid item>
                                 <Grid container direction="column" alignItems="center">
@@ -294,7 +287,7 @@ return (
                                 </Grid>
                             </Grid>
                             <Grid item>{customList(right)}</Grid>
-                            </Grid> 
+                            </Row>
                             <br/>
                             <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
                       
@@ -313,13 +306,10 @@ return (
                     </Spinner> : ""}
                                 </MatButton> 
                             </Grid>                      
-                    </CardContent>                      
+                    </CardBody>                      
                 </Card>
-        </Grid>
 
     <br/>
-        
-    </Grid>
-</form>    
+        </form>    
 )
 }

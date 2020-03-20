@@ -1,14 +1,15 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Chip from '@material-ui/core/Chip';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {url} from 'axios/url';
-
+import {
+    Col,
+    Row,
+    Card,
+    CardHeader,
+    CardBody
+  } from 'reactstrap';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
@@ -30,7 +31,8 @@ const chips = {
 };
 
 export default function PatientVitals(props) {
-    const getpatientID =props.getpatientID;
+    const {getpatient} =props.getpatientdetails ;
+    const getpatientID = getpatient.row.patientId;
     const classes = useStyles();
     const [data, setData] = useState({pulse:'', height: '', systolic: '', diastolic: '', bodyWeight: ''}); 
     // const newid = data;
@@ -48,60 +50,40 @@ export default function PatientVitals(props) {
     }, []); 
 
   return (
-    <div className={classes.root}>
-            <Card className={classes.cardroot} style={props.height} >
-                    <CardContent>
-                        <Typography className={classes.title} color="primary" gutterBottom>
-                        Recent Vital Signs
-                        </Typography>
-                            <Grid container spacing={12}>
-                            
-                                <Grid item xs='6'>
-                                    <Typography  color="textPrimary" gutterBottom>
-                                        
-                                        Pulse :<Chip variant="outlined" size="small"  label={data.pulse} style={chips}/></Typography>
+    
+            <Card  >
+                    <CardHeader> Recent Vital Signs</CardHeader>
+                        
+                    <CardBody>
+                    <Row item xs='12'>
+                           <Col item xs='6'>             
+                        Pulse (bpm) :< span> <b>{data.pulse || 'N/A'}</b></span> 
                                     
-                                </Grid>
+                                </Col>
                           
-                                <Grid item xs='6'>
-                                    <Typography  color="textPrimary" gutterBottom> 
-                                            Weight: <Chip variant="outlined" size="small" style={chips} label={data.bodyWeight} />
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs='6'>
-                                    <Typography color="textPrimary" gutterBottom>
-                                            RR : <Chip variant="outlined" size="small" style={chips} label={data.respiratoryRate} />
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs='6'>
-                                    <Typography color="textPrimary" gutterBottom>
-                                            Height: <Chip variant="outlined" size="small" style={chips} label={data.height} />
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs='6'>
-                                    <Typography  color="textPrimary" gutterBottom>
-                                            Temperature: <Chip variant="outlined" size="small" style={chips}  label={data.temperature} />
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs='6'>
-                                    <Typography color="textPrimary" gutterBottom>
-                                            BMI: <Chip variant="outlined" size="small" style={chips} label={data.pulse} />
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs='6'>
-                                    <Typography  color="textPrimary" gutterBottom>
-                                            Blood Presure : <Chip variant="outlined" size="small" style={chips}  label={data.diastolic} /> 
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs='6'>
-                                    <Typography  color="textPrimary gutterBottom">
-                                            BMI Sstatus: <Chip variant="outlined" size="small" style={chips}  label={data.pulse} />
-                                    </Typography>
-                                </Grid>
-                               
-                            </Grid>                               
-                    </CardContent>                      
+                                <Col item xs='6'>
+                                            Weight (kg): <span><b>{data.bodyWeight || 'N/A'}</b></span>                                 
+                                            </Col>
+                                <Col item xs='6'>
+                                            RR (bpm): <span><b>{data.respiratoryRate || 'N/A'}</b></span> 
+                                </Col>
+                                <Col item xs='6'>
+                                            Height (m): <span><b>{data.height || 'N/A'}</b></span>  
+                                </Col>
+                                <Col item xs='6'>
+                                            Temperature (C):  <span><b>{data.temperature || 'N/A'}</b></span> 
+                                </Col>
+                                <Col item xs='6'>
+                                            BMI: <span><b>{data.pulse || 'N/A'}</b></span> 
+                                </Col>
+                                <Col item xs='6'>
+                                            Blood Pressure (mmHg): <span><b>{data.pulse || 'N/A'}</b></span> 
+                                </Col>
+                                <Col item xs='6'>
+                                            BMI Status: <span><b>{data.pulse || 'N/A'}</b></span> 
+                                </Col>
+                                </Row>
+                    </CardBody>                      
             </Card>                     
-    </div>
   );
 }

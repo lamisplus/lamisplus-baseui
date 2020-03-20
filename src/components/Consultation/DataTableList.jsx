@@ -110,7 +110,7 @@ const BasicTable = () => {
   useEffect(() => {
     async function fetchData() {
       try{
-        const response = await fetch(url+"visits/datevisit");
+        const response = await fetch(url+"visits/today");
         const result = await response.json();
         setData(result);
         console.log(result);

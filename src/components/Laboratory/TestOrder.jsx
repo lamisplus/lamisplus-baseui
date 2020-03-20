@@ -7,6 +7,7 @@ import {
     Form,
     Row,
     Alert,
+    CardBody,
 } from 'reactstrap';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { TiWarningOutline } from "react-icons/ti";
@@ -33,6 +34,7 @@ import {
 import { Link } from 'react-router-dom';
 import SearchTestOrder from 'components/Laboratory/SearchForm/SearchTestOrder';
 import {url} from 'axios/url';
+import PatientList from 'components/Laboratory/PatientSearch';
 
 const useStyles = makeStyles({
     root: {
@@ -99,6 +101,15 @@ export default function TestOrderMain (props){
                         Note : Only  Patients With test order can be search here
                     </Alert>
                 </Col>
+            </Row>
+            <Row>
+            <Col xl={12} lg={12} md={12}>
+<Card>
+    <CardBody>
+    <PatientList />
+    </CardBody>
+</Card>
+</Col>
             </Row>
             <Row>
                 <Col sm="12">

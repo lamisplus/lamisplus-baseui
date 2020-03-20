@@ -217,14 +217,14 @@ const onChangeLabnum = e => {
                     <Typography className={classes.heading}>
                         Name:  {data[0].firstName} {' '} {data[0].lastName}
                         <br/>
-                        Gender: Female
+                        Gender: {data[0].gender || 'N/A'}
                     </Typography>
                 </div>
                 <div className={classes2.column}>
                     <Typography className={classes2.heading}>
                         DOB:  {data[0].dob}
                         <br/>
-                        Phone Number : +234567890
+                        Phone Number :  {data[0].mobilePhoneNumber || 'N/A'}
                     </Typography>
                 </div>
                 
@@ -234,7 +234,7 @@ const onChangeLabnum = e => {
             </div>
             <br/>
             <Card className="mb-12">
-              <CardHeader className="text-primary">Test Order  --  
+              <CardHeader>Test Order Details
               <Link to="/test-order">
                 <Button color="primary" className=" float-right mr-1" >
                         <TiArrowBack/>Go Back

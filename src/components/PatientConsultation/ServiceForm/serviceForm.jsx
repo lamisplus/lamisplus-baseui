@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import {Card, CardContent} from '@material-ui/core';
+//import {Card, CardContent} from '@material-ui/core';
 import {
     Form,
     Input,
     Alert,
     CardBody,
+    Card,
+    CardHeader,
     Col,
     Row,
   } from 'reactstrap';
@@ -105,14 +106,14 @@ export default function ConsultationPage(props) {
   const FilterComponent = ({ filterText, onFilter, onClear }) => (
     <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >
           <Card>
-              <CardContent>
+              <CardBody>
                     <Input
                       type="search"
                       placeholder="Search by Form Name "
                       className="cr-search-form__input pull-right"
                       value={filterText} onChange={onFilter}
                     />
-              </CardContent>
+              </CardBody>
           </Card>
       </Form>
   );
@@ -149,10 +150,8 @@ return (
   <Row>
                 <Col lg={5} >
                   <Card  style={cardStyle} className=" p-3">
+                    <CardHeader>Available Service Forms</CardHeader>
                     <CardBody>
-                        <Typography className={classes.title} color="primary" gutterBottom>
-                                      Available Service Forms
-                        </Typography>
                         {message ? 
                         <Alert color="primary">
                           {message}
@@ -189,10 +188,9 @@ return (
 
                         <Col lg={7}>
                         <Card  style={cardStyle} className=" p-3">
+                          <CardHeader>Service Forms History</CardHeader>
                     <CardBody>
-                        <Typography className={classes.title} color="primary" gutterBottom>
-                                      Service Forms History
-                        </Typography>
+                       
                         </CardBody>
                         </Card>
                         </Col>

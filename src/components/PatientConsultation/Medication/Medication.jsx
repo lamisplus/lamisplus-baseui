@@ -2,6 +2,7 @@ import React, {useState}  from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     CardBody,
+    CardHeader,
     Col,
     Row,
     Card,
@@ -147,6 +148,8 @@ const useStyles = makeStyles(theme => ({
 export default function Medication(props) {
     const [drugOrder, setDrugOrder] = React.useState([]);
     const [successMsg, setSuccessMsg] = React.useState();
+    const [errorMsg, setErrorMsg] = React.useState();
+    const [fetchingDrugs, setFetchingDrugs] = React.useState(false);
     const classes = useStyles();
      //Get countries    
      
@@ -203,10 +206,18 @@ export default function Medication(props) {
       const drugOrdersApi = url+"encounters/pharmacy/drugs";
       React.useEffect(() => {
         async function fetchDrugs() {
+            setErrorMsg();
+            setFetchingDrugs(true);
+            try{
           const response = await fetch(drugOrdersApi);
           const body = await response.json();
           setDrugOrder(body.map(({ genericName, id }) => ({ label: genericName, value: id })));
            console.log(body);
+           setFetchingDrugs(false);
+            }catch(err){
+                setErrorMsg("Could not fetch drugs at the moment, try again later");
+                setFetchingDrugs(false);
+            }
         }
         fetchDrugs();
        
@@ -219,21 +230,23 @@ export default function Medication(props) {
           <Row>
                 <Col lg={5} >
                   <Card  style={cardStyle} className=" p-3">
-                    <CardBody>
-                        <Typography className={classes.title} color="primary" gutterBottom>
-                                        Drug Order
-                        </Typography>
+                    <CardHeader>Drug Order</CardHeader>
+                        <CardBody>
+                        
                          <div>
                          {successMsg ? 
                         <Alert color="success"> 
                     {successMsg}
             </Alert> : ""
             }
-                         <NewDrugOrderForm addDrugs={addDrugs} drugOrder={drugOrder} />
+             {errorMsg ? 
+                        <Alert color="info"> 
+                    {errorMsg}
+            </Alert> : ""
+            }
+                         <NewDrugOrderForm addDrugs={addDrugs} drugOrder={drugOrder} fetchingDrugs={fetchingDrugs}/>
                                         </div>
 
-                                      
-                                   
                     </CardBody>
                   </Card>
                 </Col>
@@ -248,8 +261,8 @@ export default function Medication(props) {
                        
                         <Col lg={12} >
                             <Card  style={cardStyle} >
+                                <CardHeader>Current Drug Order</CardHeader>
                                 <CardBody>
-                                    <Typography className={classes.title} color="primary" gutterBottom>
                                     <Col md={12}>
                                     
                                         <div className={classes.demo}>
@@ -261,12 +274,12 @@ export default function Medication(props) {
                                             medi={medi}
                                             removeDrug={removeDrug}
                                             drugTypeName={getDrugName(medi.drug_order)}
+                                            
                                             />
                                             ))}
                                             </List>
                                     </div>
                                     </Col>
-                                    </Typography>
                                 </CardBody>
                             </Card>
                         </Col>
@@ -294,7 +307,7 @@ export default function Medication(props) {
   );
 }
 
-function NewDrugOrderForm({addDrugs, drugOrder}){
+function NewDrugOrderForm({addDrugs, drugOrder, fetchingDrugs}){
     
     const classes = useStyles();
     const [medi, setmedi] = useState({start_date : new Date()}); 
@@ -329,7 +342,7 @@ function NewDrugOrderForm({addDrugs, drugOrder}){
             }
                                         <Col md={12}>
                                             <FormGroup>
-                                            <Label for="hospitalNumber">Drug Generic Name</Label>
+                                            <Label for="hospitalNumber">Drug Generic Name  </Label>
                                                 <Input type="select" name="drug_order" id="drug_order" 
                                                     value={medi.drug_order}
                                                     onChange={onChange}>
@@ -340,6 +353,7 @@ function NewDrugOrderForm({addDrugs, drugOrder}){
                                                             </option>
                                                         ))}
                                                     </Input>
+                                                    {fetchingDrugs ?   <span>Fetching drugs <i class="fa fa-spinner fa-spin"></i></span> : ""}
                                             </FormGroup>  
                                         </Col>
                                         <Col md={12}>

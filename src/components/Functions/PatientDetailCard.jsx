@@ -123,7 +123,6 @@ const useStyles = makeStyles(theme => ({
 export default function PatientDetailCard (props){
  const classes = useStyles();
  const {getpatient} =props.getpatientdetails ;
- // console.log(props.getpatientdetails)
 const currentAge = getpatient.row.dob;
 const Year = Age(currentAge);
 return (
@@ -143,15 +142,14 @@ return (
                 </div>
                 <div className={classes.column}>
                     <Typography className={classes.secondaryHeading}> 
-                        Birthday : {getpatient.row.dob} ({Year} years)
+                        Date Of Birth : {getpatient.row.dob} ({Year})
                         <br/>
-                        phone Number : +234567890
+                        Phone Number : {getpatient.row.mobilePhoneNumber || 'N/A'}
                     </Typography>
                 </div>
                 <div className={classes.column}>
                     <Typography className={classes.secondaryHeading}>
-                        Email Address : Mathew Adegbite
-                        
+                        Email Address : {getpatient.row.email || 'N/A'}
                     </Typography>
                 </div>
                 </ExpansionPanelSummary>
