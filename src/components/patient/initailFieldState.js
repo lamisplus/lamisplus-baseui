@@ -10,7 +10,7 @@ export const initialfieldState_patientRegsitration = {
   maritalStatusId: '',
   occupationId: '',
   alternatePhoneNumber: '',
-  personRelativeDTOList: [],
+  personRelativesDTO: [],
   address1: '',
   city: '',
   countryId: '',

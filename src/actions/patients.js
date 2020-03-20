@@ -47,10 +47,12 @@ export const fetchById = id => dispatch => {
         type: ACTION_TYPES.PATIENTS_ERROR,
         payload: 'Something went wrong, please try again'
       })
+      
     )
+   
 }
 
-export const create = (data, onSuccess, onError) => dispatch => {
+export const create = (data) => dispatch => {
   axios
     .post(`${baseUrl}patients/`, data)
     .then(response => {
@@ -58,14 +60,17 @@ export const create = (data, onSuccess, onError) => dispatch => {
         type: ACTION_TYPES.PATIENTS_CREATE,
         payload: response.data
       })
-      onSuccess()
+      // console.log(response.data)
     })
     .catch(error => {
+      
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
         payload: 'Something went wrong, please try again'
       })
+      // console.log(error.response.data.apierror.message);
     })
+    
 }
 
 export const update = (id, data) => dispatch => {

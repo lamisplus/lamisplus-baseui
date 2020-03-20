@@ -9,7 +9,7 @@ const patientReducer = (state = { list: [] }, action) => {
       return { ...state, list: action.payload }
 
     case ACTION_TYPES.PATIENTS_CREATE:
-      return { ...state, list: action.payload }
+      return { ...state, statusmsg: action.payload }
 
     case ACTION_TYPES.PATIENTS_UPDATE:
       return { ...state, list: action.payload }
