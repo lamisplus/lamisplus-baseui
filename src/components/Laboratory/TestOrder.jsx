@@ -46,14 +46,14 @@ export default function TestOrderMain (props) {
   const [data, setData] = useState([])
   const apistate = url + 'encounters/GENERAL_SERVICE/LABTEST_ORDER_FORM/'
   
-  useEffect(() => {
-    const GetData = async () => {
-      const result = await axios(apistate)
-      setData(result.data)
-      console.log(result.data)
-    }
-    GetData()
-  }, [])
+  // useEffect(() => {
+  //   const GetData = async () => {
+  //     const result = await axios(apistate)
+  //     setData(result.data)
+  //     console.log(result.data)
+  //   }
+  //   GetData()
+  // }, [])
 
     return (
         <Page title="Test Order" >

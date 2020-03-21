@@ -213,10 +213,16 @@ export default function ScrollableTabsButtonForce(props) {
         <NavItem>
           <NavLink> <i class="fa fa-users"></i> &nbsp; Relationships &nbsp; <Badge href="#" color="dark">0</Badge></NavLink>
         </NavItem>
-        
+        { (props.location.state.getpatient && props.location.state.getpatient.row.dateVisitStart ) ? 
         <NavItem className="mr-2">
           <NavLink>  <span>Current Visit: {props.location.state.getpatient.row.dateVisitStart}</span> &nbsp; | &nbsp; Check Out &nbsp; <i class="fa fa-sign-out"></i> </NavLink>
         </NavItem>
+: 
+<NavItem className="mr-2">
+<NavLink>  <span>Patient not checked in</span> &nbsp; | &nbsp; Check In &nbsp; <i class="fa fa-sign-in"></i> </NavLink>
+</NavItem>
+}
+
         </Nav>
       {/* The DashBoad Tab  */}
       <TabPanel value={value} index={0}>
