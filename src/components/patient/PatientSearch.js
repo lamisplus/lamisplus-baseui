@@ -3,23 +3,21 @@ import DataTable from 'react-data-table-component'
 import { Card, CardContent } from '@material-ui/core'
 import IconButton from '@material-ui/core/IconButton'
 import { Delete } from '@material-ui/icons'
+import { Edit } from '@material-ui/icons'
 import './PatientSearch.css'
 import {
-  Input,
-  Form,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
   Modal,
-  Alert
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Input,
+  Form
 } from 'reactstrap'
+import { Link } from 'react-router-dom'
+import { fetchAll, Delete as Del } from '../../actions/patients'
+import { connect } from 'react-redux'
 
-import { url } from '../../api'
-
-/**Find table documentations at
- import TablePagination from '@material-ui/core/TablePagination'; * 1.https://www.npmjs.com/package/react-data-table-component#storybook-dependencies----rootdirstoriespackagejson
- import TableRow from '@material-ui/core/TableRow'; * 2. https://jbetancur.github.io/react-data-table-component/?path=/story/conditional-styling--conditional-cells */
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
   <Form className='cr-search-form' onSubmit={e => e.preventDefault()}>
     <Card>
@@ -48,26 +46,26 @@ const SampleExpandedComponent = ({ data }) => (
   </div>
 )
 
-// const calculate_age = (dob) => {
-//     var today = new Date();
-//     var dateParts = dob.split("-");
-//     var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-//     var birthDate = new Date(dateObject);  // create a date object directly from `dob1` argument
-//     console.log(dateObject);
-//     console.log(birthDate);
-//     var age_now = today.getFullYear() - birthDate.getFullYear();
-//     var m = today.getMonth() - birthDate.getMonth();
-//     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate()))
-//     {
-//         age_now--;
-//     }
+const calculate_age = dob => {
+  var today = new Date()
+  var dateParts = dob.split('-')
+  var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0])
+  var birthDate = new Date(dateObject) // create a date object directly from `dob1` argument
+  console.log(dateObject)
+  console.log(birthDate)
+  var age_now = today.getFullYear() - birthDate.getFullYear()
+  var m = today.getMonth() - birthDate.getMonth()
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age_now--
+  }
 
-//     if(age_now === 0){
-//         return m + ' month(s)';
-//     }
-//     console.log(age_now);
-//     return age_now + ' year(s)';
-// }
+  if (age_now === 0) {
+    return m + ' month(s)'
+  }
+  console.log(age_now)
+  return age_now + ' year(s)'
+}
+
 const columns = modalClickHandler => [
   {
     name: 'Patient ID',
@@ -86,14 +84,19 @@ const columns = modalClickHandler => [
     )
   },
   {
-    name: 'Start Visit',
+    name: 'Age',
     selector: 'dob',
-    sortable: false
-  },
-  {
-    name: 'End Visit',
-    selector: 'dob',
-    sortable: false
+    sortable: false,
+    cell: row => (
+      <span>
+        {row.dob === 0 ||
+        row.dob === undefined ||
+        row.dob === null ||
+        row.dob === ''
+          ? 0
+          : calculate_age(row.dob)}
+      </span>
+    )
   },
   {
     name: 'Action',
@@ -101,11 +104,19 @@ const columns = modalClickHandler => [
       <div>
         <IconButton
           color='primary'
-          onClick={modalClickHandler}
-          aria-label='Cancel CheckIn'
-          title='Cancel CheckIn'
+          aria-label='Archive Patient'
+          title='Edit Patient'
         >
-          {' '}
+          <Link to='/patient-registration'>
+            <Edit title='Edit Patient' aria-label='Edit Patient' />
+          </Link>
+        </IconButton>
+        <IconButton
+          color='primary'
+          onClick={modalClickHandler}
+          aria-label='Archive Patient'
+          title='Archive Patient'
+        >
           <Delete />
         </IconButton>
       </div>
@@ -126,16 +137,16 @@ const customStyles = {
   }
 }
 
-const BasicTable = () => {
-  const [filterText, setFilterText] = React.useState('')
-  const [resetPaginationToggle, setResetPaginationToggle] = React.useState(
-    false
-  )
-  const [data, setData] = useState([])
+const PatientTable = props => {
+  const [filterText, setFilterText] = useState('')
+  const [resetPaginationToggle, setResetPaginationToggle] = useState(false)
+
+  console.log(props.patientsList)
+  // const [data, setData] = useState([])
   const filteredItems =
-    !filterText && data
+    !filterText && props.patientsList
       ? []
-      : data.filter(
+      : props.patientsList.filter(
           item =>
             (item.firstName &&
               item.firstName
@@ -152,18 +163,9 @@ const BasicTable = () => {
   const toggle = () => setModal(!modal)
 
   useEffect(() => {
-    async function fetchData () {
-      try {
-        const response = await fetch(url + 'visits/datevisit/')
-        const result = await response.json()
-        setData(result)
-        console.log(result)
-      } catch (error) {
-        setData([])
-      }
-    }
-    fetchData()
-  }, [])
+    props.fetchAllPatients()
+    //setData(props.patientsList);
+  }, []) //componentDidMount
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
@@ -185,7 +187,7 @@ const BasicTable = () => {
   return (
     <div>
       <card>
-        <cardcontent>
+        <cardContent>
           <DataTable
             columns={columns(toggle)}
             data={filteredItems}
@@ -203,18 +205,11 @@ const BasicTable = () => {
             persistTableHead
             expandableRowsComponent={<SampleExpandedComponent />}
           />
-        </cardcontent>
+        </cardContent>
       </card>
       <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Cancel Patient</ModalHeader>
-        <ModalBody>
-          <p>Are you sure you want to cancel this visit?</p>
-          <Alert color='primary'>
-            <small>
-              <h6>Note: You can only cancel a patient without Encounter</h6>
-            </small>
-          </Alert>
-        </ModalBody>
+        <ModalHeader toggle={toggle}>Achieve Patient</ModalHeader>
+        <ModalBody>Are you sure you want to delete this patient?</ModalBody>
         <ModalFooter>
           <Button color='primary' onClick={toggle}>
             Continue
@@ -228,4 +223,13 @@ const BasicTable = () => {
   )
 }
 
-export default BasicTable
+const mapStateToProps = state => ({
+  patientsList: state.patients.list
+})
+
+const mapActionToProps = {
+  fetchAllPatients: fetchAll,
+  deletePatient: Del
+}
+
+export default connect(mapStateToProps, mapActionToProps)(PatientTable)
