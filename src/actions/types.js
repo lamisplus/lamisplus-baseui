@@ -21,3 +21,15 @@ export const CHECKIN_CREATE = 'CHECKIN_CREATE'
 export const CHECKIN_UPDATE = 'CHECKIN_UPDATE'
 export const CHECKIN_DELETE = 'CHECKIN_DELETE'
 export const CHECKIN_ERROR = 'CHECKIN_ERROR'
+
+/**
+ * @TYPES
+ * ===============================================
+ * ENCOUNTER
+ */
+export const ENCOUNTER_FETCH_ALL = 'ENCOUNTER_FETCH_ALL'
+export const ENCOUNTER_FETCH_BY_ID = 'ENCOUNTER_FETCH_BY_ID'
+export const ENCOUNTER_CREATE = 'ENCOUNTER_CREATE'
+export const ENCOUNTER_UPDATE = 'ENCOUNTER_UPDATE'
+export const ENCOUNTER_DELETE = 'ENCOUNTER_DELETE'
+export const ENCOUNTER_ERROR = 'ENCOUNTER_ERROR'

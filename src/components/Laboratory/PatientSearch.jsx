@@ -7,7 +7,7 @@ import {Button, Modal, ModalBody, ModalFooter, ModalHeader,
   Form
 } from 'reactstrap';
 import {Link} from 'react-router-dom';
-import * as actions from "actions/patients";
+import * as actions from "actions/encounter";
 import {connect} from 'react-redux';
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
@@ -85,6 +85,7 @@ const columns = [
     ignoreRowClick: true,
     allowOverflow: true,
     button: true,
+    grow: 2,
   },
 
 ];
@@ -103,14 +104,13 @@ const PatientTable = (props) => {
   const [filterText, setFilterText] = React.useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
   // const [data, setData] = useState([])
-  const filteredItems = (!filterText && props.patientsList) ? [] : props.patientsList.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
+  const filteredItems =  props.patientsList.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
   useEffect(() => {
-    props.fetchAllPatients();
-    //setData(props.patientsList);
-
+    props.fetchAllPatients('GENERAL_SERVICE', 'LABTEST_ORDER_FORM');
+  
 }, [])//componentDidMount
 
   const subHeaderComponentMemo = React.useMemo(() => {
@@ -146,31 +146,23 @@ const PatientTable = (props) => {
             expandableRowsComponent={<SampleExpandedComponent />}/>
           </cardContent>
         </card>
-        <Modal isOpen={modal} toggle={toggle}>
-          <ModalHeader toggle={toggle}>Achieve Patient</ModalHeader>
-          <ModalBody>
-            Are you sure you want to delete this patient?
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={toggle}>Continue</Button>{' '}
-            <Button color="secondary" onClick={toggle}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
-      </div>
+       </div>
 
 
   );
 
 };
 
-const mapStateToProps = state => ({
-  
-  patientsList: state.patients.list
-})
+const mapStateToProps = state => {
+  console.log('logging state');
+  console.log(state);
+  return {
+  patientsList: state.laboratory.encounters
+  }
+}
 
 const mapActionToProps = {
   fetchAllPatients: actions.fetchAll,
-  deletePatient: actions.Delete
 }
 
 export default connect(mapStateToProps, mapActionToProps)(PatientTable);
