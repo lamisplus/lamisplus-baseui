@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
-
-import Grid from '@material-ui/core/Grid'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import { FormGroup, Input } from 'reactstrap'
-import MatButton from '@material-ui/core/Button'
-import SaveIcon from '@material-ui/icons/Save'
+import React, {useState} from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+    FormGroup,
+    Input,
+     Card, CardHeader, CardBody, CardDeck
+    } from 'reactstrap';
+import MatButton from '@material-ui/core/Button';
+import SaveIcon from '@material-ui/icons/Save';
 // React Notification
 import { toast } from 'react-toastify'
 import Spinner from 'react-bootstrap/Spinner'
@@ -147,101 +146,57 @@ export default function ConsultationPage (props) {
     setconsult({ ...consult, [e.target.name]: e.target.value })
   }
 
-  return (
-    <form className={classes.form} onSubmit={Saveconsult}>
-      <Grid container spacing={2}>
-        <Grid item xs='6'>
-          <PatientVitals height={props.height} getpatientID={PatientID} />
-        </Grid>
 
-        <Grid item xs='6'>
-          <PatientAllergies
-            height={props.height}
-            addstatus={true}
-            patientAllergies={['Penicilin']}
-            setNewAllergy={setNewAllergy}
-          />
-        </Grid>
-
-        <Grid item xs='6'>
-          <Card className={classes.cardroot} style={{ height: '200px' }}>
-            <CardContent>
-              <Typography
-                className={classes.title}
-                color='primary'
-                gutterBottom
-              >
-                Presenting Complaints
-              </Typography>
-              <Grid container spacing={12}>
-                <Grid item xs='12'>
-                  <Typography className={classes.pos} color='textSecondary'>
-                    <FormGroup>
-                      <Input
-                        type='textarea'
-                        name='consultation_notes'
-                        id='consultation_notes'
-                        style={{ height: '150px' }}
-                        value={consult.consultation_notes}
-                        onChange={onChange}
-                      />
-                    </FormGroup>
-                  </Typography>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs='6'>
-          <Card className={classes.cardroot} style={{ height: '200px' }}>
-            <CardContent>
-              <Typography
-                className={classes.title}
-                color='primary'
-                gutterBottom
-              >
-                Consultation Notes
-              </Typography>
-              <Grid container spacing={12}>
-                <Grid item xs='12'>
-                  <Typography className={classes.pos} color='textSecondary'>
-                    <FormGroup>
-                      <Input
-                        type='textarea'
-                        name='present_consultation'
-                        id='present_consultation'
-                        style={{ height: '150px' }}
-                        value={consult.present_consultation}
-                        onChange={onChange}
-                      />
-                      <br></br>
-                    </FormGroup>
-                  </Typography>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
-        <br />
-
-        <Grid item xs={12} spacing={3}>
-          {showLoading && (
-            <Spinner animation='border' role='status'>
-              <span className='sr-only'>Loading...</span>
-            </Spinner>
-          )}
-
-          <MatButton
-            type='submit'
-            variant='contained'
-            color='primary'
-            className={classes.button}
-            startIcon={<SaveIcon />}
-          >
-            Save
-          </MatButton>
-        </Grid>
-      </Grid>
-    </form>
-  )
+return (
+<form className={classes.form} onSubmit={Saveconsult}>
+        <CardDeck>                    
+              <PatientVitals  height={props.height}  getpatientdetails={props.getpatientdetails }  />                 
+              <PatientAllergies height={props.height} addstatus={true} patientAllergies={["Penicilin"]} setNewAllergy={setNewAllergy}/>
+        </CardDeck>
+        <hr></hr>
+        <CardDeck>
+                <Card >
+                    <CardHeader> Presenting Complaints </CardHeader>
+                           <CardBody>
+                                    <FormGroup>
+                                    
+                                    <Input type="textarea" name="consultation_notes"  id="consultation_notes" style={{height: '150px' }} value={consult.consultation_notes}
+                                    onChange={onChange}/>
+                                    </FormGroup>
+                                         
+                    </CardBody>                      
+                </Card>
+        
+        <Card >
+            <CardHeader> Consultation Notes</CardHeader>
+                    <CardBody>
+                       
+                                    <FormGroup>
+                                    <Input type="textarea" name="present_consultation"  id="present_consultation" style={{height: '150px' }} value={consult.present_consultation}
+                                    onChange={onChange}/>
+                                    <br></br>
+                                    </FormGroup>                             
+                    </CardBody>                      
+                </Card>
+                </CardDeck>
+    <br/>
+            
+                {showLoading && 
+                    
+                    <Spinner animation="border" role="status">
+                    <span className="sr-only">Loading...</span>
+                    </Spinner> 
+                } 
+            
+        <MatButton  
+                type="submit" 
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                startIcon={<SaveIcon />}
+                >
+                Save
+        </MatButton>                        
+</form>    
+)
 }

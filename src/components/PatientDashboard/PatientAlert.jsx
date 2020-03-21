@@ -20,8 +20,7 @@ export default function PatientAlert(props) {
   const classes = useStyles(props);
 
   return (
-    <div className={classes.root}>
-            <Card className={classes.cardroot} style={props.height}>
+            <Card >
                         <CardContent>
                             <Typography className={classes.title} color="warning" gutterBottom>
                               Alerts 
@@ -30,21 +29,20 @@ export default function PatientAlert(props) {
                                     <Grid item xs='12'>
                                         <Typography className={classes.pos} color="textSecondary" >
                                         <div >
-                                        <Alert severity="error" style={{ marginTop: 2}}>This Patient is due for viral load assement!</Alert>
+                                        <Alert severity="error">This Patient is due for viral load assessment!</Alert>
                                         <Alert severity="warning" style={{ marginTop: 2}}>Patient of differentiated care</Alert>
                                         <Alert severity="info" style={{ marginTop: 2}}>This is an info alert — check it out!</Alert>
                                         
                                     </div>
                                     <br/>
-                                    <CheckBoxOutlineBlankIcon style={{ color: '#FE7235' }}/>   
-                                    <CheckBoxOutlineBlankIcon style={{ color: '#FE7235' }}/> 
-                                    <CheckBoxOutlineBlankIcon style={{ color: '#FE7235' }}/> 
+                                    <CheckBoxOutlineBlankIcon style={{ color: '#FE7235' }}/>   Danger
+                                    <CheckBoxOutlineBlankIcon style={{ color: '#FE7235' }}/>  Not Danger
+                                    <CheckBoxOutlineBlankIcon style={{ color: '#FE7235' }}/> Okay
                                         </Typography>
                                     </Grid>
                                           
                         </Grid>                               
                 </CardContent>                      
-            </Card>              
-    </div>
+            </Card>
   );
 }

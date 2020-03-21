@@ -1,13 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
 import {
   Col,
   FormGroup,
   Row,
+  Card,
+  CardHeader,
+  CardBody
 } from 'reactstrap';
 import Chip from '@material-ui/core/Chip';
 import CreatableSelect from 'react-select/creatable';
@@ -40,21 +39,14 @@ export const allergies = [
 export default function PatientAlert(props ) {
   const classes = useStyles(props);
   const handleChange = (newValue: any, actionMeta: any) => {
-    props.setNewAllergy(newValue.map(it => it.value));
+    props.setNewAllergy(newValue ? newValue.map(it => it.value) : []);    
   };
   return (
 
-    <div className={classes.root}>
-            <Card className={classes.cardroot} style={props.height}>
-                    <CardContent>
-                        <Typography className={classes.title} color="primary" gutterBottom>
-                            Allergies
-                        </Typography>
-                            <Grid container spacing={12}>
-                                <Grid item xs='12'>
-                                    <Typography className={classes.pos} color="textSecondary" >
-                                            
-                                      <div className={classes.allergiesroot}>
+            <Card >
+              <CardHeader>Allergies</CardHeader>
+                    <CardBody>
+                        
                                     
                                       {props.patientAllergies ? props.patientAllergies.map((allergy, index) => (
                                     <Chip
@@ -67,14 +59,11 @@ export default function PatientAlert(props ) {
                                       color="secondary"
                                       variant="outlined"
                                   />}
-                                      </div>
-                                    </Typography>
-                                </Grid>      
-                            </Grid> 
+                                      
                             <br></br>
                             {props.addstatus && 
-                                        <Row form>
-                                            <Col md={12}>
+                      <Row form>
+                         <Col md={12}>
                                             <FormGroup>
                                             <CreatableSelect
         isMulti
@@ -90,8 +79,7 @@ export default function PatientAlert(props ) {
 
                             
                             }                            
-                    </CardContent>                      
+                    </CardBody>                      
             </Card>
-    </div>
   );
 }

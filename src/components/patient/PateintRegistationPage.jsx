@@ -184,7 +184,7 @@ const PatientRegistration = props => {
     getCharacters()
   }, [])
   useEffect(() => {
-    props.createPatient()
+    props.create()
 }, )//componentDidMount
   //toast msg.
   const { addToast } = useToasts()

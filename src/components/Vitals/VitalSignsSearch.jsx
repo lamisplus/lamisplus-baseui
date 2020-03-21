@@ -182,19 +182,19 @@ const BasicTable = () => {
   const toggle = () => setModal(!modal)
   const toggle2 = () => setModal2(!modal2)
 
-  useEffect(() => {
-    async function fetchData () {
-      try {
-        const response = await fetch(url + 'visits/datevisit/')
-        const result = await response.json()
-        setData(result)
-        console.log(result)
-      } catch (error) {
-        setData([])
-      }
-    }
-    fetchData()
-  }, [])
+    useEffect(() => {
+        async function fetchData() {
+            try{
+                const response = await fetch(url+"visits/today/");
+                const result = await response.json();
+                setData(result);
+                console.log(result);
+            }catch(error){
+                setData([]);
+            }
+        }
+        fetchData();
+      });
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
@@ -203,7 +203,6 @@ const BasicTable = () => {
         setFilterText('')
       }
     }
-
     return (
       <FilterComponent
         onFilter={e => setFilterText(e.target.value)}

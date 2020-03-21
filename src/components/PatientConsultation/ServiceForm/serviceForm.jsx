@@ -1,13 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
-import IconButton from '@material-ui/core/IconButton'
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
-import { Card, CardContent } from '@material-ui/core'
-import { Form, Input, Alert, CardBody, Col, Row } from 'reactstrap'
-import DataTable from 'react-data-table-component'
-import { url } from '../../../api'
-import Spinner from 'react-bootstrap/Spinner'
+import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+//import {Card, CardContent} from '@material-ui/core';
+import {
+    Form,
+    Input,
+    Alert,
+    CardBody,
+    Card,
+    CardHeader,
+    Col,
+    Row,
+  } from 'reactstrap';
+  import DataTable from 'react-data-table-component';
+  import {url} from 'api/index';
+  import Spinner from 'react-bootstrap/Spinner';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -102,20 +110,19 @@ export default function ConsultationPage (props) {
   }, [])
 
   const FilterComponent = ({ filterText, onFilter, onClear }) => (
-    <Form className='cr-search-form' onSubmit={e => e.preventDefault()}>
-      <Card>
-        <CardContent>
-          <Input
-            type='search'
-            placeholder='Search by Form Name '
-            className='cr-search-form__input pull-right'
-            value={filterText}
-            onChange={onFilter}
-          />
-        </CardContent>
-      </Card>
-    </Form>
-  )
+    <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >
+          <Card>
+              <CardBody>
+                    <Input
+                      type="search"
+                      placeholder="Search by Form Name "
+                      className="cr-search-form__input pull-right"
+                      value={filterText} onChange={onFilter}
+                    />
+              </CardBody>
+          </Card>
+      </Form>
+  );
 
   const openServiceForm = () => {
     console.log('clicked')
@@ -156,62 +163,54 @@ export default function ConsultationPage (props) {
     )
   }, [filterText, resetPaginationToggle])
 
-  return (
-    <Row>
-      <Col lg={5}>
-        <Card style={cardStyle} className=' p-3'>
-          <CardBody>
-            <Typography className={classes.title} color='primary' gutterBottom>
-              Available Service Forms
-            </Typography>
-            {message ? <Alert color='primary'>{message}</Alert> : ''}
-            {showLoading ? (
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-              >
-                <span> Fetching Service Forms &nbsp; </span>{' '}
-                <Spinner animation='border' role='status'>
-                  <span className='sr-only'></span>
-                </Spinner>
-              </div>
-            ) : (
-              ''
-            )}
-            {serviceForms.length > 0 ? (
-              <div>
-                <DataTable
-                  columns={columns}
-                  data={filteredItems}
-                  pagination
-                  paginationResetDefaultPage={resetPaginationToggle}
-                  subHeader
-                  subHeaderComponent={subHeaderComponentMemo}
-                  highlightOnHover={true}
-                  subHeaderAlign={'left'}
-                  noTableHead={true}
-                  noHeader={true}
-                />
-              </div>
-            ) : (
-              ''
-            )}
-          </CardBody>
-        </Card>
-      </Col>
+return (
+  <Row>
+                <Col lg={5} >
+                  <Card  style={cardStyle} className=" p-3">
+                    <CardHeader>Available Service Forms</CardHeader>
+                    <CardBody>
+                        {message ? 
+                        <Alert color="primary">
+                          {message}
+                        </Alert> : ""
+                         }
+                        {
+                          showLoading ? 
+                          <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+                        <span>  Fetching Service Forms &nbsp; </span> <Spinner animation="border" role="status" >
+                          <span className="sr-only"></span>
+                          </Spinner></div>
+                          : ""
+                        }
+{ serviceForms.length > 0 ? 
+<div>
+    <DataTable
+      columns={columns}
+      data={filteredItems}
+      pagination
+      paginationResetDefaultPage={resetPaginationToggle} 
+      subHeader
+      subHeaderComponent={subHeaderComponentMemo}
+      highlightOnHover={true}
+      subHeaderAlign={'left'}
+      noTableHead={true}
+      noHeader={true}
+    />
 
-      <Col lg={7}>
-        <Card style={cardStyle} className=' p-3'>
-          <CardBody>
-            <Typography className={classes.title} color='primary' gutterBottom>
-              Service Forms History
-            </Typography>
-          </CardBody>
-        </Card>
-      </Col>
-    </Row>
-  )
+      </div> : ""}
+
+                        </CardBody>
+                        </Card>
+                        </Col>
+
+                        <Col lg={7}>
+                        <Card  style={cardStyle} className=" p-3">
+                          <CardHeader>Service Forms History</CardHeader>
+                    <CardBody>
+                       
+                        </CardBody>
+                        </Card>
+                        </Col>
+                        </Row>
+)
 }

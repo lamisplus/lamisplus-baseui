@@ -80,15 +80,15 @@ const columns = [
   },
   {
     name: 'Start Visit',
-    selector: 'startVisit',
-    sortable: false
+    selector: 'dateVisitStart',
+    sortable: false,
   },
   {
     name: 'Action',
-    cell: () =>
+    cell: row =>
         <div>
           <IconButton color="primary"  aria-label="View Patient" title="View Patient">
-            <Link to={{ pathname: '/patient-dashboard', state: { getpatient: {}} }}>
+            <Link to={{ pathname: '/patient-dashboard', state: { getpatient: {row}} }}>
             <Dashboard title="Patient Dashboard"   aria-label="View Patient"/>
             </Link>
           </IconButton>
@@ -117,14 +117,14 @@ const BasicTable = () => {
   const filteredItems = data.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
 
   useEffect(() => {
-    async function fetchData () {
-      try {
-        const response = await fetch(url + 'visits/datevisit')
-        const result = await response.json()
-        setData(result)
-        console.log(result)
-      } catch (error) {
-        setData([])
+    async function fetchData() {
+      try{
+        const response = await fetch(url+"visits/today");
+        const result = await response.json();
+        setData(result);
+        console.log(result);
+      }catch(error){
+        setData([]);
       }
     }
     fetchData()

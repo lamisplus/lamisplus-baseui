@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
-import {Card, CardContent} from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import {Delete} from '@material-ui/icons';
 import {Edit} from '@material-ui/icons';
 import './PatientSearch.css';
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader,
@@ -10,21 +7,19 @@ import {Button, Modal, ModalBody, ModalFooter, ModalHeader,
   Form
 } from 'reactstrap';
 import {Link} from 'react-router-dom';
-import * as actions from "../../store/actions/patients/patients";
+import * as actions from "actions/patients";
 import {connect} from 'react-redux';
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
     <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >
-      <Card>
-        <CardContent>
+      
           <Input
               type="search"
               placeholder="Search by Patient Name, Patient ID "
               className="cr-search-form__input pull-right"
               value={filterText} onChange={onFilter}
           />
-        </CardContent>
-      </Card>
+       
     </Form>
 );
 
@@ -59,7 +54,7 @@ const calculate_age = (dob) => {
 
 
 
-const columns = (modalClickHandler => [
+const columns = [
   {
     name: 'Patient ID',
     selector: 'hospitalNumber',
@@ -76,26 +71,23 @@ const columns = (modalClickHandler => [
     name: 'Age',
     selector: 'dob',
     sortable: false,
-    cell: row => <span>{row.dob }</span>
+    cell: row => <span>{calculate_age(row.dob)}</span>
   },
   {
     name: 'Action',
-    cell: () =>
+    cell: row =>
         <div>
-          <IconButton color="primary"  aria-label="Archive Patient" title="Edit Patient">
-            <Link to="/patient-registration">
-            <Edit title="Edit Patient" aria-label="Edit Patient"/>
+          <Link to={{ pathname: '/collect-sample', state: { getpatientlists: {row}} }}>
+          <Button type="button" outline color="info">Collect Sample</Button>{' '}
             </Link>
-          </IconButton>
-          <IconButton color="primary" onClick={modalClickHandler} aria-label="Archive Patient" title="Archive Patient"><Delete />
-          </IconButton>
+         
         </div>,
     ignoreRowClick: true,
     allowOverflow: true,
     button: true,
   },
 
-]);
+];
 
 const customStyles = {
   headCells: {
@@ -137,7 +129,7 @@ const PatientTable = (props) => {
         <card>
           <cardContent>
         <DataTable
-            columns={columns(toggle)}
+            columns={columns}
             data={filteredItems}
             customStyles={customStyles}
             pagination
