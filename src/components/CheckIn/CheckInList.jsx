@@ -166,7 +166,7 @@ const CheckiInListTable = (props) => {
     const handleSubmit = e => {
         setShowErrorMsg(false);
         const checkInDate = Moment(values.visitDate).format('DD-MM-YYYY');
-        const checkInTime = Moment(values.visitTime).format('h:mm A');
+        const checkInTime = Moment(values.visitTime).format('hh:mm A');
         values['dateVisitStart']= checkInDate;
         values['timeVisitStart']= checkInTime;
         values['patientId']= modal.patient.patientId;

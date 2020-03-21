@@ -13,6 +13,7 @@ import MatButton from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import {
   Row,
+  Col,
     FormGroup,
     Input,
     Label,
@@ -27,6 +28,8 @@ import {
   import { toast } from "react-toastify";
   import Spinner from 'react-bootstrap/Spinner';
   import moment from 'moment';
+  import Select from 'react-select';
+
 const useStyles = makeStyles(theme => ({
     root: {
         margin: 'auto',
@@ -89,11 +92,11 @@ export default function ConsultationPage(props) {
 
     const [checked, setChecked] = React.useState([]);
     const [testGroups, setTestGroup] = React.useState([]);
-    //const [tests, setTests] = React.useState([]);
+    const [tests, setTests] = React.useState([]);
     const [left, setLeft] = React.useState([]);
     const [right, setRight] = React.useState([]);
     const [showLoading, setShowLoading] = useState(false);  
-    // const [errorMessage, setErrorMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
     const leftChecked = intersection(checked, left);
@@ -160,7 +163,11 @@ export default function ConsultationPage(props) {
       fetchTests();
 }
 const saveTestOrder = (e) => { 
-  e.preventDefault();  
+  e.preventDefault(); 
+  if (!right || right.length < 1) {
+      setErrorMessage("You must pick a test before you can submit");
+      return;
+  }
   setShowLoading(true);
   setSuccessMessage('');
   const data = {
@@ -170,7 +177,6 @@ const saveTestOrder = (e) => {
           formName: 'LABTEST_ORDER_FORM',
           serviceName: 'GENERAL_SERVICE',
           dateEncounter: moment(new Date()).format('DD-MM-YYYY'),
-          visitId: 1
           
   }; 
   axios.post(saveTestUrl, data)
@@ -182,11 +188,12 @@ const saveTestOrder = (e) => {
           toast.success(" Successful!");
       }).catch((error) => {
           console.log(error);
-          setSuccessMessage("An error occurred, could not save request!");
+          setErrorMessage("An error occurred, could not save request!");
       setShowLoading(false)
       }
       ); 
   };
+
   const customList = items => (
     <Paper className={classes.paper}>
       <List dense component="div" role="list">
@@ -212,7 +219,9 @@ const saveTestOrder = (e) => {
     </Paper>
   );
 
-  
+  const handleChange = (newValue: any, actionMeta: any) => {
+    setRight(newValue ? newValue : []);    
+  };
 
 return (
 <form className={classes.form} onSubmit={saveTestOrder} >
@@ -222,14 +231,20 @@ return (
               <CardHeader> Test Order</CardHeader>
                     <CardBody>
                         {successMessage ? 
-                        <Alert color="primary">
+                        <Alert color="success">
                     {successMessage}
+            </Alert> : ""
+            }
+             {errorMessage ? 
+                        <Alert color="danger">
+                    {errorMessage}
             </Alert> : ""
             }
                         <br/>
                         <Row>
+                        <Col md={5}>
                             <FormGroup>
-                                    <Label for="testGroup">Please Select Test Order</Label>
+                                    <Label for="testGroup">Select Test Order</Label>
                                     <Input type="select" name="testGroup" onChange={getTestByTestGroup}>
                                         <option value="">Select Test Group</option>
                                         {testGroups.map(({ label, value }) => (
@@ -239,8 +254,28 @@ return (
                                                 ))}
                                     </Input>
                                 </FormGroup> 
+</Col>
+<Col md={5}>
+                            <FormGroup>
+                                    <Label for="testGroup">Select Test</Label>
+                                    <Select
+        isMulti={true}
+        onChange={handleChange}
+        options={left.map(x => ({...x, label:x.description, value:x.id}))}
+      />
+                                    </FormGroup>
+                                    </Col>
+
+                                    <Col md={2}>
+<Button class="btn btn-primary mt-4" type="button" onClick={saveTestOrder} >Save Test Order
+&nbsp;
+                                        { showLoading ? <Spinner animation="border" role="status">
+                    <span className="sr-only">Loading...</span>
+                    </Spinner> : ""}
+</Button>
+                                      </Col>
                         </Row>
-                        <Row>
+                        {/* <Row>
                             <Grid item>{customList(left)}</Grid>
                             <Grid item>
                                 <Grid container direction="column" alignItems="center">
@@ -305,7 +340,7 @@ return (
                     <span className="sr-only">Loading...</span>
                     </Spinner> : ""}
                                 </MatButton> 
-                            </Grid>                      
+                            </Grid>                       */}
                     </CardBody>                      
                 </Card>
 

@@ -39,7 +39,7 @@ export const allergies = [
 export default function PatientAlert(props ) {
   const classes = useStyles(props);
   const handleChange = (newValue: any, actionMeta: any) => {
-    props.setNewAllergy(newValue.map(it => it.value));
+    props.setNewAllergy(newValue ? newValue.map(it => it.value) : []);    
   };
   return (
 
