@@ -3,13 +3,13 @@ import * as ACTION_TYPES from '../actions/types'
 //     list: []
 // }
 
-const encounterReducer = (state = { encounters: []}, action) => {
+const encounterReducer = (state = { encounters: [], cencounter: {}}, action) => {
   switch (action.type) {
     case ACTION_TYPES.ENCOUNTER_FETCH_ALL:
       return {...state, encounters:action.payload}
 
     case ACTION_TYPES.ENCOUNTER_CREATE:
-      return [...state, action.payload]
+      return {...state, createEncounter:action.payload}
 
     case ACTION_TYPES.ENCOUNTER_UPDATE:
       return [...state, action.payload]

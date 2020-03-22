@@ -201,7 +201,7 @@ export default function Medication(props) {
         setmedis(allMedis);
         console.log(medis);
       };
-      const drugOrdersApi = url+"pharmacy/drugs";
+      const drugOrdersApi = url+"drugs";
       React.useEffect(() => {
         async function fetchDrugs() {
             setErrorMsg();

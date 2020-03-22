@@ -3,6 +3,9 @@ import * as ACTION_TYPES from '../actions/types'
 const initialState = {
   list: [],
   status: 0,
+  vitalSigns: {},
+  vitalSignsList: [],
+  allergies: {},
   patient: {}
 }
 
@@ -25,6 +28,15 @@ const patientReducer = (state = initialState, action) => {
     case ACTION_TYPES.PATIENTS_DELETE:
       return { ...state, list: action.payload }
 
+    case ACTION_TYPES.PATIENT_VITAL_SIGNS:
+        return { ...state.patient, vitalSignsList: action.payload }
+
+        case ACTION_TYPES.PATIENT_LATEST_VITAL_SIGNS:
+          return { ...state, vitalSigns: action.payload }
+  
+        case ACTION_TYPES.PATIENT_ALLERGIES:
+          return { ...state.patient, allergies: action.payload }
+    
     default:
       return state
   }
