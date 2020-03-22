@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {  useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import './PatientSearch.css';
 import {
@@ -6,19 +6,21 @@ import {
   Form
 } from 'reactstrap';
 import {Link} from 'react-router-dom';
-import * as actions from "actions/laboratory";
+import * as actions from "actions/encounter";
 import {connect} from 'react-redux';
+import ResultSearch from 'components/Laboratory/SearchForm/ResultSearch';
+import { FaEye,FaPrint} from 'react-icons/fa';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
-    <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >
-      
-          <Input
-              type="search"
-              placeholder="Search by Patient Name, Patient ID "
-              className="cr-search-form__input pull-right"
-              value={filterText} onChange={onFilter}
-          />
-       
+    <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >      
+        <Input
+            type="search"
+            placeholder="Search by Patient Name, Patient ID "
+            className="cr-search-form__input pull-right"
+            value={filterText} onChange={onFilter}
+        />    
     </Form>
 );
 
@@ -76,10 +78,20 @@ const columns = [
     name: 'Action',
     cell: row =>
         <div>
-          <Link to={{ pathname: '/collect-sample', state: { getpatientlists: {row}} }}>
-                Collect Sample
-          </Link>
-         
+          <Link to="/view-result">
+            <Tooltip title="View Collected Sample">
+                <IconButton aria-label="View Collected Sample">
+                <FaEye size="15"/>
+                </IconButton>
+            </Tooltip>
+        </Link>
+        <Link to="/collect-sample">
+            <Tooltip title="Print Collected Sample">
+                <IconButton aria-label="Print Collected Sample">
+                <FaPrint size="15"/>
+                </IconButton>
+            </Tooltip>
+        </Link>
         </div>,
     ignoreRowClick: true,
     allowOverflow: true,
@@ -108,7 +120,7 @@ const PatientTable = (props) => {
   //const toggle = () => setModal(!modal);
 
   useEffect(() => {
-    props.fetchAllLabTestOrder();
+    props.fetchAllPatients('GENERAL_SERVICE', 'LABTEST_ORDER_FORM');
   
 }, [])//componentDidMount
 
@@ -127,8 +139,10 @@ const PatientTable = (props) => {
       <div class="searchTable">
         <card>
           <cardContent>
-            
-        <DataTable
+            <Form>
+                <ResultSearch />
+            </Form> 
+            <DataTable
             columns={columns}
             data={filteredItems}
             customStyles={customStyles}
@@ -162,7 +176,7 @@ const mapStateToProps = state => {
 }
 
 const mapActionToProps = {
-  fetchAllLabTestOrder: actions.fetchAllLabTestOrder,
+  fetchAllPatients: actions.fetchAll,
 }
 
 export default connect(mapStateToProps, mapActionToProps)(PatientTable);

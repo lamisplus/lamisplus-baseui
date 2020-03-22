@@ -159,7 +159,7 @@ export default function Appointment(props){
             <br/>
             <Card className="mb-12">
               <CardHeader>Test Order -- 03846657558
-              <Link to="/collected-sample">
+              <Link to="/laboratory">
                 <Button color="primary" className=" float-right mr-1" >
                         <TiArrowBackOutline/> { ' ' } Go Back
                 </Button>
