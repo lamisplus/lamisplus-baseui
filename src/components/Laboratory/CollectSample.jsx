@@ -234,7 +234,7 @@ export default function CollectSample (props) {
             <br/>
             <Card className="mb-12">
               <CardHeader>Test Order Details
-              <Link to="/test-order">
+              <Link to="/laboratory">
                 <Button color="primary" className=" float-right mr-1" >
                         <TiArrowBack/>Go Back
                 </Button>

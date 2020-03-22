@@ -14,23 +14,39 @@ import * as ACTION_TYPES from './types'
  * Delete()
  */
 
-export const fetchAll = () => dispatch => {
+export const fetchAllLabTestOrder = () => dispatch => {
   axios
-    .get(`${baseUrl}visits/`)
+    .get(`${baseUrl}ecounter/GENERAL_SERVICE/LABTEST_ORDER_FORM/01-01-2020/01-04-2020`)
     .then(response => {
       dispatch({
-        type: ACTION_TYPES.CHECKIN_FETCH_ALL,
+        type: ACTION_TYPES.LABORATORY_TESTORDER,
         payload: response.data
       })
     })
     .catch(error =>
       dispatch({
-        type: ACTION_TYPES.CHECKIN_ERROR,
+        type: ACTION_TYPES.LABORATORY_TESTORDER,
         payload: 'Something went wrong, please try again'
       })
     )
 }
 
+export const fetchAllLabTestResult = () => dispatch => {
+  axios
+    .get(`${baseUrl}ecounter/GENERAL_SERVICE/LABTEST_ORDER_FORM`)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.LABORATORY_TESTRESULT,
+        payload: response.data
+      })
+    })
+    .catch(error =>
+      dispatch({
+        type: ACTION_TYPES.LABORATORY_TESTRESULT,
+        payload: 'Something went wrong, please try again'
+      })
+    )
+}
 export const fetchById = id => dispatch => {
   axios
     .get(`${baseUrl}visits/${id}`)
@@ -48,7 +64,7 @@ export const fetchById = id => dispatch => {
     )
 }
 
-export const create = (data, onSuccess, onError) => dispatch => {
+export const create = (data) => dispatch => {
   axios
     .post(`${baseUrl}visits/`, data)
     .then(response => {
@@ -56,7 +72,7 @@ export const create = (data, onSuccess, onError) => dispatch => {
         type: ACTION_TYPES.CHECKIN_CREATE,
         payload: response.data
       })
-      onSuccess()
+    
     })
     .catch(error => {
       dispatch({
@@ -83,7 +99,7 @@ export const update = (id, data) => dispatch => {
     })
 }
 
-export const Delete = (id, onSuccess) => dispatch => {
+export const Delete = (id) => dispatch => {
   axios
     .delete(`${baseUrl}visits/${id}`)
     .then(response => {
