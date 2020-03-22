@@ -23,7 +23,7 @@ const Laboratory = props => {
             style={{ color: "#000" }}
           >
             <FaVials data-tip="Sample Collection" />{" "}
-            <div>&nbsp;&nbsp;&nbsp;</div>Test Order
+            <div>&nbsp;&nbsp;&nbsp;</div>Pending Subscription
           </NavLink>
         </NavItem>
         <NavItem>
@@ -35,7 +35,7 @@ const Laboratory = props => {
             style={{ color: "#000" }}
           >
             <FaVials data-tip="Sample Collection" />{" "}
-            <div>&nbsp;&nbsp;&nbsp;</div>Test Result
+            <div>&nbsp;&nbsp;&nbsp;</div>Dispensed Subscription
           </NavLink>
         </NavItem>
         <NavItem>
@@ -66,7 +66,7 @@ const Laboratory = props => {
       </Nav>
       <TabContent activeTab={activeTab}>
         <TabPane tabId="1">
-          <TableList />
+          <TableSearch />
         </TabPane>
         <TabPane tabId="2">
           <TableSearch />
