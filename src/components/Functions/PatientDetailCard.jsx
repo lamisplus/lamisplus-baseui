@@ -34,10 +34,10 @@ return (
     </Col>
     
     <Col md={4}>
-       <span>Date Of Birth : <b>{props.patient.dob} ({Age(props.patient.dob)})</b></span>
+       <span>Date Of Birth : <b>{props.patient.dob}</b></span>
     </Col>
     <Col md={4}>
-       <span>  Email Address : <b>{props.patient.email || 'N/A'}</b></span>
+       <span> Age : <b>{Age(props.patient.dob)}</b></span>
     </Col>
     <Col md={4}>
        <span> Name : <b>{props.patient.firstName} {' '} {props.patient.lastName} </b></span>
@@ -48,7 +48,9 @@ return (
     <Col md={4}>
        <span> Phone Number : <b>{props.patient.mobilePhoneNumber || 'N/A'}</b></span>
     </Col>
-   
+    <Col md={4}>
+       <span>  Email Address : <b>{props.patient.email || 'N/A'}</b></span>
+    </Col>
 </Row>
 
                </ExpansionPanelSummary>

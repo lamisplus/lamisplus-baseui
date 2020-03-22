@@ -31,10 +31,10 @@ import {
      if(bmi <= 18.5){
       setBMIStatus('Underweight');
      } 
-     else if (bmi > 18.5 || bmi <= 24.9){
+     else if (bmi > 18.5 && bmi <= 24.9){
         setBMIStatus('Healthy Weight');
       }
-      else if (bmi > 25.0 || bmi <= 29.9){
+      else if (bmi > 25.0 && bmi <= 29.9){
         setBMIStatus('Overweight');
       } else {
         setBMIStatus('Obese');
