@@ -15,9 +15,7 @@ import {
   } from 'reactstrap';
   import DataTable from 'react-data-table-component';
   import {url} from 'api/index';
-  import axios from 'axios';
   import Spinner from 'react-bootstrap/Spinner';
-import { GiConsoleController } from 'react-icons/gi';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -68,12 +66,6 @@ const cardStyle = {
 }
 
 export default function ConsultationPage (props) {
-  const PatientID = 1
-  const visitId = 2
-  const saveTestUrl =
-    url + 'encounters/GENERAL_SERVICE/LABTEST_ORDER_FORM/' + PatientID
-
-  const classes = useStyles()
   const [showLoading, setShowLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [serviceForms, setServiceForms] = useState()

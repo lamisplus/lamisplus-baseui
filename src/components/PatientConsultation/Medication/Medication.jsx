@@ -27,7 +27,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import moment from 'moment';
-import { toast } from "react-toastify";
 import Spinner from 'react-bootstrap/Spinner';
 import axios from 'axios';  
 import {url} from 'api/index';
@@ -357,7 +356,7 @@ function NewDrugOrderForm({addDrugs, drugOrder, fetchingDrugs}){
                                         <Col md={12}>
                                             <FormGroup>
                                             <Label for="dose">Dose <small >(Amount of medication taken at one time)</small></Label>
-                                                <Input type="text" name="dose" id="dose" placeholder="Dose" placeholder="Dose"
+                                                <Input type="text" name="dose" id="dose" placeholder="Dose" 
                                                     value={medi.dose}
                                                     onChange={onChange}
                                                 />

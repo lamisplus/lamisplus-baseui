@@ -1,8 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import {url} from 'api/index';
 import {
     Col,
     Row,
