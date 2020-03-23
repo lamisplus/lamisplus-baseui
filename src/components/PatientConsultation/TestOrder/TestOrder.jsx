@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 
-import MatButton from '@material-ui/core/Button';
-import SaveIcon from '@material-ui/icons/Save';
 import {
   Row,
   Col,
@@ -71,15 +62,6 @@ const useStyles = makeStyles(theme => ({
       
       }));
    
-     
-
-function not(a, b) {
-    return a.filter(value => b.indexOf(value) === -1);
-  }
-  
-  function intersection(a, b) {
-    return a.filter(value => b.indexOf(value) !== -1);
-  }
 
 export default function ConsultationPage(props) {
   const {getpatient} =props.getpatientdetails ;
@@ -90,53 +72,14 @@ export default function ConsultationPage(props) {
 
     const classes = useStyles();
 
-    const [checked, setChecked] = React.useState([]);
     const [testGroups, setTestGroup] = React.useState([]);
-    const [tests, setTests] = React.useState([]);
     const [left, setLeft] = React.useState([]);
     const [right, setRight] = React.useState([]);
     const [showLoading, setShowLoading] = useState(false);  
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-    const leftChecked = intersection(checked, left);
-    const rightChecked = intersection(checked, right);
 
-    const handleToggle = value => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-    
-  };
-
-  const handleAllRight = () => {
-    setRight(right.concat(left));
-    setLeft([]);
-  };
-
-  const handleCheckedRight = () => {
-    setRight(right.concat(leftChecked));
-    setLeft(not(left, leftChecked));
-    setChecked(not(checked, leftChecked));
-  };
-
-  const handleCheckedLeft = () => {
-    setLeft(left.concat(rightChecked));
-    setRight(not(right, rightChecked));
-    setChecked(not(checked, rightChecked));
-  };
-
-  const handleAllLeft = () => {
-    setLeft(left.concat(right));
-    setRight([]);
-  };
 
   useEffect(() => {
     async function fetchTestGroup() {
@@ -180,7 +123,7 @@ const saveTestOrder = (e) => {
           
   }; 
   axios.post(saveTestUrl, data)
-      .then((result) => {          
+      .then(() => {          
           setShowLoading(false);
           setRight([]);
           setLeft([]);
@@ -194,32 +137,7 @@ const saveTestOrder = (e) => {
       ); 
   };
 
-  const customList = items => (
-    <Paper className={classes.paper}>
-      <List dense component="div" role="list">
-        {items.map(value => {
-          const labelId = `transfer-list-item-${value.id}-label`;
-
-          return (
-            <ListItem key={value} role="listitem" button onClick={handleToggle(value)}>
-              <ListItemIcon>
-                <Checkbox
-                  checked={checked.indexOf(value) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ 'aria-labelledby': labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={value.description} />
-            </ListItem>
-          );
-        })}
-        <ListItem />
-      </List>
-    </Paper>
-  );
-
-  const handleChange = (newValue: any, actionMeta: any) => {
+  const handleChange = (newValue: any) => {
     setRight(newValue ? newValue : []);    
   };
 

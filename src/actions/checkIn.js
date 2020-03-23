@@ -66,6 +66,7 @@ export const create = (data, onSuccess, onError) => dispatch => {
     });
 };
 
+
 export const update = (id, data) => dispatch => {
   axios
     .put(`${url}visits/${id}`, data)

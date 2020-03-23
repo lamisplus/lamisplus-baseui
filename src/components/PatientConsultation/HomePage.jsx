@@ -26,8 +26,11 @@ import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import TestOrder from './TestOrder/TestOrder';
 import Medication from './Medication/Medication';
 import ServiceForm from './ServiceForm/serviceForm';
-import { Nav, NavItem, NavLink, Badge, Card, CardBody, CardDeck } from 'reactstrap';
-
+import { Nav, NavItem, NavLink, Badge, Card, CardBody, CardDeck,Button } from 'reactstrap';
+import CheckInModal from 'components/CheckIn/CheckInModal';
+import ViewVitalsSearch from 'components/Vitals/ViewVitalsSearch'
+import * as actions from "actions/patients";
+import {connect} from 'react-redux';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -169,18 +172,35 @@ const useStyles = makeStyles(theme => ({
         overflow: 'auto',
     };
 
-
-export default function ScrollableTabsButtonForce(props) {
+function HomePage(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [checkIn, setCheckIn] = React.useState(false);
+  const hospitalNumber = props.location.state.getpatient.row.hospitalNumber || props.patient.hospitalNumber;
+  console.log('patient '+hospitalNumber);
+
+  React.useEffect(() => {
+    props.fetchPatientByHospitalNumber(hospitalNumber)
+  }, [hospitalNumber]);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
- 
+
+ const checkInPatient = () => {
+   setCheckIn(true);
+ }
+
   return (
-    <div className={classes.root}>
+  
+  <div>
+    { !(props.patient) ? 
+    <div className={classes.inforoot}>
+couldnt load patient info
+      </div> :
+      <div className={classes.root}> 
         <div className={classes.inforoot} >
-            <PatientDetailCard getpatientdetails={props.location.state }/>   
+            <PatientDetailCard />   
         </div> 
 
       <AppBar position="static" >
@@ -193,7 +213,8 @@ export default function ScrollableTabsButtonForce(props) {
           textColor="white"
           aria-label="scrollable force tabs example"
         >
-          <Tab className={classes.title} label="Dashboard" icon={<MdDashboard />} {...a11yProps(0)} />         
+          <Tab className={classes.title} label="Dashboard" icon={<MdDashboard />} {...a11yProps(0)} />  
+          <Tab className={classes.title} label="Vital Signs" icon={<MdContacts />} {...a11yProps(5)} />       
           <Tab className={classes.title} label="Consultation" icon={<MdContacts />} {...a11yProps(1)} />
           <Tab className={classes.title} label="Service Form" icon={<GiFiles />} {...a11yProps(2)} />
           <Tab className={classes.title} label="Test Order" icon={<GiTestTubes />} {...a11yProps(3)} />
@@ -213,13 +234,14 @@ export default function ScrollableTabsButtonForce(props) {
         <NavItem>
           <NavLink> <i class="fa fa-users"></i> &nbsp; Relationships &nbsp; <Badge href="#" color="dark">0</Badge></NavLink>
         </NavItem>
-        { (props.location.state.getpatient && props.location.state.getpatient.row.dateVisitStart ) ? 
-        <NavItem className="mr-2">
-          <NavLink>  <span>Current Visit: {props.location.state.getpatient.row.dateVisitStart}</span> &nbsp; | &nbsp; Check Out &nbsp; <i class="fa fa-sign-out"></i> </NavLink>
+        { (props.patient && props.patient.dateVisitStart ) ? 
+        <NavItem className="ml-auto">
+          <NavLink>  <span>Current Visit: <b>{props.patient.dateVisitStart} {props.patient.timeVisitStart}</b></span> &nbsp;  </NavLink>
         </NavItem>
 : 
-<NavItem className="mr-2">
-<NavLink>  <span>Patient not checked in</span> &nbsp; | &nbsp; Check In &nbsp; <i class="fa fa-sign-in"></i> </NavLink>
+<NavItem className="ml-auto" >
+<NavLink>  <span style={{color:'red'}}><b>Patient not checked in</b></span> &nbsp; 
+| &nbsp;<Button type="button" outline color="default" onClick={checkInPatient}> Check In &nbsp; <i class="fa fa-sign-in"></i> </Button></NavLink>
 </NavItem>
 }
 
@@ -227,8 +249,8 @@ export default function ScrollableTabsButtonForce(props) {
       {/* The DashBoad Tab  */}
       <TabPanel value={value} index={0}>
       <CardDeck>
-         <PatientVitals  getpatientdetails={props.location.state } /> 
-        <PatientAllergies height={cardHeight} addstatus={false} /> 
+         <PatientVitals patientId={props.patient.patientId} getpatientdetails={props.location.state } /> 
+        {/* <PatientAllergies height={cardHeight} addstatus={false} />  */}
         <PatientAllergies height={cardHeight} addstatus={false} /> 
       </CardDeck>
       <br></br>
@@ -241,30 +263,34 @@ export default function ScrollableTabsButtonForce(props) {
                     </Card>
 </TabPanel>
     {/* End of dashboard */}
-
-{/* Begining of Service Form */}
+{/* Begining of vital signs  */}
 <TabPanel value={value} index={1}>
+<ViewVitalsSearch  getpatientdetails={props.location.state } />  
+    
+</TabPanel>
+{/* End of vital signs */} 
+{/* Begining of Service Form */}
+<TabPanel value={value} index={2}>
  
             <Consultation getpatientdetails={props.location.state } height={cardHeight}/>
 
-</TabPanel>     
+</TabPanel>    
+ 
  {/* Begining of consultation  */}
- <TabPanel value={value} index={2}>
-      
-                <ServiceForm getpatientdetails={props.location.state } height={cardHeight}/>
-              
+ <TabPanel value={value} index={3}>    
+    <ServiceForm getpatientdetails={props.location.state } height={cardHeight}/>            
 </TabPanel>
 
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={4}>
         <TestOrder getpatientdetails={props.location.state } height={cardHeight}/>
       </TabPanel>
     {/* End of consultation */}
-    <TabPanel value={value} index={4}>
+    <TabPanel value={value} index={5}>
         {/* Card stats */}
         <Medication getpatientdetails={props.location.state }  />
 
       </TabPanel>
-      <TabPanel value={value} index={5}>
+      <TabPanel value={value} index={6}>
       <Grid container spacing={7} > 
                 <Grid item xs='7'>                    
                     <Card >
@@ -328,10 +354,22 @@ export default function ScrollableTabsButtonForce(props) {
       </TabPanel>
       
 
-      <TabPanel value={value} index={6}>
-        Item Seven
-      </TabPanel>
-    </div>
+      <CheckInModal patientId={props.location.state.getpatient.row.patientId} showModal={checkIn} setShowModal={setCheckIn}/>
+  
+      </div>
+}
+   </div>  
   );
 }
 
+const mapStateToProps = state => {
+  return {
+  patient: state.patients.patient
+  }
+}
+
+const mapActionToProps = {
+  fetchPatientByHospitalNumber: actions.fetchById,
+}
+
+export default connect(mapStateToProps, mapActionToProps)(HomePage)
