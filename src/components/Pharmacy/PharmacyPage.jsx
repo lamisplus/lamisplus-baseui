@@ -1,16 +1,48 @@
-import Page from "components/Page";
-import React, { useState } from "react";
+/**
+ * @imports external
+ */
+import React, { useState, useEffect } from "react";
 import { TabContent, TabPane, Nav, NavItem, NavLink } from "reactstrap";
+import { connect } from "react-redux";
 import { FaListAlt, FaVials } from "react-icons/fa";
 import classnames from "classnames";
-import TableList from "./TableList";
-import TableSearch from "./TableSearch";
 
+/**
+ * @imports Local
+ */
+import Dispensed from "./PendingPrescription";
+import TableSearch from "./TableSearch";
+import Page from "components/Page";
+import { fetchPrescriptions } from "../../actions/pharmacy";
+
+/**
+ * ====================================
+ * @Main
+ * @param {*} props
+ */
 const Laboratory = props => {
+  useEffect(() => {
+    props.fetchPrescriptions();
+  }, []);
   const [activeTab, setActiveTab] = useState("1");
   const toggle = tab => {
     if (activeTab !== tab) setActiveTab(tab);
   };
+
+  // {
+  //   props.prescriptions &&
+  //     props.prescriptions.map(prescription => {
+  //       console.log(prescription.firstName);
+  //       if (prescription.formData.drug_order !== undefined) {
+  //         prescription.formData.drug_order.map(drug => {
+  //           console.log(drug);
+  //         });
+  //       }
+  //     });
+  // }
+
+  console.log(props.prescriptions);
+
   return (
     <Page>
       <Nav tabs>
@@ -23,7 +55,7 @@ const Laboratory = props => {
             style={{ color: "#000" }}
           >
             <FaVials data-tip="Sample Collection" />{" "}
-            <div>&nbsp;&nbsp;&nbsp;</div>Pending Subscription
+            <div>&nbsp;&nbsp;&nbsp;</div>Pending Prescriptions
           </NavLink>
         </NavItem>
         <NavItem>
@@ -35,7 +67,7 @@ const Laboratory = props => {
             style={{ color: "#000" }}
           >
             <FaVials data-tip="Sample Collection" />{" "}
-            <div>&nbsp;&nbsp;&nbsp;</div>Dispensed Subscription
+            <div>&nbsp;&nbsp;&nbsp;</div>Dispensed Prescriptions
           </NavLink>
         </NavItem>
         <NavItem>
@@ -69,11 +101,15 @@ const Laboratory = props => {
           <TableSearch />
         </TabPane>
         <TabPane tabId="2">
-          <TableSearch />
+          <Dispensed />
         </TabPane>
       </TabContent>
     </Page>
   );
 };
 
-export default Laboratory;
+const mapStateToProps = state => ({
+  prescriptions: state.pharmacy.formData
+});
+
+export default connect(mapStateToProps, { fetchPrescriptions })(Laboratory);

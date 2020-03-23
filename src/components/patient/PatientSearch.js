@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import DataTable from 'react-data-table-component'
-import { Card, CardContent } from '@material-ui/core'
-import IconButton from '@material-ui/core/IconButton'
-import { Delete } from '@material-ui/icons'
-import { Edit } from '@material-ui/icons'
-import './PatientSearch.css'
+import React, { useState, useEffect } from "react";
+import DataTable from "react-data-table-component";
+import { Card, CardContent } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import { Delete } from "@material-ui/icons";
+import { Edit } from "@material-ui/icons";
+import "./PatientSearch.css";
 import {
   Button,
   Modal,
@@ -13,69 +13,69 @@ import {
   ModalHeader,
   Input,
   Form
-} from 'reactstrap'
-import { Link } from 'react-router-dom'
-import { fetchAll, Delete as Del } from '../../actions/patients'
-import { connect } from 'react-redux'
+} from "reactstrap";
+import { Link } from "react-router-dom";
+import { fetchAll, Delete as Del } from "../../actions/patients";
+import { connect } from "react-redux";
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
-  <Form className='cr-search-form' onSubmit={e => e.preventDefault()}>
+  <Form className="cr-search-form" onSubmit={e => e.preventDefault()}>
     <Card>
       <CardContent>
         <Input
-          type='search'
-          placeholder='Search by Patient Name, Patient ID '
-          className='cr-search-form__input pull-right'
+          type="search"
+          placeholder="Search by Patient Name, Patient ID "
+          className="cr-search-form__input pull-right"
           value={filterText}
           onChange={onFilter}
         />
       </CardContent>
     </Card>
   </Form>
-)
+);
 
 const SampleExpandedComponent = ({ data }) => (
   <div>
     <span>
-      <b> Date Of Registration:</b> {data.dateRegistration}{' '}
-    </span>{' '}
-    <br></br>{' '}
+      <b> Date Of Registration:</b> {data.dateRegistration}{" "}
+    </span>{" "}
+    <br></br>{" "}
     <span>
-      <b>Date Of Birth:</b> {data.dob}{' '}
+      <b>Date Of Birth:</b> {data.dob}{" "}
     </span>
   </div>
-)
+);
 
 const calculate_age = dob => {
-  var today = new Date()
-  var dateParts = dob.split('-')
-  var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0])
-  var birthDate = new Date(dateObject) // create a date object directly from `dob1` argument
-  console.log(dateObject)
-  console.log(birthDate)
-  var age_now = today.getFullYear() - birthDate.getFullYear()
-  var m = today.getMonth() - birthDate.getMonth()
+  var today = new Date();
+  var dateParts = dob.split("-");
+  var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+  var birthDate = new Date(dateObject); // create a date object directly from `dob1` argument
+  console.log(dateObject);
+  console.log(birthDate);
+  var age_now = today.getFullYear() - birthDate.getFullYear();
+  var m = today.getMonth() - birthDate.getMonth();
   if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-    age_now--
+    age_now--;
   }
 
   if (age_now === 0) {
-    return m + ' month(s)'
+    return m + " month(s)";
   }
-  console.log(age_now)
-  return age_now + ' year(s)'
-}
+  console.log(age_now);
+  return age_now + " year(s)";
+};
 
 const columns = modalClickHandler => [
   {
-    name: 'Patient ID',
-    selector: 'hospitalNumber',
+    name: "Patient ID",
+    selector: "hospitalNumber",
     sortable: false,
     Display: true
   },
   {
-    name: 'Patient Name',
-    selector: 'name',
+    name: "Patient Name",
+    selector: "name",
     sortable: false,
     cell: row => (
       <span>
@@ -84,38 +84,38 @@ const columns = modalClickHandler => [
     )
   },
   {
-    name: 'Age',
-    selector: 'dob',
+    name: "Age",
+    selector: "dob",
     sortable: false,
     cell: row => (
       <span>
         {row.dob === 0 ||
         row.dob === undefined ||
         row.dob === null ||
-        row.dob === ''
+        row.dob === ""
           ? 0
           : calculate_age(row.dob)}
       </span>
     )
   },
   {
-    name: 'Action',
+    name: "Action",
     cell: () => (
       <div>
         <IconButton
-          color='primary'
-          aria-label='Archive Patient'
-          title='Edit Patient'
+          color="primary"
+          aria-label="Archive Patient"
+          title="Edit Patient"
         >
-          <Link to='/patient-registration'>
-            <Edit title='Edit Patient' aria-label='Edit Patient' />
+          <Link to="/patient-registration">
+            <Edit title="Edit Patient" aria-label="Edit Patient" />
           </Link>
         </IconButton>
         <IconButton
-          color='primary'
+          color="primary"
           onClick={modalClickHandler}
-          aria-label='Archive Patient'
-          title='Archive Patient'
+          aria-label="Archive Patient"
+          title="Archive Patient"
         >
           <Delete />
         </IconButton>
@@ -125,23 +125,23 @@ const columns = modalClickHandler => [
     allowOverflow: true,
     button: true
   }
-]
+];
 
 const customStyles = {
   headCells: {
     style: {
-      color: '#202124',
-      fontSize: '14px',
-      fontWeight: 'bold'
+      color: "#202124",
+      fontSize: "14px",
+      fontWeight: "bold"
     }
   }
-}
+};
 
 const PatientTable = props => {
-  const [filterText, setFilterText] = useState('')
-  const [resetPaginationToggle, setResetPaginationToggle] = useState(false)
+  const [filterText, setFilterText] = useState("");
+  const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
 
-  console.log(props.patientsList)
+  console.log(props.patientsList);
   // const [data, setData] = useState([])
   const filteredItems =
     !filterText && props.patientsList
@@ -158,22 +158,22 @@ const PatientTable = props => {
               item.hospitalNumber
                 .toLowerCase()
                 .includes(filterText.toLowerCase()))
-        )
-  const [modal, setModal] = useState(false)
-  const toggle = () => setModal(!modal)
+        );
+  const [modal, setModal] = useState(false);
+  const toggle = () => setModal(!modal);
 
   useEffect(() => {
-    props.fetchAllPatients()
+    props.fetchAllPatients();
     //setData(props.patientsList);
-  }, []) //componentDidMount
+  }, []); //componentDidMount
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
       if (filterText) {
-        setResetPaginationToggle(!resetPaginationToggle)
-        setFilterText('')
+        setResetPaginationToggle(!resetPaginationToggle);
+        setFilterText("");
       }
-    }
+    };
 
     return (
       <FilterComponent
@@ -181,8 +181,8 @@ const PatientTable = props => {
         onClear={handleClear}
         filterText={filterText}
       />
-    )
-  }, [filterText, resetPaginationToggle])
+    );
+  }, [filterText, resetPaginationToggle]);
 
   return (
     <div>
@@ -198,7 +198,7 @@ const PatientTable = props => {
             subHeaderComponent={subHeaderComponentMemo}
             highlightOnHover={true}
             striped={true}
-            subHeaderAlign={'left'}
+            subHeaderAlign={"left"}
             // noHeader={false}
             fixedHeader={true}
             expandableRows
@@ -211,25 +211,25 @@ const PatientTable = props => {
         <ModalHeader toggle={toggle}>Achieve Patient</ModalHeader>
         <ModalBody>Are you sure you want to delete this patient?</ModalBody>
         <ModalFooter>
-          <Button color='primary' onClick={toggle}>
+          <Button color="primary" onClick={toggle}>
             Continue
-          </Button>{' '}
-          <Button color='secondary' onClick={toggle}>
+          </Button>{" "}
+          <Button color="secondary" onClick={toggle}>
             Cancel
           </Button>
         </ModalFooter>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = state => ({
   patientsList: state.patients.list
-})
+});
 
 const mapActionToProps = {
   fetchAllPatients: fetchAll,
   deletePatient: Del
-}
+};
 
-export default connect(mapStateToProps, mapActionToProps)(PatientTable)
+export default connect(mapStateToProps, mapActionToProps)(PatientTable);

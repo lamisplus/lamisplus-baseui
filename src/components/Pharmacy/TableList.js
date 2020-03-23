@@ -68,7 +68,7 @@ const columns = [
     )
   },
   {
-    name: "Age",
+    name: "Total",
     selector: "dob",
     sortable: false,
     cell: row => <span>{calculate_age(row.dob)}</span>
