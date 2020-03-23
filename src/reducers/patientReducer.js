@@ -29,13 +29,13 @@ const patientReducer = (state = initialState, action) => {
       return { ...state, list: action.payload }
 
     case ACTION_TYPES.PATIENT_VITAL_SIGNS:
-        return { ...state.patient, vitalSignsList: action.payload }
+        return { ...state, vitalSignsList: action.payload }
 
         case ACTION_TYPES.PATIENT_LATEST_VITAL_SIGNS:
           return { ...state, vitalSigns: action.payload }
   
         case ACTION_TYPES.PATIENT_ALLERGIES:
-          return { ...state.patient, allergies: action.payload }
+          return { ...state, allergies: action.payload }
     
     default:
       return state

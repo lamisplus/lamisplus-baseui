@@ -56,6 +56,7 @@ export const create = (data, onSuccess, onError) => dispatch => {
         type: ACTION_TYPES.CHECKIN_CREATE,
         payload: response.data
       })
+      console.log('in success')
       onSuccess()
     })
     .catch(error => {
@@ -63,6 +64,7 @@ export const create = (data, onSuccess, onError) => dispatch => {
         type: ACTION_TYPES.CHECKIN_ERROR,
         payload: 'Something went wrong, please try again'
       })
+      console.log('in failed')
       onError(error.response)
     })
 }

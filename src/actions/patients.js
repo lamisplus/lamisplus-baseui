@@ -15,6 +15,7 @@ import * as ACTION_TYPES from './types'
  * fetchPatientVitals()
  * fetchPatientAllergies()
  * fetchPatientLatestVitalSigns()
+ * fetchPatientTestOrders()
  */
 
 export const fetchAll = () => dispatch => {
@@ -134,7 +135,7 @@ export const fetchPatientAllergies = id => dispatch => {
 export const fetchPatientLatestVitalSigns = (id) => dispatch => {
  if(id){
   axios
-    .get(`${baseUrl}patients/${id}/encounter/GENERAL_SERVICE/VITAL_SIGNS_FORM/sortOrder/sortField/limit?limit=1`, {limit: 1, sortField: "dateEncounter", sortOrder: "desc"} )
+    .get(`${baseUrl}patients/${id}/encounter/GENERAL_SERVICE/VITAL_SIGNS_FORM`, {limit: 1, sortField: "dateEncounter", sortOrder: "desc"} )
     .then(response => {
       dispatch({
         type: ACTION_TYPES.PATIENT_LATEST_VITAL_SIGNS,
@@ -150,6 +151,52 @@ export const fetchPatientLatestVitalSigns = (id) => dispatch => {
     )
     }  
 }
+
+
+export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
+  if(id){
+   axios
+     .get(`${baseUrl}patients/${id}/encounter/GENERAL_SERVICE/VITAL_SIGNS_FORM`)
+     .then(response => {
+       dispatch({
+         type: ACTION_TYPES.PATIENT_VITAL_SIGNS,
+         payload: response.data
+       })
+       onSuccess()
+     })
+     .catch(error => {
+       dispatch({
+         type: ACTION_TYPES.PATIENTS_ERROR,
+         payload: 'Something went wrong, please try again'
+       })
+       onError()
+      }
+     )
+     }  
+ }
+
+
+ export const fetchPatientTestOrders = (id, onSuccess, onError) => dispatch => {
+  if(id){
+   axios
+     .get(`${baseUrl}patients/${id}/encounter/GENERAL_SERVICE/LAB_ORDER_FORM`)
+     .then(response => {
+       dispatch({
+         type: ACTION_TYPES.PATIENT_LAB_ORDERS,
+         payload: response.data
+       })
+       onSuccess()
+     })
+     .catch(error => {
+       dispatch({
+         type: ACTION_TYPES.PATIENTS_ERROR,
+         payload: 'Something went wrong, please try again'
+       })
+       onError()
+      }
+     )
+     }  
+ }
 //const formateData = data => ({
 //   ...data
 // })

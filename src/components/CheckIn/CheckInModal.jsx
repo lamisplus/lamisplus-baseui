@@ -21,7 +21,8 @@ import 'react-widgets/dist/css/react-widgets.css';
 import { DateTimePicker } from 'react-widgets';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
-import { create } from '../../actions/checkIn'
+import { create } from 'actions/checkIn'
+import * as actions from "actions/patients";
 import { connect } from 'react-redux'
 import { initialfieldState_checkInPatient } from './initailFieldState'
 
@@ -76,8 +77,8 @@ const CheckInModal = (props ) => {
     
         if (validate()) {
           const onSuccess = () => {
-            resetForm()
             props.setShowModal(false);
+            props.fetchPatientByHospitalNumber(props.patientId)
             toast.success('Patient Checked In Successfully', { appearance: 'success' })
           }
           const onError = errstatus => {
@@ -86,6 +87,7 @@ const CheckInModal = (props ) => {
             setShowErrorMsg(true)
           }
           props.checkInPatient(values, onSuccess, onError)
+          
         }
       }
 
@@ -163,12 +165,15 @@ const CheckInModal = (props ) => {
     );
 }
 
-const mapStateToProps = state => ({
-    
-  })
+const mapStateToProps = state => {
+  return {
+    patient: state.patients.patient
+  }
+}
   
   const mapActionToProps = {
-    checkInPatient: create
+    checkInPatient: create,
+    fetchPatientByHospitalNumber: actions.fetchById,
   }
   
   export default connect(mapStateToProps, mapActionToProps)(CheckInModal)

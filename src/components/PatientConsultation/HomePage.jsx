@@ -177,8 +177,7 @@ function HomePage(props) {
   const [value, setValue] = React.useState(0);
   const [checkIn, setCheckIn] = React.useState(false);
   const hospitalNumber = props.location.state.getpatient.row.hospitalNumber || props.patient.hospitalNumber;
-  console.log('patient '+hospitalNumber);
-
+  //const patientId = props.location.state.getpatient.row.patientId || props.patient.patientId;
   React.useEffect(() => {
     props.fetchPatientByHospitalNumber(hospitalNumber)
   }, [hospitalNumber]);
@@ -265,7 +264,7 @@ couldnt load patient info
     {/* End of dashboard */}
 {/* Begining of vital signs  */}
 <TabPanel value={value} index={1}>
-<ViewVitalsSearch  getpatientdetails={props.location.state } />  
+<ViewVitalsSearch  patientId={props.patient.patientId}   />  
     
 </TabPanel>
 {/* End of vital signs */} 
@@ -282,12 +281,12 @@ couldnt load patient info
 </TabPanel>
 
       <TabPanel value={value} index={4}>
-        <TestOrder getpatientdetails={props.location.state } height={cardHeight}/>
+        <TestOrder patientId={props.patient.patientId } visitId={props.patient.visitId}/>
       </TabPanel>
     {/* End of consultation */}
     <TabPanel value={value} index={5}>
         {/* Card stats */}
-        <Medication getpatientdetails={props.location.state }  />
+        <Medication patientId={props.patient.patientId } visitId={props.patient.visitId}  />
 
       </TabPanel>
       <TabPanel value={value} index={6}>
@@ -354,7 +353,7 @@ couldnt load patient info
       </TabPanel>
       
 
-      <CheckInModal patientId={props.location.state.getpatient.row.patientId} showModal={checkIn} setShowModal={setCheckIn}/>
+      <CheckInModal patientId={props.patient.patientId} showModal={checkIn} setShowModal={setCheckIn}/>
   
       </div>
 }

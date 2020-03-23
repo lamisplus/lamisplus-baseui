@@ -154,9 +154,8 @@ export default function Medication(props) {
      //Get countries    
      
     //POST METHOD TO SAVE THE RECORD
-    const {getpatient} =props.getpatientdetails ;
-    const PatientID = getpatient.row.patientId;
-    const visitId = getpatient.row.id;
+    const PatientID = props.patientId;
+    const visitId = props.visitId;
    const [medis, setmedis] = useState([]);
     
     const [showLoading, setShowLoading] = useState(false);  

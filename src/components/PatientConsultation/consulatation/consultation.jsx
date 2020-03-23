@@ -15,6 +15,8 @@ import { url } from '../../../api'
 import PatientVitals from 'components/PatientDashboard/PatientVitals'
 import PatientAllergies from 'components/PatientDashboard/PatientAllergies'
 // {/* Auto textfield complete */}
+import * as ECT from '@whoicd/icd11ect';
+import '@whoicd/icd11ect/style.css';
 
 const useStyles = makeStyles(theme => ({
   root2: {
@@ -146,7 +148,34 @@ export default function ConsultationPage (props) {
     setconsult({ ...consult, [e.target.name]: e.target.value })
   }
 
+  const mySettings = {
+    // The API located at the URL below 
+    // should be used only for software
+    // development and testing. 
+    // ICD content at this location might not
+    // be up to date or complete. 
+    // For production, use the API located at
+    // id.who.int with proper OAUTH authentication
+    apiServerUrl: "https://icd11restapi-developer-test.azurewebsites.net",
+    wordsAvailable: false,
+    height: "50vh"
+  };
+//   const myCallbacks = {
+//     selectedEntityFunction: (selectedEntity) => { // I only need the selectedEntityFunction callback
+//         console.log('selected uri: '+ selectedEntity.uri);
+//         console.log('selected code: '+ selectedEntity.code);
+//         console.log('selected bestMatchText: '+ selectedEntity.bestMatchText);
+//     }
+// };
 
+const myCallbacks = {
+  selectedEntityFunction: selectedEntity => {
+    document.getElementById("demo-paste-selected").innerHTML =
+      selectedEntity.code + " - " + selectedEntity.bestMatchText;
+    document.getElementById("demo-selected").style.display = "inline";
+  }
+};
+  ECT.Handler.configure(mySettings, myCallbacks);
 return (
 <form className={classes.form} onSubmit={Saveconsult}>
         <CardDeck>                    
@@ -179,6 +208,20 @@ return (
                     </CardBody>                      
                 </Card>
                 </CardDeck>
+                <hr></hr>
+        <CardDeck>
+                <Card >
+                    <CardHeader> Clinical Diagnosis </CardHeader>
+                           <CardBody>
+                           <div class="demo-search">
+      Type for starting search: 
+      <input type="text" class="ctw-input" autoComplete="off" data-ctw-ino="1" /> 
+      <button class="demo-clear" type="button" onClick={ECT.Handler.clear('1')} title="Clear search and results">❌</button>
+    </div>
+    <div class="ctw-window" data-ctw-ino="1"></div>
+                           </CardBody>
+                           </Card>
+                           </CardDeck>
     <br/>
             
                 {showLoading && 

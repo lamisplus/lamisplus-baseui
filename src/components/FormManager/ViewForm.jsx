@@ -3,6 +3,7 @@ import Page from 'components/Page';
 import { data } from './form-json';
 import { saveForm, selectError, Errors, Form, FormBuilder } from 'react-formio';
 import {Card,CardContent,} from '@material-ui/core';
+import FormRenderer from 'components/FormManager/FormRenderer';
 
 const Create = props => {
 
@@ -12,6 +13,7 @@ const Create = props => {
   const url = "https://www.lmamisplsus.org";
   return (
     <Page title="Form Builder" >
+      <FormRenderer patientId={57} formId={8} serviceName={'HIV_SERVICE'} visitId={5}/>
    <Card >
       <CardContent>
       <h4>Create Form</h4>

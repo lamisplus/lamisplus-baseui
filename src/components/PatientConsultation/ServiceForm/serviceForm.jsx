@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-//import {Card, CardContent} from '@material-ui/core';
+import {Link} from 'react-router-dom';
 import {
     Form,
     Input,
@@ -16,47 +16,7 @@ import {
   import DataTable from 'react-data-table-component';
   import {url} from 'api/index';
   import Spinner from 'react-bootstrap/Spinner';
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    margin: 'auto'
-  },
-  paper: {
-    width: 200,
-    height: 230,
-    overflow: 'auto'
-  },
-  button: {
-    margin: theme.spacing(0.5, 0)
-  },
-  root2: {
-    flexGrow: 1,
-    width: '100%',
-    backgroundColor: theme.palette.background.paper,
-    margin: theme.spacing(7),
-    bullet: {
-      display: 'inline-block',
-      margin: '0 2px',
-      transform: 'scale(0.8)'
-    },
-    title: {
-      fontSize: 12
-    },
-    pos: {
-      fontSize: 11
-    },
-    cardContent: {
-      padding: 2
-    },
-    cardroot: {
-      margin: theme.spacing(1),
-      height: 250 + 'px !important'
-    },
-    center: {
-      textAlign: 'center'
-    }
-  }
-}))
+  import {connect} from 'react-redux';
 
 const cardStyle = {
   borderColor: '#fff',
@@ -65,7 +25,7 @@ const cardStyle = {
   overflow: 'auto'
 }
 
-export default function ConsultationPage (props) {
+function ServiceFormPage (props) {
   const [showLoading, setShowLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [serviceForms, setServiceForms] = useState()
@@ -118,10 +78,6 @@ export default function ConsultationPage (props) {
       </Form>
   );
 
-  const openServiceForm = () => {
-    console.log('clicked')
-  }
-
   const columns = [
     {
       name: 'Service Form',
@@ -129,9 +85,11 @@ export default function ConsultationPage (props) {
       sortable: false
     },
     {
-      cell: () => (
+      cell: (row) => (
         <IconButton color='primary' fontSize='small'>
+          <Link to={{ pathname: '/form-renderer', state: { form: {row}} }}>
           <AddCircleOutlineIcon />
+          </Link>
         </IconButton>
       ),
       ignoreRowClick: true,
@@ -208,3 +166,11 @@ return (
                         </Row>
 )
 }
+
+const mapStateToProps = (state) => {
+  return {
+    patient: state.patients.patient
+  }
+}
+
+export default connect(mapStateToProps, {})(ServiceFormPage)

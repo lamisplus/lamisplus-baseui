@@ -63,11 +63,9 @@ const useStyles = makeStyles(theme => ({
       }));
    
 
-export default function ConsultationPage(props) {
-  const {getpatient} =props.getpatientdetails ;
-   
-   const PatientID = getpatient.row.patientId;
-   const visitId = getpatient.row.id;
+export default function ConsultationPage(props) {   
+   const PatientID = props.patientId;
+   const visitId = props.visitId;
    const saveTestUrl = url+"encounters"; 
 
     const classes = useStyles();
@@ -85,7 +83,7 @@ export default function ConsultationPage(props) {
     async function fetchTestGroup() {
       console.log('fetching test group');
         try{
-      const response = await fetch(url+'laboratory/labtest-Group');
+      const response = await fetch(url+'labTestGroup');
       const body = await response.json();
       console.log(body);         
      setTestGroup(body.map(({ category, id }) => ({ label: category, value: id })));
@@ -99,9 +97,22 @@ export default function ConsultationPage(props) {
   const getTestByTestGroup = (e) => {
     const testGroupId = e.target.value;
     async function fetchTests() {
-        const response = await fetch(url+"laboratory/"+testGroupId+"/labtest");
+      setErrorMessage("")
+      try{
+        const response = await fetch(url+"labTest?labTestGroupId="+testGroupId);
         const testLists = await response.json();
-        setLeft(testLists);
+        const total = testLists.length;
+        console.log(total);
+        if(total){
+          setLeft(testLists);
+        } else{
+          setErrorMessage("Could not fetch test list, please try again later");
+        }
+       
+      }catch(error){
+        setErrorMessage("Could not fetch test list, please try again later");
+        setLeft([])
+      }
       }
       fetchTests();
 }
@@ -116,7 +127,7 @@ const saveTestOrder = (e) => {
   const data = {
           formData :right,
           patientId: PatientID, 
-          visitId:visitId,
+          visitId: visitId,
           formName: 'LABTEST_ORDER_FORM',
           serviceName: 'GENERAL_SERVICE',
           dateEncounter: moment(new Date()).format('DD-MM-YYYY'),
