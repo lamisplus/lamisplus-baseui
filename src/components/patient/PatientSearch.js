@@ -17,6 +17,7 @@ import {
 import { Link } from 'react-router-dom'
 import { fetchAll, Delete as Del } from '../../actions/patients'
 import { connect } from 'react-redux'
+import {Dashboard} from '@material-ui/icons';
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
   <Form className='cr-search-form' onSubmit={e => e.preventDefault()}>
@@ -100,8 +101,13 @@ const columns = modalClickHandler => [
   },
   {
     name: 'Action',
-    cell: () => (
+    cell: (row) => (
       <div>
+        <IconButton color="primary"  aria-label="View Patient" title="View Patient">
+            <Link to={{ pathname: '/patient-dashboard', state: { getpatient: {row}} }}>
+            <Dashboard title="Patient Dashboard"   aria-label="View Patient"/>
+            </Link>
+          </IconButton>
         <IconButton
           color='primary'
           aria-label='Archive Patient'

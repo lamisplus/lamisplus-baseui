@@ -35,6 +35,7 @@ import { create } from '../../actions/patients'
 import { initialfieldState_patientRegsitration } from './initailFieldState'
 import useForm from '../Functions/UseForm'
 
+
 //Dtate Picker package
 Moment.locale('en')
 momentLocalizer()
@@ -275,7 +276,7 @@ const PatientRegistration = props => {
     values['personRelativesDTO'] = relatives
     values['dob'] = dateOfBirth
     values['provinceId'] = 502
-    console.log(values)
+    //console.log(values)
     e.preventDefault()
 
     props.create(values)

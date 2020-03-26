@@ -1,1 +1,1 @@
-export const url = 'http://172.16.2.243:8081/api/'
+export const url = 'https://lp-base-app.herokuapp.com/api/'
