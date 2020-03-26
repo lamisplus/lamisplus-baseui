@@ -73,7 +73,7 @@ const PatientPrescriptions = props => {
             </td>
             <td>
               <div className="note">
-                <span>13 tablets dispensed</span>
+                <span>Dispense 13 tablets</span>
               </div>
             </td>
             <td>
@@ -100,7 +100,7 @@ const PatientPrescriptions = props => {
               <p style={textstyle}>Paracetamol 55mg </p>
             </Col>
             <Col xs="4">
-              Dosa
+              Dose
               <br />
               <p style={textstyle}>3</p>
             </Col>
@@ -130,7 +130,7 @@ const PatientPrescriptions = props => {
             <Col xs="4">
               Additional Instruction
               <br />
-              <p style={textstyle}>Nile</p>
+              <p style={textstyle}>Nil</p>
             </Col>
           </Row>
         </ModalBody>

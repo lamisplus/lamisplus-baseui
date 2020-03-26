@@ -13,21 +13,19 @@ import * as ACTION_TYPES from "./types";
 
 export const fetchPrescriptions = () => dispatch => {
   axios
-    .get(
-      `${url}encounters/GENERAL_SERVICE/DRUG_ORDER_FORM?dateStart=01-01-2020&dateEnd=01-04-2020`
-    )
+    .get(`${url}encounters/GENERAL_SERVICE/DRUG_ORDER_FORM`)
     .then(response => {
-      console.log(response.data);
-      dispatch({
-        type: ACTION_TYPES.PHARMACY_FETCH_PRESCRIPTIONS,
-        payload: response.data
-      });
-    })
-    .catch(error => {
-      console.log("Pharmacy Error: ", error);
-      dispatch({
-        type: ACTION_TYPES.PHARMACY_ERROR,
-        payload: "Something went wrong"
-      });
+      console.log(response);
+      //   dispatch({
+      //     type: ACTION_TYPES.PHARMACY_FETCH_PRESCRIPTIONS,
+      //     payload: response.data
+      //   });
+      // })
+      // .catch(error => {
+      //   console.log("Pharmacy Error: ", error);
+      //   dispatch({
+      //     type: ACTION_TYPES.PHARMACY_ERROR,
+      //     payload: "Something went wrong"
+      //   });
     });
 };

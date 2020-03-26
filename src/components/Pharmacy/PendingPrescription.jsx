@@ -53,7 +53,7 @@ const PendingPrescription = props => {
     const GetData = async () => {
       const result = await axios(apistate);
       setData(result.data);
-      console.log(result.data);
+      // console.log(result.data);
     };
     GetData();
   }, []);

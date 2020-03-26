@@ -115,9 +115,6 @@ const customStyles = {
 const PatientTable = props => {
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-
-  console.log(props.prescriptions);
-  // const [data, setData] = useState([])
   const filteredItems =
     !filterText && props.prescriptions
       ? []
@@ -138,9 +135,8 @@ const PatientTable = props => {
   const toggle = () => setModal(!modal);
 
   useEffect(() => {
-    // props.fetchAllPatients();
-    //setData(props.patientsList);
-  }, []); //componentDidMount
+  
+  }, []); 
 
   const subHeaderComponentMemo = useMemo(() => {
     const handleClear = () => {
