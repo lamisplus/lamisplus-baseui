@@ -16,33 +16,34 @@ import * as ACTION_TYPES from './types'
 
 export const fetchAllLabTestOrder = () => dispatch => {
   axios
-    .get(`${baseUrl}ecounter/GENERAL_SERVICE/LABTEST_ORDER_FORM/01-01-2020/01-04-2020`)
+    .get(`${baseUrl}encounters/GENERAL_SERVICE/LABTEST_ORDER_FORM/`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.LABORATORY_TESTORDER,
         payload: response.data
       })
+      ///console.log(response)
     })
     .catch(error =>
       dispatch({
-        type: ACTION_TYPES.LABORATORY_TESTORDER,
+        type: ACTION_TYPES.ERROR_LABORATORY_TESTORDER,
         payload: 'Something went wrong, please try again'
       })
     )
 }
 
-export const fetchAllLabTestResult = () => dispatch => {
+export const createCollectedSample = (data) => dispatch => {
   axios
-    .get(`${baseUrl}ecounter/GENERAL_SERVICE/LABTEST_ORDER_FORM`)
+    .post(`${baseUrl}ecounter/GENERAL_SERVICE/LABTEST_ORDER_FORM`)
     .then(response => {
       dispatch({
-        type: ACTION_TYPES.LABORATORY_TESTRESULT,
+        type: ACTION_TYPES.CREATE_COLLECT_SAMPLE,
         payload: response.data
       })
     })
     .catch(error =>
       dispatch({
-        type: ACTION_TYPES.LABORATORY_TESTRESULT,
+        type: ACTION_TYPES.ERROR_CREATE_COLLECT_SAMPLE,
         payload: 'Something went wrong, please try again'
       })
     )

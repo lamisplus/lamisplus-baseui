@@ -21,7 +21,7 @@ const ConsultationPage = React.lazy(() => import('pages/ConsultationPage'));
 const ConsultationDashboardPage = React.lazy(() => import('components/Consultation/Dashboard'));
 
 /* Laboratory page loading */
-const LaboratoryPage = React.lazy(() => import('components/Laboratory/LaboratoryPage'));
+const LaboratoryPage = React.lazy(() => import('components/Laboratory/LaboratoryPageDashboard'));
 const TestOrder = React.lazy(() => import('components/Laboratory/TestOrder'));
 const CollectSample = React.lazy(() => import('components/Laboratory/CollectSample'));
 const CollectedSample = React.lazy(() => import('components/Laboratory/CollectedSample'));

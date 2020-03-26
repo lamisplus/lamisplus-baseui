@@ -4,25 +4,18 @@ import SourceLink from 'components/SourceLink';
 import React from 'react';
 import {
   MdDashboard,
-  MdExtension,
-  MdKeyboardArrowDown,
-  MdPages,
-  MdAirlineSeatFlat,
 } from 'react-icons/md';
 // import { GiTreeBeehive} from 'react-icons/gi';
-import { FaUserPlus, FaVials, FaXRay, FaUserMd, FaUsers} from 'react-icons/fa';
+import { FaUserPlus, FaXRay, FaUsers} from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import {
-  // UncontrolledTooltip,
-  //Collapse,
   Nav,
   Navbar,
   NavItem,
   NavLink as BSNavLink,
 } from 'reactstrap';
 import bn from 'utils/bemnames';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
+
 
 
 const sidebarBackground = {
@@ -35,7 +28,6 @@ const sidebarBackground = {
 
 const navItems = [
   { to: '/dashboard', name: 'Dashboard', exact: true, Icon: MdDashboard },
-  { to: '/patients', name: 'Registration', exact: false, Icon: FaUsers },
   { to: '/patients', name: 'Find Patient', exact: false, Icon: FaUserPlus },
   { to: '/laboratory', name: 'Laboratory', exact: false, Icon: FaXRay },
   { to: '/pharmacy', name: 'Pharmacy', exact: false, Icon: FaXRay },
