@@ -32,7 +32,7 @@ const ConsultationDashboardPage = React.lazy(() =>
 
 /* Laboratory page loading */
 const LaboratoryPage = React.lazy(() =>
-  import("components/Laboratory/LaboratoryPage")
+  import("components/Laboratory/LaboratoryPageDashboard")
 );
 const TestOrder = React.lazy(() => import("components/Laboratory/TestOrder"));
 const CollectSample = React.lazy(() =>
@@ -50,7 +50,7 @@ const FormBuilder = React.lazy(() =>
   import("components/FormManager/FormBuilder")
 );
 const ViewForm = React.lazy(() => import("components/FormManager/ViewForm"));
-
+/* Pharmacy page loading */
 /* Pharmacy page loading */
 const PharmacyPage = React.lazy(() =>
   import("components/Pharmacy/PharmacyPage")

@@ -1,4 +1,4 @@
-import React, {  useEffect } from 'react';
+import React, { useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import './PatientSearch.css';
 import {
@@ -6,21 +6,19 @@ import {
   Form
 } from 'reactstrap';
 import {Link} from 'react-router-dom';
-import * as actions from "actions/encounter";
+import {fetchAllLabTestOrder} from "actions/laboratory";
 import {connect} from 'react-redux';
-import ResultSearch from 'components/Laboratory/SearchForm/ResultSearch';
-import { FaEye,FaPrint} from 'react-icons/fa';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
-    <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >      
-        <Input
-            type="search"
-            placeholder="Search by Patient Name, Patient ID "
-            className="cr-search-form__input pull-right"
-            value={filterText} onChange={onFilter}
-        />    
+    <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >
+      
+          <Input
+              type="search"
+              placeholder="Search by Patient Name, Patient ID "
+              className="cr-search-form__input pull-right"
+              value={filterText} onChange={onFilter}
+          />
+       
     </Form>
 );
 
@@ -30,28 +28,6 @@ const SampleExpandedComponent = ({ data }) => (
    <b>  Date Of Registration:</b> {data.dateRegistration} </span> <br></br> <span><b>Date Of Birth:</b> {data.dob} </span>
     </div>
 );
-
-
-const calculate_age = (dob) => {
-  var today = new Date();
-  var dateParts = dob.split("-");
-  var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-  var birthDate = new Date(dateObject);  // create a date object directly from `dob1` argument
-  console.log(dateObject);
-  console.log(birthDate);
-  var age_now = today.getFullYear() - birthDate.getFullYear();
-  var m = today.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate()))
-  {
-    age_now--;
-  }
-
-  if(age_now === 0){
-    return m + ' month(s)';
-  }
-  console.log(age_now);
-  return age_now + ' year(s)';
-}
 
 
 
@@ -66,32 +42,22 @@ const columns = [
     name: 'Patient Name',
     selector: 'name',
     sortable: false,
-    cell: row => <span>{row.firstName} {row.lastName}</span>
+    cell: row => <span>{row.firstName}{''}{row.lastName} </span>
   },
   {
-    name: 'Age',
-    selector: 'dob',
+    name: 'Total Test Order',
+    selector: 'test order',
     sortable: false,
-    cell: row => <span>{calculate_age(row.dob)}</span>
+  cell: row => <span>{row.encounterId}</span>
   },
   {
     name: 'Action',
     cell: row =>
         <div>
-          <Link to="/view-result">
-            <Tooltip title="View Collected Sample">
-                <IconButton aria-label="View Collected Sample">
-                <FaEye size="15"/>
-                </IconButton>
-            </Tooltip>
-        </Link>
-        <Link to="/collect-sample">
-            <Tooltip title="Print Collected Sample">
-                <IconButton aria-label="Print Collected Sample">
-                <FaPrint size="15"/>
-                </IconButton>
-            </Tooltip>
-        </Link>
+          <Link to={{ pathname: '/collect-sample', state: { getpatientlists: {row}} }}>
+                Collect Sample
+          </Link>
+         
         </div>,
     ignoreRowClick: true,
     allowOverflow: true,
@@ -111,16 +77,16 @@ const customStyles = {
   }
 };
 
-const PatientTable = (props) => {
+const LaboratoryTestOrder = (props) => {
   const [filterText, setFilterText] = React.useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
   // const [data, setData] = useState([])
-  const filteredItems =  props.patientsList.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
+  const filteredItems =  props.patientsTestOrderList.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
   //const [modal, setModal] = useState(false);
   //const toggle = () => setModal(!modal);
 
   useEffect(() => {
-    props.fetchAllPatients('GENERAL_SERVICE', 'LABTEST_ORDER_FORM');
+    props.fetchAllLabTestOrderToday();
   
 }, [])//componentDidMount
 
@@ -139,10 +105,8 @@ const PatientTable = (props) => {
       <div class="searchTable">
         <card>
           <cardContent>
-            <Form>
-                <ResultSearch />
-            </Form> 
-            <DataTable
+            
+        <DataTable
             columns={columns}
             data={filteredItems}
             customStyles={customStyles}
@@ -168,15 +132,15 @@ const PatientTable = (props) => {
 };
 
 const mapStateToProps = state => {
-  console.log('logging state');
-  console.log(state);
+  ///console.log('logging state');
+  //console.log(state);
   return {
-  patientsList: state.laboratory.encounters
+  patientsTestOrderList: state.laboratory.list
   }
 }
 
 const mapActionToProps = {
-  fetchAllPatients: actions.fetchAll,
+  fetchAllLabTestOrderToday: fetchAllLabTestOrder,
 }
 
-export default connect(mapStateToProps, mapActionToProps)(PatientTable);
+export default connect(mapStateToProps, mapActionToProps)(LaboratoryTestOrder);

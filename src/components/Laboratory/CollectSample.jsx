@@ -31,7 +31,6 @@ import { Link } from 'react-router-dom'
 import Table from '@material-ui/core/Table'
 
 import TableBody from '@material-ui/core/TableBody'
-import axios from 'axios'
 import TableCell from '@material-ui/core/TableCell'
 import 'react-widgets/dist/css/react-widgets.css'
 //Date Picker
@@ -47,8 +46,9 @@ import { toast } from 'react-toastify'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Page from 'components/Page'
-import { url } from '../../api'
 import Spinner from 'react-bootstrap/Spinner'
+import { connect } from 'react-redux'
+import { createCollectedSample } from '../../actions/laboratory'
 
 Moment.locale('en')
 momentLocalizer()
@@ -115,89 +115,75 @@ const StyledTableRow = withStyles(theme => ({
   }
 }))(TableRow)
 
-export default function CollectSample (props) {
+ function CollectSample (props) {
   const classes = useStyles()
   const classes2 = useStyles2()
-  const apiUrl = url + 'encounters/'
-  const data = [props.location.state.getpatientlists.row]
+  const data = [props.location.state.getpatientlists.row.formData.labtest[0]]
+  const [useData, setUsedata] = useState(data)
+  const userInfo = props.location.state.getpatientlists.row
   const [showLoading, setShowLoading] = useState(false)
-  // const [datas, setdatas]= useState(data)
-  //console.log(data);
-
+  const [checkvalue, setCheckvalue] = useState(0);
+  const [transfer, setTransfer] = useState('');
   /* For modal popup */
   const { className } = props
-
+  const [checked, setChecked] = useState({id:'', statuscheck:false })
   const [modal, setModal] = useState(false)
   const [modal3, setModal3] = useState(false)
-
   const toggle = () => setModal(!modal)
   const toggle3 = () => setModal3(!modal3)
   // const [encounterid, setencounterid] = useState('');
-  const [labNum, setlabNum] = useState([''])
+  const [labNum, setlabNum] = useState({lab_number:''})
   //const [patientrow, setpatientValue] = useState({date_sample_collected:new Date(), sample_collected:''});
   const TodayDate = moment(new Date()).format('DD-MM-YYYY')
   const [patientrow, setpatientValue] = useState({
-    date_sample_collected: TodayDate,
-    lab_testid: '1',
-    description: '',
-    sample_type: '',
-    test_result: 0,
-    sample_referred: '',
-    sample_collected: '',
-    unit_measurement: '',
-    date_result_reported: ''
+        date_sample_collected: TodayDate,
+        lab_number: '',
+  })
+  const [collectsample, setCollectsample] = useState({
+        dateEncounter: "",
+        formData: {},
+        formName: "LAB_ORDER_FORM",
+        patientId: 0,
+        serviceName: "GENERAL_SERVICE",
+        visitId: 0
   })
   //const newDate = moment(patientrow.date_sample_collected).format('DD-MM-YYYY');
 
-  // const getUsermodal = (usercollection)=> {
-  // // setuservalue(user);
-  // console.log(usercollection);
-  // setencounterid(usercollection.encounterId);
-  // setpatientValue(usercollection.formData)
-  // setModal3(!modal3);
 
-  // }
-  const saveDateofSample = e => {
-    //toast.warn("Processing Registration");
-    //setpatientValue({...patientrow, date_sample_collected: newDate});
-    setShowLoading(true)
-    e.preventDefault()
-    const datapost = { formData: data, lab_number: labNum.lab_number }
-    console.log(datapost)
-    const newapiurl = apiUrl //+encounterid;
-    axios
-      .put(newapiurl, datapost)
-      .then(result => {
-        setShowLoading(false)
-        props.history.push('/patients')
-        toast.success('Patient Registration Successful!')
-      })
-      .catch(error => {
-        setShowLoading(false)
-      })
-  }
   const saveColllectSample = e => {
-    //toast.warn("Processing Registration");
-    //setpatientValue({...patientrow, date_sample_collected: newDate});
-    setShowLoading(true)
+    console.log(patientrow)
+    const newDatenow = moment(TodayDate).format('DD-MM-YYYY')
+    
+    useData['formData'] = useData
+    setUsedata({...useData, formData:{"labtest":useData }})
+    console.log(useData)
+    toast.warn("Processing Sample ");
     e.preventDefault()
-    const data = { formData: patientrow }
-    console.log(data)
-    const newapiurl = apiUrl //+encounterid;
-    axios
-      .put(newapiurl, data)
-      .then(result => {
-        setShowLoading(false)
-        props.history.push('/patients')
-        toast.success('Patient Registration Successful!')
-      })
-      .catch(error => {
-        setShowLoading(false)
-      })
+   props.createCollectedSample(collectsample)
+ 
   }
-  const onChangeLabnum = e => {
+  const handlelabNumber = e => {
     //  e.preventDefault();
-    setlabNum({ ...labNum, [e.target.name]: e.target.value })
+    
+    setpatientValue({ ...patientrow, [e.target.name]: e.target.value })
+  }
+  const handlecollect = e => {
+    setChecked({...checked, [e.target.value]: e.target.value})
+    console.log(e)
+  }
+const handleCheckbox = (val) => {
+  const newcheck = useData.filter(el => el.description === val);
+  setCheckvalue(1)
+  console.log(checkvalue)
+  //const defaultCountryId = data[0].find(x => x.description === 'CD4')
+  //setPatientorder({...patientorder, sample_collected: newsample_collected });
+  //console.log(defaultCountryId)
+}
+ 
+const getUsermodal = (usercollection)=> {
+    setTransfer(usercollection)
+    setModal(!modal)
+   
   }
   return (
     <Page title='Collect Sample'>
@@ -216,16 +202,16 @@ export default function CollectSample (props) {
               >
                 <div className={classes2.column}>
                     <Typography className={classes.heading}>
-                        Name:  {data[0].firstName} {' '} {data[0].lastName}
+                        Name:  {userInfo.firstName} {' '} {userInfo.lastName}
                         <br/>
-                        Gender: {data[0].gender || 'N/A'}
+                        Gender: {userInfo.gender || 'N/A'} 
                     </Typography>
                 </div>
                 <div className={classes2.column}>
                     <Typography className={classes2.heading}>
-                        DOB:  {data[0].dob}
+                        DOB:  {userInfo.dob}
                         <br/>
-                        Phone Number :  {data[0].mobilePhoneNumber || 'N/A'}
+                        Phone Number :  {userInfo.mobilePhoneNumber || 'N/A'}
                     </Typography>
                 </div>
               </ExpansionPanelSummary>
@@ -245,6 +231,7 @@ export default function CollectSample (props) {
               <Row>
                 <Col>
                   <Card body>
+                    <Form onSubmit={saveColllectSample}>
                     <TableContainer component={Paper}>
                       <Table
                         className={classes.table}
@@ -270,26 +257,33 @@ export default function CollectSample (props) {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {data.map(row => (
-                            <StyledTableRow key={row.encounterId}>
+                          
+                            {useData.map(row => (
+                            
+                            <StyledTableRow key={row.id}>
                               <TableCell component='th' scope='row'>
-                                {row.encounterId}
+                                {row.description}
                               </TableCell>
-                              <TableCell align='center'></TableCell>
+                              <TableCell align='center'>{row.sample_type}</TableCell>
                               <TableCell align='center'>
-                                {row.dateEncounter}
+                              {userInfo.dateEncounter} 
+                                {/* date_sample_collected */}
                               </TableCell>
                               <TableCell align='center'>
                                 <FormGroup check>
                                   <Label check disabled>
-                                    <Input type='checkbox' checked />{' '}
+                                    <Input type='checkbox' name="sample_collected" checked={checkvalue} onChange={() =>
+                                      handleCheckbox(row.description)} value={row.description}/>
                                   </Label>
                                 </FormGroup>
                               </TableCell>
                               <TableCell align='center'>
                                 <FormGroup check>
                                   <Label check>
-                                    <Input type='checkbox' />{' '}
+                                    <Input type='checkbox' 
+                                      onClick={() =>
+                                        getUsermodal(row.description)}
+                                      />{' '}
                                   </Label>
                                 </FormGroup>
                               </TableCell>
@@ -299,7 +293,7 @@ export default function CollectSample (props) {
                       </Table>
                     </TableContainer>
                     <br />
-                    <Form onSubmit={saveColllectSample}>
+                    
                       <Row form>
                         <Col md={3} style={{ marginTop: '20px' }}>
                           <Input
@@ -308,8 +302,8 @@ export default function CollectSample (props) {
                             className='cr-search-form__input '
                             name='lab_number'
                             id='lab_number'
-                            value={labNum.lab_number}
-                            onChangeLabnum={onChangeLabnum}
+                            value={patientrow.lab_number}
+                            onChange={handlelabNumber}
                           />
                         </Col>
                         <Col md={2}>
@@ -321,8 +315,8 @@ export default function CollectSample (props) {
                         <Col md={2} style={{ marginTop: '20px' }}>
                           <DateTimePicker
                             time={false}
-                            name='dateRegistration'
-                            id='dateRegistration'
+                            name='date_sample_collected'
+                            id='date_sample_collected'
                             defaultValue={new Date()}
                             max={new Date()}
                           />
@@ -352,7 +346,7 @@ export default function CollectSample (props) {
       </Row>
       {/* Modal to cancel new test result  */}
       <Modal isOpen={modal3} toggle={toggle3} className={className} size='sm'>
-        <Form onSubmit={saveDateofSample}>
+        <Form >
           <ModalHeader toggle={toggle3}>Collect Sample </ModalHeader>
           <ModalBody>
             <Row form>
@@ -392,25 +386,12 @@ export default function CollectSample (props) {
 
       {/* Modal to cancel new test result  */}
       <Modal isOpen={modal} toggle={toggle} className={className} size='sm'>
-        <Form onSubmit={saveDateofSample}>
-          <ModalHeader toggle={toggle}>Transfer Test Order</ModalHeader>
+        <Form >
+                <ModalHeader toggle={toggle}>Collect Test Order </ModalHeader>
           <ModalBody>
-            <Row form>
+            <Row >
               <Col md={12}>
-                <FormGroup>
-                  <Label for='exampleEmail'>Date Sample Collected</Label>
-
-                  <Input
-                    type='text'
-                    name='referer'
-                    id='referer'
-                    placeholder='Enter the Transfer Name'
-                    value={patientrow.referer}
-                    onChange={value1 =>
-                      setpatientValue({ ...patientrow, referer: value1 })
-                    }
-                  />
-                </FormGroup>
+                <p>Are you sure you have collect the Sample {transfer} ? </p>
               </Col>
             </Row>
           </ModalBody>
@@ -424,11 +405,11 @@ export default function CollectSample (props) {
                 )}
               </Col>
             </Row>
-            <Button color='primary' type='submit'>
-              Save
+            <Button color='primary'  onClick={handlecollect} >
+              Yes
             </Button>{' '}
             <Button color='secondary' onClick={toggle}>
-              Cancel
+              No
             </Button>
           </ModalFooter>
         </Form>
@@ -438,3 +419,6 @@ export default function CollectSample (props) {
     </Page>
   )
 }
+
+
+export default connect(null, { createCollectedSample })(CollectSample)

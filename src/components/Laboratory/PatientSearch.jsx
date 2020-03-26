@@ -3,7 +3,7 @@ import DataTable from "react-data-table-component";
 import "./PatientSearch.css";
 import { Input, Form } from "reactstrap";
 import { Link } from "react-router-dom";
-import * as actions from "actions/laboratory";
+import { fetchAllLabTestOrder } from "actions/laboratory";
 import { connect } from "react-redux";
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
@@ -30,26 +30,6 @@ const SampleExpandedComponent = ({ data }) => (
   </div>
 );
 
-const calculate_age = dob => {
-  var today = new Date();
-  var dateParts = dob.split("-");
-  var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-  var birthDate = new Date(dateObject); // create a date object directly from `dob1` argument
-  console.log(dateObject);
-  console.log(birthDate);
-  var age_now = today.getFullYear() - birthDate.getFullYear();
-  var m = today.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-    age_now--;
-  }
-
-  if (age_now === 0) {
-    return m + " month(s)";
-  }
-  console.log(age_now);
-  return age_now + " year(s)";
-};
-
 const columns = [
   {
     name: "Patient ID",
@@ -63,15 +43,16 @@ const columns = [
     sortable: false,
     cell: row => (
       <span>
-        {row.firstName} {row.lastName}
+        {row.firstName}
+        {row.lastName}
       </span>
     )
   },
   {
-    name: "Age",
-    selector: "dob",
+    name: "Total Test Order",
+    selector: "test order",
     sortable: false,
-    cell: row => <span>{calculate_age(row.dob)}</span>
+    cell: row => <span>{row.formData.no_lab_test}</span>
   },
   {
     name: "Action",
@@ -104,13 +85,14 @@ const customStyles = {
   }
 };
 
-const PatientTable = props => {
+const LaboratoryTestOrder = props => {
   const [filterText, setFilterText] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(
     false
   );
   // const [data, setData] = useState([])
-  const filteredItems = props.patientsList.filter(
+
+  const filteredItems = props.patientsTestOrderList.filter(
     item =>
       (item.firstName &&
         item.firstName.toLowerCase().includes(filterText.toLowerCase())) ||
@@ -119,11 +101,9 @@ const PatientTable = props => {
       (item.hospitalNumber &&
         item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase()))
   );
-  //const [modal, setModal] = useState(false);
-  //const toggle = () => setModal(!modal);
 
   useEffect(() => {
-    props.fetchAllLabTestOrder();
+    props.fetchAllLabTestOrderToday();
   }, []); //componentDidMount
 
   const subHeaderComponentMemo = React.useMemo(() => {
@@ -171,13 +151,15 @@ const PatientTable = props => {
 };
 
 const mapStateToProps = state => {
+  ///console.log('logging state');
+  console.log(state.laboratory.list);
   return {
-    patientsList: state.laboratory.encounters
+    patientsTestOrderList: state.laboratory.list
   };
 };
 
 const mapActionToProps = {
-  fetchAllLabTestOrder: actions.fetchAllLabTestOrder
+  fetchAllLabTestOrderToday: fetchAllLabTestOrder
 };
 
-export default connect(mapStateToProps, mapActionToProps)(PatientTable);
+export default connect(mapStateToProps, mapActionToProps)(LaboratoryTestOrder);
