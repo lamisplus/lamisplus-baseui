@@ -18,25 +18,11 @@ import * as ACTION_TYPES from "./types";
 
 export const fetchAllLabTestOrder = () => dispatch => {
   axios
-<<<<<<< HEAD
-    .get(
-      `${baseUrl}ecounter/GENERAL_SERVICE/LABTEST_ORDER_FORM/01-01-2020/01-04-2020`
-    )
-=======
     .get(`${baseUrl}encounters/GENERAL_SERVICE/LABTEST_ORDER_FORM/`)
->>>>>>> a95293c9f6e66fefc23bc3c1461e8ea052d46cb9
     .then(response => {
       dispatch({
         type: ACTION_TYPES.LABORATORY_TESTORDER,
         payload: response.data
-<<<<<<< HEAD
-      });
-    })
-    .catch(error =>
-      dispatch({
-        type: ACTION_TYPES.LABORATORY_TESTORDER,
-        payload: "Something went wrong, please try again"
-=======
       })
       ///console.log(response)
     })
@@ -44,7 +30,6 @@ export const fetchAllLabTestOrder = () => dispatch => {
       dispatch({
         type: ACTION_TYPES.ERROR_LABORATORY_TESTORDER,
         payload: 'Something went wrong, please try again'
->>>>>>> a95293c9f6e66fefc23bc3c1461e8ea052d46cb9
       })
     );
 };
@@ -60,13 +45,8 @@ export const createCollectedSample = (data) => dispatch => {
     })
     .catch(error =>
       dispatch({
-<<<<<<< HEAD
-        type: ACTION_TYPES.LABORATORY_TESTRESULT,
-        payload: "Something went wrong, please try again"
-=======
         type: ACTION_TYPES.ERROR_CREATE_COLLECT_SAMPLE,
         payload: 'Something went wrong, please try again'
->>>>>>> a95293c9f6e66fefc23bc3c1461e8ea052d46cb9
       })
     );
 };
