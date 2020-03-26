@@ -50,10 +50,10 @@ export const fetchById = id => dispatch => {
 
 export const create = data => dispatch => {
   axios
-    .post(`${baseUrl}visits/`, data)
+    .post(`${baseUrl}encounters/`, data)
     .then(response => {
       dispatch({
-        type: ACTION_TYPES.CHECKIN_CREATE,
+        type: ACTION_TYPES.ENCOUNTER_CREATE,
         payload: response.data
       });
     })
@@ -64,6 +64,7 @@ export const create = data => dispatch => {
       });
     });
 };
+
 
 export const update = (id, data) => dispatch => {
   axios

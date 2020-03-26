@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import MatButton from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
-import { Card, CardContent } from '@material-ui/core'
-import { Col, FormGroup, Input, Label, Row } from 'reactstrap'
+import { Col, FormGroup, Input, Label, Row, Card, Alert, CardBody } from 'reactstrap'
 import SaveIcon from '@material-ui/icons/Save'
 import CancelIcon from '@material-ui/icons/Cancel'
 import Spinner from 'react-bootstrap/Spinner'
@@ -13,11 +12,10 @@ import 'react-widgets/dist/css/react-widgets.css'
 import { DateTimePicker } from 'react-widgets'
 import Moment from 'moment'
 import momentLocalizer from 'react-widgets-moment'
-import moment from 'moment'
+import * as encounterAction from "actions/encounter";
+import * as actions from "actions/patients";
 
-import axios from 'axios'
-import { url } from '../../api'
-
+import {connect} from 'react-redux';
 //Dtate Picker package
 Moment.locale('en')
 momentLocalizer()
@@ -57,15 +55,12 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default function AddVitalsPage (props) {
+function AddVitalsPage (props) {
   const classes = useStyles()
-
-  //Save Vitals
+  const [errorMsg, setErrorMsg] = React.useState('')
+  const [showErrorMsg, setShowErrorMsg] = useState(false)
+  const onDismiss = () => setShowErrorMsg(false)
   const [vitals, setVitals] = useState({
-    formName: 'VITALS_SIGN_FORM',
-    // patientId: props.patient.patientId,
-    serviceName: 'CLINICAL_SERVICE',
-    // visitId:props.patient.id,
     dateEncounter: new Date()
   })
   const [formDataForVitals, setformDataForVitals] = useState({
@@ -78,38 +73,36 @@ export default function AddVitalsPage (props) {
     height: ''
   })
   const [showLoading, setShowLoading] = useState(false)
-  const apiUrl = url + 'encounters'
-
   const SaveVitals = e => {
-    console.log('the save button is call')
-    e.preventDefault()
-    const newDatenow = moment(vitals.dateEncounter).format('DD-MM-YYYY')
+    setShowErrorMsg(false)
+    setShowLoading(true)
+    const newDatenow = Moment(vitals.dateEncounter).format('DD-MM-YYYY')
     const data = {
       formName: 'VITAL_SIGNS_FORM',
-      patientId: vitals.patientId,
+      patientId: props.patientId,
       serviceName: 'GENERAL_SERVICE',
-      visitId: vitals.visitId,
+      visitId: props.patient.visitId,
       formData: formDataForVitals,
       dateEncounter: newDatenow
     }
-    console.log(data)
-    axios
-      .post(apiUrl, data)
-      .then(result => {
-        toast.success('Patient Checked In was Successful!')
+    e.preventDefault()
+      const onSuccess = () => {
+        setformDataForVitals({});
         setShowLoading(false)
-        props.history.push('/checkedin-patients')
-        console.log(result)
-      })
-      .catch(error => {
-        //toast.danger("Processing Please wait ");
-        console.log(error)
+        props.toggle();
+        props.fetchPatientVitalSigns(props.patientId)
+        toast.success('Patient Checked In Successfully', { appearance: 'success' })
+      }
+      const onError = errstatus => {
+        const msg = !(errstatus && errstatus.data && errstatus.data.apierror && errstatus.data.apierror.message) ? 'Something went wrong' : errstatus.data.apierror.message
+        setErrorMsg(msg)
+        setShowErrorMsg(true)
         setShowLoading(false)
-        setVitals(false)
-        // console.log("Error in CreateBook!");
-        //toast.error("Something went wrong!");
-      })
+      }
+      props.createVitalSigns(data, onSuccess, onError)
+      
   }
+ 
   const onChangeFormdata = e => {
     e.persist()
     setformDataForVitals({
@@ -119,15 +112,15 @@ export default function AddVitalsPage (props) {
   }
   return (
     <form className={classes.form} onSubmit={SaveVitals}>
-      <Card className={classes.cardBottom}>
-        <CardContent>
-          {/*<Title >New Vitals Signs --- {props.patient.hospitalNumber}*/}
-          {/*</Title>*/}
-          {/*<br/>*/}
+      <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
+            {errorMsg}
+          </Alert>
+      <Card >
+        <CardBody>
           <Row form>
             <Col md={6}>
               <FormGroup>
-                <Label for='hospitalNumber'>Date of Vitals</Label>
+                <Label for='hospitalNumber'>Date of Vital Signs</Label>
                 <DateTimePicker
                   time={false}
                   name='dateEncounter'
@@ -143,7 +136,7 @@ export default function AddVitalsPage (props) {
             </Col>
             <Col md={6}>
               <FormGroup>
-                <Label for='middleName'>Pulse(bpm)</Label>
+                <Label for='middleName'>Pulse (bpm)</Label>
                 <Input
                   type='text'
                   name='pulse'
@@ -158,7 +151,7 @@ export default function AddVitalsPage (props) {
           <Row form>
             <Col md={6}>
               <FormGroup>
-                <Label for='middleName'>Respiratory Rate(bpm)</Label>
+                <Label for='middleName'>Respiratory Rate (bpm)</Label>
                 <Input
                   type='text'
                   name='respiratoryRate'
@@ -186,13 +179,13 @@ export default function AddVitalsPage (props) {
           <Row form>
             <Col md={3}>
               <FormGroup>
-                <Label for='hospitalNumber'>BloodPressure(mmHg)</Label>
+                <Label for='hospitalNumber'>Blood Pressure</Label>
                 <Input
                   type='text'
-                  name='diastolic'
-                  id='diastolic'
-                  placeholder='Sytolic'
-                  value={formDataForVitals.diastolic}
+                  name='systolic'
+                  id='systolic'
+                  placeholder='Systolic (mmHg)'
+                  value={formDataForVitals.systolic}
                   onChange={onChangeFormdata}
                 />
               </FormGroup>
@@ -204,7 +197,7 @@ export default function AddVitalsPage (props) {
                   type='text'
                   name='diastolic'
                   id='diastolic'
-                  placeholder='Diastolic'
+                  placeholder='Diastolic (mmHg)'
                   value={formDataForVitals.diastolic}
                   onChange={onChangeFormdata}
                 />
@@ -212,7 +205,7 @@ export default function AddVitalsPage (props) {
             </Col>
             <Col md={6}>
               <FormGroup>
-                <Label for='middleName'>Body Weight Kg</Label>
+                <Label for='middleName'>Body Weight (Kg)</Label>
                 <Input
                   type='text'
                   name='bodyWeight'
@@ -227,7 +220,7 @@ export default function AddVitalsPage (props) {
           <Row>
             <Col md={6}>
               <FormGroup>
-                <Label for='middleName'>Height</Label>
+                <Label for='middleName'>Height (cm)</Label>
                 <Input
                   type='text'
                   name='height'
@@ -261,13 +254,27 @@ export default function AddVitalsPage (props) {
           <MatButton
             variant='contained'
             color='default'
+            onClick={props.toggle}
             className={classes.button}
             startIcon={<CancelIcon />}
           >
             Cancel
           </MatButton>
-        </CardContent>
+        </CardBody>
       </Card>
     </form>
   )
 }
+const mapStateToProps = state => {
+  return {
+  vitalSigns: state.patients.vitalSigns,
+  patient: state.patients.patient
+  }
+}
+
+const mapActionToProps = {
+  createVitalSigns: encounterAction.create,
+  fetchPatientVitalSigns: actions.fetchPatientLatestVitalSigns
+}
+
+export default connect(mapStateToProps, mapActionToProps)(AddVitalsPage)

@@ -1,58 +1,65 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import {url} from 'api/index';
 import {
     Col,
     Row,
     Card,
     CardHeader,
-    CardBody
+    CardBody,
+    Modal, ModalBody, ModalHeader
   } from 'reactstrap';
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: theme.spacing(2),
-      
+  import AddVitalsPage from 'components/Vitals/AddVitalsPage';
+  import * as actions from "actions/patients";
+  import * as encounterAction from "actions/encounter";
+  import {connect} from 'react-redux';
 
-    },
-    chips: {
-        fontSize: 11,
-        marginRight: 30
-      },
-    
-    
-  },
-}));
-const chips = {
-    marginLeft: 0
-};
-
-export default function PatientVitals(props) {
-    const {getpatient} =props.getpatientdetails ;
-    const getpatientID = getpatient.row.patientId;
-    const classes = useStyles();
+ function PatientVitals(props) {
     const [data, setData] = useState({pulse:'', height: '', systolic: '', diastolic: '', bodyWeight: ''}); 
-    // const newid = data;
+    const [showModal, setShowModal] = useState(false);
+    const [bmiStatus, setBMIStatus] = useState();
+    const [bmi, setBMI] = useState();
+    const toggle = () => {
+      return setShowModal(!showModal)
+   }
+
+   const calculateBMI = () => {
+     if(props.vitalSigns.formData.bodyWeight && props.vitalSigns.formData.height){
+     const bmi = (props.vitalSigns.formData.bodyWeight / props.vitalSigns.formData.height / props.vitalSigns.formData.height) * 10000;
+     if(bmi <= 18.5){
+      setBMIStatus('Underweight');
+     } 
+     else if (bmi > 18.5 && bmi <= 24.9){
+        setBMIStatus('Healthy Weight');
+      }
+      else if (bmi > 25.0 && bmi <= 29.9){
+        setBMIStatus('Overweight');
+      } else {
+        setBMIStatus('Obese');
+      }
+
+     setBMI(Number(bmi).toFixed(1));
+     }
     
-    console.log(data.patientId);
-    const apistate = url+"encounters/GENERAL_SERVICE/VITAL_SIGNS_FORM/"+getpatientID+"/last";
-    useEffect(() => {    
-    const GetData = async () => {    
-        const result = await axios(apistate);    
-        setData(result.data.formData);  
-        console.log(result.data.formData);   
-    }  
-    GetData();     
+   }
 
-    }, []); 
+   useEffect(() => {    
+    props.fetchPatientVitalSigns(props.patientId)  
+    }, [props.patient]); 
 
+    useEffect(() => {
+        setData({});
+        setBMI()
+        setBMIStatus()
+      if(props.vitalSigns && props.vitalSigns.formData){
+         setData(props.vitalSigns.formData)
+         calculateBMI() 
+      } 
+      
+    }, [props.vitalSigns])
   return (
     
             <Card  >
-                    <CardHeader> Recent Vital Signs</CardHeader>
+                    <CardHeader> Recent Vital Signs  <button type="button" class="float-right ml-3" onClick={toggle}><i class="fa fa-plus"></i> Add Vitals</button></CardHeader>
                         
                     <CardBody>
                     <Row item xs='12'>
@@ -68,22 +75,47 @@ export default function PatientVitals(props) {
                                             RR (bpm): <span><b>{data.respiratoryRate || 'N/A'}</b></span> 
                                 </Col>
                                 <Col item xs='6'>
-                                            Height (m): <span><b>{data.height || 'N/A'}</b></span>  
+                                            Height (cm): <span><b>{data.height || 'N/A'}</b></span>  
                                 </Col>
                                 <Col item xs='6'>
                                             Temperature (C):  <span><b>{data.temperature || 'N/A'}</b></span> 
                                 </Col>
                                 <Col item xs='6'>
-                                            BMI: <span><b>{data.pulse || 'N/A'}</b></span> 
+                                            BMI: <span><b>{bmi || 'N/A'}</b></span> 
                                 </Col>
                                 <Col item xs='6'>
-                                            Blood Pressure (mmHg): <span><b>{data.pulse || 'N/A'}</b></span> 
+                                            Blood Pressure (mmHg): <span><b>{data.systolic || ''} / {data.diastolic || ''}</b></span> 
                                 </Col>
                                 <Col item xs='6'>
-                                            BMI Status: <span><b>{data.pulse || 'N/A'}</b></span> 
+                                            BMI Status: <span><b>{bmiStatus || 'N/A'}</b></span> 
+                                </Col>
+                                <Col item xs='12'>
+  {props.vitalSigns ? <span>Updated on <b>{props.vitalSigns.dateEncounter || ""} {props.vitalSigns.timeCreated || ""}</b></span> : ""}
                                 </Col>
                                 </Row>
-                    </CardBody>                      
-            </Card>                     
+                    </CardBody>  
+                    <Modal isOpen={showModal} toggle={toggle} size='lg'>
+                      <ModalHeader toggle={toggle}>Take Patient Vitals</ModalHeader>
+                      <ModalBody>
+                      <AddVitalsPage patientId={props.patientId} showModal={showModal} toggle={toggle}/>
+                     </ModalBody>
+                    </Modal>                       
+            </Card>   
+                           
   );
 }
+
+const mapStateToProps = state => {
+  return {
+  patient: state.patients.patient,
+  vitalSigns: state.patients.vitalSigns
+  }
+}
+
+const mapActionToProps = {
+  fetchPatientByHospitalNumber: actions.fetchById,
+  createVitalSigns: encounterAction.create,
+  fetchPatientVitalSigns: actions.fetchPatientLatestVitalSigns
+}
+
+export default connect(mapStateToProps, mapActionToProps)(PatientVitals)

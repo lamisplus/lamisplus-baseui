@@ -171,8 +171,6 @@ const PatientTable = props => {
 };
 
 const mapStateToProps = state => {
-  console.log("logging state");
-  console.log(state);
   return {
     patientsList: state.laboratory.encounters
   };
