@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import {Card, CardContent} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,12 +9,11 @@ import {Button, Modal, ModalBody, ModalFooter, ModalHeader,
   Input,
   Form
 } from 'reactstrap';
-import {url} from 'axios/url';
 import {Link} from 'react-router-dom';
+import * as actions from "../../store/actions/patients/patients";
+import {connect} from 'react-redux';
+import {Dashboard} from '@material-ui/icons';
 
-/**Find table documentations at
- import TablePagination from '@material-ui/core/TablePagination'; * 1.https://www.npmjs.com/package/react-data-table-component#storybook-dependencies----rootdirstoriespackagejson
- import TableRow from '@material-ui/core/TableRow'; * 2. https://jbetancur.github.io/react-data-table-component/?path=/story/conditional-styling--conditional-cells */
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
     <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >
       <Card>
@@ -36,9 +35,7 @@ const SampleExpandedComponent = ({ data }) => (
    <b>  Date Of Registration:</b> {data.dateRegistration} </span> <br></br> <span><b>Date Of Birth:</b> {data.dob} </span>
     </div>
 );
-const handleDelete = () => {
-  console.log('clicked');
-};
+
 
 const calculate_age = (dob) => {
   var today = new Date();
@@ -80,12 +77,17 @@ const columns = (modalClickHandler => [
     name: 'Age',
     selector: 'dob',
     sortable: false,
-    cell: row => <span>{calculate_age(row.dob)}</span>
+    cell: row => <span>{row.dob }</span>
   },
   {
     name: 'Action',
-    cell: () =>
+    cell: (row) =>
         <div>
+          <IconButton color="primary"  aria-label="View Patient" title="View Patient">
+            <Link to={{ pathname: '/patient-dashboard', state: { getpatient: {row}} }}>
+            <Dashboard title="Patient Dashboard"   aria-label="View Patient"/>
+            </Link>
+          </IconButton>
           <IconButton color="primary"  aria-label="Archive Patient" title="Edit Patient">
             <Link to="/patient-registration">
             <Edit title="Edit Patient" aria-label="Edit Patient"/>
@@ -111,28 +113,19 @@ const customStyles = {
   }
 };
 
-const BasicTable = () => {
+const PatientTable = (props) => {
   const [filterText, setFilterText] = React.useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-  const [data, setData] = useState([])
-  const filteredItems = (!filterText && data) ? [] : data.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
+  // const [data, setData] = useState([])
+  const filteredItems = (!filterText && props.patientsList) ? [] : props.patientsList.filter(item => (item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())) || (item.lastName && item.lastName.toLowerCase().includes(filterText.toLowerCase())) || (item.hospitalNumber && item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase())));
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
   useEffect(() => {
-    async function fetchData() {
-      try{
-        const response = await fetch(url+"patients");
-        const result = await response.json();
-        setData(result);
-        console.log(result);
-      }catch(error){
-        setData([]);
-      }
-    }
-    fetchData();
+    props.fetchAllPatients();
+    //setData(props.patientsList);
 
-  }, []);
+}, [])//componentDidMount
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
@@ -146,7 +139,7 @@ const BasicTable = () => {
   }, [filterText, resetPaginationToggle]);
 
   return (
-      <div>
+      <div class="searchTable">
         <card>
           <cardContent>
         <DataTable
@@ -167,7 +160,6 @@ const BasicTable = () => {
             expandableRowsComponent={<SampleExpandedComponent />}/>
           </cardContent>
         </card>
-
         <Modal isOpen={modal} toggle={toggle}>
           <ModalHeader toggle={toggle}>Achieve Patient</ModalHeader>
           <ModalBody>
@@ -185,5 +177,14 @@ const BasicTable = () => {
 
 };
 
+const mapStateToProps = state => ({
+  
+  patientsList: state.patients.list
+})
 
-export default BasicTable;
+const mapActionToProps = {
+  fetchAllPatients: actions.fetchAll,
+  deletePatient: actions.Delete
+}
+
+export default connect(mapStateToProps, mapActionToProps)(PatientTable);

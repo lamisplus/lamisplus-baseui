@@ -80,12 +80,6 @@ const CheckInPage = (props) => {
     setPage(0);  
   };  
 
-  // const onsavesample = e => {
-  //   //  e.preventDefault();
-  //   setRelative({...relative, [e.target.name]: e.target.value});
-   
-  //   }
-
 
   return (
     <Page title="Collected Sample" >     
@@ -103,8 +97,8 @@ const CheckInPage = (props) => {
               <Row>          
                 <Col sm="12">
                   <Card body>
-                    <Form>
-                      <ResultSearch />
+                      <Form>
+                        <ResultSearch />
                       </Form>          
                         
                       <br/>

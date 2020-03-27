@@ -1,67 +1,115 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import {
-    Button,
-    Form,
-    Alert
-} from 'reactstrap';
-import {
-    Card,
-    CardContent,
-}
-    from '@material-ui/core';
-import { TiWarningOutline } from "react-icons/ti";
-import { makeStyles } from '@material-ui/core/styles';
-import Page from 'components/Page';
-import SearchInput from 'components/SearchBox/SearchInput';
-import Title from 'components/Title/CardTitle';
-import DataTableList from 'components/DataTable/DataTable';
+/**
+ * @imports external
+ */
+import React, { useState, useEffect } from "react";
+import { TabContent, TabPane, Nav, NavItem, NavLink } from "reactstrap";
+import { connect } from "react-redux";
+import { FaListAlt, FaVials } from "react-icons/fa";
+import classnames from "classnames";
 
+/**
+ * @imports Local
+ */
+import Dispensed from "./PendingPrescription";
+import TableSearch from "./TableSearch";
+import Page from "components/Page";
+import { fetchPrescriptions } from "../../actions/pharmacy";
 
-const useStyles = makeStyles(theme => ({
-    card: {
-        margin: theme.spacing(20),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
+/**
+ * ====================================
+ * @Main
+ * @param {*} props
+ */
+const Laboratory = props => {
+  useEffect(() => {
+    props.fetchPrescriptions();
+  }, []);
+  const [activeTab, setActiveTab] = useState("1");
+  const toggle = tab => {
+    if (activeTab !== tab) setActiveTab(tab);
+  };
 
-}));
+  // {
+  //   props.prescriptions &&
+  //     props.prescriptions.map(prescription => {
+  //       console.log(prescription.firstName);
+  //       if (prescription.formData.drug_order !== undefined) {
+  //         prescription.formData.drug_order.map(drug => {
+  //           console.log(drug);
+  //         });
+  //       }
+  //     });
+  // }
 
-const PharmacyPage = () => {
-    const classes = useStyles();
-    return (
-        <Page title="Pharmacy" >
-            <Alert color="primary">
-                <TiWarningOutline
-                    size="30"
-                    className=" text-dark"/>  { '  '}
-                Note : Only checked in Patients can be search here
-            </Alert>
-            <Card className={classes.cardBottom}>
-                <CardContent>
-                    <Title >Pending Prescription
+  console.log(props.prescriptions);
 
-                        <Link to="/patient-registration">
-                            <Button color="primary" className=" float-right mr-1" >
-                                Dispensed Prescription
-                            </Button>
-                        </Link>
-                    </Title>
-                    <br/>
-                    {/* Search Form Input Field */}
-                    <Form>
-
-                        <SearchInput />
-                    </Form>
-                    <br/>
-                    <DataTableList />
-
-                </CardContent>
-            </Card>
-
-        </Page>
-    );
+  return (
+    <Page>
+      <Nav tabs>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === "1" })}
+            onClick={() => {
+              toggle("1");
+            }}
+            style={{ color: "#000" }}
+          >
+            <FaVials data-tip="Sample Collection" />{" "}
+            <div>&nbsp;&nbsp;&nbsp;</div>Pending Prescriptions
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === "2" })}
+            onClick={() => {
+              toggle("2");
+            }}
+            style={{ color: "#000" }}
+          >
+            <FaVials data-tip="Sample Collection" />{" "}
+            <div>&nbsp;&nbsp;&nbsp;</div>Dispensed Prescriptions
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === "3" })}
+            onClick={() => {
+              toggle("3");
+            }}
+            style={{ color: "#000" }}
+          >
+            <FaVials data-tip="Sample Collection" />{" "}
+            <div>&nbsp;&nbsp;&nbsp;</div>Dispatched
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === "4" })}
+            onClick={() => {
+              toggle("4");
+            }}
+            style={{ color: "#000" }}
+          >
+            <FaListAlt data-tip="Result" />
+            {"  "}
+            <div>&nbsp;&nbsp;&nbsp;</div>Result
+          </NavLink>
+        </NavItem>
+      </Nav>
+      <TabContent activeTab={activeTab}>
+        <TabPane tabId="1">
+          <TableSearch />
+        </TabPane>
+        <TabPane tabId="2">
+          <Dispensed />
+        </TabPane>
+      </TabContent>
+    </Page>
+  );
 };
 
-export default PharmacyPage;
+const mapStateToProps = state => ({
+  prescriptions: state.pharmacy.formData
+});
+
+export default connect(mapStateToProps, { fetchPrescriptions })(Laboratory);

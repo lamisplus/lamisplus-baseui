@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "http://localhost:5000/precache-manifest.beae1e4765de60e538c4e49a30d3079c.js"
+  "http://lamisplus.org/demo/precache-manifest.ed3226bdf84a152b80f4b828421a3d93.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("http://localhost:5000/index.html", {
+workbox.routing.registerNavigationRoute("http://lamisplus.org/demo/index.html", {
   
   blacklist: [/^\/_/,/\/[^/]+\.[^/]+$/],
 });

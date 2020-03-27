@@ -1,107 +1,121 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Chip from '@material-ui/core/Chip';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import {url} from 'axios/url';
+import {
+    Col,
+    Row,
+    Card,
+    CardHeader,
+    CardBody,
+    Modal, ModalBody, ModalHeader
+  } from 'reactstrap';
+  import AddVitalsPage from 'components/Vitals/AddVitalsPage';
+  import * as actions from "actions/patients";
+  import * as encounterAction from "actions/encounter";
+  import {connect} from 'react-redux';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: theme.spacing(2),
-      
-
-    },
-    chips: {
-        fontSize: 11,
-        marginRight: 30
-      },
-    
-    
-  },
-}));
-const chips = {
-    marginLeft: 0
-};
-
-export default function PatientVitals(props) {
-    const getpatientID =props.getpatientID;
-    const classes = useStyles();
+ function PatientVitals(props) {
     const [data, setData] = useState({pulse:'', height: '', systolic: '', diastolic: '', bodyWeight: ''}); 
-    // const newid = data;
+    const [showModal, setShowModal] = useState(false);
+    const [bmiStatus, setBMIStatus] = useState();
+    const [bmi, setBMI] = useState();
+    const toggle = () => {
+      return setShowModal(!showModal)
+   }
+
+   const calculateBMI = () => {
+     if(props.vitalSigns.formData.bodyWeight && props.vitalSigns.formData.height){
+     const bmi = (props.vitalSigns.formData.bodyWeight / props.vitalSigns.formData.height / props.vitalSigns.formData.height) * 10000;
+     if(bmi <= 18.5){
+      setBMIStatus('Underweight');
+     } 
+     else if (bmi > 18.5 && bmi <= 24.9){
+        setBMIStatus('Healthy Weight');
+      }
+      else if (bmi > 25.0 && bmi <= 29.9){
+        setBMIStatus('Overweight');
+      } else {
+        setBMIStatus('Obese');
+      }
+
+     setBMI(Number(bmi).toFixed(1));
+     }
     
-    console.log(data.patientId);
-    const apistate = url+"encounters/GENERAL_SERVICE/VITAL_SIGNS_FORM/"+getpatientID+"/last";
-    useEffect(() => {    
-    const GetData = async () => {    
-        const result = await axios(apistate);    
-        setData(result.data.formData);  
-        console.log(result.data.formData);   
-    }  
-    GetData();     
+   }
 
-    }, []); 
+   useEffect(() => {    
+    props.fetchPatientVitalSigns(props.patientId)  
+    }, [props.patient]); 
 
+    useEffect(() => {
+        setData({});
+        setBMI()
+        setBMIStatus()
+      if(props.vitalSigns && props.vitalSigns.formData){
+         setData(props.vitalSigns.formData)
+         calculateBMI() 
+      } 
+      
+    }, [props.vitalSigns])
   return (
-    <div className={classes.root}>
-            <Card className={classes.cardroot} style={props.height} >
-                    <CardContent>
-                        <Typography className={classes.title} color="primary" gutterBottom>
-                        Recent Vital Signs
-                        </Typography>
-                            <Grid container spacing={12}>
-                            
-                                <Grid item xs='6'>
-                                    <Typography  color="textPrimary" gutterBottom>
-                                        
-                                        Pulse :<Chip variant="outlined" size="small"  label={data.pulse} style={chips}/></Typography>
+    
+            <Card  >
+                    <CardHeader> Recent Vital Signs  <button type="button" class="float-right ml-3" onClick={toggle}><i class="fa fa-plus"></i> Add Vitals</button></CardHeader>
+                        
+                    <CardBody>
+                    <Row item xs='12'>
+                           <Col item xs='6'>             
+                        Pulse (bpm) :< span> <b>{data.pulse || 'N/A'}</b></span> 
                                     
-                                </Grid>
+                                </Col>
                           
-                                <Grid item xs='6'>
-                                    <Typography  color="textPrimary" gutterBottom> 
-                                            Weight: <Chip variant="outlined" size="small" style={chips} label={data.bodyWeight} />
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs='6'>
-                                    <Typography color="textPrimary" gutterBottom>
-                                            RR : <Chip variant="outlined" size="small" style={chips} label={data.respiratoryRate} />
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs='6'>
-                                    <Typography color="textPrimary" gutterBottom>
-                                            Height: <Chip variant="outlined" size="small" style={chips} label={data.height} />
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs='6'>
-                                    <Typography  color="textPrimary" gutterBottom>
-                                            Temperature: <Chip variant="outlined" size="small" style={chips}  label={data.temperature} />
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs='6'>
-                                    <Typography color="textPrimary" gutterBottom>
-                                            BMI: <Chip variant="outlined" size="small" style={chips} label={data.pulse} />
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs='6'>
-                                    <Typography  color="textPrimary" gutterBottom>
-                                            Blood Presure : <Chip variant="outlined" size="small" style={chips}  label={data.diastolic} /> 
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs='6'>
-                                    <Typography  color="textPrimary gutterBottom">
-                                            BMI Sstatus: <Chip variant="outlined" size="small" style={chips}  label={data.pulse} />
-                                    </Typography>
-                                </Grid>
-                               
-                            </Grid>                               
-                    </CardContent>                      
-            </Card>                     
-    </div>
+                                <Col item xs='6'>
+                                            Weight (kg): <span><b>{data.bodyWeight || 'N/A'}</b></span>                                 
+                                            </Col>
+                                <Col item xs='6'>
+                                            RR (bpm): <span><b>{data.respiratoryRate || 'N/A'}</b></span> 
+                                </Col>
+                                <Col item xs='6'>
+                                            Height (cm): <span><b>{data.height || 'N/A'}</b></span>  
+                                </Col>
+                                <Col item xs='6'>
+                                            Temperature (C):  <span><b>{data.temperature || 'N/A'}</b></span> 
+                                </Col>
+                                <Col item xs='6'>
+                                            BMI: <span><b>{bmi || 'N/A'}</b></span> 
+                                </Col>
+                                <Col item xs='6'>
+                                            Blood Pressure (mmHg): <span><b>{data.systolic || ''} / {data.diastolic || ''}</b></span> 
+                                </Col>
+                                <Col item xs='6'>
+                                            BMI Status: <span><b>{bmiStatus || 'N/A'}</b></span> 
+                                </Col>
+                                <Col item xs='12'>
+  {props.vitalSigns ? <span>Updated on <b>{props.vitalSigns.dateEncounter || ""} {props.vitalSigns.timeCreated || ""}</b></span> : ""}
+                                </Col>
+                                </Row>
+                    </CardBody>  
+                    <Modal isOpen={showModal} toggle={toggle} size='lg'>
+                      <ModalHeader toggle={toggle}>Take Patient Vitals</ModalHeader>
+                      <ModalBody>
+                      <AddVitalsPage patientId={props.patientId} showModal={showModal} toggle={toggle}/>
+                     </ModalBody>
+                    </Modal>                       
+            </Card>   
+                           
   );
 }
+
+const mapStateToProps = state => {
+  return {
+  patient: state.patients.patient,
+  vitalSigns: state.patients.vitalSigns
+  }
+}
+
+const mapActionToProps = {
+  fetchPatientByHospitalNumber: actions.fetchById,
+  createVitalSigns: encounterAction.create,
+  fetchPatientVitalSigns: actions.fetchPatientLatestVitalSigns
+}
+
+export default connect(mapStateToProps, mapActionToProps)(PatientVitals)

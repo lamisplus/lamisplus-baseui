@@ -2,7 +2,7 @@ import Avatar from 'components/Avatar';
 import { UserCard } from 'components/Card';
 import Notifications from 'components/Notifications';
 import { notificationsData } from 'demos/header';
-import withBadge from 'hocs/withBadge';
+// import withBadge from 'hocs/withBadge';
 import React from 'react';
 import {Link} from 'react-router-dom';
 
@@ -10,7 +10,7 @@ import {
   MdClearAll,
   MdExitToApp,
   MdHelp,
-  MdNotificationsActive,
+  // MdNotificationsActive,
   MdPersonPin,
 } from 'react-icons/md';
 import {
