@@ -16,16 +16,16 @@ export const fetchPrescriptions = () => dispatch => {
     .get(`${url}encounters/GENERAL_SERVICE/DRUG_ORDER_FORM`)
     .then(response => {
       console.log(response);
-      //   dispatch({
-      //     type: ACTION_TYPES.PHARMACY_FETCH_PRESCRIPTIONS,
-      //     payload: response.data
-      //   });
-      // })
-      // .catch(error => {
-      //   console.log("Pharmacy Error: ", error);
-      //   dispatch({
-      //     type: ACTION_TYPES.PHARMACY_ERROR,
-      //     payload: "Something went wrong"
-      //   });
+        dispatch({
+          type: ACTION_TYPES.PHARMACY_FETCH_PRESCRIPTIONS,
+          payload: response.data
+        });
+      })
+      .catch(error => {
+        console.log("Pharmacy Error: ", error);
+        dispatch({
+          type: ACTION_TYPES.PHARMACY_ERROR,
+          payload: "Something went wrong"
+        });
     });
 };

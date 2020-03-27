@@ -2,7 +2,7 @@ import { EmptyLayout, LayoutRoute, MainLayout } from "components/Layout";
 import PageSpinner from "components/PageSpinner";
 
 // import AuthPage from 'pages/AuthPage';
-import React from "react";
+import React, {Component} from "react";
 
 // import componentQueries from 'react-component-queries';
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
@@ -52,6 +52,7 @@ const FormBuilder = React.lazy(() =>
 const ViewForm = React.lazy(() => import("components/FormManager/ViewForm"));
 /* Pharmacy page loading */
 /* Pharmacy page loading */
+const PharmacyDashboard = React.lazy(() => import("./components/Pharmacy/PharmacyDashboard"))
 const PharmacyPage = React.lazy(() =>
   import("components/Pharmacy/PharmacyPage")
 );
@@ -87,7 +88,7 @@ const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split("/").pop()}`;
 };
 
-class Routes extends React.Component {
+class Routes extends Component {
   render() {
     return (
       <BrowserRouter basename={getBasename()} history={history}>
@@ -128,7 +129,7 @@ class Routes extends React.Component {
               <Route exact path="/patients" component={PatientsPage} />
 
               {/* Pharmacy Links */}
-              <Route exact path="/pharmacy" component={PharmacyPage} />
+              <Route exact path="/pharmacy" component={PharmacyDashboard} />
               <Route
                 exact
                 path="/pending-prescription"
