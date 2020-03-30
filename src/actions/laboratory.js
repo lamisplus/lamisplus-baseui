@@ -33,8 +33,9 @@ export const fetchAllLabTestOrder = () => dispatch => {
 }
 
 export const createCollectedSample = (data) => dispatch => {
+  console.log(data)
   axios
-    .post(`${baseUrl}ecounter/GENERAL_SERVICE/LABTEST_ORDER_FORM`)
+    .put(`${baseUrl}ecounter/GENERAL_SERVICE/LABTEST_ORDER_FORM`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.CREATE_COLLECT_SAMPLE,

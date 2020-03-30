@@ -15,17 +15,7 @@ import {
   } from 'react-icons/md';
 import {GiFiles,GiTestTubes } from 'react-icons/gi';  
 import { FaBriefcaseMedical} from "react-icons/fa"; 
-//{/*  Check box list */}
 
-
-// import PatientAllergies from 'components/PatientDashboard/PatientAllergies';
-// import PatientVitals from 'components/PatientDashboard/PatientVitals';
-// import ClinicalHistory from 'components/PatientDashboard/ClinicalHistory';
-// // import Consultation from './consulatation/consultation';
-// import PatientDetailCard from 'components/Functions/PatientDetailCard';
-// import TestOrder from './TestOrder/TestOrder';
-// import Medication from './Medication/Medication';
-// import ServiceForm from './ServiceForm/serviceForm';
 import { 
   // Nav, NavItem, NavLink, Badge, 
   Card, CardBody, CardDeck, CardHeader } from 'reactstrap';
@@ -33,6 +23,7 @@ import { Bar, Pie } from 'react-chartjs-2';
 import { getColor } from 'utils/colors';
 import { randomNum } from 'utils/demos';
 import UserProgressTable from 'components/UserProgressTable';
+import TestOrderList from './PatientSearch';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -366,8 +357,8 @@ export default function ScrollableTabsButtonForce(props) {
 {/* Begining of Service Form */}
 <TabPanel value={value} index={1}>
  
-    {/* <Consultation getpatientdetails={props.location.state } height={cardHeight}/> */}
-
+    <TestOrderList />
+    
 </TabPanel>     
  {/* Begining of consultation  */}
  <TabPanel value={value} index={2}>

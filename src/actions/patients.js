@@ -12,6 +12,9 @@ import * as ACTION_TYPES from './types'
  * create()
  * update()
  * Delete()
+ * fetchPatientVitals()
+ * fetchPatientAllergies()
+ * fetchPatientLatestVitalSigns()
  */
 
 export const fetchAll = () => dispatch => {
@@ -53,6 +56,7 @@ export const fetchById = id => dispatch => {
 }
 
 export const create = (data) => dispatch => {
+  console.log('am here')
   axios
     .post(`${baseUrl}patients/`, data)
     .then(response => {
@@ -109,6 +113,44 @@ export const Delete = (id, onSuccess) => dispatch => {
     })
 }
 
+export const fetchPatientAllergies = id => dispatch => {
+  axios
+    .get(`${baseUrl}patients/${id}/encounter/GENERAL_SERVICE/CONSULATION_FORM/`)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.PATIENT_ALLERGIES,
+        payload: response.data
+      })
+    })
+    .catch(error =>
+      dispatch({
+        type: ACTION_TYPES.PATIENTS_ERROR,
+        payload: 'Something went wrong, please try again'
+      })
+      
+    )
+   
+}
+
+export const fetchPatientLatestVitalSigns = (id) => dispatch => {
+ if(id){
+  axios
+    .get(`${baseUrl}patients/${id}/encounter/GENERAL_SERVICE/VITAL_SIGNS_FORM/sortOrder/sortField/limit?limit=1`, {limit: 1, sortField: "dateEncounter", sortOrder: "desc"} )
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.PATIENT_LATEST_VITAL_SIGNS,
+        payload: response.data[0]
+      })
+    })
+    .catch(error =>
+      dispatch({
+        type: ACTION_TYPES.PATIENTS_ERROR,
+        payload: 'Something went wrong, please try again'
+      })
+      
+    )
+    }  
+}
 //const formateData = data => ({
 //   ...data
 // })

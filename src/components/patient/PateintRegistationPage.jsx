@@ -276,7 +276,7 @@ const PatientRegistration = props => {
     values['personRelativesDTO'] = relatives
     values['dob'] = dateOfBirth
     values['provinceId'] = 502
-    //console.log(values)
+    console.log(values)
     e.preventDefault()
 
     props.create(values)
@@ -389,7 +389,7 @@ const PatientRegistration = props => {
                         id='lastName'
                         placeholder='Last Name'
                         value={values.lastName}                        
-                        required
+                        
                       />
                     </FormGroup>
                   </Col>

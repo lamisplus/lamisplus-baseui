@@ -66,20 +66,14 @@ const cardStyle = {
 }
 
 export default function ConsultationPage (props) {
-  const PatientID = 1
-  const visitId = 2
-  const saveTestUrl =
-    url + 'encounters/GENERAL_SERVICE/LABTEST_ORDER_FORM/' + PatientID
-
-  const classes = useStyles()
   const [showLoading, setShowLoading] = useState(false)
   const [message, setMessage] = useState('')
-  const [serviceForms, setServiceForms] = useState([])
+  const [serviceForms, setServiceForms] = useState()
   const [filterText, setFilterText] = React.useState('')
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(
     false
   )
-  const filteredItems = serviceForms.filter(
+  const filteredItems = !serviceForms ? [] : serviceForms.filter(
     item =>
       (item.displayName &&
         item.displayName.toLowerCase().includes(filterText.toLowerCase())) ||
@@ -93,9 +87,8 @@ export default function ConsultationPage (props) {
     async function fetchServiceForms () {
       setShowLoading(true)
       try {
-        const response = await fetch(url + 'forms/all')
+        const response = await fetch(url + 'forms')
         const body = await response.json()
-        console.log(body)
         setServiceForms(body)
         setShowLoading(false)
       } catch (error) {
@@ -104,6 +97,7 @@ export default function ConsultationPage (props) {
           'Could not fetch available service forms. Please try again later'
         )
         setShowLoading(false)
+        setServiceForms();
       }
     }
     fetchServiceForms()
@@ -182,7 +176,7 @@ return (
                           </Spinner></div>
                           : ""
                         }
-{ serviceForms.length > 0 ? 
+{ (serviceForms && serviceForms.length) > 0 ? 
 <div>
     <DataTable
       columns={columns}
