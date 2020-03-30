@@ -40,11 +40,13 @@ const PatientPrescriptions = props => {
   const toggle2 = () => setModal2(!modal2);
   const { className } = props;
 
-  const patientId = props.location.Id;
+  const patient = props.location.prescriptions;
+
+  console.log(patient)
   
-  useEffect(() => {
-      props.fetchPatientPrescription(patientId);
-  }, [])
+  // useEffect(() => {
+  //     props.fetchPatientPrescription();
+  // }, [])
 
   return (
     <div className="patpres">

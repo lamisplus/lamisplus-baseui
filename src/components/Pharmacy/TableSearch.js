@@ -94,7 +94,7 @@ const columns = modalClickHandler => [
   {
     name: "Action",
     cell: (row) => (
-      <Link to={{ pathname: "/patientPrescriptions", Id : row.patientId}}>
+      <Link to={{ pathname: "/patientPrescriptions", prescriptions : row.formData.drug_prescription}}>
         <p>
           view prescription
         </p>
