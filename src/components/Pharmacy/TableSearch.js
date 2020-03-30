@@ -34,6 +34,8 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
   </Form>
 );
 
+
+
 const SampleExpandedComponent = ({ data }) => (
   <div>
     <span>
@@ -91,9 +93,11 @@ const columns = modalClickHandler => [
   },
   {
     name: "Action",
-    cell: () => (
-      <Link to="/patientPrescriptions">
-        <p>view prescription</p>
+    cell: (row) => (
+      <Link to={{ pathname: "/patientPrescriptions", Id : row.patientId}}>
+        <p>
+          view prescription
+        </p>
       </Link>
     ),
     ignoreRowClick: true,
@@ -113,6 +117,9 @@ const customStyles = {
 };
 
 const PatientTable = props => {
+
+
+
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   const filteredItems =
@@ -134,9 +141,11 @@ const PatientTable = props => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
-  useEffect(() => {
-  
-  }, []); 
+  const viewPrescription = id => {
+    props.history.push("/view-prescription/" + id);
+  };
+
+ 
 
   const subHeaderComponentMemo = useMemo(() => {
     const handleClear = () => {
@@ -179,7 +188,7 @@ const PatientTable = props => {
         </cardContent>
       </card>
       <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Achieve Patient</ModalHeader>
+        <ModalHeader toggle={toggle}>Archive Patient</ModalHeader>
         <ModalBody>Are you sure you want to delete this patient?</ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={toggle}>
@@ -196,6 +205,6 @@ const PatientTable = props => {
 
 const mapStateToProps = state => ({
   prescriptions: state.pharmacy.formData
-});
+ });
 
 export default connect(mapStateToProps, null)(PatientTable);

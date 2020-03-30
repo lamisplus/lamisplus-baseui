@@ -45,7 +45,7 @@ const StyledTableRow = withStyles(theme => ({
 
 const PendingPrescription = props => {
   const classes = useStyles();
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = useState(0);
   const [data, setData] = useState([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const apistate = "https://jsonplaceholder.typicode.com/users";

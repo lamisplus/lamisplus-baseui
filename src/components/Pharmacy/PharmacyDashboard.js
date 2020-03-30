@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -7,10 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import {
-    MdDashboard,
-    MdContacts
-} from 'react-icons/md';
+import { MdDashboard, MdContacts } from 'react-icons/md';
 import { GiFiles, GiTestTubes } from 'react-icons/gi';
 import Dispensed from "./PendingPrescription";
 import { FaBriefcaseMedical } from "react-icons/fa";
@@ -20,6 +17,8 @@ import { getColor } from 'utils/colors';
 import { randomNum } from 'utils/demos';
 import UserProgressTable from 'components/UserProgressTable';
 import TableSearch from './TableSearch';
+import { fetchPrescriptions } from "../../actions/pharmacy";
+import { connect } from 'react-redux'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -241,12 +240,16 @@ const userProgressTableData = [
 
 ];
 
-export default function ScrollableTabsButtonForce(props) {
+const ScrollableTabsButtonForce = (props) => {
     const classes = useStyles();
     const [value, setValue] = useState(0);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    useEffect(() => {
+         props.fetchPrescriptions();
+    }, [])
 
     return (
         <div className={classes.root}>
@@ -416,3 +419,8 @@ export default function ScrollableTabsButtonForce(props) {
     );
 }
 
+// const mapStateToProps = state => ({
+//   prescriptions: state.pharmacy.formData
+// });
+
+export default connect(null, { fetchPrescriptions })(ScrollableTabsButtonForce);
