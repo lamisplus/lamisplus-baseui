@@ -18,7 +18,7 @@ import { IoMdFingerPrint } from "react-icons/io";
 import { FaFileImport } from "react-icons/fa";
 import { FaPlusSquare } from "react-icons/fa";
 import "react-widgets/dist/css/react-widgets.css";
-import { useToasts } from "react-toast-notifications";
+
 import { connect } from "react-redux";
 //Date Picker
 import "react-widgets/dist/css/react-widgets.css";
@@ -182,8 +182,7 @@ const PatientRegistration = props => {
   useEffect(() => {
     props.create();
   }); //componentDidMount
-  //toast msg.
-  const { addToast } = useToasts();
+  
   //Get States from selected country
   const getStates = e => {
     const getCountryId = e.target.value;
