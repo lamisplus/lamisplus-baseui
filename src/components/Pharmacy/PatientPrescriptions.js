@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./patientPrescriptions.css";
 import { Checkbox } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
+import {fetchPatientPrescriptions} from '../../actions/pharmacy'
+import { connect } from 'react-redux'
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Col,
@@ -37,6 +39,12 @@ const PatientPrescriptions = props => {
   const [modal2, setModal2] = useState(false);
   const toggle2 = () => setModal2(!modal2);
   const { className } = props;
+
+  const patientId = props.location.Id;
+  
+  useEffect(() => {
+      props.fetchPatientPrescription(patientId);
+  }, [])
 
   return (
     <div className="patpres">
@@ -144,4 +152,10 @@ const PatientPrescriptions = props => {
   );
 };
 
-export default PatientPrescriptions;
+const mapStateToProps = (state) => {
+  return {
+    prescriptions: state.pharmacy.prescriptions
+  }
+}
+
+export default connect(null, {fetchPatientPrescriptions})(PatientPrescriptions);

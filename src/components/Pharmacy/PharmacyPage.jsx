@@ -29,18 +29,7 @@ const Laboratory = props => {
     if (activeTab !== tab) setActiveTab(tab);
   };
 
-  // {
-  //   props.prescriptions &&
-  //     props.prescriptions.map(prescription => {
-  //       console.log(prescription.firstName);
-  //       if (prescription.formData.drug_order !== undefined) {
-  //         prescription.formData.drug_order.map(drug => {
-  //           console.log(drug);
-  //         });
-  //       }
-  //     });
-  // }
-
+ 
   console.log(props.prescriptions);
 
   return (

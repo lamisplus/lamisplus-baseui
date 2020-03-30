@@ -59,7 +59,7 @@ const PharmacyPage = React.lazy(() =>
 const PendingPrescription = React.lazy(() =>
   import("components/Pharmacy/PendingPrescription")
 );
-const Viewprescription = React.lazy(() =>
+const ViewPrescription = React.lazy(() =>
   import("components/Pharmacy/ViewPrescription")
 );
 const DispensedPrescription = React.lazy(() =>
@@ -138,7 +138,7 @@ class Routes extends Component {
               <Route
                 exact
                 path="/view-prescription"
-                component={Viewprescription}
+                component={ViewPrescription}
               />
               <Route
                 exact
