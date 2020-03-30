@@ -299,7 +299,7 @@ const PatientRegistration = props => {
               <CardContent>
                 <Title>
                   Basic Information <br />
-                  <MatButton
+                  {/* <MatButton
                     variant='contained'
                     color='primary'
                     className=' float-right mr-1'
@@ -314,7 +314,7 @@ const PatientRegistration = props => {
                     startIcon={<IoMdFingerPrint />}
                   >
                     Finger print
-                  </MatButton>
+                  </MatButton> */}
                   <br />
                 </Title>
                 <Row form>
