@@ -82,6 +82,7 @@ const PatientRegistration = props => {
   const apicountries = url + "countries";
   const apistate = url + "state/country/";
 
+
   const { values, setValues, handleInputChange, resetForm } = useForm(
     initialfieldState_patientRegsitration
   );
@@ -91,6 +92,10 @@ const PatientRegistration = props => {
    */
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
+  const [gender, setGender] = useState([]);
+  const [occupation, setOccupation] = useState([]);
+  const [qualification, setQualification] = useState([]);
+  const [maritalStatus, setMaterialStatus] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [relatives, setRelatives] = useState([]);
   const [relative, setRelative] = useState([{}]);
@@ -100,7 +105,86 @@ const PatientRegistration = props => {
     { id: "3", name: "Sister" },
     { id: "4", name: "Brother" }
   ];
+  
   const [display, setDisplay] = useState(false);
+    //Get countries
+    useEffect(() => {
+      async function getCharacters() {
+        try {
+          const response = await fetch(apicountries);
+          const body = await response.json();
+          setCountries(body.map(({ name, id }) => ({ label: name, value: id })));
+          const defaultCountryId = body.find(x => x.name === "Nigeria").id;
+          setValues({ ...values, countryId: defaultCountryId });
+          setStateByCountryId(defaultCountryId);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      getCharacters();
+    }, []);
+
+/*# Get list of gender parameter from the endpoint #*/
+useEffect(() => {
+  async function getCharacters() {
+    try {
+      const response = await fetch(url+'codeset/GENDER');
+      const body = await response.json();
+      setGender(body.map(({ display, id }) => ({ label: display, value: id })));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  getCharacters();
+}, []);
+/* ##### End of gender parameter from the endpoint ##########*/
+
+/*# Get list of OCUUPATION parameter from the endpoint #*/
+useEffect(() => {
+  async function getCharacters() {
+    try {
+      const response = await fetch(url+'codeset/OCCUPATION');
+      const body = await response.json();
+      setOccupation(body.map(({ display, id }) => ({ label: display, value: id })));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  getCharacters();
+}, []);
+
+/*# Get list of EDUCATION parameter from the endpoint #*/
+useEffect(() => {
+  async function getCharacters() {
+    try {
+      const response = await fetch(url+'codeset/EDUCATION');
+      const body = await response.json();
+      setQualification(body.map(({ display, id }) => ({ label: display, value: id })));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  getCharacters();
+}, []);
+/* ##### End of gender parameter from the endpoint ##########*/
+
+/*# Get list of MARITAL STATUS parameter from the endpoint #*/
+useEffect(() => {
+  async function getCharacters() {
+    try {
+      const response = await fetch(url+'codeset/MARITAL_STATUS');
+      const body = await response.json();
+      setMaterialStatus(body.map(({ display, id }) => ({ label: display, value: id })));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  getCharacters();
+}, []);
+/* ##### End of gender parameter from the endpoint ##########*/
+    useEffect(() => {
+      props.create();
+    }); //componentDidMount
   const findAge = date => {
     var dob = new Date(date);
     var today = new Date();
@@ -163,25 +247,7 @@ const PatientRegistration = props => {
     }
   };
 
-  //Get countries
-  useEffect(() => {
-    async function getCharacters() {
-      try {
-        const response = await fetch(apicountries);
-        const body = await response.json();
-        setCountries(body.map(({ name, id }) => ({ label: name, value: id })));
-        const defaultCountryId = body.find(x => x.name === "Nigeria").id;
-        setValues({ ...values, countryId: defaultCountryId });
-        setStateByCountryId(defaultCountryId);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getCharacters();
-  }, []);
-  useEffect(() => {
-    props.create();
-  }); //componentDidMount
+
   
   //Get States from selected country
   const getStates = e => {
@@ -292,12 +358,6 @@ const PatientRegistration = props => {
                 <Title>
                   Basic Information <br />
 
-                  <MatButton
-                    variant="contained"
-                    color="primary"
-                    className=" float-right mr-1"
-
-                  <br />
                 </Title>
                 <Row form>
                   <Col md={4}>
@@ -383,11 +443,14 @@ const PatientRegistration = props => {
                         type="select"
                         name="genderId"
                         id="genderId"
-                        value={values.genderId}
+                        value={values.id}
                         required
                       >
-                        <option value="1">Female</option>
-                        <option value="2">Male</option>
+                      {gender.map(({ label, value }) => (
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
                       </Input>
                     </FormGroup>
                   </Col>
@@ -398,11 +461,13 @@ const PatientRegistration = props => {
                         type="select"
                         name="occupationId"
                         id="occupationId"
-                        value={values.occupationId}
+                        value={values.id}
                       >
-                        <option value="1">Students</option>
-                        <option value="2">Business</option>
-                        <option value="3">Government</option>
+                        {occupation.map(({ label, value }) => (
+                          <option key={value} value={value}>
+                            {label}
+                          </option>
+                        ))}
                       </Input>
                     </FormGroup>
                   </Col>
@@ -412,13 +477,13 @@ const PatientRegistration = props => {
                       <Input
                         type="select"
                         name="educationId"
-                        value={values.educationId}
+                        value={values.id}
                       >
-                        <option value="1">PHD</option>
-                        <option value="2">MSC</option>
-                        <option value="3">BSC</option>
-                        <option value="4">HND</option>
-                        <option value="5">NCE</option>
+                        {qualification.map(({ label, value }) => (
+                            <option key={value} value={value}>
+                              {label}
+                            </option>
+                          ))}
                       </Input>
                     </FormGroup>
                   </Col>
@@ -433,9 +498,11 @@ const PatientRegistration = props => {
                         id="maritalStatusId"
                         value={values.maritalStatusId}
                       >
-                        <option value="1">Single</option>
-                        <option value="2">Married</option>
-                        <option value="3">Divorce</option>
+                        {maritalStatus.map(({ label, value }) => (
+                            <option key={value} value={value}>
+                              {label}
+                            </option>
+                          ))}
                       </Input>
                     </FormGroup>
                   </Col>
