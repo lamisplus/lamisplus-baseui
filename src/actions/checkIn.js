@@ -1,141 +1,103 @@
-import axios from 'axios'
-import { url as baseUrl } from '../api'
-import * as ACTION_TYPES from './types'
+import axios from "axios";
+import { url } from "../api";
+import * as ACTION_TYPES from "./types";
 
 /**
  * @Actions
- * CheckIn CRUD OPERATIONS
- * returns API response from server
+ *  CheckIn CRUD OPERATIONS
+ * returns API response from server => payload: response || error
  * =================================
- * fetchAll()
- * fetchById()
- * create()
- * update()
- * Delete()
+ * @method GET => fetchAll() -> get all visits: params {null} | query: {null}
+ * @method GET => fetchById()  -> get visit by Id: params {id} | query: {null}
+ * @method POST => create() -> create a new visit: params {formData} | query : {null}
+ * @method PUT => update() -> Update an existing visit: params {id}{data} | query: {null}
+ * @method DELETE => Delete() -> remove a record: params {id} | query: {null}
  */
 
 export const fetchAll = () => dispatch => {
   axios
-    .get(`${baseUrl}visits/`)
+    .get(`${url}visits/`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.CHECKIN_FETCH_ALL,
         payload: response.data
-      })
+      });
     })
     .catch(error =>
       dispatch({
         type: ACTION_TYPES.CHECKIN_ERROR,
-        payload: 'Something went wrong, please try again'
+        payload: "Something went wrong, please try again"
       })
-    )
-}
+    );
+};
 
 export const fetchById = id => dispatch => {
   axios
-    .get(`${baseUrl}visits/${id}`)
+    .get(`${url}visits/${id}`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.CHECKIN_FETCH_BY_ID,
         payload: response.data
-      })
+      });
     })
     .catch(error =>
       dispatch({
         type: ACTION_TYPES.CHECKIN_ERROR,
-        payload: 'Something went wrong, please try again'
+        payload: "Something went wrong, please try again"
       })
-    )
-}
+    );
+};
 
 export const create = (data, onSuccess, onError) => dispatch => {
   axios
-    .post(`${baseUrl}visits/`, data)
+    .post(`${url}visits/`, data)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.CHECKIN_CREATE,
         payload: response.data
-      })
-      onSuccess()
+      });
+      onSuccess();
     })
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.CHECKIN_ERROR,
-        payload: 'Something went wrong, please try again'
-      })
-      onError(error.response)
-    })
-}
+        payload: "Something went wrong, please try again"
+      });
+    });
+};
+
+
 
 export const update = (id, data) => dispatch => {
   axios
-    .put(`${baseUrl}visits/${id}`, data)
+    .put(`${url}visits/${id}`, data)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.CHECKIN_UPDATE,
         payload: response.data
-      })
+      });
     })
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.CHECKIN_ERROR,
-        payload: 'Something went wrong, please try again'
-      })
-    })
-}
+        payload: "Something went wrong, please try again"
+      });
+    });
+};
 
 export const Delete = (id, onSuccess) => dispatch => {
   axios
-    .delete(`${baseUrl}visits/${id}`)
+    .delete(`${url}visits/${id}`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.CHECKIN_DELETE,
         payload: response.data
-      })
+      });
     })
     .catch(error => {
       dispatch({
         types: ACTION_TYPES.CHECKIN_ERROR,
-        payload: 'Something went wrong, please try again'
-      })
-    })
-}
-
-// const formateData = data => ({
-//     ...data
-// })
-
-//===============================================
-//import api from './checkInApi'
-//import * as ACTION_TYPES from '../types'
-//===============================================
-//     if (error.response) {
-//         // The request was made and the server responded with a status code
-//         // that falls out of the range of 2xx
-//         // console.log(error.response.data.apierror.message);
-//         const errorCode = error.response.data.apierror
-//             ? error.response.data.apierror.status
-//             : error.response.data.status
-//         const errormessage = error.response.data.apierror
-//             ? error.response.data.apierror.message
-//             : error.response.data.message
-//         onError(errormessage)
-//         console.log(errorCode)
-//         if (errorCode >= 500) {
-//             onError('Something went wrong, please contact adminstration!')
-//         }
-
-//         // console.log(error.response.apierror.status);
-//         // console.log(error.response.apierror.headers);
-//     } else if (error.request) {
-//         // The request was made but no response was received
-//         // `error.request` is an instance of XMLHttpRequest in the
-//         // browser and an instance of
-//         // http.ClientRequest in node.js
-//         console.log(error.request)
-//     } else {
-//         // Something happened in setting up the request that triggered an Error
-//         console.log('Error', error.message)
-//     }
-//     console.log(error)
-// })
+        payload: "Something went wrong, please try again"
+      });
+    });
+};
