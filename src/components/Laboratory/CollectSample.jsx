@@ -46,9 +46,11 @@ import { toast } from 'react-toastify'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Page from 'components/Page'
-import Spinner from 'react-bootstrap/Spinner'
 import { connect } from 'react-redux'
 import { createCollectedSample } from '../../actions/laboratory'
+import ModalSample from './collectSampleModal';
+import ModalSampleTransfer from './transferSampleModal';
+
 
 Moment.locale('en')
 momentLocalizer()
@@ -118,7 +120,7 @@ const StyledTableRow = withStyles(theme => ({
  function CollectSample (props) {
   const classes = useStyles()
   const classes2 = useStyles2()
-  const data = [props.location.state.getpatientlists.row.formData.labtest[0]]
+  const data = [props.location.state.getpatientlists.row.formData.labtest_order[0]]
   const [useData, setUsedata] = useState(data)
   const userInfo = props.location.state.getpatientlists.row
   const [showLoading, setShowLoading] = useState(false)
@@ -128,9 +130,10 @@ const StyledTableRow = withStyles(theme => ({
   const { className } = props
   const [checked, setChecked] = useState({id:'', statuscheck:false })
   const [modal, setModal] = useState(false)
-  const [modal3, setModal3] = useState(false)
-  const toggle = () => setModal(!modal)
-  const toggle3 = () => setModal3(!modal3)
+  const togglemodal = () => setModal(!modal)
+  const [modal2, setModal2] = useState(false)
+  const togglemodal2 = () => setModal2(!modal2)
+  const [collectmodal, setcollectmodal] = useState('')
   // const [encounterid, setencounterid] = useState('');
   const [labNum, setlabNum] = useState({lab_number:''})
   //const [patientrow, setpatientValue] = useState({date_sample_collected:new Date(), sample_collected:''});
@@ -153,7 +156,7 @@ const StyledTableRow = withStyles(theme => ({
   const saveColllectSample = e => {
     console.log(patientrow)
     const newDatenow = moment(TodayDate).format('DD-MM-YYYY')
-    
+
     useData['formData'] = useData
     setUsedata({...useData, formData:{"labtest":useData }})
     console.log(useData)
@@ -171,20 +174,20 @@ const StyledTableRow = withStyles(theme => ({
     setChecked({...checked, [e.target.value]: e.target.value})
     console.log(e)
   }
-const handleCheckbox = (val) => {
-  const newcheck = useData.filter(el => el.description === val);
-  setCheckvalue(1)
-  console.log(checkvalue)
+const handlesample = (val) => {
+   setModal(!modal)
+   setcollectmodal(val);
+
   //const defaultCountryId = data[0].find(x => x.description === 'CD4')
   //setPatientorder({...patientorder, sample_collected: newsample_collected });
   //console.log(defaultCountryId)
 }
- 
-const getUsermodal = (usercollection)=> {
-    setTransfer(usercollection)
-    setModal(!modal)
-   
-  }
+const transfersample = (val) => {
+  setModal2(!modal2)
+  setcollectmodal(val);
+
+}
+
   return (
     <Page title='Collect Sample'>
       <ToastContainer autoClose={2000} />
@@ -270,22 +273,15 @@ const getUsermodal = (usercollection)=> {
                                 {/* date_sample_collected */}
                               </TableCell>
                               <TableCell align='center'>
-                                <FormGroup check>
-                                  <Label check disabled>
-                                    <Input type='checkbox' name="sample_collected" checked={checkvalue} onChange={() =>
-                                      handleCheckbox(row.description)} value={row.description}/>
-                                  </Label>
-                                </FormGroup>
+                                <Button  size="sm" color="info" onClick={() =>
+                                      handlesample(row.description)}>Collect Sample
+                                </Button>
+                                
                               </TableCell>
                               <TableCell align='center'>
-                                <FormGroup check>
-                                  <Label check>
-                                    <Input type='checkbox' 
-                                      onClick={() =>
-                                        getUsermodal(row.description)}
-                                      />{' '}
-                                  </Label>
-                                </FormGroup>
+                              <Button  size="sm" color="warning" onClick={() =>
+                                      transfersample(row.description)}>Transfer Sample
+                                </Button>
                               </TableCell>
                             </StyledTableRow>
                           ))}
@@ -297,7 +293,7 @@ const getUsermodal = (usercollection)=> {
                       <Row form>
                         <Col md={3} style={{ marginTop: '20px' }}>
                           <Input
-                            type='search'
+                            type='text'
                             placeholder='Lab. Number '
                             className='cr-search-form__input '
                             name='lab_number'
@@ -344,8 +340,10 @@ const getUsermodal = (usercollection)=> {
           </Card>
         </Col>
       </Row>
+      <ModalSample modalstatus={modal} togglestatus={togglemodal} datasample={collectmodal} testorder={data}  userInfo={userInfo} useData={useData}/>
+      <ModalSampleTransfer modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal} testorder={data}  userInfo={userInfo} useData={useData}/>
       {/* Modal to cancel new test result  */}
-      <Modal isOpen={modal3} toggle={toggle3} className={className} size='sm'>
+      {/* <Modal isOpen={modal3} toggle={toggle} className={className} size='sm'>
         <Form >
           <ModalHeader toggle={toggle3}>Collect Sample </ModalHeader>
           <ModalBody>
@@ -380,12 +378,12 @@ const getUsermodal = (usercollection)=> {
             </Button>
           </ModalFooter>
         </Form>
-      </Modal>
+      </Modal> */}
 
       {/* End of each Modal popup for each action */}
 
       {/* Modal to cancel new test result  */}
-      <Modal isOpen={modal} toggle={toggle} className={className} size='sm'>
+      {/* <Modal isOpen={modal} toggle={toggle} className={className} size='sm'>
         <Form >
                 <ModalHeader toggle={toggle}>Collect Test Order </ModalHeader>
           <ModalBody>
@@ -413,7 +411,7 @@ const getUsermodal = (usercollection)=> {
             </Button>
           </ModalFooter>
         </Form>
-      </Modal>
+      </Modal> */}
 
       {/* End of each Modal popup for each action */}
     </Page>

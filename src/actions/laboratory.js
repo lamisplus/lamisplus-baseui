@@ -1,6 +1,8 @@
-import axios from 'axios'
-import { url as baseUrl } from '../api'
-import * as ACTION_TYPES from './types'
+import axios from "axios";
+import { url as baseUrl } from "../api";
+import * as ACTION_TYPES from "./types";
+
+//TODO: by Jeph => Complete documentation
 
 /**
  * @Actions
@@ -29,25 +31,26 @@ export const fetchAllLabTestOrder = () => dispatch => {
         type: ACTION_TYPES.ERROR_LABORATORY_TESTORDER,
         payload: 'Something went wrong, please try again'
       })
-    )
-}
+    );
+};
 
 export const createCollectedSample = (data) => dispatch => {
+  console.log(data)
   axios
-    .post(`${baseUrl}ecounter/GENERAL_SERVICE/LABTEST_ORDER_FORM`)
+    .put(`${baseUrl}ecounter/GENERAL_SERVICE/LABTEST_ORDER_FORM`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.CREATE_COLLECT_SAMPLE,
         payload: response.data
-      })
+      });
     })
     .catch(error =>
       dispatch({
         type: ACTION_TYPES.ERROR_CREATE_COLLECT_SAMPLE,
         payload: 'Something went wrong, please try again'
       })
-    )
-}
+    );
+};
 export const fetchById = id => dispatch => {
   axios
     .get(`${baseUrl}visits/${id}`)
@@ -55,33 +58,32 @@ export const fetchById = id => dispatch => {
       dispatch({
         type: ACTION_TYPES.CHECKIN_FETCH_BY_ID,
         payload: response.data
-      })
+      });
     })
     .catch(error =>
       dispatch({
         type: ACTION_TYPES.CHECKIN_ERROR,
-        payload: 'Something went wrong, please try again'
+        payload: "Something went wrong, please try again"
       })
-    )
-}
+    );
+};
 
-export const create = (data) => dispatch => {
+export const create = data => dispatch => {
   axios
     .post(`${baseUrl}visits/`, data)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.CHECKIN_CREATE,
         payload: response.data
-      })
-    
+      });
     })
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.CHECKIN_ERROR,
-        payload: 'Something went wrong, please try again'
-      })
-    })
-}
+        payload: "Something went wrong, please try again"
+      });
+    });
+};
 
 export const update = (id, data) => dispatch => {
   axios
@@ -90,30 +92,29 @@ export const update = (id, data) => dispatch => {
       dispatch({
         type: ACTION_TYPES.CHECKIN_UPDATE,
         payload: response.data
-      })
+      });
     })
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.CHECKIN_ERROR,
-        payload: 'Something went wrong, please try again'
-      })
-    })
-}
+        payload: "Something went wrong, please try again"
+      });
+    });
+};
 
-export const Delete = (id) => dispatch => {
+export const Delete = id => dispatch => {
   axios
     .delete(`${baseUrl}visits/${id}`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.CHECKIN_DELETE,
         payload: response.data
-      })
+      });
     })
     .catch(error => {
       dispatch({
         types: ACTION_TYPES.CHECKIN_ERROR,
-        payload: 'Something went wrong, please try again'
-      })
-    })
-}
-
+        payload: "Something went wrong, please try again"
+      });
+    });
+};

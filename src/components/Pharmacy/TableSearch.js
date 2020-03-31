@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import DataTable from "react-data-table-component";
 import { Card, CardContent } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import { Delete } from "@material-ui/icons";
 import { Edit } from "@material-ui/icons";
-import "./PatientSearch.css";
+// import "./PatientSearch.css";
 import {
   Button,
   Modal,
@@ -17,7 +17,6 @@ import {
 import { Link } from "react-router-dom";
 import { fetchAll, Delete as Del } from "../../actions/patients";
 import { connect } from "react-redux";
-import { Dashboard } from "@material-ui/icons";
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
   <Form className="cr-search-form" onSubmit={e => e.preventDefault()}>
@@ -34,6 +33,8 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
     </Card>
   </Form>
 );
+
+
 
 const SampleExpandedComponent = ({ data }) => (
   <div>
@@ -70,7 +71,7 @@ const calculate_age = dob => {
 const columns = modalClickHandler => [
   {
     name: "Patient ID",
-    selector: "hospitalNumber",
+    selector: "patientId",
     sortable: false,
     Display: true
   },
@@ -85,56 +86,19 @@ const columns = modalClickHandler => [
     )
   },
   {
-    name: "Age",
-    selector: "dob",
+    name: "Total",
+    selector: "count",
     sortable: false,
-    cell: row => (
-      <span>
-        {row.dob === 0 ||
-        row.dob === undefined ||
-        row.dob === null ||
-        row.dob === ""
-          ? 0
-          : calculate_age(row.dob)}
-      </span>
-    )
+    cell: row => <span>{row.formData.prescription_count}</span>
   },
   {
     name: "Action",
-    cell: row => (
-      <div>
-        <IconButton
-          color="primary"
-          aria-label="View Patient"
-          title="View Patient"
-        >
-          <Link
-            to={{
-              pathname: "/patient-dashboard",
-              state: { getpatient: { row } }
-            }}
-          >
-            <Dashboard title="Patient Dashboard" aria-label="View Patient" />
-          </Link>
-        </IconButton>
-        <IconButton
-          color="primary"
-          aria-label="Archive Patient"
-          title="Edit Patient"
-        >
-          <Link to="/patient-registration">
-            <Edit title="Edit Patient" aria-label="Edit Patient" />
-          </Link>
-        </IconButton>
-        <IconButton
-          color="primary"
-          onClick={modalClickHandler}
-          aria-label="Archive Patient"
-          title="Archive Patient"
-        >
-          <Delete />
-        </IconButton>
-      </div>
+    cell: (row) => (
+      <Link to={{ pathname: "/patientPrescriptions", prescriptions : row.formData.drug_prescription}}>
+        <p>
+          view prescription
+        </p>
+      </Link>
     ),
     ignoreRowClick: true,
     allowOverflow: true,
@@ -153,15 +117,15 @@ const customStyles = {
 };
 
 const PatientTable = props => {
+
+
+
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-
-  console.log(props.patientsList);
-  // const [data, setData] = useState([])
   const filteredItems =
-    !filterText && props.patientsList
+    !filterText && props.prescriptions
       ? []
-      : props.patientsList.filter(
+      : props.prescriptions.filter(
           item =>
             (item.firstName &&
               item.firstName
@@ -177,12 +141,13 @@ const PatientTable = props => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
-  useEffect(() => {
-    props.fetchAllPatients();
-    //setData(props.patientsList);
-  }, []); //componentDidMount
+  const viewPrescription = id => {
+    props.history.push("/view-prescription/" + id);
+  };
 
-  const subHeaderComponentMemo = React.useMemo(() => {
+ 
+
+  const subHeaderComponentMemo = useMemo(() => {
     const handleClear = () => {
       if (filterText) {
         setResetPaginationToggle(!resetPaginationToggle);
@@ -223,7 +188,7 @@ const PatientTable = props => {
         </cardContent>
       </card>
       <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Achieve Patient</ModalHeader>
+        <ModalHeader toggle={toggle}>Archive Patient</ModalHeader>
         <ModalBody>Are you sure you want to delete this patient?</ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={toggle}>
@@ -239,12 +204,7 @@ const PatientTable = props => {
 };
 
 const mapStateToProps = state => ({
-  patientsList: state.patients.list
-});
+  prescriptions: state.pharmacy.formData
+ });
 
-const mapActionToProps = {
-  fetchAllPatients: fetchAll,
-  deletePatient: Del
-};
-
-export default connect(mapStateToProps, mapActionToProps)(PatientTable);
+export default connect(mapStateToProps, null)(PatientTable);
