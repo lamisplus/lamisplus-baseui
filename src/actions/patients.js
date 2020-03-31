@@ -55,6 +55,7 @@ export const fetchById = id => dispatch => {
     );
 };
 
+
 export const create = data => dispatch => {
   axios
     .post(`${baseUrl}patients/`, data)
@@ -109,6 +110,26 @@ export const Delete = (id, onSuccess) => dispatch => {
       });
     });
 };
+
+export const fetchPatientAllergies = id => dispatch => {
+  axios
+    .get(`${baseUrl}patients/${id}/encounter/GENERAL_SERVICE/CONSULATION_FORM/`)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.PATIENT_ALLERGIES,
+        payload: response.data
+      })
+    })
+    .catch(error =>
+      dispatch({
+        type: ACTION_TYPES.PATIENTS_ERROR,
+        payload: 'Something went wrong, please try again'
+      })
+      
+    )
+   
+}
+
 
 export const fetchPatientAllergies = id => dispatch => {
   axios

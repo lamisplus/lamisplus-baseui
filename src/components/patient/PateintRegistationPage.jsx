@@ -264,12 +264,14 @@ const PatientRegistration = props => {
     const newDatenow = moment(values.regDate).format("DD-MM-YYYY");
     const dateOfBirth = moment(values.dateOfBirth).format("DD-MM-YYYY");
     //setValues({ dateRegistration: newDatenow});
+
     values["dateRegistration"] = newDatenow;
     values["personRelativesDTO"] = relatives;
     values["dob"] = dateOfBirth;
     values["provinceId"] = 502;
     console.log(values);
     e.preventDefault();
+
 
     props.create(values);
   };
@@ -289,22 +291,12 @@ const PatientRegistration = props => {
               <CardContent>
                 <Title>
                   Basic Information <br />
+
                   <MatButton
                     variant="contained"
                     color="primary"
                     className=" float-right mr-1"
-                    startIcon={<FaFileImport />}
-                  >
-                    Import image
-                  </MatButton>
-                  <MatButton
-                    variant="contained"
-                    color="primary"
-                    className=" float-right mr-1"
-                    startIcon={<IoMdFingerPrint />}
-                  >
-                    Finger print
-                  </MatButton>
+
                   <br />
                 </Title>
                 <Row form>
