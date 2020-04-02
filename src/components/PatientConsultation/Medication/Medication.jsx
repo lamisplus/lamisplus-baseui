@@ -28,8 +28,6 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import moment from 'moment';
 import Spinner from 'react-bootstrap/Spinner';
-import axios from 'axios';  
-import {url} from 'api/index';
 import Select from 'react-select';
 import * as encounterAction from "actions/encounter";
 import * as actions from "actions/medication";
@@ -206,7 +204,6 @@ function MedicationPage(props) {
             setFetchingDrugs(false);
           }
           const onError = errstatus => {
-            const msg = !(errstatus && errstatus.data && errstatus.data.apierror && errstatus.data.apierror.message) ? 'Something went wrong' : errstatus.data.apierror.message
             setErrorMsg("Could not fetch drugs at the moment, try again later")
             setFetchingDrugs(false);
           }

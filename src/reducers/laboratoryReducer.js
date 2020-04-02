@@ -3,7 +3,9 @@ import * as ACTION_TYPES from '../actions/types'
 const initialState = {
   list: [],
   status: 0,
-  patient: {}
+  patient: {},
+  tests: [],
+  testGroup: []
 }
 
 const laboratoryReducer = (state = initialState, action) => {
@@ -15,15 +17,19 @@ const laboratoryReducer = (state = initialState, action) => {
       return { ...state, patient: action.payload }
 
     case ACTION_TYPES.PATIENTS_CREATE:
-
       return { ...state, status: action.payload }
-
 
     case ACTION_TYPES.PATIENTS_UPDATE:
       return { ...state, updated: action.payload }
 
     case ACTION_TYPES.PATIENTS_DELETE:
       return { ...state, list: action.payload }
+    
+    case ACTION_TYPES.FETCH_ALL_TEST_GROUP:
+      return { ...state, testGroup: action.payload }
+
+    case ACTION_TYPES.FETCH_ALL_TESTS_BY_TEST_GROUP:
+      return { ...state, tests: action.payload }
 
     default:
       return state
