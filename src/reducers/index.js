@@ -10,7 +10,7 @@ export default combineReducers({
   patients: patientReducer,
   checkedIn: checkInReducer,
   laboratory: laboratoryReducer,
-  formManager: formManagerReducer
-  pharmacy: pharmReducer
+  formManager: formManagerReducer,
+  pharmacy: pharmReducer,
   encounter: encounterReducer,
 });
