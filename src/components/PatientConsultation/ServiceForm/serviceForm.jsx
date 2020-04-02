@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import {Link} from 'react-router-dom';
@@ -14,9 +13,9 @@ import {
     Row,
   } from 'reactstrap';
   import DataTable from 'react-data-table-component';
-  import {url} from 'api/index';
   import Spinner from 'react-bootstrap/Spinner';
   import {connect} from 'react-redux';
+  import * as actions from "actions/formManager";
 
 const cardStyle = {
   borderColor: '#fff',
@@ -30,9 +29,8 @@ function ServiceFormPage (props) {
   const [message, setMessage] = useState('')
   const [serviceForms, setServiceForms] = useState()
   const [filterText, setFilterText] = React.useState('')
-  const [resetPaginationToggle, setResetPaginationToggle] = React.useState(
-    false
-  )
+  const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false)
+  
   const filteredItems = !serviceForms ? [] : serviceForms.filter(
     item =>
       (item.displayName &&
@@ -43,26 +41,23 @@ function ServiceFormPage (props) {
         item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase()))
   )
 
-  useEffect(() => {
-    async function fetchServiceForms () {
-      setShowLoading(true)
-      try {
-        const response = await fetch(url + 'forms')
-        const body = await response.json()
-        setServiceForms(body)
+  React.useEffect(() => {
+    setShowLoading(true)
+    const onSuccess = () => {
+        setServiceForms(props.formList)
         setShowLoading(false)
-      } catch (error) {
-        console.log(error)
-        setMessage(
-          'Could not fetch available service forms. Please try again later'
-        )
+      }
+      const onError = () => {
+        setMessage('Could not fetch available service forms. Please try again later')
         setShowLoading(false)
         setServiceForms();
       }
-    }
-    fetchServiceForms()
-  }, [])
+    props.fetchForms(onSuccess, onError);
+  }, [props.patient]);
 
+  React.useEffect(() => {
+    setServiceForms(props.formList)
+  }, [props.formList]);
   const FilterComponent = ({ filterText, onFilter, onClear }) => (
     <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >
           <Card>
@@ -169,8 +164,13 @@ return (
 
 const mapStateToProps = (state) => {
   return {
-    patient: state.patients.patient
+    patient: state.patients.patient,
+    formList: state.formManager.formList
   }
 }
 
-export default connect(mapStateToProps, {})(ServiceFormPage)
+const mapActionToProps = {
+  fetchForms: actions.fetchAll,
+}
+
+export default connect(mapStateToProps, mapActionToProps)(ServiceFormPage)

@@ -13,6 +13,7 @@ export const PATIENT_VITAL_SIGNS = 'PATIENT_VITAL_SIGNS'
 export const PATIENT_LATEST_VITAL_SIGNS = 'PATIENT_LATEST_VITAL_SIGNS'
 export const PATIENT_ALLERGIES = 'PATIENT_ALLERGIES'
 export const PATIENT_LAB_ORDERS = 'PATIENT_LAB_ORDERS'
+export const PATIENT_LATEST_MEDICATION_LIST = 'PATIENT_LATEST_MEDICATION_LIST'
 
 /**
  * @TYPES
@@ -63,4 +64,20 @@ export const FORM_CREATE = 'FORM_CREATE'
 export const FORM_UPDATE = 'FORM_UPDATE'
 export const FORM_SAVE_ENCOUNTER = 'FORM_SAVE_ENCOUNTER'
 export const FORM_ERROR = 'FORM_ERROR'
+
+/**
+ * @TYPES
+ * ===============================================
+ * CONSULATION
+ */
+export const CONSULTATION_CREATE = 'CONSULTATION_CREATE'
+export const CONSULTATION_ERROR = 'CONSULTATION_ERROR'
+
+/**
+ * @TYPES
+ * ===============================================
+ * CONSULATION
+ */
+export const MEDICATION_FETCH = 'MEDICATION_FETCH'
+export const MEDICATION_ERROR = 'MEDICATION_ERROR'
 

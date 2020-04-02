@@ -14,21 +14,24 @@ import * as ACTION_TYPES from './types'
  * Delete()
  */
 
-export const fetchAll = (serviceName) => dispatch => {
+export const fetchAll = (onSuccess, onError) => dispatch => {
   axios
-    .get(`${baseUrl}forms/${serviceName}}`)
+    .get(`${baseUrl}forms`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.FORM_FETCH_ALL,
         payload: response.data
       })
+      onSuccess()
     })
-    .catch(error =>
+    .catch(error => {
+      onError()
       dispatch({
         type: ACTION_TYPES.FORM_ERROR,
         payload: 'Something went wrong, please try again'
       })
-    )
+      
+    })
 }
 
 export const fetchById = (id, serviceName, onSuccess, onError) => dispatch => {
@@ -42,6 +45,7 @@ export const fetchById = (id, serviceName, onSuccess, onError) => dispatch => {
       onSuccess()
     })
     .catch(error => {
+      onError()
       dispatch({
         type: ACTION_TYPES.FORM_ERROR,
         payload: 'Error loading form, something went wrong. Please try again'

@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import Moment from 'moment'
 import momentLocalizer from 'react-widgets-moment'
 import { toast } from 'react-toastify'
-import { Card, Alert, CardBody } from 'reactstrap'
+import { Card, Alert, CardBody, Spinner } from 'reactstrap'
 
 
 Moment.locale('en')
@@ -17,17 +17,18 @@ const FormRenderer = props => {
   const [errorMsg, setErrorMsg] = React.useState('')
   const [showErrorMsg, setShowErrorMsg] = React.useState(false)
   const [showLoading, setShowLoading] = React.useState(false)
+  const [showLoadingForm, setShowLoadingForm] = React.useState(true)
   const onDismiss = () => setShowErrorMsg(false)
 
   React.useEffect(() => {
     const onSuccess = () => {
-        setShowLoading(false)
+      setShowLoadingForm(false)
         setForm(props.form);
       }
       const onError = errstatus => {
         setErrorMsg('Error loading form, something went wrong')
         setShowErrorMsg(true)
-        setShowLoading(false)
+        setShowLoadingForm(false)
       }
     props.fetchForm(props.formId, props.serviceName, onSuccess, onError);
   }, [props.formId]);
@@ -59,6 +60,10 @@ const FormRenderer = props => {
   }
   return (
     <Page title="" >
+      { (showLoadingForm) ? 
+   <span className="text-center"><Spinner style={{ width: '3rem', height: '3rem' }} type="grow" /> Loading form...</span>
+:  
+ 
    <Card >
       <CardBody>
   <h4 class="text-capitalize">{props.title || props.form.displayName}</h4>
@@ -82,6 +87,7 @@ const FormRenderer = props => {
         />
     </CardBody>
     </Card>
+       }
     </Page>
   );
 }

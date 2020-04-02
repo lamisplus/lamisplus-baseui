@@ -31,6 +31,11 @@ import Spinner from 'react-bootstrap/Spinner';
 import axios from 'axios';  
 import {url} from 'api/index';
 import Select from 'react-select';
+import * as encounterAction from "actions/encounter";
+import * as actions from "actions/medication";
+import * as patientActions from "actions/patients";
+
+import {connect} from 'react-redux';
 
 //Dtate Picker package
 Moment.locale('en');
@@ -145,82 +150,77 @@ const useStyles = makeStyles(theme => ({
     };
 
 
-export default function Medication(props) {
+function MedicationPage(props) {
     const [drugOrder, setDrugOrder] = React.useState([]);
     const [successMsg, setSuccessMsg] = React.useState("");
     const [errorMsg, setErrorMsg] = React.useState();
     const [fetchingDrugs, setFetchingDrugs] = React.useState(false);
     const classes = useStyles();
-     //Get countries    
-     
-    //POST METHOD TO SAVE THE RECORD
     const PatientID = props.patientId;
     const visitId = props.visitId;
-   const [medis, setmedis] = useState([]);
-    
+    const [medis, setmedis] = useState([]);
+    const [previousMedicationList, setPreviousMedicationList] = useState([]);
     const [showLoading, setShowLoading] = useState(false);  
-    const apiUrl = url+"encounters";  
     
     const saveDrugOrders = (e) => { 
-    e.preventDefault();  
+        e.preventDefault();  
         setSuccessMsg("");
-    const data = {
+        const data = {
             formData : medis,
             patientId: PatientID, 
-            visitId:visitId,
+            visitId: visitId,
             formName: 'DRUG_ORDER_FORM',
             serviceName: 'GENERAL_SERVICE',
             dateEncounter: moment(new Date()).format('DD-MM-YYYY'),
 
-    }; 
-    axios.post(apiUrl, data)
-        .then((result) => {          
+        }; 
+        setShowLoading(true);
+        const onSuccess = () => {
             setShowLoading(false);
             setSuccessMsg("Drug Order Successfully Saved!");
             setmedis([]);
-        }).catch((error) => {
+          }
+        const onError = errstatus => {
             setShowLoading(false)
             setErrorMsg("Something went wrong, please contact administration");
-        }
-        ); 
+          }
+          props.createMedication(data, onSuccess, onError)
     };
   
     const addDrugs = value => {
-        console.log('adding drug');
-        console.log(value);
         const allmedis = [...medis,  value ];
         setmedis(allmedis);
-        console.log(medis);
       };
       
       const removeDrug = index => {
         const allMedis = [...medis];
         allMedis.splice(index, 1);
         setmedis(allMedis);
-        console.log(medis);
       };
-      const drugOrdersApi = url+"drugs";
+
       React.useEffect(() => {
-        async function fetchDrugs() {
-            setErrorMsg();
-            setFetchingDrugs(true);
-            try{
-          const response = await fetch(drugOrdersApi);
-          const body = await response.json();
-          setDrugOrder(body.map(({ genericName, id }) => ({ label: genericName, value: id })));
-           console.log(body);
-           setFetchingDrugs(false);
-            }catch(err){
-                setErrorMsg("Could not fetch drugs at the moment, try again later");
-                setFetchingDrugs(false);
-            }
-        }
-        fetchDrugs();
-       
-      }, []);
+         if(props.drugList.length === 0){
+        setErrorMsg();
+        setFetchingDrugs(true);
+        const onSuccess = () => {
+            setFetchingDrugs(false);
+          }
+          const onError = errstatus => {
+            const msg = !(errstatus && errstatus.data && errstatus.data.apierror && errstatus.data.apierror.message) ? 'Something went wrong' : errstatus.data.apierror.message
+            setErrorMsg("Could not fetch drugs at the moment, try again later")
+            setFetchingDrugs(false);
+          }
+          props.fetchDrugs(onSuccess, onError)
+          
+   }
+      }, [props.medication]);
+
+      React.useEffect(() => {
+        setDrugOrder(props.drugList.map(({ genericName, id, strength }) => ({ label: genericName +' ('+strength+')', value: id })));
+    }, [props.drugList]);
+
       function getDrugName(id) {
         return drugOrder.find(x => x.value === id).label;
-        //return 'drugNMw';
     }
   return (
           <Row>
@@ -248,6 +248,16 @@ export default function Medication(props) {
                 </Col>
                 
                 <Col lg={7} >
+                    { previousMedicationList.length < 1 ? "" :
+                    <Row>
+                    <Col lg={12}>
+                    <Card  style={cardStyle} >
+                                 <CardHeader>Previous Drug Order</CardHeader>
+ 
+                                 </Card>
+                    </Col>
+                </Row>
+                }
                
                 { medis.length > 0 ?
                     <Row>
@@ -270,7 +280,6 @@ export default function Medication(props) {
                                             medi={medi}
                                             removeDrug={removeDrug}
                                             drugTypeName={getDrugName(medi.drug_order)}
-                                            
                                             />
                                             ))}
                                             </List>
@@ -290,8 +299,8 @@ export default function Medication(props) {
                                         >
                                         Save &nbsp;
                                         { showLoading ? <Spinner animation="border" role="status">
-                    <span className="sr-only">Loading...</span>
-                    </Spinner> : ""}
+                                              <span className="sr-only">Loading...</span>
+                                            </Spinner> : ""}
                                 </MatButton> 
                         </Col>
                    
@@ -329,12 +338,11 @@ function NewDrugOrderForm({addDrugs, drugOrder, fetchingDrugs}){
       };
 
       const handleChange = (newValue: any, actionMeta: any) => {
-          console.log(newValue);
        setmedi({...medi, drug_order: newValue.value});  
       };
 
     return (
-        <Form className={classes.formroot} >
+        <Form className={classes.formroot} onSubmit={handleAddDrugs}>
  {errorMsg ? 
                         <Alert color="danger"> 
                     {errorMsg}
@@ -344,7 +352,7 @@ function NewDrugOrderForm({addDrugs, drugOrder, fetchingDrugs}){
                                         <Col md={12}>
                                             <FormGroup>
                                             <Label for="hospitalNumber">Drug Generic Name  </Label>
-                                            <Select
+                                            <Select required
         isMulti={false}
         onChange={handleChange}
         options={drugOrder}
@@ -355,7 +363,7 @@ function NewDrugOrderForm({addDrugs, drugOrder, fetchingDrugs}){
                                         <Col md={12}>
                                             <FormGroup>
                                             <Label for="dose">Dose <small >(Amount of medication taken at one time)</small></Label>
-                                                <Input type="text" name="dose" id="dose" placeholder="Dose" 
+                                                <Input type="number" name="dose" id="dose" placeholder="Dose"  required min="0" step="1" oninput="validity.valid||(value='');"
                                                     value={medi.dose}
                                                     onChange={onChange}
                                                 />
@@ -364,7 +372,7 @@ function NewDrugOrderForm({addDrugs, drugOrder, fetchingDrugs}){
                                         <Col md={12}>
                                             <FormGroup>
                                             <Label for="dose_frequency">Dose Frequency <small>(Frequency of dose per day)</small></Label>
-                                                <Input type="text" name="dose_frequency" id="dose_fequency" placeholder="Dose Frequency" 
+                                                <Input type="number" name="dose_frequency" id="dose_fequency" placeholder="Dose Frequency" required min="0" step="1" oninput="validity.valid||(value='');"
                                                     value={medi.dose_frequency}
                                                     onChange={onChange}
                                                 />
@@ -374,22 +382,23 @@ function NewDrugOrderForm({addDrugs, drugOrder, fetchingDrugs}){
                                             <Label for="start_date">Start Date</Label>
                                 
                                             <DateTimePicker time={false} name="start_date"  id="start_date"   value={medi.start_date}   onChange={value1 => setmedi({...medi, start_date:value1})}
-                                                defaultValue={new Date()} max={new Date()} format='D/M/Y'
+                                                defaultValue={new Date()} format='D/M/Y' required
                                                 />
                                         </Col>
                                         <Col md={12}>
                                             <FormGroup>
                                             <Label for="duration">Duration</Label>
-                                                <Input type="text" name="duration" id="duration" placeholder="Duration" 
+                                                <Input type="number" name="duration" id="duration" placeholder="Duration" 
+                                                 required min="0" step="1" oninput="validity.valid||(value='');"
                                                 value={medi.duration}
-                                                onChange={onChange}
+                                                onChange={onChange} required
                                                 />
                                             </FormGroup>  
                                          </Col>
                                         <Col md={12}>
                                                 <FormGroup>
                                                 <Label for="duration_unit">Duration Unit</Label>
-                                                <Input type="select" name="duration_unit" id="duration_unit"  value={medi.duration_unit}
+                                                <Input type="select" name="duration_unit" id="duration_unit"  value={medi.duration_unit} required
                                                         onChange={onChange}>
                                                     <option value="">Select a duration unit</option>        
                                                     <option value="Days">Days</option>
@@ -415,7 +424,7 @@ function NewDrugOrderForm({addDrugs, drugOrder, fetchingDrugs}){
                                                 color="primary"
                                                 className={classes.button}
                                                 startIcon={<SaveIcon />}
-                                                onClick={handleAddDrugs}
+                                               
                                             >
                                                 Add
                                             </MatButton>
@@ -424,8 +433,8 @@ function NewDrugOrderForm({addDrugs, drugOrder, fetchingDrugs}){
     )
 
 }
-function CurrentDrugOrders ({ medi, index, removeDrug, drugTypeName }) {
 
+function CurrentDrugOrders ({ medi, index, removeDrug, drugTypeName }) {
     return (
         <ListItem>
                   <ListItemText
@@ -451,9 +460,60 @@ function CurrentDrugOrders ({ medi, index, removeDrug, drugTypeName }) {
                       <DeleteIcon />
                     </IconButton>
                   </ListItemSecondaryAction>
+                  
+                
                 </ListItem>
                 
                 
     );
   } 
 
+  function PreviousDrugOrders ({ medi, index, refillDrug, drugTypeName }) {
+    return (
+        <ListItem>
+                  <ListItemText
+                    primary={
+                    <React.Fragment>{drugTypeName}, {medi.dose} unit(s) to be taken {medi.dose_frequency} time(s) a day</React.Fragment> 
+                    }
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                         
+                          color="textPrimary"
+                        >
+                        Start at {medi.start_date.toLocaleDateString()} for {medi.duration} {medi.duration_unit} <br></br>
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                  
+                                    
+                  <ListItemSecondaryAction  onClick={() => refillDrug(index)}>
+                    <IconButton edge="end" aria-label="Refill">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+
+                </ListItem>
+                
+                
+    );
+  } 
+  const mapStateToProps = (state) => {
+    return {
+      patient: state.patients.patient,
+      drugList: state.medication.medicationList,
+      previousMedicationList: state.patients.previousMedications
+    }
+  }
+  
+  const mapActionToProps = {
+    fetchDrugs: actions.fetchAll,
+    createMedication: encounterAction.create,
+    fetchPreviousMedication: patientActions.fetchPatientLatestMedicationOrder
+  }
+  
+  export default connect(mapStateToProps, mapActionToProps)(MedicationPage)
+  

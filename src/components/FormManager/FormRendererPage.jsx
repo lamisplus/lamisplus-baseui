@@ -4,6 +4,7 @@ import FormRenderer from 'components/FormManager/FormRenderer';
 import {connect} from 'react-redux';
 
 function FormRendererPage(props) {
+    console.log(props)
     const form = props.location.state.form.row;
     return (
         <div>

@@ -271,7 +271,7 @@ couldnt load patient info
 {/* Begining of Service Form */}
 <TabPanel value={value} index={2}>
  
-            <Consultation getpatientdetails={props.location.state } height={cardHeight}/>
+            <Consultation patientId={props.patient.patientId } visitId={props.patient.visitId} />
 
 </TabPanel>    
  

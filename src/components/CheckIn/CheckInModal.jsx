@@ -62,9 +62,7 @@ const CheckInModal = (props ) => {
         setValues,
         errors,
         setErrors,
-        handleInputChange,
-        resetForm
-      } = useForm(initialfieldState_checkInPatient, validate)
+        handleInputChange      } = useForm(initialfieldState_checkInPatient, validate)
 
     const handleSubmit = e => {
         setShowErrorMsg(false)
