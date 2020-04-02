@@ -9,9 +9,9 @@ const App = () => {
   return (
     <div>
       <Provider store={store}>
-        <ToastProvider>
+      <ToastProvider>
           <Routes />
-        </ToastProvider>
+      </ToastProvider>
       </Provider>
     </div>
   )
