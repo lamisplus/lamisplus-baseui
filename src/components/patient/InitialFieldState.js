@@ -1,4 +1,4 @@
-export const initialfieldState_patientRegsitration = {
+export const initialfieldState_patientRegistration = {
   hospitalNumber: '',
   firstName: '',
   lastName: '',
