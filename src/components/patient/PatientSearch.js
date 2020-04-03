@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo} from "react";
 import DataTable from "react-data-table-component";
 import { Card, CardContent } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
@@ -182,7 +182,7 @@ const PatientTable = props => {
     //setData(props.patientsList);
   }, []); //componentDidMount
 
-  const subHeaderComponentMemo = React.useMemo(() => {
+  const subHeaderComponentMemo = useMemo(() => {
     const handleClear = () => {
       if (filterText) {
         setResetPaginationToggle(!resetPaginationToggle);
@@ -202,7 +202,7 @@ const PatientTable = props => {
   return (
     <div>
       <card>
-        <cardContent>
+        <CardContent>
           <DataTable
             columns={columns(toggle)}
             data={filteredItems}
@@ -220,7 +220,7 @@ const PatientTable = props => {
             persistTableHead
             expandableRowsComponent={<SampleExpandedComponent />}
           />
-        </cardContent>
+        </CardContent>
       </card>
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Achieve Patient</ModalHeader>

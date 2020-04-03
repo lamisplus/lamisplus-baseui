@@ -60,12 +60,12 @@ export const create = data => dispatch => {
     })
     .catch(error => {
       dispatch({
-        type: ACTION_TYPES.CHECKIN_ERROR,
-        payload: "Something went wrong, please try again"
-      });
-    });
-};
-
+        type: ACTION_TYPES.ENCOUNTER_ERROR,
+        payload: 'Something went wrong, please try again'
+      })
+      // onError(error.response)
+    })
+}
 
 export const update = (id, data) => dispatch => {
   axios

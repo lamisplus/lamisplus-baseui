@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Page from "components/Page";
 import React, { useState, useEffect } from "react";
 import MatButton from "@material-ui/core/Button";
@@ -32,9 +33,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Title from "components/Title/CardTitle";
 import { url } from "../../api";
 import { create } from "../../actions/patients";
-import { initialfieldState_patientRegsitration } from "./initailFieldState";
+import { initialfieldState_patientRegistration } from "./InitialFieldState";
 import useForm from "../Functions/UseForm";
-
 
 //Dtate Picker package
 Moment.locale("en");
@@ -83,7 +83,7 @@ const PatientRegistration = props => {
   const apistate = url + "state/country/";
 
   const { values, setValues, handleInputChange, resetForm } = useForm(
-    initialfieldState_patientRegsitration
+    initialfieldState_patientRegistration
   );
 
   /**
@@ -101,6 +101,9 @@ const PatientRegistration = props => {
     { id: "4", name: "Brother" }
   ];
   const [display, setDisplay] = useState(false);
+
+
+  
   const findAge = date => {
     var dob = new Date(date);
     var today = new Date();
@@ -163,25 +166,27 @@ const PatientRegistration = props => {
     }
   };
 
-  //Get countries
+
+
   useEffect(() => {
-    async function getCharacters() {
-      try {
-        const response = await fetch(apicountries);
-        const body = await response.json();
-        setCountries(body.map(({ name, id }) => ({ label: name, value: id })));
-        const defaultCountryId = body.find(x => x.name === "Nigeria").id;
-        setValues({ ...values, countryId: defaultCountryId });
-        setStateByCountryId(defaultCountryId);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getCharacters();
-  }, []);
-  useEffect(() => {
-    props.create();
-  }); //componentDidMount
+     getCharacters();
+   }); 
+
+     async function getCharacters() {
+       try {
+         const countries = await axios.get(apicountries);
+         console.log(countries)
+         setCountries(countries.map(({ name, id }) => ({ label: name, value: id })));
+         const defaultCountryId = countries.find(x => x.name === "Nigeria").id;
+         setValues({ ...values, countryId: defaultCountryId });
+         setStateByCountryId(defaultCountryId);
+
+         console.log(values.countryId);
+       } catch (error) {
+         console.log(error);
+       }
+     }
+     
   
   //Get States from selected country
   const getStates = e => {
@@ -264,12 +269,14 @@ const PatientRegistration = props => {
     const newDatenow = moment(values.regDate).format("DD-MM-YYYY");
     const dateOfBirth = moment(values.dateOfBirth).format("DD-MM-YYYY");
     //setValues({ dateRegistration: newDatenow});
+
     values["dateRegistration"] = newDatenow;
     values["personRelativesDTO"] = relatives;
     values["dob"] = dateOfBirth;
     values["provinceId"] = 502;
     console.log(values);
     e.preventDefault();
+
 
     props.create(values);
   };
@@ -292,21 +299,10 @@ const PatientRegistration = props => {
                   <MatButton
                     variant="contained"
                     color="primary"
-                    className=" float-right mr-1"
-                    startIcon={<FaFileImport />}
-                  >
-                    Import image
-                  </MatButton>
-                  <MatButton
-                    variant="contained"
-                    color="primary"
-                    className=" float-right mr-1"
-                    startIcon={<IoMdFingerPrint />}
-                  >
-                    Finger print
-                  </MatButton>
-                  <br />
+                    className=" float-right mr-1" >
+                    </MatButton>
                 </Title>
+                <br />
                 <Row form>
                   <Col md={4}>
                     <FormGroup>
