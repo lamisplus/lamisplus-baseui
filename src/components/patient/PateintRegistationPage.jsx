@@ -175,13 +175,10 @@ const PatientRegistration = props => {
      async function getCharacters() {
        try {
          const countries = await axios.get(apicountries);
-         console.log(countries)
-         setCountries(countries.map(({ name, id }) => ({ label: name, value: id })));
-         const defaultCountryId = countries.find(x => x.name === "Nigeria").id;
+         setCountries(countries.data.map(({ name, id }) => ({ label: name, value: id })));
+         const defaultCountryId = countries.data.find(x => x.name === "Nigeria").id;
          setValues({ ...values, countryId: defaultCountryId });
          setStateByCountryId(defaultCountryId);
-
-         console.log(values.countryId);
        } catch (error) {
          console.log(error);
        }
