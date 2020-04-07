@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import {
   Row,
@@ -20,8 +19,9 @@ import {
   import * as actions from "actions/laboratory";
   
   import {connect} from 'react-redux';
+  import { v1 as uuidv1 } from 'uuid';
 
-
+  
 function TestOrderPage(props) {   
    const PatientID = props.patientId;
    const visitId = props.visitId;
@@ -70,16 +70,43 @@ React.useEffect(() => {
       }
       fetchTests();
 }
+function getTestGroupNameById(id) {
+  return testGroups.find(x => x.value === id).label;
+}
+ 
+
 const saveTestOrder = (e) => { 
-  try{
+ 
   e.preventDefault(); 
   if (!testOrders || testOrders.length < 1) {
       setErrorMessage("You must pick a test before you can submit");
       return;
   }
- 
+
+ // default value that have to go with the form data
+ const defaults = { patient_id : props.patientId,
+  test_result:"",
+  date_result_reported:"",
+  date_sample_collected: "",
+  comment:"",
+  user_id:"",
+  sample_type:"",
+  lab_test_order_id:uuidv1(),
+  lab_test_order_status:0}
+
+
+  //looping through the test order to create the formData structure expected by the server
+ var orders = testOrders.map((x) => {
+  return { ...{lab_test_id: x.id,
+    description: x.description,
+    lab_test_group:  getTestGroupNameById(x.labTestCategoryId),
+    lab_test_group_id: x.labTestCategoryId,
+    unit_measurement: x.unitMeasurement}, ...defaults
+  }
+ });
+
   const data = {
-    formData: testOrders,
+    formData: {lab_test_order: orders, lab_test_count: orders.length},
     patientId: PatientID, 
     visitId: visitId,
     formName: 'LABTEST_ORDER_FORM',
@@ -99,13 +126,10 @@ const saveTestOrder = (e) => {
     setShowLoading(false)
   }
   props.createLabOrder(data, onSuccess, onError);
-}catch(err){
-  console.log(err)
-}
   };
 
   const handleChange = (newValue) => {
-    setTestOrders(newValue ? newValue : []);    
+    setTestOrders(newValue ? newValue : []);  
   };
 
 return (

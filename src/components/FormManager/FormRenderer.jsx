@@ -39,24 +39,26 @@ const FormRenderer = props => {
    // e.preventDefault()
       const onSuccess = () => {
         setShowLoading(false)
-        toast.success('Successfully', { appearance: 'success' })
+        toast.success('Form saved successfully!', { appearance: 'success' })
       }
       const onError = errstatus => {
-        setErrorMsg('Something went wrong')
+        setErrorMsg('Something went wrong, request failed! Please contact admin.')
         setShowErrorMsg(true)
         setShowLoading(false)
       }
       const encounterDate = submission['dateEncounter'] ? submission['dateEncounter'] : new Date();
       const formatedDate = Moment(encounterDate).format('DD-MM-YYYY')
       const data = {
-          formData: submission,
+          formData: submission.data,
           patientId: props.patientId,
-          formName: props.form.formName,
+          formName: props.form.name,
           serviceName: props.form.serviceName,
           dateEncounter: formatedDate,
           visitId: props.visitId
       }
-      props.saveEncounter(data, onSuccess, onError);
+      props.saveEncounter(data, 
+        props.onSuccess ? props.onSuccess : onSuccess, 
+        props.onError ? props.onError : onError);
   }
   return (
     <Page title="" >
@@ -72,6 +74,7 @@ const FormRenderer = props => {
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
             {errorMsg}
           </Alert>
+          
       <Form
           form={props.form.resourceObject}
           submission={submission}

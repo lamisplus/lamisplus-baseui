@@ -198,6 +198,7 @@ function HomePage(props) {
 couldnt load patient info
       </div> :
       <div className={classes.root}> 
+
         <div className={classes.inforoot} >
             <PatientDetailCard />   
         </div> 
@@ -277,7 +278,7 @@ couldnt load patient info
  
  {/* Begining of consultation  */}
  <TabPanel value={value} index={3}>    
-    <ServiceForm getpatientdetails={props.location.state } height={cardHeight}/>            
+    <ServiceForm patientId={props.patient.patientId } visitId={props.patient.visitId}/>            
 </TabPanel>
 
       <TabPanel value={value} index={4}>

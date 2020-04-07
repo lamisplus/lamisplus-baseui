@@ -7,7 +7,8 @@ const initialState = {
   vitalSignsList: [],
   allergies: {},
   patient: {},
-  previousMedications: []
+  previousMedications: [],
+  encounters: []
 }
 
 const patientReducer = (state = initialState, action) => {
@@ -38,6 +39,9 @@ const patientReducer = (state = initialState, action) => {
 
     case ACTION_TYPES.PATIENT_LATEST_MEDICATION_LIST:
       return { ...state, previousMedications: action.payload }    
+    
+    case ACTION_TYPES.PATIENT_ENCOUNTER_LIST:
+      return { ...state, encounters: action.payload }    
           
     default:
       return state

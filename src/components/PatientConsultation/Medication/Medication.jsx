@@ -34,6 +34,7 @@ import * as actions from "actions/medication";
 import * as patientActions from "actions/patients";
 
 import {connect} from 'react-redux';
+import { v1 as uuidv1 } from 'uuid';
 
 //Dtate Picker package
 Moment.locale('en');
@@ -163,8 +164,30 @@ function MedicationPage(props) {
     const saveDrugOrders = (e) => { 
         e.preventDefault();  
         setSuccessMsg("");
+
+        const defaults = {
+          patient_id: PatientID,
+          drug_presription_id: uuidv1(),
+          prescription_status: 0,
+          quantity_dispensed: 0,
+          brand_name_dispensed: "",
+          user_id: 0
+        }
+        const prescriptions = medis.map((x) => {
+          return { ...{duration: x.duration_unit,
+            drug_id: x.drug_order,
+            generic_name:  getDrugName(x.drug_order),
+            duration_unit: x.duration_unit,
+            date_prescribed: moment(new Date()).format('DD-MM-YYYY'),
+            start_date: moment(x.start_date).format('DD-MM-YYYY'),
+            dosage: x.dose,
+            dosage_frequency: x.dose_frequency,
+            comment: x.comment  }, ...defaults
+          }
+         });
+
         const data = {
-            formData : medis,
+            formData : {drug_presription: prescriptions, presription_count: prescriptions.length},
             patientId: PatientID, 
             visitId: visitId,
             formName: 'DRUG_ORDER_FORM',
@@ -447,6 +470,7 @@ function CurrentDrugOrders ({ medi, index, removeDrug, drugTypeName }) {
                           color="textPrimary"
                         >
                         Start at {medi.start_date.toLocaleDateString()} for {medi.duration} {medi.duration_unit} <br></br>
+                        <small>{medi.comment}</small>
                         </Typography>
                       </React.Fragment>
                     }

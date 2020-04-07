@@ -18,6 +18,7 @@ import * as ACTION_TYPES from "./types";
  * fetchPatientAllergies()
  * fetchPatientLatestVitalSigns()
  * fetchPatientTestOrders()  get all patient's lab order encounter: params {patientId}{formName} || query {null}
+ * fetchPatientEncounters() get all patient's encounter: params{patientId, onSuccess, onError} || query{null}
  */
 
 export const fetchAll = () => dispatch => {
@@ -235,3 +236,26 @@ export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
      )
      }  
  }
+
+ export const fetchPatientEncounters = (id, onSuccess, onError) => dispatch => {
+  if(id){
+   axios
+     .get(`${baseUrl}encounters/${id}` )
+     .then(response => {
+       dispatch({
+         type: ACTION_TYPES.PATIENT_ENCOUNTER_LIST,
+         payload: response.data
+       })
+       onSuccess()
+     })
+     .catch(error => {
+       dispatch({
+         type: ACTION_TYPES.PATIENTS_ERROR,
+         payload: 'Something went wrong, please try again'
+       })
+       onError()
+      }
+     )
+     }  
+ }
+ 
