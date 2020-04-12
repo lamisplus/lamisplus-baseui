@@ -24,7 +24,7 @@ export const fetchAll = () => dispatch => {
   axios
     .get(`${baseUrl}patients/`)
     .then(response => {
-      console.log(response.data);
+      //console.log(response.data);
       dispatch({
         type: ACTION_TYPES.PATIENTS_FETCH_ALL,
         payload: response.data
@@ -61,19 +61,19 @@ export const create = data => dispatch => {
     .post(`${baseUrl}patients/`, data)
     .then(response => {
       console.log(response);
-      console.log(response.status);
+      //console.log(response.status);
       dispatch({
         type: ACTION_TYPES.PATIENTS_CREATE,
-        payload: response.status
+        payload: response.data
       });
       // console.log(response.data)
     })
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
-        payload: "Something went wrong, please try again"
+        payload: error.response.data.apierror.message
       });
-      // console.log(error.response.data.apierror.message);
+       console.log(error.response.data.apierror.message);
     });
 };
 

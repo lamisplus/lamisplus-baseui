@@ -6,7 +6,8 @@ const initialState = {
   vitalSigns: {},
   vitalSignsList: [],
   allergies: {},
-  patient: {}
+  patient: {},
+  errMessage:{}
 }
 
 const patientReducer = (state = initialState, action) => {
@@ -21,6 +22,10 @@ const patientReducer = (state = initialState, action) => {
 
       return { ...state, status: action.payload }
 
+      case ACTION_TYPES.PATIENTS_ERROR:
+
+        return { ...state, errormsg: action.payload }
+  
 
     case ACTION_TYPES.PATIENTS_UPDATE:
       return { ...state, updated: action.payload }

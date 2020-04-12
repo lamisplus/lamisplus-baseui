@@ -3,7 +3,9 @@ import PageSpinner from "components/PageSpinner";
 
 // import AuthPage from 'pages/AuthPage';
 import React, {Component} from "react";
-
+// React Toast Notification 
+// import { ToastContainer } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 // import componentQueries from 'react-component-queries';
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import "./styles/reduction.scss";
@@ -35,9 +37,8 @@ const LaboratoryPage = React.lazy(() =>
   import("components/Laboratory/LaboratoryPageDashboard")
 );
 const TestOrder = React.lazy(() => import("components/Laboratory/TestOrder"));
-const CollectSample = React.lazy(() =>
-  import("components/Laboratory/CollectSample")
-);
+const CollectSample = React.lazy(() =>import("components/Laboratory/CollectSample"));
+const PatientlabTestOrder = React.lazy(() =>import("components/Laboratory/PatientlabTestOrder"));
 const CollectedSample = React.lazy(() =>
   import("components/Laboratory/CollectedSample")
 );
@@ -125,7 +126,7 @@ class Routes extends Component {
               />
               <Route exact path="/test-result" component={TestResult} />
               <Route exact path="/collect-sample" component={CollectSample} />
-
+              <Route exact path="/patient-lab-test/:id" component={PatientlabTestOrder} />
               <Route exact path="/patients" component={PatientsPage} />
 
               {/* Pharmacy Links */}
@@ -176,6 +177,7 @@ class Routes extends Component {
           </MainLayout>
           <Redirect to="/" />
         </Switch>
+        {/* <ToastContainer autoClose={3000} hideProgressBar /> */}
       </BrowserRouter>
     );
   }
