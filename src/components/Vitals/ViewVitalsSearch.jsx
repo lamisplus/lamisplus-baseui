@@ -72,7 +72,7 @@ function DataTableList (props) {
     setData(props.vitalSignsList);
 
   }, [props.vitalSignsList]);
-  //get the user that need to be checked in
+  
  
   return (
     <div>

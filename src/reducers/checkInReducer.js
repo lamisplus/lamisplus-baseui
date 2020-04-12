@@ -3,13 +3,13 @@ import * as ACTION_TYPES from '../actions/types'
 //     list: []
 // }
 
-const checkInReducer = (state = {}, action) => {
+const checkInReducer = (state = {checkIn:{}}, action) => {
   switch (action.type) {
     case ACTION_TYPES.CHECKIN_FETCH_ALL:
       return [...state, action.payload]
 
     case ACTION_TYPES.CHECKIN_CREATE:
-      return [...state, action.payload]
+      return [{...state, checkIn: action.payload}]
 
     case ACTION_TYPES.CHECKIN_UPDATE:
       return [...state, action.payload]

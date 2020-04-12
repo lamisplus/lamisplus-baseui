@@ -20,6 +20,7 @@ import {
   import FormRenderer from 'components/FormManager/FormRenderer';
   import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
+  import * as CODES from "api/codes";
 
 const cardStyle = {
   borderColor: '#fff',
@@ -33,7 +34,7 @@ function ServiceFormPage (props) {
   const [showEncounterLoading, setShowEncounterLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [encounterMessage, setEncounterMessage] = useState('')
-  const [serviceForms, setServiceForms] = useState()
+  const [serviceForms, setServiceForms] = useState([])
   const [filterText, setFilterText] = React.useState('')
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false)
   const [showFormPage, setShowFormPage] = useState(false);
@@ -41,12 +42,8 @@ function ServiceFormPage (props) {
   const [patientEncounters, setPatientEncouters] = useState()
   const filteredItems = !serviceForms ? [] : serviceForms.filter(
     item =>
-      (item.displayName &&
-        item.displayName.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item.lastName &&
-        item.lastName.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item.hospitalNumber &&
-        item.hospitalNumber.toLowerCase().includes(filterText.toLowerCase()))
+    (item.name &&
+      item.name.toLowerCase().includes(filterText.toLowerCase()))
   )
 
   const encounterFilteredItems = !patientEncounters ? [] : patientEncounters.filter(
@@ -64,19 +61,19 @@ function ServiceFormPage (props) {
   React.useEffect(() => {
     setShowLoading(true)
     const onSuccess = () => {
-        setServiceForms(props.formList)
         setShowLoading(false)
       }
       const onError = () => {
         setMessage('Could not fetch available service forms. Please try again later')
         setShowLoading(false)
-        setServiceForms();
+        setServiceForms([]);
       }
     props.fetchForms(onSuccess, onError);
   }, []);
 
   React.useEffect(() => {
-    setServiceForms(props.formList)
+    const filteredForms = props.formList.filter(x => x.programCode !== CODES.GENERAL_SERVICE);
+    setServiceForms(filteredForms);
   }, [props.formList]);
 
 
@@ -100,7 +97,6 @@ function ServiceFormPage (props) {
 
   React.useEffect(() => {
     setPatientEncouters(props.patientEncounterList)
-    console.log('setting enc')
   }, [props.patientEncounterList]);
 
  const loadForm = (value) => {
@@ -182,7 +178,7 @@ function ServiceFormPage (props) {
   const columns = (openForm) => [
     {
       name: 'Service Form',
-      selector: 'displayName',
+      selector: 'name',
       sortable: false
     },
     {
@@ -303,7 +299,7 @@ return (
                 Go Back
                 </Button>
                 { currentForm ?
-            <FormRenderer patientId={props.patient.patientId} formId={currentForm.id} serviceName={currentForm.serviceName} visitId={props.patient.visitId} onSuccess={onSuccess}/>
+            <FormRenderer patientId={props.patient.patientId} formId={currentForm.id} programCode={currentForm.programCode} visitId={props.patient.visitId} onSuccess={onSuccess}/>
             : ""}
         </div>
   </Col>
@@ -318,13 +314,13 @@ const mapStateToProps = (state) => {
   return {
     patient: state.patients.patient,
     formList: state.formManager.formList,
-    patientEncounterList: state.patients.encounters
+    patientEncounterList: state.patients.exclusiveEncounters
   }
 }
 
 const mapActionToProps = {
   fetchForms: actions.fetchAll,
-  fetchPatientEncounters: patientActions.fetchPatientEncounters
+  fetchPatientEncounters: patientActions.fetchPatientEncounterProgramCodeExclusionList
 }
 
 export default connect(mapStateToProps, mapActionToProps)(ServiceFormPage)

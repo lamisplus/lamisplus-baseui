@@ -121,7 +121,7 @@ export const Delete = id => dispatch => {
 
 export const fetchAllTestGroup = (onSuccess, onError) => dispatch => {
   axios
-    .get(`${baseUrl}labTestGroup/`)
+    .get(`${baseUrl}lab-test-groups/`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.FETCH_ALL_TEST_GROUP,
@@ -140,7 +140,7 @@ export const fetchAllTestGroup = (onSuccess, onError) => dispatch => {
 
 export const fetchAllTestsByTestGroup = (id, onSuccess, onError) => dispatch => {
   axios
-    .get(`${baseUrl}labTest?labTestGroupId=${id}`)
+    .get(`${baseUrl}lab-test-groups/${id}/lab-tests`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.FETCH_ALL_TESTS_BY_TEST_GROUP,

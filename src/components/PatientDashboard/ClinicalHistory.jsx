@@ -56,7 +56,7 @@ export default function ClinicalHistory() {
 
   return (
     <div className={classes.root}>
-    <Typography className={classes.title} color="warning" gutterBottom>
+    <Typography className={classes.title} gutterBottom>
         Clinical History 
     </Typography>
       <AppBar position="static">

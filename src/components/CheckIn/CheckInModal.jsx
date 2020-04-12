@@ -25,6 +25,7 @@ import { create } from 'actions/checkIn'
 import * as actions from "actions/patients";
 import { connect } from 'react-redux'
 import { initialfieldState_checkInPatient } from './initailFieldState'
+import Spinner from 'react-bootstrap/Spinner';
 
 //Dtate Picker package
 Moment.locale('en');
@@ -34,7 +35,7 @@ const CheckInModal = (props ) => {
 
     const [errorMsg, setErrorMsg] = React.useState('')
     const [showErrorMsg, setShowErrorMsg] = useState(false)
-   // const [showCheckInModal, setShowCheckInModal] = React.useState(props.showModal);
+    const [loading, setLoading] = React.useState(false)
     const onDismiss = () => setShowErrorMsg(false)
 
     const toggle = () => {
@@ -72,15 +73,18 @@ const CheckInModal = (props ) => {
         values['timeVisitStart'] = checkInTime
         values['patientId'] = props.patientId
         e.preventDefault()
-    
+        setLoading(true);
         if (validate()) {
           const onSuccess = () => {
+            setLoading(false)
+            toast.success('Patient Checked In Successfully')
+            props.fetchPatientByHospitalNumber(props.patient.hospitalNumber)
             props.setShowModal(false);
-            props.fetchPatientByHospitalNumber(props.patientId)
-            toast.success('Patient Checked In Successfully', { appearance: 'success' })
           }
           const onError = errstatus => {
-              const msg = !(errstatus && errstatus.data && errstatus.data.apierror && errstatus.data.apierror.message) ? 'Something went wrong' : errstatus.data.apierror.message
+            setLoading(false)
+            toast.error('An error occurred.');
+            const msg = !(errstatus && errstatus.data && errstatus.data.apierror && errstatus.data.apierror.message) ? 'Something went wrong' : errstatus.data.apierror.message
             setErrorMsg(msg)
             setShowErrorMsg(true)
           }
@@ -92,7 +96,7 @@ const CheckInModal = (props ) => {
     return (
         
         <Modal isOpen={props.showModal} toggle={toggle} size='lg'>
-             <ToastContainer autoClose={3000} />
+             <ToastContainer />
         <ModalHeader toggle={toggle}>Check In Patient</ModalHeader>
         <ModalBody>
           <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
@@ -153,7 +157,8 @@ const CheckInModal = (props ) => {
         </ModalBody>
         <ModalFooter>
           <Button color='primary' onClick={handleSubmit}>
-            CheckIn
+            CheckIn  { loading ? <Spinner animation="border" role="status">
+                                            </Spinner> : ""}
           </Button>{' '}
           <Button color='secondary' onClick={toggle}>
             Cancel

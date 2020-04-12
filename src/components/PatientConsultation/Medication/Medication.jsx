@@ -35,6 +35,8 @@ import * as patientActions from "actions/patients";
 
 import {connect} from 'react-redux';
 import { v1 as uuidv1 } from 'uuid';
+import * as CODES from "api/codes";
+import PreviousMedication from './PreviousMedication'
 
 //Dtate Picker package
 Moment.locale('en');
@@ -174,7 +176,7 @@ function MedicationPage(props) {
           user_id: 0
         }
         const prescriptions = medis.map((x) => {
-          return { ...{duration: x.duration_unit,
+          return { ...{duration: x.duration,
             drug_id: x.drug_order,
             generic_name:  getDrugName(x.drug_order),
             duration_unit: x.duration_unit,
@@ -187,11 +189,11 @@ function MedicationPage(props) {
          });
 
         const data = {
-            formData : {drug_presription: prescriptions, presription_count: prescriptions.length},
+            data : prescriptions,
             patientId: PatientID, 
             visitId: visitId,
-            formName: 'DRUG_ORDER_FORM',
-            serviceName: 'GENERAL_SERVICE',
+            formCode: CODES.DRUG_PRESCRIPTION_FORM,
+            programCode: CODES.GENERAL_SERVICE,
             dateEncounter: moment(new Date()).format('DD-MM-YYYY'),
 
         }; 
@@ -200,6 +202,11 @@ function MedicationPage(props) {
             setShowLoading(false);
             setSuccessMsg("Drug Order Successfully Saved!");
             setmedis([]);
+            try{
+            props.fetchPatientMedicationOrder(props.patientId, () => {},  () => {});
+            }catch(err){
+
+            }
           }
         const onError = errstatus => {
             setShowLoading(false)
@@ -268,17 +275,7 @@ function MedicationPage(props) {
                 </Col>
                 
                 <Col lg={7} >
-                    { previousMedicationList.length < 1 ? "" :
-                    <Row>
-                    <Col lg={12}>
-                    <Card  style={cardStyle} >
-                                 <CardHeader>Previous Drug Order</CardHeader>
- 
-                                 </Card>
-                    </Col>
-                </Row>
-                }
-               
+                   
                 { medis.length > 0 ?
                     <Row>
                         
@@ -322,10 +319,22 @@ function MedicationPage(props) {
                                               <span className="sr-only">Loading...</span>
                                             </Spinner> : ""}
                                 </MatButton> 
+                                <br></br>
+                                <br></br>
                         </Col>
-                   
+                   <hr></hr>
                                             </Row>
                   : ""}
+
+                    <Row>
+                    
+                    <Col lg={12}>
+                    <Card  style={cardStyle} >
+                                 <CardHeader>Previous Drug Order</CardHeader>
+                                 <PreviousMedication  patientId={props.patient.patientId}   />  
+                                 </Card>
+                    </Col>
+                </Row>
                 </Col> 
                
               </Row>   
@@ -489,39 +498,7 @@ function CurrentDrugOrders ({ medi, index, removeDrug, drugTypeName }) {
     );
   } 
 
-  function PreviousDrugOrders ({ medi, index, refillDrug, drugTypeName }) {
-    return (
-        <ListItem>
-                  <ListItemText
-                    primary={
-                    <React.Fragment>{drugTypeName}, {medi.dose} unit(s) to be taken {medi.dose_frequency} time(s) a day</React.Fragment> 
-                    }
-                    secondary={
-                      <React.Fragment>
-                        <Typography
-                          component="span"
-                          variant="body2"
-                         
-                          color="textPrimary"
-                        >
-                        Start at {medi.start_date.toLocaleDateString()} for {medi.duration} {medi.duration_unit} <br></br>
-                        </Typography>
-                      </React.Fragment>
-                    }
-                  />
-                  
-                                    
-                  <ListItemSecondaryAction  onClick={() => refillDrug(index)}>
-                    <IconButton edge="end" aria-label="Refill">
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
 
-                </ListItem>
-                
-                
-    );
-  } 
   const mapStateToProps = (state) => {
     return {
       patient: state.patients.patient,
@@ -533,7 +510,7 @@ function CurrentDrugOrders ({ medi, index, removeDrug, drugTypeName }) {
   const mapActionToProps = {
     fetchDrugs: actions.fetchAll,
     createMedication: encounterAction.create,
-    fetchPreviousMedication: patientActions.fetchPatientLatestMedicationOrder
+    fetchPatientMedicationOrder: patientActions.fetchPatientLatestMedicationOrder
   }
   
   export default connect(mapStateToProps, mapActionToProps)(MedicationPage)

@@ -7,8 +7,8 @@ import * as ACTION_TYPES from './types'
  * Encounter CRUD OPERATIONS
  * returns API response from server
  * =================================
- * fetchAll()
- * fetchById()
+ * @method GET => fetchAll() get all forms
+ * @method GET => fetchById() get form by Id: params{formId}{programCode} || query {null}
  * create()
  * update()
  * Delete()
@@ -34,9 +34,9 @@ export const fetchAll = (onSuccess, onError) => dispatch => {
     })
 }
 
-export const fetchById = (id, serviceName, onSuccess, onError) => dispatch => {
+export const fetchById = (id, programCode, onSuccess, onError) => dispatch => {
   axios
-    .get(`${baseUrl}forms/${id}/${serviceName}`)
+    .get(`${baseUrl}forms/${id}/${programCode}`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.FORM_FETCH_BY_ID,

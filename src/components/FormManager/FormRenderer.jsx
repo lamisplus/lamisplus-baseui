@@ -24,13 +24,17 @@ const FormRenderer = props => {
     const onSuccess = () => {
       setShowLoadingForm(false)
         setForm(props.form);
+        if(!props.form.resourceObject && !props.form.resourcePath){
+          setErrorMsg('Form resource not found, please contact adminstration.')
+          setShowErrorMsg(true)
+        }
       }
       const onError = errstatus => {
         setErrorMsg('Error loading form, something went wrong')
         setShowErrorMsg(true)
         setShowLoadingForm(false)
       }
-    props.fetchForm(props.formId, props.serviceName, onSuccess, onError);
+    props.fetchForm(props.formId, props.programCode, onSuccess, onError);
   }, [props.formId]);
 
   const submission = props.submission;
@@ -49,10 +53,10 @@ const FormRenderer = props => {
       const encounterDate = submission['dateEncounter'] ? submission['dateEncounter'] : new Date();
       const formatedDate = Moment(encounterDate).format('DD-MM-YYYY')
       const data = {
-          formData: submission.data,
+          data: [submission.data],
           patientId: props.patientId,
-          formName: props.form.name,
-          serviceName: props.form.serviceName,
+          formCode: props.form.name,
+          programCode: props.form.programCode,
           dateEncounter: formatedDate,
           visitId: props.visitId
       }
@@ -68,7 +72,7 @@ const FormRenderer = props => {
  
    <Card >
       <CardBody>
-  <h4 class="text-capitalize">{props.title || props.form.displayName}</h4>
+  <h4 class="text-capitalize">{props.title || props.form.name}</h4>
       <hr />
       {/* <Errors errors={props.errors} /> */}
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>

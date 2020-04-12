@@ -52,10 +52,14 @@ export const create = (data, onSuccess, onError) => dispatch => {
   axios
     .post(`${url}visits/`, data)
     .then(response => {
+      try{
       dispatch({
         type: ACTION_TYPES.CHECKIN_CREATE,
         payload: response.data
       });
+    }catch(err){
+      console.log(err)
+    }
       onSuccess();
     })
     .catch(error => {

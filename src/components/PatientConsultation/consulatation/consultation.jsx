@@ -23,8 +23,8 @@ function ConsultationPage (props) {
   const initialConsultState = {
     present_consultation: '',
     consultation_notes: '',
-    formName: 'CONSULTATION_FORM',
-    serviceName: 'GENERAL_SERVICE'
+    formCode: 'CONSULTATION_FORM',
+    programCode: 'GENERAL_SERVICE'
   };
   const [consult, setconsult] = useState(initialConsultState);
   const [newAllergy, setNewAllergy] = useState([])
@@ -41,8 +41,8 @@ function ConsultationPage (props) {
       formData: formData,
       patientId: props.patientId,
       visitId: props.visitId,
-      formName: 'CONSULTATION_FORM',
-      serviceName: 'GENERAL_SERVICE',
+      formCode: 'CONSULTATION_FORM',
+      programCode: 'GENERAL_SERVICE',
       dateEncounter:  moment(new Date()).format('DD-MM-YYYY')
     }
     setShowSuccessMsg(false)

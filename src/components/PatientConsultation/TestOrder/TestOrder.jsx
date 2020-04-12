@@ -20,6 +20,7 @@ import {
   
   import {connect} from 'react-redux';
   import { v1 as uuidv1 } from 'uuid';
+  import * as CODES from "api/codes";
 
   
 function TestOrderPage(props) {   
@@ -47,7 +48,7 @@ function TestOrderPage(props) {
    }, []);
    
    React.useEffect(() => {
-    setTestGroup(props.testGroupList.map(({ category, id }) => ({ label: category, value: id })));
+    setTestGroup(props.testGroupList.map(({ name, id }) => ({ label: name, value: id })));
 }, [props.testGroupList]);
 
 React.useEffect(() => {
@@ -99,18 +100,18 @@ const saveTestOrder = (e) => {
  var orders = testOrders.map((x) => {
   return { ...{lab_test_id: x.id,
     description: x.description,
-    lab_test_group:  getTestGroupNameById(x.labTestCategoryId),
-    lab_test_group_id: x.labTestCategoryId,
+    lab_test_group:  getTestGroupNameById(x.labTestGroupId),
+    lab_test_group_id: x.labTestGroupId,
     unit_measurement: x.unitMeasurement}, ...defaults
   }
  });
 
   const data = {
-    formData: {lab_test_order: orders, lab_test_count: orders.length},
+    data:  orders,
     patientId: PatientID, 
     visitId: visitId,
-    formName: 'LABTEST_ORDER_FORM',
-    serviceName: 'GENERAL_SERVICE',
+    formCode: CODES.LAB_TEST_ORDER_FORM,
+    programCode: CODES.GENERAL_SERVICE,
     dateEncounter: moment(new Date()).format('DD-MM-YYYY')      
   }; 
   setShowLoading(true);

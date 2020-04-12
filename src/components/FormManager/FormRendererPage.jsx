@@ -10,7 +10,7 @@ function FormRendererPage(props) {
             <Button color="primary" className=" float-right mr-1" onClick={props.history.goBack} >
                 Go Back
                 </Button>
-            <FormRenderer patientId={props.patient.patientId} formId={form.id} serviceName={form.serviceName} visitId={props.patient.visitId}/>
+            <FormRenderer patientId={props.patient.patientId} formId={form.id} serviceName={form.programCode} visitId={props.patient.visitId}/>
         </div>
     )
 }

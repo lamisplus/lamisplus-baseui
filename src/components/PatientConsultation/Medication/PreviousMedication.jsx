@@ -3,41 +3,53 @@ import DataTable from 'react-data-table-component'
 import { Alert } from 'reactstrap'
 import * as actions from "actions/patients";
 import {connect} from 'react-redux';
+import "./Style.css";
+
 
 const columns = [
   {
     name: 'Date',
-    selector: 'dateEncounter',
+    selector: 'date_prescribed',
     sortable: false,
     Display: true
   },
   {
-    name: 'Test',
-    selector: 'description',
+    name: 'Drug Name (Generic)',
+    selector: 'generic_name',
     sortable: false,
   },
   {
-    name: 'Test Status',
-    selector: 'lab_test_order_status',
+    name: 'Dose',
+    selector: 'dose',
     sortable: false,
+    cell: row => (
+        <span>
+          {row.dosage || ''} {' unit(s) to be taken '}{row.dosage_frequency || ''}{' time(s) a day'}
+        </span>
+      )
   },
   {
-    name: 'Date Sample Collected',
-    selector: 'date_sample_collected',
-    sortable: false,
-  },
-  {
-    name: 'Test Result',
-    selector: 'test_result',
+    name: 'Period',
+    selector: 'start_date',
     sortable: false,
     cell: row => (
       <span>
-        {row.test_result || ''} {' '}{row.unit_measurement || ''}
+        {'Start at '}{row.start_date || ''} {' for '}{row.duration}{' '}{row.duration_unit}
       </span>
     )
+  },
+  {
+    name: 'Quantity Dispensed',
+    selector: 'quantity_dispensed',
+    sortable: false,
+  },
+  {
+    name: 'Prescription Status',
+    selector: 'prescription_status',
+    sortable: false,
   }
 ]
-function PreviousTestOrder (props) {
+function PreviousMedication (props) {
   const [errorMsg, setErrorMsg] = React.useState('')
   const [showErrorMsg, setShowErrorMsg] = useState(false)
   const onDismiss = () => setShowErrorMsg(false)
@@ -94,4 +106,4 @@ const mapActionToProps = {
   fetchPatientMedicationOrder: actions.fetchPatientLatestMedicationOrder,
 }
 
-export default connect(mapStateToProps, mapActionToProps)(PreviousTestOrder)
+export default connect(mapStateToProps, mapActionToProps)(PreviousMedication)
