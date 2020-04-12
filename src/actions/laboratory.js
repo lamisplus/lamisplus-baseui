@@ -134,3 +134,42 @@ export const Delete = id => dispatch => {
       });
     });
 };
+
+export const fetchAllTestGroup = (onSuccess, onError) => dispatch => {
+  axios
+    .get(`${baseUrl}lab-test-groups/`)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.FETCH_ALL_TEST_GROUP,
+        payload: response.data
+      })
+      onSuccess()
+    })
+    .catch(error => {
+      dispatch({
+        type: ACTION_TYPES.LABORATORY_ERROR,
+        payload: 'Something went wrong, please try again'
+      })
+      onError(error.response)
+    })
+}
+
+export const fetchAllTestsByTestGroup = (id, onSuccess, onError) => dispatch => {
+  axios
+    .get(`${baseUrl}lab-test-groups/${id}/lab-tests`)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.FETCH_ALL_TESTS_BY_TEST_GROUP,
+        payload: response.data
+      })
+      onSuccess()
+    })
+    .catch(error => {
+      dispatch({
+        type: ACTION_TYPES.LABORATORY_ERROR,
+        payload: 'Something went wrong, please try again'
+      })
+      onError(error.response)
+    })
+}
+

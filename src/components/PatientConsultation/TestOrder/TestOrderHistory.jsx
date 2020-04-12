@@ -12,42 +12,32 @@ const columns = [
     Display: true
   },
   {
-    name: 'Pulse(bpm)',
-    selector: 'formData.pulse',
+    name: 'Test',
+    selector: 'description',
     sortable: false,
   },
   {
-    name: 'Respiratory(bpm)',
-    selector: 'formData.respiratoryRate',
+    name: 'Test Status',
+    selector: 'lab_test_order_status',
     sortable: false,
   },
   {
-    name: 'Temperature(c)',
-    selector: 'formData.temperature',
+    name: 'Date Sample Collected',
+    selector: 'date_sample_collected',
     sortable: false,
-  },,
+  },
   {
-    name: 'Blood Pressure(mmHg)',
-    selector: 'row.formData',
+    name: 'Test Result',
+    selector: 'test_result',
     sortable: false,
     cell: row => (
       <span>
-        {row.formData.systolic || ''} {' / '}{row.formData.diastolic || ''}
+        {row.test_result || ''} {' '}{row.unit_measurement || ''}
       </span>
     )
-  },,
-  {
-    name: 'Weight(kg)',
-    selector: 'formData.weight',
-    sortable: false,
-  },
-  {
-    name: 'Height(cm)',
-    selector: 'formData.height',
-    sortable: false,
-  },
+  }
 ]
-function DataTableList (props) {
+function PreviousTestOrder (props) {
   const [errorMsg, setErrorMsg] = React.useState('')
   const [showErrorMsg, setShowErrorMsg] = useState(false)
   const onDismiss = () => setShowErrorMsg(false)
@@ -57,21 +47,20 @@ function DataTableList (props) {
   React.useEffect(() => {
     setLoading(true)
     const onSuccess = () => {
-      console.log('setting data');
-      setData(props.vitalSignsList);
+      setData(props.previousMedications);
       setLoading(false)
     }
     const onError = () => {
       setLoading(false)
-      setErrorMsg("Could not fetch vital signs, try again later");
+      setErrorMsg("Could not fetch previous medications, try again later");
     }
-    props.fetchPatientVitalSigns(props.patientId, onSuccess, onError)
+    props.fetchPatientMedicationOrder(props.patientId, onSuccess, onError)
   }, [props.patientId]);
 
   React.useEffect(() => {
-    setData(props.vitalSignsList);
+    setData(props.previousMedications);
 
-  }, [props.vitalSignsList]);
+  }, [props.previousMedications]);
   
  
   return (
@@ -97,12 +86,12 @@ function DataTableList (props) {
 
 const mapStateToProps = state => {
   return {
-  vitalSignsList: state.patients.vitalSignsList
+    previousMedications: state.patients.previousMedications
   }
 }
 
 const mapActionToProps = {
-  fetchPatientVitalSigns: actions.fetchPatientVitalSigns,
+  fetchPatientMedicationOrder: actions.fetchPatientLatestMedicationOrder,
 }
 
-export default connect(mapStateToProps, mapActionToProps)(DataTableList)
+export default connect(mapStateToProps, mapActionToProps)(PreviousTestOrder)

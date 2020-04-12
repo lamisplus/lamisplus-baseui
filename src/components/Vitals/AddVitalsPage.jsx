@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import MatButton from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
-import { Col, FormGroup, Input, Label, Row, Card, Alert, CardBody } from 'reactstrap'
+import { Col, FormGroup, Input, Label, Row, Card, Alert, CardBody , Form} from 'reactstrap'
 import SaveIcon from '@material-ui/icons/Save'
 import CancelIcon from '@material-ui/icons/Cancel'
 import Spinner from 'react-bootstrap/Spinner'
@@ -14,7 +14,7 @@ import Moment from 'moment'
 import momentLocalizer from 'react-widgets-moment'
 import * as encounterAction from "actions/encounter";
 import * as actions from "actions/patients";
-
+import * as CODES from "api/codes";
 import {connect} from 'react-redux';
 //Dtate Picker package
 Moment.locale('en')
@@ -75,23 +75,33 @@ function AddVitalsPage (props) {
   const [showLoading, setShowLoading] = useState(false)
   const SaveVitals = e => {
     setShowErrorMsg(false)
+    e.preventDefault()
+
+    console.log(formDataForVitals);
+    //check to see if at least a field was filled
+    if(!(formDataForVitals.pulse || formDataForVitals.respiratoryRate || formDataForVitals.temperature || formDataForVitals.diastolic
+      || formDataForVitals.systolic || formDataForVitals.bodyWeight || formDataForVitals.height)){
+        setErrorMsg("Fill at least a field");
+        setShowErrorMsg(true);
+        return;
+      }
     setShowLoading(true)
     const newDatenow = Moment(vitals.dateEncounter).format('DD-MM-YYYY')
     const data = {
-      formName: 'VITAL_SIGNS_FORM',
+      formCode: CODES.VITAL_SIGNS_FORM,
       patientId: props.patientId,
-      serviceName: 'GENERAL_SERVICE',
+      programCode: CODES.GENERAL_SERVICE,
       visitId: props.patient.visitId,
-      formData: formDataForVitals,
+      data: [formDataForVitals],
       dateEncounter: newDatenow
     }
-    e.preventDefault()
-      const onSuccess = () => {
+   
+        const onSuccess = () => {
         setformDataForVitals({});
         setShowLoading(false)
         props.toggle();
         props.fetchPatientVitalSigns(props.patientId)
-        toast.success('Patient Checked In Successfully', { appearance: 'success' })
+        toast.success('Patient Vitals Saved Successfully', { appearance: 'success' })
       }
       const onError = errstatus => {
         const msg = !(errstatus && errstatus.data && errstatus.data.apierror && errstatus.data.apierror.message) ? 'Something went wrong' : errstatus.data.apierror.message
@@ -111,7 +121,7 @@ function AddVitalsPage (props) {
     })
   }
   return (
-    <form className={classes.form} onSubmit={SaveVitals}>
+    <Form className={classes.form} onSubmit={SaveVitals}>
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
             {errorMsg}
           </Alert>
@@ -144,6 +154,7 @@ function AddVitalsPage (props) {
                   placeholder=' '
                   value={formDataForVitals.pulse}
                   onChange={onChangeFormdata}
+                  min={0} max={100} type="number"
                 />
               </FormGroup>
             </Col>
@@ -153,12 +164,12 @@ function AddVitalsPage (props) {
               <FormGroup>
                 <Label for='middleName'>Respiratory Rate (bpm)</Label>
                 <Input
-                  type='text'
                   name='respiratoryRate'
                   id='respiratoryRate'
                   placeholder=''
                   value={formDataForVitals.respiratoryRate}
                   onChange={onChangeFormdata}
+                  min={0} max={99} type="number"
                 />
               </FormGroup>
             </Col>
@@ -166,12 +177,13 @@ function AddVitalsPage (props) {
               <FormGroup>
                 <Label for='middleName'>Temparature (C)</Label>
                 <Input
-                  type='text'
                   name='temperature'
                   id='temperature'
                   placeholder=''
                   value={formDataForVitals.temperature}
                   onChange={onChangeFormdata}
+                  min={25} max={43} type="number"
+                  step="0.1"
                 />
               </FormGroup>
             </Col>
@@ -187,6 +199,7 @@ function AddVitalsPage (props) {
                   placeholder='Systolic (mmHg)'
                   value={formDataForVitals.systolic}
                   onChange={onChangeFormdata}
+                  min={90} max={250} type="number"
                 />
               </FormGroup>
             </Col>
@@ -200,6 +213,7 @@ function AddVitalsPage (props) {
                   placeholder='Diastolic (mmHg)'
                   value={formDataForVitals.diastolic}
                   onChange={onChangeFormdata}
+                  min={60} max={140} type="number"
                 />
               </FormGroup>
             </Col>
@@ -207,7 +221,7 @@ function AddVitalsPage (props) {
               <FormGroup>
                 <Label for='middleName'>Body Weight (Kg)</Label>
                 <Input
-                  type='text'
+                  type="number"
                   name='bodyWeight'
                   id='bodyWeight'
                   placeholder=''
@@ -222,7 +236,8 @@ function AddVitalsPage (props) {
               <FormGroup>
                 <Label for='middleName'>Height (cm)</Label>
                 <Input
-                  type='text'
+                  type="number"
+                  step="0.1"
                   name='height'
                   id='height'
                   placeholder=''
@@ -262,7 +277,7 @@ function AddVitalsPage (props) {
           </MatButton>
         </CardBody>
       </Card>
-    </form>
+    </Form>
   )
 }
 const mapStateToProps = state => {

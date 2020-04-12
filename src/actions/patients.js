@@ -1,6 +1,7 @@
 import axios from "axios";
 import { url as baseUrl } from "../api";
 import * as ACTION_TYPES from "./types";
+import * as CODES from "api/codes";
 
 //TODO: by Jeph => Complete documentation
 
@@ -17,6 +18,9 @@ import * as ACTION_TYPES from "./types";
  * fetchPatientVitals()
  * fetchPatientAllergies()
  * fetchPatientLatestVitalSigns()
+ * @method GET => fetchPatientTestOrders()  get all patient's lab order encounter: params {patientId}{formName} || query {null}
+ * @method GET => fetchPatientEncounters() get all patient's encounter: params{patientId, onSuccess, onError} || query{null}
+ * @method GET => fetchPatientEncounterProgramCodeExclusionList() get all patient's encounter that is not general service: params{patientId, onSuccess, onError} || query{null}
  */
 
 export const fetchAll = () => dispatch => {
@@ -133,7 +137,7 @@ export const Delete = (id, onSuccess) => dispatch => {
 
 export const fetchPatientAllergies = id => dispatch => {
   axios
-    .get(`${baseUrl}patients/${id}/encounter/GENERAL_SERVICE/CONSULATION_FORM/`)
+    .get(`${baseUrl}patients/${id}/encounter/25216afc-d158-4696-ada6-00df609b9a4c/d157d4e2-4031-499d-b32b-7562208a10cf/`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.PATIENT_ALLERGIES,
@@ -153,7 +157,7 @@ export const fetchPatientAllergies = id => dispatch => {
 export const fetchPatientLatestVitalSigns = (id) => dispatch => {
  if(id){
   axios
-    .get(`${baseUrl}patients/${id}/encounter/GENERAL_SERVICE/VITAL_SIGNS_FORM/sortOrder/sortField/limit?limit=1`, {limit: 1, sortField: "dateEncounter", sortOrder: "desc"} )
+    .get(`${baseUrl}patients/${id}/encounter/25216afc-d158-4696-ada6-00df609b9a4c/bc5d44b8-8ed1-4de0-85de-c3c6f2c91cd0`, {limit: 1, sortField: "dateEncounter", sortOrder: "desc"} )
     .then(response => {
       dispatch({
         type: ACTION_TYPES.PATIENT_LATEST_VITAL_SIGNS,
@@ -169,89 +173,135 @@ export const fetchPatientLatestVitalSigns = (id) => dispatch => {
     )
     }  
 }
-//const formateData = data => ({
-//   ...data
-// })
 
-// import api from './patientApi'
-// import { history } from '../../history'
 
-// export const fetchAll = () => dispatch => {
-//   api
-//     .patient()
-//     .fetchAll()
-//     .then(response => {
-//       dispatch({
-//         type: ACTION_TYPES.FETCH_ALL,
-//         payload: response.data
-//       })
-//     })
-//     .catch(err => console.log(err))
-// }
+export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
+  if(id){
+   axios
+     .get(`${baseUrl}patients/${id}/encounter/25216afc-d158-4696-ada6-00df609b9a4c/bc5d44b8-8ed1-4de0-85de-c3c6f2c91cd0`)
+     .then(response => {
+       dispatch({
+         type: ACTION_TYPES.PATIENT_VITAL_SIGNS,
+         payload: response.data
+       })
+       onSuccess()
+     })
+     .catch(error => {
+       dispatch({
+         type: ACTION_TYPES.PATIENTS_ERROR,
+         payload: 'Something went wrong, please try again'
+       })
+       onError()
+      }
+     )
+     }  
+ }
 
-// export const create = (data, onSuccess, onError) => dispatch => {
-//   data = formateData(data)
-//   console.log(data)
-//   api
-//     .patient()
-//     .create(data)
-//     .then(res => {
-//       console.log(res)
-//       dispatch({
-//         type: ACTION_TYPES.CREATE,
-//         payload: res.data
-//       })
-//       onSuccess()
-//       history.push('/')
-//     })
-//     .catch(error => {
-//       if (error.response) {
-//         // The request was made and the server responded with a status code
-//         // that falls out of the range of 2xx
-//         console.log(error.response.data.apierror.message)
-//         const errormessage = error.response.data.apierror.message
-//         onError(errormessage)
-//         // console.log(error.response.apierror.status);
-//         // console.log(error.response.apierror.headers);
-//       } else if (error.request) {
-//         // The request was made but no response was received
-//         // `error.request` is an instance of XMLHttpRequest in the
-//         // browser and an instance of
-//         // http.ClientRequest in node.js
-//         console.log(error.request)
-//       } else {
-//         // Something happened in setting up the request that triggered an Error
-//         console.log('Error', error.message)
-//       }
-//       console.log(error)
-//     })
-// }
 
-// export const update = (id, data, onSuccess) => dispatch => {
-//   data = formateData(data)
-//   api
-//     .patient()
-//     .update(id, data)
-//     .then(res => {
-//       dispatch({
-//         type: ACTION_TYPES.UPDATE,
-//         payload: { id, ...data }
-//       })
-//       onSuccess()
-//     })
-//     .catch(err => console.log(err))
-// }
+ export const fetchPatientTestOrders = (id, onSuccess, onError) => dispatch => {
+  if(id){
+   axios
+     .get(`${baseUrl}patients/${id}/encounter/25216afc-d158-4696-ada6-00df609b9a4c/87cb9bc7-ea0d-4c83-a70d-b57a5fb7769e`)
+     .then(response => {
+       dispatch({
+         type: ACTION_TYPES.PATIENT_LAB_ORDERS,
+         payload: response.data
+       })
+       onSuccess()
+     })
+     .catch(error => {
+       dispatch({
+         type: ACTION_TYPES.PATIENTS_ERROR,
+         payload: 'Something went wrong, please try again'
+       })
+       onError()
+      }
+     )
+     }  
+ }
+ export const fetchPatientLatestMedicationOrder = (id, onSuccess, onError) => dispatch => {
+  if(id){
+   axios
+     .get(`${baseUrl}patients/${id}/encounters/${CODES.DRUG_PRESCRIPTION_FORM}`, {limit: 5, sortField: "dateEncounter", sortOrder: "desc"} )
+     .then(response => {
+       onSuccess();
+       dispatch({
+         type: ACTION_TYPES.PATIENT_LATEST_MEDICATION_LIST,
+         payload: response.data
+       })
+     })
+     .catch(error => {
+        onError();
+       dispatch({
+         type: ACTION_TYPES.PATIENTS_ERROR,
+         payload: 'Something went wrong, please try again'
+       })
+       
+      }
+     )
+     }  
+ }
 
-// export const Delete = (id, onSuccess) => dispatch => {
-//   api
-//     .patient()
-//     .delete(id)
-//     .then(res => {
-//       dispatch({
-//         type: ACTION_TYPES.DELETE,
-//         payload: id
-//       })
-//       onSuccess()
-//     })
-//     .catch(err => console.log(err))
-// }
+ export const fetchPatientEncounters = (id, onSuccess, onError) => dispatch => {
+  if(id){
+   axios
+     .get(`${baseUrl}encounters/${id}` )
+     .then(response => {
+       dispatch({
+         type: ACTION_TYPES.PATIENT_ENCOUNTER_LIST,
+         payload: response.data
+       })
+       onSuccess()
+     })
+     .catch(error => {
+       dispatch({
+         type: ACTION_TYPES.PATIENTS_ERROR,
+         payload: 'Something went wrong, please try again'
+       })
+       onError()
+      }
+     )
+     }  
+ }
+
+ export const fetchByHospitalNumber = (id, onSuccess, onError) => dispatch => {
+  axios
+    .get(`${baseUrl}patients/${id}`)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.PATIENTS_FETCH_BY_ID,
+        payload: response.data
+      });
+      onSuccess();
+    })
+    .catch(error => {
+      dispatch({
+        type: ACTION_TYPES.PATIENTS_ERROR,
+        payload: "Something went wrong, please try again"
+      })
+      onError();
+    }
+    );
+};
+ 
+export const fetchPatientEncounterProgramCodeExclusionList = (id, onSuccess, onError) => dispatch => {
+  if(id){
+   axios
+     .get(`${baseUrl}patients/${id}/encounters/programCodeExclusionList` )
+     .then(response => {
+       dispatch({
+         type: ACTION_TYPES.PATIENT_EXCLUSIVE_ENCOUNTER_LIST,
+         payload: response.data
+       })
+       onSuccess()
+     })
+     .catch(error => {
+       dispatch({
+         type: ACTION_TYPES.PATIENTS_ERROR,
+         payload: 'Something went wrong, please try again'
+       })
+       onError()
+      }
+     )
+     }  
+ }

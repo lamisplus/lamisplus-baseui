@@ -7,6 +7,10 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
+import { ToastContainer, toast } from 'react-toastify'
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
 // {/* Auto textfield complete */}
 import {
@@ -31,6 +35,9 @@ import CheckInModal from 'components/CheckIn/CheckInModal';
 import ViewVitalsSearch from 'components/Vitals/ViewVitalsSearch'
 import * as actions from "actions/patients";
 import {connect} from 'react-redux';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Popover from '@material-ui/core/Popover';
+import MatButton from '@material-ui/core/Button';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -164,6 +171,9 @@ const useStyles = makeStyles(theme => ({
         margin: 20,
         backgroundColor: '#eee',
     },
+    navItemText: {
+      padding: theme.spacing(2),
+    },
     }));
 
     const cardHeight = {
@@ -176,11 +186,48 @@ function HomePage(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [checkIn, setCheckIn] = React.useState(false);
-  const hospitalNumber = props.location.state.getpatient.row.hospitalNumber || props.patient.hospitalNumber;
-  console.log('patient '+hospitalNumber);
+  const [fetchingPatient, setFetchingPatient] = React.useState(false);
+  const hospitalNumber = props.location.state.hospitalNumber || props.patient.hospitalNumber || '';
+  const [rPopoverOpen, setRelationshipPopoverOpen] = React.useState(false);
+
+  const toggleRelationshipPopOver = () => setRelationshipPopoverOpen(!rPopoverOpen);
+  const modifiers = {
+    preventOverflow: {
+      enabled: false,
+    },
+    flip: {
+      enabled: false,
+    },
+  };
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
+  const isEmpty = (value) => {
+    if(JSON.stringify(value) === "{}"){
+      return true;
+    }
+    return false;
+  }
 
   React.useEffect(() => {
-    props.fetchPatientByHospitalNumber(hospitalNumber)
+    setFetchingPatient(true);
+    const onSuccess = () => {
+      setFetchingPatient(false);
+    }
+    const onError = () => {
+      setFetchingPatient(false);
+    }
+    props.fetchPatientByHospitalNumber(hospitalNumber, onSuccess, onError)
   }, [hospitalNumber]);
 
   const handleChange = (event, newValue) => {
@@ -191,18 +238,25 @@ function HomePage(props) {
    setCheckIn(true);
  }
 
+ switch (isEmpty(props.patient)) {
+
+ }
   return (
   
   <div>
-    { !(props.patient) ? 
+    
+    {/* Show couldnt load patient info if api call to fetch patient is unsuccessful, else show patient dashboard */}
+    { (!fetchingPatient && isEmpty(props.patient)) ? 
     <div className={classes.inforoot}>
-couldnt load patient info
+        Couldn't load patient information.
       </div> :
+
       <div className={classes.root}> 
+
         <div className={classes.inforoot} >
             <PatientDetailCard />   
         </div> 
-
+       
       <AppBar position="static" >
         <Tabs
           value={value}
@@ -227,12 +281,47 @@ couldnt load patient info
      
     </div>
       </AppBar>
+      <ToastContainer />
+      { fetchingPatient ? 
+
+<LinearProgress color="primary" thickness={5}/>
+: <div>
+
+
       <Nav pills style={{backgroundColor:'silver'}} light >
         <NavItem>
-          <NavLink  title="Alerts"><i class="fa fa-bell"></i>&nbsp;  <Badge href="#" color="dark">0</Badge> </NavLink>
+          <NavLink  title="Alerts"><i className="fa fa-bell"></i>&nbsp;  <Badge href="#" color="dark">0</Badge> </NavLink>
         </NavItem>
         <NavItem>
-          <NavLink> <i class="fa fa-users"></i> &nbsp; Relationships &nbsp; <Badge href="#" color="dark">0</Badge></NavLink>
+        <MatButton aria-describedby={id} onClick={handleClick}>
+      &nbsp; Relationships &nbsp; <Badge color="dark">{props.patient.personRelativeDTOs ? props.patient.personRelativeDTOs.length : 0}</Badge>
+      </MatButton>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+       <List>
+         {(props.patient.personRelativeDTOs && props.patient.personRelativeDTOs.length > 0 ) ? props.patient.personRelativeDTOs.map((relative, index) => (
+                          <RelativeList
+                            key={index}
+                            index={index}
+                            relative={relative}
+                            relationshipTypeName={"Father"}
+                          />
+                        )) : 
+                        <Typography className={classes.navItemText}>No Relationship </Typography>}
+                      </List>
+      </Popover>
         </NavItem>
         { (props.patient && props.patient.dateVisitStart ) ? 
         <NavItem className="ml-auto">
@@ -240,8 +329,9 @@ couldnt load patient info
         </NavItem>
 : 
 <NavItem className="ml-auto" >
-<NavLink>  <span style={{color:'red'}}><b>Patient not checked in</b></span> &nbsp; 
-| &nbsp;<Button type="button" outline color="default" onClick={checkInPatient}> Check In &nbsp; <i class="fa fa-sign-in"></i> </Button></NavLink>
+<div>  
+  <span style={{color:'red'}}><b>Patient not checked in</b></span> &nbsp; 
+| &nbsp;<MatButton type="button" outline color="default" onClick={checkInPatient}> Check In &nbsp; <i class="fa fa-sign-in"></i> </MatButton></div>
 </NavItem>
 }
 
@@ -249,7 +339,7 @@ couldnt load patient info
       {/* The DashBoad Tab  */}
       <TabPanel value={value} index={0}>
       <CardDeck>
-         <PatientVitals patientId={props.patient.patientId} getpatientdetails={props.location.state } /> 
+         <PatientVitals patientId={props.patient.patientId}  /> 
         {/* <PatientAllergies height={cardHeight} addstatus={false} />  */}
         <PatientAllergies height={cardHeight} addstatus={false} /> 
       </CardDeck>
@@ -265,29 +355,29 @@ couldnt load patient info
     {/* End of dashboard */}
 {/* Begining of vital signs  */}
 <TabPanel value={value} index={1}>
-<ViewVitalsSearch  getpatientdetails={props.location.state } />  
+<ViewVitalsSearch  patientId={props.patient.patientId}   />  
     
 </TabPanel>
 {/* End of vital signs */} 
 {/* Begining of Service Form */}
 <TabPanel value={value} index={2}>
  
-            <Consultation getpatientdetails={props.location.state } height={cardHeight}/>
+            <Consultation patientId={props.patient.patientId } visitId={props.patient.visitId} />
 
 </TabPanel>    
  
  {/* Begining of consultation  */}
  <TabPanel value={value} index={3}>    
-    <ServiceForm getpatientdetails={props.location.state } height={cardHeight}/>            
+    <ServiceForm patientId={props.patient.patientId } visitId={props.patient.visitId}/>            
 </TabPanel>
 
       <TabPanel value={value} index={4}>
-        <TestOrder getpatientdetails={props.location.state } height={cardHeight}/>
+        <TestOrder patientId={props.patient.patientId } visitId={props.patient.visitId}/>
       </TabPanel>
     {/* End of consultation */}
     <TabPanel value={value} index={5}>
         {/* Card stats */}
-        <Medication getpatientdetails={props.location.state }  />
+        <Medication patientId={props.patient.patientId } visitId={props.patient.visitId}  />
 
       </TabPanel>
       <TabPanel value={value} index={6}>
@@ -352,9 +442,9 @@ couldnt load patient info
             
             </Grid>
       </TabPanel>
-      
-
-      <CheckInModal patientId={props.location.state.getpatient.row.patientId} showModal={checkIn} setShowModal={setCheckIn}/>
+      </div>
+    }
+      <CheckInModal patientId={props.patient.patientId} showModal={checkIn} setShowModal={setCheckIn}/>
   
       </div>
 }
@@ -362,6 +452,31 @@ couldnt load patient info
   );
 }
 
+function RelativeList({
+  relative,
+  relationshipTypeName
+}) {
+  return (
+    <ListItem>
+      <ListItemText
+        primary={
+          <React.Fragment>
+            {relationshipTypeName}, {relative.firstName} {relative.otherNames}{" "}
+            {relative.lastName}
+          </React.Fragment>
+        }
+        secondary={
+          <React.Fragment>
+            <Typography component="span" variant="body2" color="textPrimary">
+              {relative.mobilePhoneNumber} {relative.email} <br></br>
+            </Typography>
+            {relative.address}
+          </React.Fragment>
+        }
+      />
+    </ListItem>
+  );
+}
 const mapStateToProps = state => {
   return {
   patient: state.patients.patient
@@ -369,7 +484,7 @@ const mapStateToProps = state => {
 }
 
 const mapActionToProps = {
-  fetchPatientByHospitalNumber: actions.fetchById,
+  fetchPatientByHospitalNumber: actions.fetchByHospitalNumber,
 }
 
 export default connect(mapStateToProps, mapActionToProps)(HomePage)

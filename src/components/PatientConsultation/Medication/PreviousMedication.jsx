@@ -3,51 +3,53 @@ import DataTable from 'react-data-table-component'
 import { Alert } from 'reactstrap'
 import * as actions from "actions/patients";
 import {connect} from 'react-redux';
+import "./Style.css";
+
 
 const columns = [
   {
     name: 'Date',
-    selector: 'dateEncounter',
+    selector: 'date_prescribed',
     sortable: false,
     Display: true
   },
   {
-    name: 'Pulse(bpm)',
-    selector: 'formData.pulse',
+    name: 'Drug Name (Generic)',
+    selector: 'generic_name',
     sortable: false,
   },
   {
-    name: 'Respiratory(bpm)',
-    selector: 'formData.respiratoryRate',
+    name: 'Dose',
+    selector: 'dose',
     sortable: false,
+    cell: row => (
+        <span>
+          {row.dosage || ''} {' unit(s) to be taken '}{row.dosage_frequency || ''}{' time(s) a day'}
+        </span>
+      )
   },
   {
-    name: 'Temperature(c)',
-    selector: 'formData.temperature',
-    sortable: false,
-  },,
-  {
-    name: 'Blood Pressure(mmHg)',
-    selector: 'row.formData',
+    name: 'Period',
+    selector: 'start_date',
     sortable: false,
     cell: row => (
       <span>
-        {row.formData.systolic || ''} {' / '}{row.formData.diastolic || ''}
+        {'Start at '}{row.start_date || ''} {' for '}{row.duration}{' '}{row.duration_unit}
       </span>
     )
-  },,
+  },
   {
-    name: 'Weight(kg)',
-    selector: 'formData.weight',
+    name: 'Quantity Dispensed',
+    selector: 'quantity_dispensed',
     sortable: false,
   },
   {
-    name: 'Height(cm)',
-    selector: 'formData.height',
+    name: 'Prescription Status',
+    selector: 'prescription_status',
     sortable: false,
-  },
+  }
 ]
-function DataTableList (props) {
+function PreviousMedication (props) {
   const [errorMsg, setErrorMsg] = React.useState('')
   const [showErrorMsg, setShowErrorMsg] = useState(false)
   const onDismiss = () => setShowErrorMsg(false)
@@ -57,21 +59,20 @@ function DataTableList (props) {
   React.useEffect(() => {
     setLoading(true)
     const onSuccess = () => {
-      console.log('setting data');
-      setData(props.vitalSignsList);
+      setData(props.previousMedications);
       setLoading(false)
     }
     const onError = () => {
       setLoading(false)
-      setErrorMsg("Could not fetch vital signs, try again later");
+      setErrorMsg("Could not fetch previous medications, try again later");
     }
-    props.fetchPatientVitalSigns(props.patientId, onSuccess, onError)
+    props.fetchPatientMedicationOrder(props.patientId, onSuccess, onError)
   }, [props.patientId]);
 
   React.useEffect(() => {
-    setData(props.vitalSignsList);
+    setData(props.previousMedications);
 
-  }, [props.vitalSignsList]);
+  }, [props.previousMedications]);
   
  
   return (
@@ -97,12 +98,12 @@ function DataTableList (props) {
 
 const mapStateToProps = state => {
   return {
-  vitalSignsList: state.patients.vitalSignsList
+    previousMedications: state.patients.previousMedications
   }
 }
 
 const mapActionToProps = {
-  fetchPatientVitalSigns: actions.fetchPatientVitalSigns,
+  fetchPatientMedicationOrder: actions.fetchPatientLatestMedicationOrder,
 }
 
-export default connect(mapStateToProps, mapActionToProps)(DataTableList)
+export default connect(mapStateToProps, mapActionToProps)(PreviousMedication)

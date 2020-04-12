@@ -9,6 +9,7 @@
     "@material-ui/lab": "^4.0.0-alpha.42",
     "@material-ui/pickers": "^3.2.10",
     "@material-ui/styles": "^4.9.0",
+    "@whoicd/icd11ect": "^1.2.0",
     "autosuggest-highlight": "^3.1.1",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
@@ -73,6 +74,7 @@
     "styled-components": "^5.0.1",
     "use-hooks": "^2.0.0-rc.5",
     "use-react-hooks": "^1.0.7",
+    "uuid": "^7.0.3",
     "victory": "^32.0.0"
   },
   "devDependencies": {

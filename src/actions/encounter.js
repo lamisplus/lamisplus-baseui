@@ -49,10 +49,11 @@ export const fetchById = id => dispatch => {
     );
 };
 
-export const create = data => dispatch => {
+export const create = (data, onSuccess, onError )=> dispatch => {
   axios
     .post(`${baseUrl}encounters/`, data)
     .then(response => {
+      onSuccess()
       dispatch({
         type: ACTION_TYPES.ENCOUNTER_CREATE,
         payload: response.data
@@ -63,7 +64,7 @@ export const create = data => dispatch => {
         type: ACTION_TYPES.ENCOUNTER_ERROR,
         payload: 'Something went wrong, please try again'
       })
-      //onError(error.response)
+      onError(error.response)
     })
 }
 
