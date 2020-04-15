@@ -331,7 +331,7 @@ return (
                 Go Back
                 </Button>
                 { currentForm && currentForm.type === 'NEW' &&
-                  <FormRenderer patientId={props.patient.patientId} formCode={currentForm.formCode} programCode={currentForm.programCode} visitId={props.patient.visitId} onSuccess={onSuccess} />
+                  <FormRenderer patientId={props.patient.patientId} formCode={currentForm.code} programCode={currentForm.programCode} visitId={props.patient.visitId} onSuccess={onSuccess} />
                 }
                  { currentForm && currentForm.type === 'VIEW' &&
                   <ViewForm patientId={props.patient.patientId} formCode={currentForm.formCode} programCode={currentForm.programCode} visitId={props.patient.visitId} onSuccess={onSuccess} encounterId={currentForm.encounterId}/>

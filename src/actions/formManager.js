@@ -35,6 +35,11 @@ export const fetchAll = (onSuccess, onError) => dispatch => {
 }
 
 export const fetchById = (id, onSuccess, onError) => dispatch => {
+  dispatch({
+    type: ACTION_TYPES.FORM_FETCH_BY_ID,
+    payload: {}
+  })
+
   axios
     .get(`${baseUrl}forms/${id}/formCode`)
     .then(response => {

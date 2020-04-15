@@ -49,11 +49,11 @@ const FormRenderer = props => {
   }, [props.formCode]);
 
   React.useEffect(() => {
-    if(!props.form.resourceObject && !props.form.resourcePath){
-        setErrorMsg('Form resource not found, please contact adminstration.')
-        setShowErrorMsg(true)
-        return;
-      }
+    // if(!props.form.resourceObject && !props.form.resourcePath){
+    //     setErrorMsg('Form resource not found, please contact adminstration.')
+    //     setShowErrorMsg(true)
+    //     return;
+    //   }
       setForm(props.form);
   },[props.form]);
   React.useEffect(() => {
