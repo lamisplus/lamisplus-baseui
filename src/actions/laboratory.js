@@ -33,7 +33,23 @@ export const fetchAllLabTestOrder = () => dispatch => {
       })
     );
 };
-
+export const fetchAllLabTestOrderOfPatient = () => dispatch => {
+  axios
+    .get(`${baseUrl}encounters/GENERAL_SERVICE/LABTEST_ORDER_FORM/`)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.LABORATORY_TESTORDER_FOR_PATIENT,
+        payload: response.data
+      })
+      ///console.log(response)
+    })
+    .catch(error =>
+      dispatch({
+        type: ACTION_TYPES.ERROR_LABORATORY_TESTORDER_FOR_PATIENT,
+        payload: 'Something went wrong, please try again'
+      })
+    );
+};
 export const createCollectedSample = (data) => dispatch => {
   console.log(data)
   axios

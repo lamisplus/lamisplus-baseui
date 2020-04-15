@@ -1,3 +1,27 @@
+import React, {useState} from 'react';
+import useResources from '../components/Functions/useResources';
+import {url} from '../api';
+
+function Test() {
+    const apiurl = url +'countries'   
+    const countries = useResources(apiurl);
+  return (
+      <div>
+      
+        <ul>
+          {countries.map(names => (
+            <li key={names.value}>{names.label}</li>
+          ))}
+      </ul>
+      </div>
+  );
+};
+
+export default Test
+
+
+
+
 // import React from 'react';
 // import updateMovie from '../store/actions/updateMovies';
 // import fetchUsers from '../store/actions/fetchUser';

@@ -1,14 +1,29 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import {url} from '../../api'
 
 export default function FixedTags() {
+    const [optionsample, setOptionsample] = useState([]);
+    useEffect(() => {
+        async function getCharacters() {
+          try {
+            const response = await fetch(url+'codeset/SAMPLE_TYPE');
+            const body = await response.json();
+            setOptionsample(body.map(({ display, id }) => ({ title: display, value: id })));
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        getCharacters();
+      }, []);
+      /* ##### End of gender parameter from the endpoint ##########*/
   return (
     <Autocomplete
       multiple
       id="fixed-tags-demo"
-      options={top100Films}
+      options={optionsample}
       getOptionLabel={(option) => option.title}
       
       renderTags={(value, getTagProps) =>
@@ -24,13 +39,3 @@ export default function FixedTags() {
   );
 }
 
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  { title: 'Urine', year: 1994 },
-  { title: 'Bllod', year: 1972 },
-  { title: 'Facet', year: 1974 },
-  { title: 'Water', year: 2008 },
-  { title: 'Body presure', year: 1957 },
-
- 
-];

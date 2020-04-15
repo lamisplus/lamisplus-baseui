@@ -24,6 +24,11 @@ const patientReducer = (state = initialState, action) => {
     case ACTION_TYPES.PATIENTS_CREATE:
       return { ...state, status: action.payload }
 
+      case ACTION_TYPES.PATIENTS_ERROR:
+
+        return { ...state, errormsg: action.payload }
+  
+
     case ACTION_TYPES.PATIENTS_UPDATE:
       return { ...state, updated: action.payload }
 

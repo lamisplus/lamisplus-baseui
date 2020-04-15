@@ -2,7 +2,7 @@ import Page from "components/Page";
 import React, { useState, useEffect } from "react";
 import MatButton from "@material-ui/core/Button";
 import "./PatientRegistrationPage.css";
-import { Col, Form, FormGroup, Input, Label, Row, Alert } from "reactstrap";
+import { Col, Form, FormGroup, Input, Label, Row, Alert, FormFeedback } from "reactstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -14,11 +14,12 @@ import Typography from "@material-ui/core/Typography";
 import { Card, CardContent } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
-import { IoMdFingerPrint } from "react-icons/io";
-import { FaFileImport } from "react-icons/fa";
+// import { IoMdFingerPrint } from "react-icons/io";
+// import { FaFileImport } from "react-icons/fa";
 import { FaPlusSquare } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-
 import { connect } from "react-redux";
 //Date Picker
 import "react-widgets/dist/css/react-widgets.css";
@@ -27,8 +28,6 @@ import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import moment from "moment";
 // React Notification
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Title from "components/Title/CardTitle";
 import { url } from "../../api";
 import { create } from "../../actions/patients";
@@ -82,11 +81,9 @@ const PatientRegistration = props => {
   const apicountries = url + "countries";
   const apistate = url + "state/country/";
 
-
   const { values, setValues, handleInputChange, resetForm } = useForm(
     initialfieldState_patientRegsitration
   );
-
   /**
    * Initializing state properties
    */
@@ -105,7 +102,7 @@ const PatientRegistration = props => {
     { id: "3", name: "Sister" },
     { id: "4", name: "Brother" }
   ];
-  
+  const [saving, setSaving] = useState(false);
   const [display, setDisplay] = useState(false);
     //Get countries
     useEffect(() => {
@@ -182,9 +179,6 @@ useEffect(() => {
   getCharacters();
 }, []);
 /* ##### End of gender parameter from the endpoint ##########*/
-    useEffect(() => {
-      props.create();
-    }); //componentDidMount
   const findAge = date => {
     var dob = new Date(date);
     var today = new Date();
@@ -327,28 +321,34 @@ useEffect(() => {
   // setValues({...values, dateRegistration: newDatenow});
   //The Submit Button Implemenatation
   const handleSubmit = e => {
+    e.preventDefault();
+   
     const newDatenow = moment(values.regDate).format("DD-MM-YYYY");
     const dateOfBirth = moment(values.dateOfBirth).format("DD-MM-YYYY");
     //setValues({ dateRegistration: newDatenow});
-
     values["dateRegistration"] = newDatenow;
     values["personRelativesDTO"] = relatives;
     values["dob"] = dateOfBirth;
-    values["provinceId"] = 502;
-    console.log(values);
-    e.preventDefault();
-
-
+    //console.log(values);
+    setSaving(true);
     props.create(values);
+    //toast.success("Registration Successful")
+  
   };
 
   return (
     <Page title="Patient Registration">
-      <ToastContainer autoClose={3000} />
+      <ToastContainer autoClose={3000} hideProgressBar />
       <Alert color="primary">
         All Information with Asterisks(*) are compulsory
       </Alert>
-      {props.status === 201 && toast.success("Registration Successful")}
+      {props.status === 201 &&
+          toast.success("Registration Successful")
+      }
+      {props.errormsg===undefined ||  props.errormsg==="" ? " ":
+        toast.warn(props.errormsg)
+      }
+      
       <Form onSubmit={handleSubmit}>
         {/* First  row form entry  for Demographics*/}
         <Row>
@@ -359,6 +359,7 @@ useEffect(() => {
                   Basic Information <br />
 
                 </Title>
+                <br />
                 <Row form>
                   <Col md={4}>
                     <FormGroup>
@@ -405,8 +406,9 @@ useEffect(() => {
                         placeholder="First Name"
                         value={values.firstName}
                         onChange={handleInputChange}
-                        required
+                        
                       />
+                      <FormFeedback>Oh noes! that name is already taken</FormFeedback>
                     </FormGroup>
                   </Col>
                   <Col md={4}>
@@ -417,6 +419,7 @@ useEffect(() => {
                         name="otherNames"
                         id="otherNames"
                         placeholder="Middle Name"
+                        onChange={handleInputChange}
                         value={values.otherNames}
                       />
                     </FormGroup>
@@ -429,6 +432,7 @@ useEffect(() => {
                         name="lastName"
                         id="lastName"
                         placeholder="Last Name"
+                        onChange={handleInputChange}
                         value={values.lastName}
                         required
                       />
@@ -443,7 +447,8 @@ useEffect(() => {
                         type="select"
                         name="genderId"
                         id="genderId"
-                        value={values.id}
+                        value={values.genderId}
+                        onChange={handleInputChange}
                         required
                       >
                       {gender.map(({ label, value }) => (
@@ -461,7 +466,8 @@ useEffect(() => {
                         type="select"
                         name="occupationId"
                         id="occupationId"
-                        value={values.id}
+                        value={values.occupationId}
+                        onChange={handleInputChange}
                       >
                         {occupation.map(({ label, value }) => (
                           <option key={value} value={value}>
@@ -477,7 +483,8 @@ useEffect(() => {
                       <Input
                         type="select"
                         name="educationId"
-                        value={values.id}
+                        value={values.educationId}
+                        onChange={handleInputChange}
                       >
                         {qualification.map(({ label, value }) => (
                             <option key={value} value={value}>
@@ -497,6 +504,7 @@ useEffect(() => {
                         name="maritalStatusId"
                         id="maritalStatusId"
                         value={values.maritalStatusId}
+                        onChange={handleInputChange}
                       >
                         {maritalStatus.map(({ label, value }) => (
                             <option key={value} value={value}>
@@ -659,6 +667,7 @@ useEffect(() => {
                                 id="provinceId"
                                 placeholder="Select Province"
                                 value={values.provinceId}
+                                
                               >
                                 {provinces.length > 0 ? (
                                   provinces.map(({ id, name }) => (
@@ -872,8 +881,10 @@ useEffect(() => {
                   color="primary"
                   className={classes.button}
                   startIcon={<SaveIcon />}
+                  disabled={saving}
                 >
-                  Save
+                  {!saving ?'Save' : 'Saving'}
+                  
                 </MatButton>
 
                 <MatButton
@@ -926,7 +937,10 @@ function RelativeList({
 }
 
 const mapStateToProps = state => ({
-  status: state.patients.status
+  
+  status: state.patients.status,
+  errormsg:state.patients.errormsg
 });
+
 
 export default connect(mapStateToProps, { create })(PatientRegistration);
