@@ -34,9 +34,9 @@ export const fetchAll = (onSuccess, onError) => dispatch => {
     })
 }
 
-export const fetchById = (id, programCode, onSuccess, onError) => dispatch => {
+export const fetchById = (id, onSuccess, onError) => dispatch => {
   axios
-    .get(`${baseUrl}forms/${id}/${programCode}`)
+    .get(`${baseUrl}forms/${id}/formCode`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.FORM_FETCH_BY_ID,
@@ -93,6 +93,25 @@ export const update = (id, data) => dispatch => {
 export const saveEncounter = (data, onSuccess, onError) => dispatch => {
   axios
     .post(`${baseUrl}encounters/`, data)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.FORM_SAVE_ENCOUNTER,
+        payload: response.data
+      })
+      onSuccess()
+    })
+    .catch(error => {
+      dispatch({
+        type: ACTION_TYPES.FORM_ERROR,
+        payload: 'Something went wrong, please try again'
+      })
+      onError(error.response)
+    })
+}
+
+export const updateEncounter = (id, data, onSuccess, onError) => dispatch => {
+  axios
+    .put(`${baseUrl}encounters/${id}`, data)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.FORM_SAVE_ENCOUNTER,

@@ -201,7 +201,7 @@ export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
  export const fetchPatientTestOrders = (id, onSuccess, onError) => dispatch => {
   if(id){
    axios
-     .get(`${baseUrl}patients/${id}/encounter/25216afc-d158-4696-ada6-00df609b9a4c/87cb9bc7-ea0d-4c83-a70d-b57a5fb7769e`)
+     .get(`${baseUrl}patients/${id}/encounters/${CODES.LAB_TEST_ORDER_FORM}`, {limit: 5, sortField: "dateEncounter", sortOrder: "desc"})
      .then(response => {
        dispatch({
          type: ACTION_TYPES.PATIENT_LAB_ORDERS,
@@ -286,8 +286,9 @@ export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
  
 export const fetchPatientEncounterProgramCodeExclusionList = (id, onSuccess, onError) => dispatch => {
   if(id){
+    const exclusionList = [CODES.GENERAL_SERVICE];
    axios
-     .get(`${baseUrl}patients/${id}/encounters/programCodeExclusionList` )
+     .get(`${baseUrl}patients/${id}/encounters/programCodeExclusionList?programCodeExclusionList=${exclusionList}` )
      .then(response => {
        dispatch({
          type: ACTION_TYPES.PATIENT_EXCLUSIVE_ENCOUNTER_LIST,
