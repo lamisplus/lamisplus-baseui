@@ -84,6 +84,7 @@ export const createCollectedSample = (data, lab_id) => dispatch => {
         type: ACTION_TYPES.ERROR_CREATE_COLLECT_SAMPLE,
         payload: error
       })
+      console.log(error)
       toast.error("Something went wrong, please try again");
       //window.location.reload()
       //setInterval(window.location.reload(false), 80000);
@@ -114,7 +115,7 @@ export const transferSample = (samples, lab_id) => dispatch => {
 export const fetchFormById = id => dispatch => {
   console.log(id)
   axios
-    .get(`${baseUrl}/form-data/${id}`)
+    .get(`${baseUrl}form-data/${id}`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.FORMDATA_FETCH_BY_ID,
@@ -122,11 +123,13 @@ export const fetchFormById = id => dispatch => {
       });
       //console.log("is getting here ") 
     })
-    .catch(error =>
+    .catch(error => {
       dispatch({
-        type: ACTION_TYPES.CHECKIN_ERROR,
-        payload: "Something went wrong, please try again"
+        type: ACTION_TYPES.ERROR_FORMDATA_FETCH_BY_ID,
+        payload: error
       })
+      console.log(error)
+    }
     );
 };
 

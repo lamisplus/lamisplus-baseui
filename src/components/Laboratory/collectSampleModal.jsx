@@ -28,25 +28,19 @@ momentLocalizer();
 
 
 const ModalSample = (props) => {
-  const {
-    className,
-    modalstatus,
-    togglestatus,
-    datasample
-  } = props;
+/* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
   const formdata = useSelector(state => state.laboratory.formdata);
   const dispatch = useDispatch();
-  const lab_id = datasample.id
-  console.log(formdata)
+  const lab_id = props.datasample.id
+  console.log(lab_id)
+  const labId = lab_id;
   useEffect(() => {
-    const labId = lab_id;
     dispatch(fetchFormById(labId));
-  }, []);
-        const datas= [formdata]
-        const [data, setData] = useState(datas)
+  }, [labId]);
+        console.log(formdata.data)
+        const [data, setData] = useState(formdata)
         //setData({...data, data:{datas}})      
-        
-        
+        console.log(data)      
         const [samples, setSamples] = useState({                                     
                                       sample_type: "",
                                       date_sample_collected: new Date(),
@@ -92,10 +86,10 @@ const ModalSample = (props) => {
       
       <div >
        <ToastContainer autoClose={3000} hideProgressBar />
-      <Modal isOpen={modalstatus} toggle={togglestatus} className={className}>
+      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className}>
         
       <Form onSubmit={saveSample}>
-        <ModalHeader toggle={togglestatus}>Collect Sample</ModalHeader>
+        <ModalHeader toggle={props.togglestatus}>Collect Sample</ModalHeader>
         <ModalBody>
         <Row >
         <Col md={12}>
@@ -148,7 +142,7 @@ const ModalSample = (props) => {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" type="submit" >Save Sample</Button>{' '}
-          <Button color="secondary" onClick={togglestatus}>Cancel</Button>
+          <Button color="secondary" onClick={props.togglestatus}>Cancel</Button>
         </ModalFooter>
         </Form>
       </Modal>
