@@ -120,30 +120,10 @@ const StyledTableRow = withStyles(theme => ({
  function CollectSample (props) {
   const classes = useStyles()
   const classes2 = useStyles2()
-  const data = props.location.state.getpatientlists.row.formData.lab_test_order
-  console.log(data)
+  const data = [props]
   const [useData, setUsedata] = useState(data)
-  //Get list of test type
-  const [labTestType, setLabTestType] = useState(data)
-  //const labTestType = data.find(x => x.lab_test_group === 'CD4')
-  const result = [];
-  data.forEach(function(value, index, array) {
-    // The callback is executed for each element in the array.
-    // `value` is the element itself (equivalent to `array[index]`)
-    // `index` will be the index of the element in the array
-    // `array` is a reference to the array itself (i.e. `data.items` in this case)
-    //setLabTestType({...labTestType, name: value['lab_test_group'] } )
-    // result.filter(x => x !== value['lab_test_group'] =>{
-      
-    // } )
-    result.push(value['lab_test_group']);
-    console.log(result);
-});
-  
   const userInfo = props.location.state.getpatientlists.row
-  const [showLoading, setShowLoading] = useState(false)
-  const [checkvalue, setCheckvalue] = useState(0);
-  const [transfer, setTransfer] = useState('');
+
   /* For modal popup */
   const { className } = props
   const [checked, setChecked] = useState({id:'', statuscheck:false })
@@ -188,17 +168,11 @@ const StyledTableRow = withStyles(theme => ({
     
     setpatientValue({ ...patientrow, [e.target.name]: e.target.value })
   }
-  const handlecollect = e => {
-    setChecked({...checked, [e.target.value]: e.target.value})
-    console.log(e)
-  }
+
+  
 const handlesample = (val) => {
    setModal(!modal)
    setcollectmodal(val);
-
-  //const defaultCountryId = data[0].find(x => x.description === 'CD4')
-  //setPatientorder({...patientorder, sample_collected: newsample_collected });
-  //console.log(defaultCountryId)
 }
 const transfersample = (val) => {
   setModal2(!modal2)
@@ -252,28 +226,6 @@ const transfersample = (val) => {
               <Row>
                 <Col>
                   <Card body>
-                      <Row form>
-                          <Col md={3}>
-                            <FormGroup>
-                              <Label for="occupation">Lab Test Group </Label>
-                              <Input
-                                type="select"
-                                name="relationshipTypeId"
-                                id="relationshipTypeId"
-                                
-                              >
-                                <option value="">
-                                  Select Lab Test Group 
-                                </option>
-                                {result.map(x => 
-                                  <option key={x} value={x}>
-                                    {x}
-                                  </option>
-                                )}
-                              </Input>
-                            </FormGroup>
-                          </Col>
-                      </Row>
                     <Form onSubmit={saveColllectSample}>
                     <TableContainer component={Paper}>
                       <Table
@@ -380,80 +332,7 @@ const transfersample = (val) => {
           </Card>
         </Col>
       </Row>
-      <ModalSample modalstatus={modal} togglestatus={togglemodal} datasample={collectmodal} testorder={data}  userInfo={userInfo} useData={useData}/>
-      <ModalSampleTransfer modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal} testorder={data}  userInfo={userInfo} useData={useData}/>
-      {/* Modal to cancel new test result  */}
-      {/* <Modal isOpen={modal3} toggle={toggle} className={className} size='sm'>
-        <Form >
-          <ModalHeader toggle={toggle3}>Collect Sample </ModalHeader>
-          <ModalBody>
-            <Row form>
-              <Col md={12}>
-                <FormGroup>
-                  <Label for='exampleEmail'>Date Sample Collected</Label>
-                  <DateTimePicker
-                    time={false}
-                    name='date_sample_collected'
-                    dropDown
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-          </ModalBody>
-          <ModalFooter>
-            <Row>
-              <Col md={12}>
-                {showLoading && (
-                  <Spinner animation='border' role='status'>
-                    <span className='sr-only'>Loading...</span>
-                  </Spinner>
-                )}
-              </Col>
-            </Row>
-            <Button color='primary' type='submit'>
-              Save
-            </Button>{' '}
-            <Button color='secondary' onClick={toggle3}>
-              Cancel
-            </Button>
-          </ModalFooter>
-        </Form>
-      </Modal> */}
-
-      {/* End of each Modal popup for each action */}
-
-      {/* Modal to cancel new test result  */}
-      {/* <Modal isOpen={modal} toggle={toggle} className={className} size='sm'>
-        <Form >
-                <ModalHeader toggle={toggle}>Collect Test Order </ModalHeader>
-          <ModalBody>
-            <Row >
-              <Col md={12}>
-                <p>Are you sure you have collect the Sample {transfer} ? </p>
-              </Col>
-            </Row>
-          </ModalBody>
-          <ModalFooter>
-            <Row>
-              <Col md={12}>
-                {showLoading && (
-                  <Spinner animation='border' role='status'>
-                    <span className='sr-only'>Loading...</span>
-                  </Spinner>
-                )}
-              </Col>
-            </Row>
-            <Button color='primary'  onClick={handlecollect} >
-              Yes
-            </Button>{' '}
-            <Button color='secondary' onClick={toggle}>
-              No
-            </Button>
-          </ModalFooter>
-        </Form>
-      </Modal> */}
-
-      {/* End of each Modal popup for each action */}
+      
     </Page>
   )
 }

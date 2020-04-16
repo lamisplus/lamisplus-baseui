@@ -3,7 +3,7 @@ import Page from "components/Page";
 import React, { useState, useEffect } from "react";
 import MatButton from "@material-ui/core/Button";
 import "./PatientRegistrationPage.css";
-import { Col, Form, FormGroup, Input, Label, Row, Alert } from "reactstrap";
+import { Col, Form, FormGroup, Input, Label, Row, Alert, FormFeedback } from "reactstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -15,11 +15,12 @@ import Typography from "@material-ui/core/Typography";
 import { Card, CardContent } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
-import { IoMdFingerPrint } from "react-icons/io";
-import { FaFileImport } from "react-icons/fa";
+// import { IoMdFingerPrint } from "react-icons/io";
+// import { FaFileImport } from "react-icons/fa";
 import { FaPlusSquare } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-
 import { connect } from "react-redux";
 //Date Picker
 import "react-widgets/dist/css/react-widgets.css";
@@ -28,8 +29,6 @@ import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import moment from "moment";
 // React Notification
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Title from "components/Title/CardTitle";
 import { url } from "../../api";
 import { create } from "../../actions/patients";
@@ -85,12 +84,15 @@ const PatientRegistration = props => {
   const { values, setValues, handleInputChange, resetForm } = useForm(
     initialfieldState_patientRegistration
   );
-
   /**
    * Initializing state properties
    */
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
+  const [gender, setGender] = useState([]);
+  const [occupation, setOccupation] = useState([]);
+  const [qualification, setQualification] = useState([]);
+  const [maritalStatus, setMaterialStatus] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [relatives, setRelatives] = useState([]);
   const [relative, setRelative] = useState([{}]);
@@ -100,10 +102,85 @@ const PatientRegistration = props => {
     { id: "3", name: "Sister" },
     { id: "4", name: "Brother" }
   ];
+  const [saving, setSaving] = useState(false);
   const [display, setDisplay] = useState(false);
 
+    //Get countries
+    useEffect(() => {
+      async function getCharacters() {
+        try {
+          const response = await fetch(apicountries);
+          const body = await response.json();
+          setCountries(body.map(({ name, id }) => ({ label: name, value: id })));
+          const defaultCountryId = body.find(x => x.name === "Nigeria").id;
+          setValues({ ...values, countryId: defaultCountryId });
+          setStateByCountryId(defaultCountryId);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      getCharacters();
+    }, []);
 
-  
+/*# Get list of gender parameter from the endpoint #*/
+useEffect(() => {
+  async function getCharacters() {
+    try {
+      const response = await fetch(url+'codeset/GENDER');
+      const body = await response.json();
+      setGender(body.map(({ display, id }) => ({ label: display, value: id })));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  getCharacters();
+}, []);
+/* ##### End of gender parameter from the endpoint ##########*/
+
+/*# Get list of OCUUPATION parameter from the endpoint #*/
+useEffect(() => {
+  async function getCharacters() {
+    try {
+      const response = await fetch(url+'codeset/OCCUPATION');
+      const body = await response.json();
+      setOccupation(body.map(({ display, id }) => ({ label: display, value: id })));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  getCharacters();
+}, []);
+
+/*# Get list of EDUCATION parameter from the endpoint #*/
+useEffect(() => {
+  async function getCharacters() {
+    try {
+      const response = await fetch(url+'codeset/EDUCATION');
+      const body = await response.json();
+      setQualification(body.map(({ display, id }) => ({ label: display, value: id })));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  getCharacters();
+}, []);
+/* ##### End of gender parameter from the endpoint ##########*/
+
+/*# Get list of MARITAL STATUS parameter from the endpoint #*/
+useEffect(() => {
+  async function getCharacters() {
+    try {
+      const response = await fetch(url+'codeset/MARITAL_STATUS');
+      const body = await response.json();
+      setMaterialStatus(body.map(({ display, id }) => ({ label: display, value: id })));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  getCharacters();
+}, []);
+/* ##### End of gender parameter from the endpoint ##########*/
+
   const findAge = date => {
     var dob = new Date(date);
     var today = new Date();
@@ -168,6 +245,7 @@ const PatientRegistration = props => {
 
 
 
+
   useEffect(() => {
      getCharacters();
    }); 
@@ -183,7 +261,7 @@ const PatientRegistration = props => {
          console.log(error);
        }
      }
-     
+
   
   //Get States from selected country
   const getStates = e => {
@@ -263,28 +341,34 @@ const PatientRegistration = props => {
   // setValues({...values, dateRegistration: newDatenow});
   //The Submit Button Implemenatation
   const handleSubmit = e => {
+    e.preventDefault();
+   
     const newDatenow = moment(values.regDate).format("DD-MM-YYYY");
     const dateOfBirth = moment(values.dateOfBirth).format("DD-MM-YYYY");
     //setValues({ dateRegistration: newDatenow});
-
     values["dateRegistration"] = newDatenow;
     values["personRelativesDTO"] = relatives;
     values["dob"] = dateOfBirth;
-    values["provinceId"] = 502;
-    console.log(values);
-    e.preventDefault();
-
-
+    //console.log(values);
+    setSaving(true);
     props.create(values);
+    //toast.success("Registration Successful")
+  
   };
 
   return (
     <Page title="Patient Registration">
-      <ToastContainer autoClose={3000} />
+      <ToastContainer autoClose={3000} hideProgressBar />
       <Alert color="primary">
         All Information with Asterisks(*) are compulsory
       </Alert>
-      {props.status === 201 && toast.success("Registration Successful")}
+      {props.status === 201 &&
+          toast.success("Registration Successful")
+      }
+      {props.errormsg===undefined ||  props.errormsg==="" ? " ":
+        toast.warn(props.errormsg)
+      }
+      
       <Form onSubmit={handleSubmit}>
         {/* First  row form entry  for Demographics*/}
         <Row>
@@ -298,6 +382,7 @@ const PatientRegistration = props => {
                     color="primary"
                     className=" float-right mr-1" >
                     </MatButton>
+
                 </Title>
                 <br />
                 <Row form>
@@ -346,8 +431,9 @@ const PatientRegistration = props => {
                         placeholder="First Name"
                         value={values.firstName}
                         onChange={handleInputChange}
-                        required
+                        
                       />
+                      <FormFeedback>Oh noes! that name is already taken</FormFeedback>
                     </FormGroup>
                   </Col>
                   <Col md={4}>
@@ -358,6 +444,7 @@ const PatientRegistration = props => {
                         name="otherNames"
                         id="otherNames"
                         placeholder="Middle Name"
+                        onChange={handleInputChange}
                         value={values.otherNames}
                       />
                     </FormGroup>
@@ -370,6 +457,7 @@ const PatientRegistration = props => {
                         name="lastName"
                         id="lastName"
                         placeholder="Last Name"
+                        onChange={handleInputChange}
                         value={values.lastName}
                         required
                       />
@@ -385,10 +473,14 @@ const PatientRegistration = props => {
                         name="genderId"
                         id="genderId"
                         value={values.genderId}
+                        onChange={handleInputChange}
                         required
                       >
-                        <option value="1">Female</option>
-                        <option value="2">Male</option>
+                      {gender.map(({ label, value }) => (
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
                       </Input>
                     </FormGroup>
                   </Col>
@@ -400,10 +492,13 @@ const PatientRegistration = props => {
                         name="occupationId"
                         id="occupationId"
                         value={values.occupationId}
+                        onChange={handleInputChange}
                       >
-                        <option value="1">Students</option>
-                        <option value="2">Business</option>
-                        <option value="3">Government</option>
+                        {occupation.map(({ label, value }) => (
+                          <option key={value} value={value}>
+                            {label}
+                          </option>
+                        ))}
                       </Input>
                     </FormGroup>
                   </Col>
@@ -414,12 +509,13 @@ const PatientRegistration = props => {
                         type="select"
                         name="educationId"
                         value={values.educationId}
+                        onChange={handleInputChange}
                       >
-                        <option value="1">PHD</option>
-                        <option value="2">MSC</option>
-                        <option value="3">BSC</option>
-                        <option value="4">HND</option>
-                        <option value="5">NCE</option>
+                        {qualification.map(({ label, value }) => (
+                            <option key={value} value={value}>
+                              {label}
+                            </option>
+                          ))}
                       </Input>
                     </FormGroup>
                   </Col>
@@ -433,10 +529,13 @@ const PatientRegistration = props => {
                         name="maritalStatusId"
                         id="maritalStatusId"
                         value={values.maritalStatusId}
+                        onChange={handleInputChange}
                       >
-                        <option value="1">Single</option>
-                        <option value="2">Married</option>
-                        <option value="3">Divorce</option>
+                        {maritalStatus.map(({ label, value }) => (
+                            <option key={value} value={value}>
+                              {label}
+                            </option>
+                          ))}
                       </Input>
                     </FormGroup>
                   </Col>
@@ -593,6 +692,7 @@ const PatientRegistration = props => {
                                 id="provinceId"
                                 placeholder="Select Province"
                                 value={values.provinceId}
+                                
                               >
                                 {provinces.length > 0 ? (
                                   provinces.map(({ id, name }) => (
@@ -806,8 +906,10 @@ const PatientRegistration = props => {
                   color="primary"
                   className={classes.button}
                   startIcon={<SaveIcon />}
+                  disabled={saving}
                 >
-                  Save
+                  {!saving ?'Save' : 'Saving'}
+                  
                 </MatButton>
 
                 <MatButton
@@ -860,7 +962,10 @@ function RelativeList({
 }
 
 const mapStateToProps = state => ({
-  status: state.patients.status
+  
+  status: state.patients.status,
+  errormsg:state.patients.errormsg
 });
+
 
 export default connect(mapStateToProps, { create })(PatientRegistration);

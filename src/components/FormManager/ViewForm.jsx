@@ -3,6 +3,7 @@ import Page from 'components/Page';
 import { data } from './form-json';
 import { saveForm, selectError, Errors, Form, FormBuilder } from 'react-formio';
 import {Card,CardContent,} from '@material-ui/core';
+import FormRenderer from 'components/FormManager/FormRenderer';
 
 const Create = props => {
 

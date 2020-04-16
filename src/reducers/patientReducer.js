@@ -6,7 +6,10 @@ const initialState = {
   vitalSigns: {},
   vitalSignsList: [],
   allergies: {},
-  patient: {}
+  patient: {},
+  previousMedications: [],
+  encounters: [],
+  exclusiveEncounters: []
 }
 
 const patientReducer = (state = initialState, action) => {
@@ -18,9 +21,12 @@ const patientReducer = (state = initialState, action) => {
       return { ...state, patient: action.payload }
 
     case ACTION_TYPES.PATIENTS_CREATE:
-
       return { ...state, status: action.payload }
 
+      case ACTION_TYPES.PATIENTS_ERROR:
+
+        return { ...state, errormsg: action.payload }
+  
 
     case ACTION_TYPES.PATIENTS_UPDATE:
       return { ...state, updated: action.payload }
@@ -29,14 +35,23 @@ const patientReducer = (state = initialState, action) => {
       return { ...state, list: action.payload }
 
     case ACTION_TYPES.PATIENT_VITAL_SIGNS:
-        return { ...state.patient, vitalSignsList: action.payload }
+        return { ...state, vitalSignsList: action.payload }
 
-        case ACTION_TYPES.PATIENT_LATEST_VITAL_SIGNS:
+    case ACTION_TYPES.PATIENT_LATEST_VITAL_SIGNS:
           return { ...state, vitalSigns: action.payload }
   
-        case ACTION_TYPES.PATIENT_ALLERGIES:
-          return { ...state.patient, allergies: action.payload }
+    case ACTION_TYPES.PATIENT_ALLERGIES:
+          return { ...state, allergies: action.payload }
+
+    case ACTION_TYPES.PATIENT_LATEST_MEDICATION_LIST:
+      return { ...state, previousMedications: action.payload }    
     
+    case ACTION_TYPES.PATIENT_ENCOUNTER_LIST:
+      return { ...state, encounters: action.payload }    
+         
+    case ACTION_TYPES.PATIENT_EXCLUSIVE_ENCOUNTER_LIST:
+      return {...state, exclusiveEncounters: action.payload }
+      
     default:
       return state
   }

@@ -3,15 +3,13 @@ import componentQueries from 'react-component-queries'
 import { Provider } from 'react-redux'
 import store from './store'
 import Routes from './routes'
-import { ToastProvider } from 'react-toast-notifications'
+//import { ToastProvider } from 'react-toast-notifications'
 
 const App = () => {
   return (
     <div>
-      <Provider store={store}>
-      <ToastProvider>
+      <Provider store={store}>   
           <Routes />
-      </ToastProvider>
       </Provider>
     </div>
   )

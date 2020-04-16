@@ -111,7 +111,7 @@ const columns = modalClickHandler => [
           <Link
             to={{
               pathname: "/patient-dashboard",
-              state: { getpatient: { row } }
+              state: { hospitalNumber: row.hospitalNumber  }
             }}
           >
             <Dashboard title="Patient Dashboard" aria-label="View Patient" />
