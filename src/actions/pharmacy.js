@@ -14,36 +14,41 @@ import * as ACTION_TYPES from "./types";
 
 export const fetchPrescriptions = () => dispatch => {
   axios
-    .get(`${url}encounters/GENERAL_SERVICE/DRUG_ORDER_FORM`)
-    .then(response => {
+    .get(
+      `${url}encounters/4ab293ff-6837-41e8-aa85-14f25ce59ef0/{dateStart}/{dateEnd}`
+    )
+    .then((response) => {
       console.log(response);
-        dispatch({
-          type: ACTION_TYPES.PHARMACY_FETCH_PRESCRIPTIONS,
-          payload: response.data
-        });
-      })
-      .catch(error => {
-        dispatch({
-          type: ACTION_TYPES.PHARMACY_ERROR,
-          payload: "Something went wrong"
-        });
+      dispatch({
+        type: ACTION_TYPES.PHARMACY_FETCH_PRESCRIPTIONS,
+        payload: response.data,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: ACTION_TYPES.PHARMACY_ERROR,
+        payload: "Something went wrong",
+      });
     });
 };
 
-export const fetchPatientPrescriptions = () => dispatch => {
+export const fetchPatientPrescriptions = (patientId) => dispatch => {
+  console.log(patientId)
   axios
-    .get(`${url}encounters/`)
-    .then(response => {
+    .get(
+      `${url}patients/${patientId}/encounters/4ab293ff-6837-41e8-aa85-14f25ce59ef0/{dateStart}/{dateEnd}`
+    )
+    .then((response) => {
       dispatch({
         type: ACTION_TYPES.FETCH_PATIENT_PRESCRIPTIONS,
-        payload: response.data
+        payload: response.data,
       });
     })
-    .catch(error => {
+    .catch((error) => {
       console.log("Pharmacy Error: ", error);
       dispatch({
         type: ACTION_TYPES.PHARMACY_ERROR,
-        payload: "Something went wrong"
+        payload: "Something went wrong",
       });
     });
 

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Page from "components/Page";
 import React, { useState, useEffect } from "react";
 import MatButton from "@material-ui/core/Button";
@@ -31,9 +32,8 @@ import moment from "moment";
 import Title from "components/Title/CardTitle";
 import { url } from "../../api";
 import { create } from "../../actions/patients";
-import { initialfieldState_patientRegsitration } from "./initailFieldState";
+import { initialfieldState_patientRegistration } from "./InitialFieldState";
 import useForm from "../Functions/UseForm";
-
 
 //Dtate Picker package
 Moment.locale("en");
@@ -82,7 +82,7 @@ const PatientRegistration = props => {
   const apistate = url + "state/country/";
 
   const { values, setValues, handleInputChange, resetForm } = useForm(
-    initialfieldState_patientRegsitration
+    initialfieldState_patientRegistration
   );
   /**
    * Initializing state properties
@@ -104,6 +104,7 @@ const PatientRegistration = props => {
   ];
   const [saving, setSaving] = useState(false);
   const [display, setDisplay] = useState(false);
+
     //Get countries
     useEffect(() => {
       async function getCharacters() {
@@ -179,6 +180,7 @@ useEffect(() => {
   getCharacters();
 }, []);
 /* ##### End of gender parameter from the endpoint ##########*/
+
   const findAge = date => {
     var dob = new Date(date);
     var today = new Date();
@@ -241,6 +243,24 @@ useEffect(() => {
     }
   };
 
+
+
+
+  useEffect(() => {
+     getCharacters();
+   }); 
+
+     async function getCharacters() {
+       try {
+         const countries = await axios.get(apicountries);
+         setCountries(countries.data.map(({ name, id }) => ({ label: name, value: id })));
+         const defaultCountryId = countries.data.find(x => x.name === "Nigeria").id;
+         setValues({ ...values, countryId: defaultCountryId });
+         setStateByCountryId(defaultCountryId);
+       } catch (error) {
+         console.log(error);
+       }
+     }
 
   
   //Get States from selected country
@@ -357,6 +377,11 @@ useEffect(() => {
               <CardContent>
                 <Title>
                   Basic Information <br />
+                  <MatButton
+                    variant="contained"
+                    color="primary"
+                    className=" float-right mr-1" >
+                    </MatButton>
 
                 </Title>
                 <br />

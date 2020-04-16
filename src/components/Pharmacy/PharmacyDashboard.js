@@ -9,14 +9,13 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import { MdDashboard, MdContacts } from 'react-icons/md';
 import { GiFiles, GiTestTubes } from 'react-icons/gi';
-import Dispensed from "./PendingPrescription";
 import { FaBriefcaseMedical } from "react-icons/fa";
 import {Card, CardBody, CardDeck, CardHeader} from 'reactstrap';
 import { Bar, Pie } from 'react-chartjs-2';
 import { getColor } from 'utils/colors';
 import { randomNum } from 'utils/demos';
 import UserProgressTable from 'components/UserProgressTable';
-import TableSearch from './TableSearch';
+import PatientSearch from './PatientSearch';
 import { fetchPrescriptions } from "../../actions/pharmacy";
 import { connect } from 'react-redux'
 
@@ -241,186 +240,190 @@ const userProgressTableData = [
 ];
 
 const ScrollableTabsButtonForce = (props) => {
+
+    console.log(props);
+
+    useEffect(() => {
+      props.fetchPrescriptions();
+    }, []);
     const classes = useStyles();
     const [value, setValue] = useState(0);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
-    useEffect(() => {
-         props.fetchPrescriptions();
-    }, [])
+    
 
     return (
-        <div className={classes.root}>
-            <div className={classes.inforoot} >
-                {/* <PatientDetailCard getpatientdetails={props.location.state }/>    */}
-            </div>
-
-            <AppBar position="static" color="transparent">
-                <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    variant="scrollable"
-                    scrollButtons="on"
-                    indicatorColor="secondary"
-                    textColor="white"
-                    aria-label="scrollable force tabs example"
-                >
-                    <Tab className={classes.title} label="Dashboard" icon={<MdDashboard />} {...a11yProps(0)} />
-                    <Tab className={classes.title} label="Pending Prescription" icon={<MdContacts />} {...a11yProps(1)} />
-                    <Tab className={classes.title} label="Dispensed Prescription" icon={<FaBriefcaseMedical />} {...a11yProps(2)} />
-                </Tabs>
-                <div>
-
-                </div>
-            </AppBar>
-          
-            <TabPanel value={value} index={0}>
-                <CardDeck>
-                    <Card >
-
-                        <CardHeader> Most Commonly Prescribed Drugs</CardHeader>
-                        <CardBody>
-
-                            <Pie data={genPieData()} />
-                        </CardBody>
-                    </Card>
-                    <Card >
-                        <CardHeader> Total Monthly Prescriptions</CardHeader>
-                        <CardBody>
-                            <Bar data={genLineData()} />
-                        </CardBody>
-                    </Card>
-
-                </CardDeck>
-                <br /><br />
-                <Grid container spacing={2}>
-                    <Grid item xs='6' >
-                        <Card  >
-                            <CardHeader> Recent Dispensed Orders</CardHeader>
-
-                            <CardBody>
-                                <UserProgressTable
-                                    headers={[
-                                        'name'
-                                    ]}
-                                    usersData={userProgressTableData}
-                                />
-                            </CardBody>
-                        </Card>
-                    </Grid>
-                    <Grid item xs='6'>
-                        <Card  >
-                            <CardHeader> Recent Pending Orders</CardHeader>
-
-                            <CardBody>
-                                <UserProgressTable
-                                    headers={[
-                                        'name'
-                                    ]}
-                                    usersData={userProgressTableData}
-                                />
-                            </CardBody>
-                        </Card>
-                    </Grid>
-
-                </Grid>
-
-            </TabPanel>
-            {/* End of dashboard */}
-
-            {/* Begining of Service Form */}
-            <TabPanel value={value} index={1}>
-
-                <TableSearch />
-
-            </TabPanel>
-            {/* Begining of consultation  */}
-            <TabPanel value={value} index={2}>
-                <Dispensed />
-            </TabPanel>
-
-            <TabPanel value={value} index={3}>
-                
-            </TabPanel>
-            {/* End of consultation */}
-            <TabPanel value={value} index={4}>
-          
-            </TabPanel>
-            <TabPanel value={value} index={5}>
-                <Grid container spacing={7} >
-                    <Grid item xs='7'>
-                        <Card >
-                            <CardBody>
-                                <Typography className={classes.title} color="primary" gutterBottom>
-
-                                </Typography>
-                                <Grid >
-                                    <Grid item xs='6'>
-                                        <Typography className={classes.pos} color="textSecondary" >
-                                            Pulse : <span style={{ fontSize: 'bold' }}>56pm</span>
-
-                                        </Typography>
-                                    </Grid>
-
-                                </Grid>
-                            </CardBody>
-                        </Card>
-                    </Grid>
-
-                    <Grid item xs='5'>
-                        <Card >
-                            <CardBody>
-                                <Typography className={classes.title} color="primary" gutterBottom>
-                                    Drug Order
-                            </Typography>
-                                <Grid container >
-                                    <Grid item >
-                                        <Typography className={classes.pos} color="textSecondary" >
-                                            Pulse : <span style={{ fontSize: 'bold' }}>56pm</span>
-
-                                        </Typography>
-                                    </Grid>
-
-                                </Grid>
-                            </CardBody>
-                        </Card>
-                    </Grid>
-                    <br />
-                    <Grid item xs='7'>
-                        <Card >
-                            <CardBody>
-                                <Typography className={classes.title} color="primary" gutterBottom>
-                                    Drug Order
-                            </Typography>
-                                <Grid container >
-                                    <Grid item >
-                                        <Typography className={classes.pos} color="textSecondary" >
-                                            Pulse : <span style={{ fontSize: 'bold' }}>56pm</span>
-
-                                        </Typography>
-                                    </Grid>
-
-                                </Grid>
-                            </CardBody>
-                        </Card>
-                    </Grid>
-
-
-                </Grid>
-            </TabPanel>
-
-
-            <TabPanel value={value} index={6}>
-                Item Seven
-      </TabPanel>
+      <div className={classes.root}>
+        <div className={classes.inforoot}>
+          {/* <PatientDetailCard getpatientdetails={props.location.state }/>    */}
         </div>
+
+        <AppBar position="static" color="transparent">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            variant="scrollable"
+            scrollButtons="on"
+            indicatorColor="secondary"
+            textColor="inherit"
+            aria-label="scrollable force tabs example"
+          >
+            <Tab
+              className={classes.title}
+              label="Dashboard"
+              icon={<MdDashboard />}
+              {...a11yProps(0)}
+            />
+            <Tab
+              className={classes.title}
+              label="Prescriptions"
+              icon={<MdContacts />}
+              {...a11yProps(1)}
+            />
+            {/* <Tab
+              className={classes.title}
+              label="Dispensed Prescription"
+              icon={<FaBriefcaseMedical />}
+              {...a11yProps(2)}
+            /> */}
+          </Tabs>
+          <div></div>
+        </AppBar>
+
+        <TabPanel value={value} index={0}>
+          <CardDeck>
+            <Card>
+              <CardHeader> Most Commonly Prescribed Drugs</CardHeader>
+              <CardBody>
+                <Pie data={genPieData()} />
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader> Total Monthly Prescriptions</CardHeader>
+              <CardBody>
+                <Bar data={genLineData()} />
+              </CardBody>
+            </Card>
+          </CardDeck>
+          <br />
+          <br />
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Card>
+                <CardHeader> Recent Dispensed Orders</CardHeader>
+
+                <CardBody>
+                  <UserProgressTable
+                    headers={["name"]}
+                    usersData={userProgressTableData}
+                  />
+                </CardBody>
+              </Card>
+            </Grid>
+            <Grid item xs={6}>
+              <Card>
+                <CardHeader> Recent Pending Orders</CardHeader>
+
+                <CardBody>
+                  <UserProgressTable
+                    headers={["name"]}
+                    usersData={userProgressTableData}
+                  />
+                </CardBody>
+              </Card>
+            </Grid>
+          </Grid>
+        </TabPanel>
+        {/* End of dashboard */}
+
+        {/* Begining of Service Form */}
+        <TabPanel value={value} index={1}>
+          <PatientSearch />
+        </TabPanel>
+        {/* Begining of consultation  */}
+        {/* <TabPanel value={value} index={2}>
+          <Dispensed />
+        </TabPanel> */}
+
+        <TabPanel value={value} index={3}></TabPanel>
+        {/* End of consultation */}
+        <TabPanel value={value} index={4}></TabPanel>
+        <TabPanel value={value} index={5}>
+          <Grid container spacing={7}>
+            <Grid item xs="7">
+              <Card>
+                <CardBody>
+                  <Typography
+                    className={classes.title}
+                    color="primary"
+                    gutterBottom
+                  ></Typography>
+                  <Grid>
+                    <Grid item xs={6}>
+                      <Typography className={classes.pos} color="textSecondary">
+                        Pulse : <span style={{ fontSize: "bold" }}>56pm</span>
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </CardBody>
+              </Card>
+            </Grid>
+
+            <Grid item xs="5">
+              <Card>
+                <CardBody>
+                  <Typography
+                    className={classes.title}
+                    color="primary"
+                    gutterBottom
+                  >
+                    Drug Order
+                  </Typography>
+                  <Grid container>
+                    <Grid item>
+                      <Typography className={classes.pos} color="textSecondary">
+                        Pulse : <span style={{ fontSize: "bold" }}>56pm</span>
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </CardBody>
+              </Card>
+            </Grid>
+            <br />
+            <Grid item xs="7">
+              <Card>
+                <CardBody>
+                  <Typography
+                    className={classes.title}
+                    color="primary"
+                    gutterBottom
+                  >
+                    Drug Order
+                  </Typography>
+                  <Grid container>
+                    <Grid item>
+                      <Typography className={classes.pos} color="textSecondary">
+                        Pulse : <span style={{ fontSize: "bold" }}>56pm</span>
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </CardBody>
+              </Card>
+            </Grid>
+          </Grid>
+        </TabPanel>
+
+        <TabPanel value={value} index={6}>
+          Item Seven
+        </TabPanel>
+      </div>
     );
 }
 
-// const mapStateToProps = state => ({
-//   prescriptions: state.pharmacy.formData
-// });
+const mapStateToProps = state => ({
+  patients: state.pharmacy.allPrescriptions
+});
 
-export default connect(null, { fetchPrescriptions })(ScrollableTabsButtonForce);
+export default connect(mapStateToProps , { fetchPrescriptions })(ScrollableTabsButtonForce);
