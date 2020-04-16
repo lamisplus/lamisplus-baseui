@@ -160,8 +160,7 @@ const LaboratoryTestOrder = props => {
 };
 
 const mapStateToProps = state => {
-  //console.log('logging state');
-  //console.log(state.laboratory.list);
+
   return {
     patientsTestOrderList: state.laboratory.list
   };
