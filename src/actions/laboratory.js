@@ -33,7 +33,23 @@ export const fetchAllLabTestOrder = () => dispatch => {
       })
     );
 };
-
+export const fetchAllLabTestOrderOfPatient = () => dispatch => {
+  axios
+    .get(`${baseUrl}encounters/GENERAL_SERVICE/LABTEST_ORDER_FORM/`)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.LABORATORY_TESTORDER_FOR_PATIENT,
+        payload: response.data
+      })
+      ///console.log(response)
+    })
+    .catch(error =>
+      dispatch({
+        type: ACTION_TYPES.ERROR_LABORATORY_TESTORDER_FOR_PATIENT,
+        payload: 'Something went wrong, please try again'
+      })
+    );
+};
 export const createCollectedSample = (data) => dispatch => {
   console.log(data)
   axios
@@ -118,3 +134,42 @@ export const Delete = id => dispatch => {
       });
     });
 };
+
+export const fetchAllTestGroup = (onSuccess, onError) => dispatch => {
+  axios
+    .get(`${baseUrl}lab-test-groups/`)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.FETCH_ALL_TEST_GROUP,
+        payload: response.data
+      })
+      onSuccess()
+    })
+    .catch(error => {
+      dispatch({
+        type: ACTION_TYPES.LABORATORY_ERROR,
+        payload: 'Something went wrong, please try again'
+      })
+      onError(error.response)
+    })
+}
+
+export const fetchAllTestsByTestGroup = (id, onSuccess, onError) => dispatch => {
+  axios
+    .get(`${baseUrl}lab-test-groups/${id}/lab-tests`)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.FETCH_ALL_TESTS_BY_TEST_GROUP,
+        payload: response.data
+      })
+      onSuccess()
+    })
+    .catch(error => {
+      dispatch({
+        type: ACTION_TYPES.LABORATORY_ERROR,
+        payload: 'Something went wrong, please try again'
+      })
+      onError(error.response)
+    })
+}
+

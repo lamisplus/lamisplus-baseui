@@ -49,10 +49,16 @@ const columns = [
     )
   },
   {
+    name: "Test Order Date",
+    selector: "test order",
+    sortable: false,
+  cell: row => <span>{row.dateEncounter}{' '} {row.timeCreated}</span>
+  },
+  {
     name: "Total Test Order",
     selector: "test order",
     sortable: false,
-    cell: row => <span>{row.formData.no_lab_test}</span>
+    cell: row => <span>{row.formData.lab_test_count}</span>
   },
   {
     name: "Action",
@@ -66,6 +72,9 @@ const columns = [
         >
           Collect Sample
         </Link>
+        {/* <Link to={`/patient-lab-test/${row.encounterId}`}>
+         
+        </Link> */}
       </div>
     ),
     ignoreRowClick: true,
@@ -152,7 +161,6 @@ const LaboratoryTestOrder = props => {
 
 const mapStateToProps = state => {
 
-  console.log(state.laboratory.list);
   return {
     patientsTestOrderList: state.laboratory.list
   };

@@ -24,6 +24,7 @@ import { getColor } from 'utils/colors';
 import { randomNum } from 'utils/demos';
 import UserProgressTable from 'components/UserProgressTable';
 import TestOrderList from './PatientSearch';
+import LabTestResult from './LabTestResult'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -269,10 +270,10 @@ export default function ScrollableTabsButtonForce(props) {
           aria-label="scrollable force tabs example"
         >
           <Tab className={classes.title} label="Dashboard" icon={<MdDashboard />} {...a11yProps(0)} />         
-          <Tab className={classes.title} label="Lab. Test Order" icon={<MdContacts />} {...a11yProps(1)} />
-          <Tab className={classes.title} label="Lab. Result" icon={<GiFiles />} {...a11yProps(2)} />
-          <Tab className={classes.title} label="Dispatch" icon={<GiTestTubes />} {...a11yProps(3)} />
-          <Tab className={classes.title} label="Medication" icon={<FaBriefcaseMedical />} {...a11yProps(4)} />
+          <Tab className={classes.title} label="Lab. Test Orders" icon={<MdContacts />} {...a11yProps(1)} />
+          <Tab className={classes.title} label="Lab. Results" icon={<GiFiles />} {...a11yProps(2)} />
+          {/* <Tab className={classes.title} label="Dispatch" icon={<GiTestTubes />} {...a11yProps(3)} />
+          <Tab className={classes.title} label="Medication" icon={<FaBriefcaseMedical />} {...a11yProps(4)} /> */}
           {/* <Tab className={classes.title} label="Others" icon={<FaChartLine />} {...a11yProps(5)}  onClick={handleClick}/> */}
           
           
@@ -358,12 +359,12 @@ export default function ScrollableTabsButtonForce(props) {
 <TabPanel value={value} index={1}>
  
     <TestOrderList />
-    
+
 </TabPanel>     
  {/* Begining of consultation  */}
  <TabPanel value={value} index={2}>
       
-  {/* <ServiceForm getpatientdetails={props.location.state } height={cardHeight}/> */}
+  <LabTestResult />
               
 </TabPanel>
 
