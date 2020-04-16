@@ -80,7 +80,8 @@ const PatientSearch = (props) => {
           Id: prescription.patientId,
           date: prescription.dateEncounter,
           status: 0,
-          actions: <Link to="/patientPrescriptions" onClick={toggle2} style={{ cursor: "pointer", color:"blue", fontStyle:"bold"}}>View</Link>
+          actions: <Link to ={{ pathname: "/patientPrescriptions", name: prescription.firstName +" "+ prescription.lastName, patientId : prescription.patientId}} onClick={toggle2} style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>View</Link>
+       
             //(
           //   <VisibilityIcon onClick={()=>toggle2(prescription.patientId)} style={{ cursor: "pointer" }} />
           // ),
