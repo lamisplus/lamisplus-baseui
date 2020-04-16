@@ -1682,6 +1682,11 @@
     "@webassemblyjs/wast-parser" "1.7.11"
     "@xtuc/long" "4.2.1"
 
+"@whoicd/icd11ect@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@whoicd/icd11ect/-/icd11ect-1.2.0.tgz#53c9027f75b9585be1f5c2f458685d29da41897b"
+  integrity sha512-SkZC8UClRg7SSGt5hmyfTiGn/AVBoktUwGnDt9YsxKygvlkWn00t1iXSulPdZXve6R8PJR7G34Kgt7dXNXMBog==
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
@@ -13669,6 +13674,13 @@ use-hooks@^2.0.0-rc.5:
   dependencies:
     "@types/react" "^16.8.3"
 
+use-http@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/use-http/-/use-http-1.0.4.tgz#a3850c6c4cfbd80004a6ec357a8054ed7e240269"
+  integrity sha512-xChl6ICnQCJJAKowm1ZYwgurPh879L0+iZpqyRKBZith73a4g3kY5fk4wlNGRvTgtj23NnXmI3QSSbbk6n9l/A==
+  dependencies:
+    use-ssr "^1.0.22"
+
 use-memo-one@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/use-memo-one/-/use-memo-one-1.1.1.tgz#39e6f08fe27e422a7d7b234b5f9056af313bd22c"
@@ -13678,6 +13690,11 @@ use-react-hooks@^1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/use-react-hooks/-/use-react-hooks-1.0.7.tgz#57a3948dcddf721eaf19b80a1cc060171e00f0f1"
   integrity sha512-QMV4FM3SRwauPYAGcGKvXFzw7u1rqTaI4hibwv9eiX5QlHP5bb2EIlO0XflBE1aAsxAdgvxlbmqVPye4+7+QIA==
+
+use-ssr@^1.0.22:
+  version "1.0.23"
+  resolved "https://registry.yarnpkg.com/use-ssr/-/use-ssr-1.0.23.tgz#3bde1e10cd01b3b61ab6386d7cddb72e74828bf8"
+  integrity sha512-5bvlssgROgPgIrnILJe2mJch4e2Id0/bVm1SQzqvPvEAXmlsinCCVHWK3a2iHcPat7PkdJHBo0gmSmODIz6tNA==
 
 use@^3.1.0:
   version "3.1.1"
@@ -13740,6 +13757,11 @@ uuid@^7.0.2:
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.2.tgz#7ff5c203467e91f5e0d85cfcbaaf7d2ebbca9be6"
   integrity sha512-vy9V/+pKG+5ZTYKf+VcphF5Oc6EFiu3W8Nv3P3zIh0EqVI80ZxOzuPfe9EHjkFNvf8+xuTHVeei4Drydlx4zjw==
+
+uuid@^7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
+  integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
 
 validate-npm-package-license@^3.0.1:
   version "3.0.4"

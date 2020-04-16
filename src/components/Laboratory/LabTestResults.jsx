@@ -79,15 +79,13 @@ const columns = [
       <div>
         <Link
           to={{
-            pathname: "/collect-sample",
+            pathname: "/collect-result",
             state: { getpatientlists: { row } }
           }}
         >
-          Collect Sample
+          Enter Result
         </Link>
-        {/* <Link to={`/patient-lab-test/${row.encounterId}/${row.hospitalNumber}`}>
-          Collect Sample
-        </Link> */}
+      
       </div>
     ),
     ignoreRowClick: true,
@@ -173,8 +171,7 @@ const LaboratoryTestOrder = props => {
 };
 
 const mapStateToProps = state => {
-  //console.log('logging state');
-  //console.log(state.laboratory.list);
+
   return {
     patientsTestOrderList: state.laboratory.list
   };

@@ -73,6 +73,7 @@
     "status": "^0.0.13",
     "styled-components": "^5.0.1",
     "use-hooks": "^2.0.0-rc.5",
+    "use-http": "^1.0.4",
     "use-react-hooks": "^1.0.7",
     "uuid": "^7.0.3",
     "victory": "^32.0.0"

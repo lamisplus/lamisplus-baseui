@@ -1,56 +1,97 @@
-import React, { useState } from 'react';
-
+import React, {useState, useEffect} from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter ,
-  Form,
-  Row,
-  Col,
-  FormGroup,
-  Label,
-  Input
-  } from 'reactstrap';
-  import { connect } from 'react-redux';
-  import { createCollectedSample } from '../../actions/laboratory';
-  import FixedTags from './autocomplete';
+Form,
+Row,
+Col,
+FormGroup,
+Label
+} from 'reactstrap';
+import { connect } from 'react-redux';
+import Chip from '@material-ui/core/Chip';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "react-widgets/dist/css/react-widgets.css";
+import { DateTimePicker } from 'react-widgets';
+import Moment from 'moment';
+import momentLocalizer from 'react-widgets-moment';
+import moment from "moment";
+import {url} from '../../api'
 
+import { useSelector, useDispatch } from 'react-redux';
+import { createCollectedSample, fetchFormById } from '../../actions/laboratory';
+
+
+Moment.locale('en');
+momentLocalizer();
 
 
 const ModalSample = (props) => {
-
   const {
-          className,
-          modalstatus,
-          togglestatus,
-          datasample,
-          testorder,
-          userInfo,
-          useData
-        } = props;
-        const [samples, setsamples] = useState(testorder)
-        //console.log(samples)
-        const defaultSample = useData.find(x => x.description === datasample)
-        //console.log(defaultSample)
-    const handleInputChangeSample = e => {
+    className,
+    modalstatus,
+    togglestatus,
+    datasample
+  } = props;
+  const formdata = useSelector(state => state.laboratory.formdata);
+  const dispatch = useDispatch();
+  const lab_id = datasample.id
+  console.log(formdata)
+  useEffect(() => {
+    const labId = lab_id;
+    dispatch(fetchFormById(labId));
+  }, []);
+        const datas= [formdata]
+        const [data, setData] = useState(datas)
+        //setData({...data, data:{datas}})      
+        
+        
+        const [samples, setSamples] = useState({                                     
+                                      sample_type: "",
+                                      date_sample_collected: new Date(),
+                                      lab_test_order_status: ""
+                                    })
+
+
+        const [optionsample, setOptionsample] = useState([]);
+        useEffect(() => {
+            async function getCharacters() {
+              try {
+                const response = await fetch(url+'application-codesets/codesetGroup?codesetGroup=SAMPLE_TYPE');
+                const body = await response.json();
+                setOptionsample(body.map(({ display, id }) => ({ title: display, value: id })));
+              } catch (error) {
+                console.log(error);
+              }
+            }
+            getCharacters();
+          }, []);
+       const handleInputChangeSample = e => {
         const { name, value } = e.target
         const fieldValue = { [name]: value }
-        setsamples({
+        setSamples({
             ...samples,
             ...fieldValue
         })
 
     }
     const saveSample = e => {
-      //setsamples({...samples, comment:samples.comment})
-      setsamples({...samples, labtest_order_status:0})
-      console.log(samples)
-      // toast.warn("Processing Sample ");
+     
+
+      toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
+      const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
+      samples['lab_test_order_status'] = 1;
+      samples['date_sample_collected'] = newDatenow;
+      data['data'] = samples;
+      //console.log(data)
       e.preventDefault()
-      //props.createCollectedSample(samples)
-      //console.log(samples)
+      props.createCollectedSample(data, lab_id)
     }
   return (
       
       <div >
-       
+       <ToastContainer autoClose={3000} hideProgressBar />
       <Modal isOpen={modalstatus} toggle={togglestatus} className={className}>
         
       <Form onSubmit={saveSample}>
@@ -58,44 +99,55 @@ const ModalSample = (props) => {
         <ModalBody>
         <Row >
         <Col md={12}>
-          <p>Sample Type {datasample} ? </p>
+          <p>Sample Type  </p>
           
           <FormGroup>
-            <Label for='maritalStatus'>Sample Collected</Label>
-            <Input
-              type='select'
-              name='labtest_order_status'
-              id='labtest_order_status'
-              onChange={handleInputChangeSample}
-              value={samples.labtest_order_status} 
-              required                       
-            >
-              <option value=''>Please Slect </option>
-              <option value='1'>Yes</option>
-              <option value='0'>No</option>                       
-            </Input>
+            
+            <Label for='maritalStatus'>Date Collected</Label>
+            
+            <DateTimePicker
+                        time={false}
+                        name="date_sample_collected"
+                        id="date_sample_collected"
+                        value={samples.date_sample_collected}
+                        onChange={value1 =>
+                          setSamples({ ...samples, date_sample_collected: value1 })
+                        }
+                        defaultValue={new Date()}
+                        max={new Date()}
+                        required
+                      /> 
           </FormGroup>
           <FormGroup>
-            <Label for='lastName'>Note  </Label>
-            {/* <Input
-              type='text'
-              name='comment'
-              id='comment'
-              placeholder='Sample Collection Comment'
-              value={samples.comment}
-              onChange={handleInputChangeSample}
-              // onChange={value1 =>
-              //   setsamples({ ...values, comment: value1 })
-              // }                        
-              required
-            /> */}
-            <FixedTags/>
+            <Label for=''>Sample Type  </Label>
+              <Autocomplete
+                multiple
+                id="sample_type"
+                options={optionsample}
+                getOptionLabel={(option) => option.title}
+                onChange={(e, i) => setSamples({ ...samples, sample_type: i })}
+                renderTags={(value, getTagProps) =>
+                  value.map((option, index) => (
+                    <Chip label={option.title} {...getTagProps({ index })} disabled={index === 0} />
+                  ))
+                }
+                style={{ width: 'auto' }}
+                renderInput={(params) => (
+                  <TextField {...params} variant="outlined" margin="normal" label="Sample Type "  />
+                )}
+                // onChange={(e, value) =>
+                //   setSamples({ ...samples, sample_type: value })
+                // }
+                
+                // value={samples.sample_type}
+              />
+            {/* <FixedTags onChange={handleInputChangeSample} value={samples.sample_type} /> */}
          </FormGroup>
         </Col>
     </Row>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" type="submit" onClick={togglestatus}>Save Sample</Button>{' '}
+          <Button color="primary" type="submit" >Save Sample</Button>{' '}
           <Button color="secondary" onClick={togglestatus}>Cancel</Button>
         </ModalFooter>
         </Form>
@@ -104,16 +156,4 @@ const ModalSample = (props) => {
   );
 }
 
-export default connect(null, { createCollectedSample })(ModalSample);
-
-const top100Films = [
-  { title: 'Urine', year: 1994 },
-  { title: 'The Godfather', year: 1972 },
-  { title: 'The Godfather: Part II', year: 1974 },
-  { title: 'The Matrix', year: 1999 },
-  { title: 'Seven Samurai', year: 1954 },
-  { title: 'Star Wars: Episode IV - A New Hope', year: 1977 },
-  { title: 'City of God', year: 2002 },
-  { title: 'Se7en', year: 1995 },
-  { title: 'The Silence of the Lambs', year: 1991 }
-];
+export default connect(null, { createCollectedSample, fetchFormById })(ModalSample);

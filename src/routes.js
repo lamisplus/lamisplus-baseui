@@ -38,6 +38,7 @@ const LaboratoryPage = React.lazy(() =>
 );
 const TestOrder = React.lazy(() => import("components/Laboratory/TestOrder"));
 const CollectSample = React.lazy(() =>import("components/Laboratory/CollectSample"));
+const LaboratorySampleResultPage = React.lazy(() =>import("components/Laboratory/CollectResult"));
 const PatientlabTestOrder = React.lazy(() =>import("components/Laboratory/PatientlabTestOrder"));
 const CollectedSample = React.lazy(() =>
   import("components/Laboratory/CollectedSample")
@@ -115,8 +116,9 @@ class Routes extends Component {
                 path="/consultation-dashbaord"
                 component={ConsultationDashboardPage}
               />
-
+             <Route exact path="/collect-result" component={LaboratorySampleResultPage} />
               <Route exact path="/laboratory" component={LaboratoryPage} />
+              
               <Route exact path="/view-result" component={ViewResult} />
               <Route exact path="/test-order" component={TestOrder} />
               <Route
@@ -126,7 +128,7 @@ class Routes extends Component {
               />
               <Route exact path="/test-result" component={TestResult} />
               <Route exact path="/collect-sample" component={CollectSample} />
-              <Route exact path="/patient-lab-test/:id" component={PatientlabTestOrder} />
+              <Route exact path="/patient-lab-test/:id/:patientId" component={PatientlabTestOrder} />
               <Route exact path="/patients" component={PatientsPage} />
 
               {/* Pharmacy Links */}

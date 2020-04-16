@@ -43,6 +43,7 @@ export const fetchAll = () => dispatch => {
 };
 
 export const fetchById = id => dispatch => {
+  
   axios
     .get(`${baseUrl}patients/${id}`)
     .then(response => {
@@ -54,9 +55,11 @@ export const fetchById = id => dispatch => {
     .catch(error =>
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
-        payload: "Something went wrong, please try again"
+        payload: error
       })
+      
     );
+    
 };
 
 

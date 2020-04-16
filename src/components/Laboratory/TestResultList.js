@@ -131,16 +131,19 @@ const LaboratoryTestOrder = (props) => {
 
 };
 
+
 const mapStateToProps = state => {
-  ///console.log('logging state');
-  //console.log(state);
+  //console.log('logging state');
+  //console.log(state.laboratory.list);
   return {
-  patientsTestOrderList: state.laboratory.list
-  }
-}
+    patientsTestOrderList: state.laboratory.list
+  };
+};
 
 const mapActionToProps = {
-  fetchAllLabTestOrderToday: fetchAllLabTestOrder,
-}
+  fetchAllLabTestOrderToday: fetchAllLabTestOrder
+};
+
+
 
 export default connect(mapStateToProps, mapActionToProps)(LaboratoryTestOrder);

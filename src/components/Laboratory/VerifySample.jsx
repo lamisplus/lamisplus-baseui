@@ -8,18 +8,13 @@ Label,
 Input
 } from 'reactstrap';
 import { connect } from 'react-redux';
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-import {url} from '../../api'
-import { transferSample } from '../../actions/laboratory';
-// import FixedTags from './autocomplete';
-// import { now } from 'moment';
+import { createCollectedSample } from '../../actions/laboratory';
+import { url } from "../../api";
 
-
-
-const ModalSampleTransfer = (props) => {
+const ModalSample = (props) => {
   
   const {
           className,
@@ -27,14 +22,28 @@ const ModalSampleTransfer = (props) => {
           togglestatus,
           datasample
         } = props;
-        const lab_id = datasample.id
-        console.log(lab_id)
+        const lab_id = datasample
+        console.log(lab_id);
+        const [samplesdetail, setSamplesdetail] = useState(null);
+        useEffect(() => {
+            async function getCharacters() {
+              try {
+                const response = await fetch(url+`encounters/${lab_id}/form-data`);
+                const body = await response.json();
+                setSamplesdetail(body);
+                console.log(samplesdetail)
+              } catch (error) {
+                console.log(error);
+              }
+            }
+            getCharacters();
+          }, [lab_id]);
         const [samples, setSamples] = useState({
-                                      comment: "",
+                                      lab_test_id:"",
                                       date_sample_collected: "",
                                       lab_test_order_status: ""
                                     })
-
+ 
        const handleInputChangeSample = e => {
         const { name, value } = e.target
         const fieldValue = { [name]: value }
@@ -42,19 +51,20 @@ const ModalSampleTransfer = (props) => {
             ...samples,
             ...fieldValue
         })
+
     }
     const saveSample = e => {
       setSamples({
         ...samples,
-        date_sample_collected: "djjdsjd",
-        lab_test_order_status: "2"
+        lab_test_id: lab_id,
+        date_sample_collected: ""
       })
-      samples['lab_test_order_status']=2
-      toast.warn("Processing Sample Transfer", { autoClose: 1000, hideProgressBar:false });
+      //console.log(samples)
+      toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
       e.preventDefault()
-      props.transferSample(samples, lab_id)
+      props.createCollectedSample(samples, lab_id)
       //setInterval(window.location.reload(false), 10000);
-      console.log(samples)
+      //console.log(samples)
     }
   return (
       
@@ -63,28 +73,28 @@ const ModalSampleTransfer = (props) => {
       <Modal isOpen={modalstatus} toggle={togglestatus} className={className}>
         
       <Form onSubmit={saveSample}>
-        <ModalHeader toggle={togglestatus}>Transfer Sample</ModalHeader>
+        <ModalHeader toggle={togglestatus}>Verify Sample</ModalHeader>
         <ModalBody>
         <Row >
         <Col md={12}>
-          {/* <p>Sample Type {datasample.data.description}  </p> */}
+            <p>Are you Sure the sample is valid </p>
           
           <FormGroup>
             
-            <Label for='maritalStatus'>Note</Label>
+            <Label for='maritalStatus'>Sample Collected</Label>
             <Input
-              type='textarea'
-              name='comment'
-              id='comment'
+              type='select'
+              name='labtest_order_status'
+              id='labtest_order_status'
               onChange={handleInputChangeSample}
-              value={samples.comment} 
-                                     
+              value={samples.lab_test_order_status}                                     
             >
-                                     
+              <option value=''>Please Slect </option>
+              <option value='1'>Yes</option>
+              <option value='0'>No</option>                       
             </Input>
-          
           </FormGroup>
-          
+         
         </Col>
     </Row>
         </ModalBody>
@@ -98,4 +108,4 @@ const ModalSampleTransfer = (props) => {
   );
 }
 
-export default connect(null, { transferSample })(ModalSampleTransfer);
+export default connect(null, { createCollectedSample })(ModalSample);

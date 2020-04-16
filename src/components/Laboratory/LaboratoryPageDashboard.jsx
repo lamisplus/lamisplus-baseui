@@ -24,7 +24,8 @@ import { getColor } from 'utils/colors';
 import { randomNum } from 'utils/demos';
 import UserProgressTable from 'components/UserProgressTable';
 import TestOrderList from './PatientSearch';
-import LabTestResult from './LabTestResult'
+import LabTestResult from './LabTestResult';
+import LabTestResults from './LabTestResults';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -272,34 +273,13 @@ export default function ScrollableTabsButtonForce(props) {
           <Tab className={classes.title} label="Dashboard" icon={<MdDashboard />} {...a11yProps(0)} />         
           <Tab className={classes.title} label="Lab. Test Orders" icon={<MdContacts />} {...a11yProps(1)} />
           <Tab className={classes.title} label="Lab. Results" icon={<GiFiles />} {...a11yProps(2)} />
-          {/* <Tab className={classes.title} label="Dispatch" icon={<GiTestTubes />} {...a11yProps(3)} />
-          <Tab className={classes.title} label="Medication" icon={<FaBriefcaseMedical />} {...a11yProps(4)} /> */}
-          {/* <Tab className={classes.title} label="Others" icon={<FaChartLine />} {...a11yProps(5)}  onClick={handleClick}/> */}
-          
-          
+          <Tab className={classes.title} label="Lab. Results New" icon={<GiFiles />} {...a11yProps(3)} />
         </Tabs>
         <div>
      
     </div>
       </AppBar>
-      {/* <Nav pills style={{backgroundColor:'silver'}} light >
-        <NavItem>
-          <NavLink  title="Alerts"><i class="fa fa-bell"></i>&nbsp;  <Badge href="#" color="dark">0</Badge> </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink> <i class="fa fa-users"></i> &nbsp; Relationships &nbsp; <Badge href="#" color="dark">0</Badge></NavLink>
-        </NavItem>
-        { (props.location.state.getpatient && props.location.state.getpatient.row.dateVisitStart ) ? 
-        <NavItem className="mr-2">
-          <NavLink>  <span>Current Visit: {props.location.state.getpatient.row.dateVisitStart}</span> &nbsp; | &nbsp; Check Out &nbsp; <i class="fa fa-sign-out"></i> </NavLink>
-        </NavItem>
-: 
-        <NavItem className="mr-2">
-        <NavLink>  <span>Patient not checked in</span> &nbsp; | &nbsp; Check In &nbsp; <i class="fa fa-sign-in"></i> </NavLink>
-        </NavItem>
-}
 
-        </Nav> */}
       {/* The DashBoad Tab  */}
       <TabPanel value={value} index={0}>
       <CardDeck>
@@ -365,6 +345,11 @@ export default function ScrollableTabsButtonForce(props) {
  <TabPanel value={value} index={2}>
       
   <LabTestResult />
+              
+</TabPanel>
+<TabPanel value={value} index={3}>
+      
+  <LabTestResults />
               
 </TabPanel>
 
