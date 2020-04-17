@@ -5,12 +5,14 @@ import * as actions from "actions/patients";
 import {connect} from 'react-redux';
 
 const columns = [
-  {
-    name: 'Date',
-    selector: 'dateEncounter',
-    sortable: false,
-    Display: true
-  },
+//   {
+//     name: 'Date',
+//     selector: '',
+//     sortable: false,
+//     cell: (row) => (
+//         <span>{row.dateEncounter || ''}</span>
+//       )
+//   },
   {
     name: 'Test',
     selector: 'description',
@@ -20,6 +22,9 @@ const columns = [
     name: 'Test Status',
     selector: 'lab_test_order_status',
     sortable: false,
+    cell: (row) => (
+        <span>{row.dateEncounter || ''}</span>
+      )
   },
   {
     name: 'Date Sample Collected',
@@ -32,7 +37,7 @@ const columns = [
     sortable: false,
     cell: row => (
       <span>
-        {row.test_result || ''} {' '}{row.unit_measurement || ''}
+        {row.test_result  ? row.test_result +'' +row.unit_measurement : ''}
       </span>
     )
   }
@@ -47,20 +52,19 @@ function PreviousTestOrder (props) {
   React.useEffect(() => {
     setLoading(true)
     const onSuccess = () => {
-      setData(props.previousMedications);
+      setData(props.previousTests);
       setLoading(false)
     }
     const onError = () => {
       setLoading(false)
       setErrorMsg("Could not fetch previous medications, try again later");
     }
-    props.fetchPatientMedicationOrder(props.patientId, onSuccess, onError)
+    props.fetchPatientTestOrder(props.patientId, onSuccess, onError)
   }, [props.patientId]);
 
   React.useEffect(() => {
-    setData(props.previousMedications);
-
-  }, [props.previousMedications]);
+    setData(props.previousTests);
+  }, [props.previousTests]);
   
  
   return (
@@ -86,12 +90,12 @@ function PreviousTestOrder (props) {
 
 const mapStateToProps = state => {
   return {
-    previousMedications: state.patients.previousMedications
+    previousTests: state.patients.previousTestOrders
   }
 }
 
 const mapActionToProps = {
-  fetchPatientMedicationOrder: actions.fetchPatientLatestMedicationOrder,
+  fetchPatientTestOrder: actions.fetchPatientTestOrders,
 }
 
 export default connect(mapStateToProps, mapActionToProps)(PreviousTestOrder)

@@ -9,7 +9,8 @@ import {
     Alert,
     Card,
     CardBody,
-    CardHeader
+    CardHeader,
+    CardDeck
   } from 'reactstrap';
 
   import Spinner from 'react-bootstrap/Spinner';
@@ -21,6 +22,7 @@ import {
   import {connect} from 'react-redux';
   import { v1 as uuidv1 } from 'uuid';
   import * as CODES from "api/codes";
+  import PreviousTestOrder from './TestOrderHistory'
 
   
 function TestOrderPage(props) {   
@@ -99,7 +101,7 @@ const saveTestOrder = (e) => {
   //looping through the test order to create the formData structure expected by the server
  var orders = testOrders.map((x) => {
   return { ...{lab_test_id: x.id,
-    description: x.description,
+    description: x.name,
     lab_test_group:  getTestGroupNameById(x.labTestGroupId),
     lab_test_group_id: x.labTestGroupId,
     unit_measurement: x.unitMeasurement}, ...defaults
@@ -134,7 +136,8 @@ const saveTestOrder = (e) => {
   };
 
 return (
-<form  onSubmit={saveTestOrder} >
+
+  <CardDeck>
             <Card  >
               <CardHeader> Test Order</CardHeader>
                     <CardBody>
@@ -149,8 +152,10 @@ return (
             </Alert> : ""
             }
                         <br/>
+                        <form  onSubmit={saveTestOrder} >
                         <Row>
-                        <Col md={5}>
+                        <Col md={12}>
+                       
                             <FormGroup>
                                     <Label for="testGroup">Select Test Order</Label>
                                     <Input type="select" name="testGroup" onChange={getTestByTestGroup}>
@@ -162,20 +167,21 @@ return (
                                                 ))}
                                     </Input>
                                 </FormGroup> 
+                               
 </Col>
-<Col md={5}>
+<Col md={12}>
                             <FormGroup>
                                     <Label for="testGroup">Select Test</Label>
                                     <Select
         isMulti={true}
         onChange={handleChange}
-        options={tests.map(x => ({...x, label:x.description, value:x.id}))}
+        options={tests.map(x => ({...x, label:x.name, value:x.id}))}
       />
                                     </FormGroup>
                                     </Col>
 
-                                    <Col md={2}>
-<Button class="btn btn-primary mt-4" type="button" onClick={saveTestOrder} >Save
+                                    <Col md={4}>
+<Button class="btn btn-primary " type="button" onClick={saveTestOrder} >Save
 &nbsp;
                                         { showLoading ? <Spinner animation="border" role="status">
                     <span className="sr-only">Loading...</span>
@@ -183,12 +189,15 @@ return (
 </Button>
                                       </Col>
                         </Row>
-                        
+                        </form>    
                     </CardBody>                      
                 </Card>
-
-    <br/>
-        </form>    
+                <Card   >
+                                 <CardHeader>Previous Test Order</CardHeader>
+                                 <PreviousTestOrder  patientId={props.patient.patientId}   />  
+                                 </Card>
+                                 </CardDeck>
+       
 )
 }
 

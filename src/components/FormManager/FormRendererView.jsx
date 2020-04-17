@@ -17,9 +17,25 @@ const FormRenderer = props => {
   const [errorMsg, setErrorMsg] = React.useState('')
   const [showErrorMsg, setShowErrorMsg] = React.useState(false)
   const [showLoading, setShowLoading] = React.useState(false)
+  const [showLoadingEncounter, setShowLoadingEncounter] = React.useState(false)
+  const [submission, setSubmission] = React.useState(props.submission)
   const [showLoadingForm, setShowLoadingForm] = React.useState(true)
   const onDismiss = () => setShowErrorMsg(false)
-
+  const options = {
+    readOnly: true
+    }
+  //extract the formData as an obj (if form data length is one) or an array
+  const extractFormData = (formData) => {
+    if(!formData){
+        return null;
+    }
+    if(formData.length === 1){
+      return formData[0].data;
+    }
+    return formData.map(item => {
+      return item.data;
+    })
+  }
   React.useEffect(() => {
     const onSuccess = () => {
       setShowLoadingForm(false)
@@ -31,51 +47,46 @@ const FormRenderer = props => {
       }
     props.fetchForm(props.formCode, onSuccess, onError);
   }, [props.formCode]);
+
   React.useEffect(() => {
-    if(!props.form.resourceObject && !props.form.resourcePath){
-        setErrorMsg('Form resource not found, please contact adminstration.')
-        setShowErrorMsg(true)
-        return;
-      }
+    // if(!props.form.resourceObject && !props.form.resourcePath){
+    //     setErrorMsg('Form resource not found, please contact adminstration.')
+    //     setShowErrorMsg(true)
+    //     return;
+    //   }
       setForm(props.form);
   },[props.form]);
-  const submission = props.submission;
-
-  const submitForm = ( submission) => {
-   // e.preventDefault()
-      const onSuccess = () => {
-        setShowLoading(false)
-        toast.success('Form saved successfully!', { appearance: 'success' })
-      }
-      const onError = errstatus => {
-        setErrorMsg('Something went wrong, request failed! Please contact admin.')
-        setShowErrorMsg(true)
-        setShowLoading(false)
-      }
-      const encounterDate = submission['dateEncounter'] ? submission['dateEncounter'] : new Date();
-      const formatedDate = Moment(encounterDate).format('DD-MM-YYYY')
-      const data = {
-          data: [submission.data],
-          patientId: props.patientId,
-          formCode: props.formCode,
-          programCode: props.form.programCode,
-          dateEncounter: formatedDate,
-          visitId: props.visitId
-      }
-      props.saveEncounter(data, 
-        props.onSuccess ? props.onSuccess : onSuccess, 
-        props.onError ? props.onError : onError);
-  }
-
+  React.useEffect(() => {
+    //verify that the encounter in the store is the same as the one passed in props
+      setShowLoadingEncounter(true);
+    if(props.encounter.encounterId === props.encounterId){
+        console.log(props.encounter)
+        setShowLoadingEncounter(false);
+        const extractedData = extractFormData(props.encounter.formDataObj);
+        if(!extractedData){
+            setErrorMsg('Could not load form information');
+            setShowErrorMsg(true);
+            return;
+        }
+        setSubmission({data: extractedData});
+        
+        console.log(submission)
+    }
+  }, [props.encounter]);
+  
   return (
     <Page title="" >
       { (showLoadingForm) ? 
    <span className="text-center"><Spinner style={{ width: '3rem', height: '3rem' }} type="grow" /> Loading form...</span>
 :  
+<div>
+{ (showLoadingEncounter) ? 
+  <span className="text-center"><Spinner style={{ width: '3rem', height: '3rem' }} type="grow" /> Loading encounter information...</span>
+:  
  
    <Card >
       <CardBody>
-      <h4 class="text-capitalize">{'NEW '}{props.title || props.form.name}</h4>
+  <h4 class="text-capitalize">{'VIEW '}{props.title || props.form.name}</h4>
       <hr />
       {/* <Errors errors={props.errors} /> */}
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
@@ -85,35 +96,29 @@ const FormRenderer = props => {
       <Form
           form={props.form.resourceObject}
           submission={submission}
+          options={options}
           hideComponents={props.hideComponents}
-          //onSubmit={props.onSubmit}
-          onSubmit={(submission) => {
-              if(props.onSubmit){
-                  return props.onSubmit(submission);
-              }
-
-            return submitForm (submission);
-            }}
+          
         />
     </CardBody>
     </Card>
-       }
+      } </div>  }
     </Page>
   );
 }
 
-const mapStateToProps = (state = { form:{}}) => {
+const mapStateToProps = (state = {formManager: {}}) => {
   return {
     form: state.formManager.form,
     formEncounter: state.formManager.formEncounter,
-    errors: state.formManager.errors
+    errors: state.formManager.errors,
+    encounter: state.encounter.encounter
   }
 }
 
 
 const mapActionToProps = {
   fetchForm: actions.fetchById,
-  saveEncounter: actions.saveEncounter
 }
 
 export default connect(mapStateToProps, mapActionToProps)(FormRenderer)

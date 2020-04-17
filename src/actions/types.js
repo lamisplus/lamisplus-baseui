@@ -81,6 +81,7 @@ export const FORM_CREATE = 'FORM_CREATE'
 export const FORM_UPDATE = 'FORM_UPDATE'
 export const FORM_SAVE_ENCOUNTER = 'FORM_SAVE_ENCOUNTER'
 export const FORM_ERROR = 'FORM_ERROR'
+export const UPDATE_FORM_DATA = 'UPDATE_FORM_DATA'
 
 /**
  * @TYPES
