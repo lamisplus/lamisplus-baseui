@@ -136,6 +136,7 @@ const StyledTableRow = withStyles(theme => ({
   //Make the list contain unique list of Data 
   const uniqueValues = [...new Set(labTestType)];
   const userInfo = props.location.state.getpatientlists.row
+ console.log(props)
   const { className } = props
   const [checked, setChecked] = useState({id:'', statuscheck:false })
   const [modal, setModal] = useState(false)
