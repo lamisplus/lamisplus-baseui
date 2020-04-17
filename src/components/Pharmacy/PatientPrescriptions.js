@@ -96,7 +96,6 @@ const PatientPrescriptions = props => {
         <table style={{ width: "80%" }}>
           <thead>
             <tr>
-              <th>S/N</th>
               <th>Prescription</th>
               <th>Note/Remarks</th>
               <th>Action</th>
@@ -109,7 +108,6 @@ const PatientPrescriptions = props => {
                 <Fragment>
                   {" "}
                   <tr style={{marginBottom: "10 rem"}}>
-                    <td>1</td>
                     <td>
                       <span>
                         <b>{data.drugName}</b>
