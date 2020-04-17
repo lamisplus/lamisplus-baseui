@@ -37,9 +37,9 @@ const ModalSample = (props) => {
   useEffect(() => {
     dispatch(fetchFormById(labId));
   }, [labId]);
-        console.log(formdata.data)
-        const [data, setData] = useState(formdata)
-        //setData({...data, data:{datas}})      
+        console.log(formdata)
+        const [data, setData] = useState({data:formdata})
+        //setData({...data, data:formdata.data})      
         console.log(data)      
         const [samples, setSamples] = useState({                                     
                                       sample_type: "",
