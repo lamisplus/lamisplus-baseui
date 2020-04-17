@@ -129,12 +129,7 @@ const StyledTableRow = withStyles(theme => ({
   const data = [testorder]
   const [useData, setUsedata] = useState(data)
   //Get list of test type
-  const [labTestType, setLabTestType] = useState([])
-      data[0].forEach(function(value, index, array) {
-        labTestType.push(value['data'].lab_test_group);
-    });
-  //Make the list contain unique list of Data 
-  const uniqueValues = [...new Set(labTestType)];
+
 
   const userInfo = props.location.state.getpatientlists.row
 
@@ -194,12 +189,12 @@ const StyledTableRow = withStyles(theme => ({
   }
   const handleresult = (sampleval) => {
     setcollectmodal(sampleval);
-    setModal(!modal2)
+    setModal2(!modal2)
    
   }
   const handlereject = (sampleval) => {
     setcollectmodal(sampleval);
-    setModal(!modal3)
+    setModal3(!modal3)
    
   }
   

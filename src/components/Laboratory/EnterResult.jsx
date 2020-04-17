@@ -23,14 +23,8 @@ Moment.locale('en');
 momentLocalizer();
 
 const ModalSampleResult = (props) => {
-   
-  const {
-          className,
-          modalstatus,
-          togglestatus,
-          datasample
-        } = props;
-        const lab_id = datasample
+
+        const lab_id = props.datasample
         console.log(lab_id)
         const [samples, setSamples] = useState({
                                       lab_test_id:"",
@@ -68,11 +62,11 @@ const ModalSampleResult = (props) => {
   return (
       
       <div >
-       <ToastContainer autoClose={3000} hideProgressBar />
-      <Modal isOpen={modalstatus} toggle={togglestatus} className={className}>
+       <ToastContainer autoClose={2000} hideProgressBar />
+      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className}>
         
       <Form onSubmit={saveSample}>
-        <ModalHeader toggle={togglestatus}>Enter Sample Result</ModalHeader>
+        <ModalHeader toggle={props.togglestatus}>Enter Sample Result</ModalHeader>
         <ModalBody>
                         <Row style={{ marginTop: '20px'}}>
                             <Col xs="4">
@@ -154,7 +148,7 @@ const ModalSampleResult = (props) => {
                     </ModalBody>
         <ModalFooter>
           <Button color="primary" type="submit" >Save Sample</Button>{' '}
-          <Button color="secondary" onClick={togglestatus}>Cancel</Button>
+          <Button color="secondary" onClick={props.togglestatus}>Cancel</Button>
         </ModalFooter>
         </Form>
       </Modal>

@@ -57,7 +57,7 @@ const ModalSampleTransfer = (props) => {
           const lab_test_order_status = formdata.data ? formdata.data.lab_test_order_status : null
          
           const [data, setData] = useState({data:{}})
-          const [newcomment, setNewcomment] = useState('')
+          //const [newcomment, setNewcomment] = useState('')
           const [samples, setSamples] = useState({ 
                                             comment: comment,
                                             sample_type:sample_type,                                                                        
@@ -93,8 +93,8 @@ const ModalSampleTransfer = (props) => {
          const handleInputChangeSample = e => {
           const { name, value } = e.target
           const fieldValue = { [name]: value }
-          setNewcomment({
-              ...newcomment,
+          setSamples({
+              ...samples,
               ...fieldValue
           })
       }
@@ -103,9 +103,9 @@ const ModalSampleTransfer = (props) => {
         console.log(data)
         toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
         const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
-        console.log(newcomment)
+        
         samples['lab_test_order_status'] = 2;
-        samples['comment'] = newcomment;
+        //samples['comment'] = newcomment;
         samples['date_sample_collected'] = newDatenow;
         samples['sample_type'] = sample_type
         samples['user_id'] = user_id
@@ -126,7 +126,7 @@ const ModalSampleTransfer = (props) => {
   return (
       
       <div >
-       <ToastContainer autoClose={3000} hideProgressBar />
+    
       <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className}>
         
       <Form onSubmit={saveSample}>
@@ -160,7 +160,7 @@ const ModalSampleTransfer = (props) => {
               name='comment'
               id='comment'
               onChange={handleInputChangeSample}
-               
+               value = {samples.comment}
                                      
             >
                                      

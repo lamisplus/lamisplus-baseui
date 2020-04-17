@@ -68,7 +68,7 @@ export const fetchFormDataById = id => dispatch => {
     );
 };
 export const createCollectedSample = (data, lab_id) => dispatch => {
-  console.log(data)
+  
   axios
     .put(`${baseUrl}form-data/${lab_id}`, data)
     .then(response => {

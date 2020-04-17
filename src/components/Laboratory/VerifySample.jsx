@@ -24,20 +24,6 @@ const ModalSample = (props) => {
         } = props;
         const lab_id = datasample
         console.log(lab_id);
-        const [samplesdetail, setSamplesdetail] = useState(null);
-        useEffect(() => {
-            async function getCharacters() {
-              try {
-                const response = await fetch(url+`encounters/${lab_id}/form-data`);
-                const body = await response.json();
-                setSamplesdetail(body);
-                console.log(samplesdetail)
-              } catch (error) {
-                console.log(error);
-              }
-            }
-            getCharacters();
-          }, [lab_id]);
         const [samples, setSamples] = useState({
                                       lab_test_id:"",
                                       date_sample_collected: "",
@@ -87,7 +73,7 @@ const ModalSample = (props) => {
               name='labtest_order_status'
               id='labtest_order_status'
               onChange={handleInputChangeSample}
-              value={samples.lab_test_order_status}                                     
+              value={samples.lab_test_id}                                     
             >
               <option value=''>Please Slect </option>
               <option value='1'>Yes</option>

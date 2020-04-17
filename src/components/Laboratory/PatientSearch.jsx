@@ -75,6 +75,12 @@ const columns = [
     cell: row => <span>{getTotalcount(row.encounterId)}</span>
   },
   {
+    name: "Sample Collected",
+    selector: "test order",
+    sortable: false,
+    cell: row => <span>{0}</span>
+  },
+  {
     name: "Action",
     cell: row => (
       <div>
@@ -84,7 +90,7 @@ const columns = [
             state: { getpatientlists: { row } }
           }}
         >
-          Collect Sample
+          Collect Sample  { ' '}
         </Link>
         {/* <Link to={`/patient-lab-test/${row.encounterId}/${row.hospitalNumber}`}>
           Collect Sample
