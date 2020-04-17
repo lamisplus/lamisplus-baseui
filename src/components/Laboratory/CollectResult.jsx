@@ -140,7 +140,7 @@ const StyledTableRow = withStyles(theme => ({
   const [modal2, setModal2] = useState(false)
   const togglemodal2 = () => setModal2(!modal2)
   const [modal3, setModal3] = useState(false);
-  const togglemodal3 = () => setModal(!modal3)
+  const togglemodal3 = () => setModal3(!modal3)
   const [collectmodal, setcollectmodal] = useState([])
   // const [encounterid, setencounterid] = useState('');
 
@@ -180,7 +180,7 @@ const StyledTableRow = withStyles(theme => ({
   }
   const handlecollect = e => {
     setChecked({...checked, [e.target.value]: e.target.value})
-    console.log(e)
+    
   }
   const handlesample = (sampleval) => {
     setcollectmodal(sampleval);
