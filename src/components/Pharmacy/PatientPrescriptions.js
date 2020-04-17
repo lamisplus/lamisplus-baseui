@@ -53,14 +53,6 @@ const PatientPrescriptions = props => {
 
   const patientId = props.location.patientId;
   const patientName = props.location.name;
-  const dispensed = 0
-  console.log(props.location.patientId)
-  console.log(props.location.name)
-
-  console.log(patientId)
-
-  console.log(props)
-
 
     useEffect(() => {
       props.fetchPatientPrescriptions(patientId);
@@ -104,7 +96,6 @@ const PatientPrescriptions = props => {
         <table style={{ width: "80%" }}>
           <thead>
             <tr>
-              <th>S/N</th>
               <th>Prescription</th>
               <th>Note/Remarks</th>
               <th>Action</th>
@@ -117,7 +108,6 @@ const PatientPrescriptions = props => {
                 <Fragment>
                   {" "}
                   <tr style={{marginBottom: "10 rem"}}>
-                    <td>1</td>
                     <td>
                       <span>
                         <b>{data.drugName}</b>

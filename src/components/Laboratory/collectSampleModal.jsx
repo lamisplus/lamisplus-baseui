@@ -33,7 +33,7 @@ const ModalSample = (props) => {
   const formdata = useSelector(state => state.laboratory.formdata);
   const dispatch = useDispatch();
   const lab_id = props.datasample.id
-  console.log(lab_id)
+  console.log(props.datasample)
   const labId = lab_id;
 
   useEffect(() => {

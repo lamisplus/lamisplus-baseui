@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import DataTable from "react-data-table-component";
 import "./PatientSearch.css";
 import { Input, Form } from "reactstrap";
+import { Card } from "reactstrap";
 import { Link } from "react-router-dom";
 import { fetchAllLabTestOrder } from "actions/laboratory";
 import { connect } from "react-redux";
@@ -146,8 +147,8 @@ const LaboratoryTestOrder = props => {
   }, [filterText, resetPaginationToggle]);
 
   return (
-    <div class="searchTable">
-      <card>
+    <div className="searchTable">
+      <Card>
         <cardContent>
           <DataTable
             columns={columns}
@@ -167,7 +168,7 @@ const LaboratoryTestOrder = props => {
             expandableRowsComponent={<SampleExpandedComponent />}
           />
         </cardContent>
-      </card>
+      </Card>
     </div>
   );
 };
