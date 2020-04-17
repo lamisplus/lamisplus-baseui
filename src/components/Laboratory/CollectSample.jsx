@@ -222,7 +222,7 @@ const transfersample = (val) => {
                     <Typography className={classes2.heading}>
                         DOB:  {userInfo.dob}
                         <br/>
-                        Phone Number :  {PatientDetail.dateRegistration || 'N/A'}
+                        Phone Numbers :  {PatientDetail.dateRegistration || 'N/A'}
                     </Typography>
                 </div>
               </ExpansionPanelSummary>

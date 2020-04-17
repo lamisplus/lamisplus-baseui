@@ -7,6 +7,9 @@ import {
   Row,
   Button,
   Form,
+  FormGroup,
+  Label,
+  Input
 } from 'reactstrap'
 import { useState , useEffect} from 'react'
 import { TiArrowBack } from 'react-icons/ti'
@@ -25,6 +28,8 @@ import IconButton from '@material-ui/core/IconButton';
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import 'react-widgets/dist/css/react-widgets.css'
+//Date Picker
+import { DateTimePicker } from 'react-widgets'
 import Moment from 'moment'
 import momentLocalizer from 'react-widgets-moment'
 import moment from 'moment'
@@ -124,34 +129,28 @@ const StyledTableRow = withStyles(theme => ({
   const data = [testorder]
   const [useData, setUsedata] = useState(data)
   //Get list of test type
-  const [labTestType] = useState([])
-      data[0].forEach(function(value, index, array) {
-        labTestType.push(value['data'].lab_test_group);
-    });
-  //Make the list contain unique list of Data 
-  // const uniqueValues = [...new Set(labTestType)];
+
 
   const userInfo = props.location.state.getpatientlists.row
 
-  // const [checked, setChecked] = useState({id:'', statuscheck:false })
+  const { className } = props
+  const [checked, setChecked] = useState({id:'', statuscheck:false })
   const [modal, setModal] = useState(false)
   const togglemodal = () => setModal(!modal)
   const [modal2, setModal2] = useState(false)
   const togglemodal2 = () => setModal2(!modal2)
-
   const [modal3, setModal3] = useState(false);
   const togglemodal3 = () => setModal3(!modal3)
-
   const [collectmodal, setcollectmodal] = useState([])
   // const [encounterid, setencounterid] = useState('');
 
   //const [patientrow, setpatientValue] = useState({date_sample_collected:new Date(), sample_collected:''});
   const TodayDate = moment(new Date()).format('DD-MM-YYYY')
-  const [patientrow] = useState({
+  const [patientrow, setpatientValue] = useState({
         date_sample_collected: TodayDate,
         lab_number: '',
   })
-  const [collectsample] = useState({
+  const [collectsample, setCollectsample] = useState({
         dateEncounter: "",
         formData: {},
         formName: "LAB_ORDER_FORM",
@@ -164,7 +163,7 @@ const StyledTableRow = withStyles(theme => ({
 
   const saveColllectSample = e => {
     console.log(patientrow)
-    // const newDatenow = moment(TodayDate).format('DD-MM-YYYY')
+    const newDatenow = moment(TodayDate).format('DD-MM-YYYY')
 
     useData['formData'] = useData
     setUsedata({...useData, formData:{"labtest":useData }})
@@ -174,10 +173,9 @@ const StyledTableRow = withStyles(theme => ({
    props.createCollectedSample(collectsample)
  
   }
-  // const handlelabNumber = e => {
-  //   //  e.preventDefault();
+  const handlelabNumber = e => {
+    //  e.preventDefault();
     
-
     setpatientValue({ ...patientrow, [e.target.name]: e.target.value })
   }
   const handlecollect = e => {
