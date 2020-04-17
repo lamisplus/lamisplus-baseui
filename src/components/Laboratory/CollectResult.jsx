@@ -6,10 +6,7 @@ import {
   Col,
   Row,
   Button,
-  Form,
-  FormGroup,
-  Label,
-  Input
+  Form
 } from 'reactstrap'
 import { useState , useEffect} from 'react'
 import { TiArrowBack } from 'react-icons/ti'
