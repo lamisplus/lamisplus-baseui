@@ -17,10 +17,15 @@ import {
   import {connect} from 'react-redux';
   import * as actions from "actions/formManager";
   import * as patientActions from "actions/patients";
+  import * as encounterAction from "actions/encounter";
   import FormRenderer from 'components/FormManager/FormRenderer';
+  import ViewForm from 'components/FormManager/FormRendererView';
+  import UpdateForm from 'components/FormManager/FormRendererUpdate';
   import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
   import * as CODES from "api/codes";
+  import EditIcon from '@material-ui/icons/Edit';
+  import VisibilityIcon from '@material-ui/icons/Visibility';
 
 const cardStyle = {
   borderColor: '#fff',
@@ -36,10 +41,12 @@ function ServiceFormPage (props) {
   const [encounterMessage, setEncounterMessage] = useState('')
   const [serviceForms, setServiceForms] = useState([])
   const [filterText, setFilterText] = React.useState('')
+  const [efilterText, setEFilterText] = React.useState('')
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false)
+  const [eresetPaginationToggle, setEResetPaginationToggle] = React.useState(false)
   const [showFormPage, setShowFormPage] = useState(false);
   const [currentForm, setCurrentForm] = useState();
-  const [patientEncounters, setPatientEncouters] = useState()
+  const [patientEncounters, setPatientEncouters] = useState([])
   const filteredItems = !serviceForms ? [] : serviceForms.filter(
     item =>
     (item.name &&
@@ -49,10 +56,7 @@ function ServiceFormPage (props) {
   const encounterFilteredItems = !patientEncounters ? [] : patientEncounters.filter(
     item =>
       (item.formName &&
-        item.formName.toLowerCase().includes(filterText.toLowerCase())) ||
-      (item.serviceName &&
-        item.serviceName.toLowerCase().includes(filterText.toLowerCase())) 
-  )
+        item.formName.toLowerCase().includes(efilterText.toLowerCase()))) 
 
   const togglePage = () => {
       return setShowFormPage(!showFormPage);
@@ -80,13 +84,13 @@ function ServiceFormPage (props) {
   const fetchEncounters = () => {
     setShowEncounterLoading(true)
     const onSuccess = () => {
-        setPatientEncouters(props.patientEncounterList)
+        //setPatientEncouters(props.patientEncounterList)
         setShowEncounterLoading(false)
       }
       const onError = () => {
         setMessage('Could not fetch service forms history. Please try again later')
         setShowEncounterLoading(false)
-        setPatientEncouters();
+        setPatientEncouters([]);
       }
     props.fetchPatientEncounters(props.patient.patientId, onSuccess, onError);
   }
@@ -96,21 +100,28 @@ function ServiceFormPage (props) {
   }, []);
 
   React.useEffect(() => {
+    try{
     setPatientEncouters(props.patientEncounterList)
+    }catch(err){
+      console.log(err)
+    }
+    console.log(patientEncounters)
   }, [props.patientEncounterList]);
 
  const loadForm = (value) => {
-    setCurrentForm(value);
+    setCurrentForm({...value, type:'NEW'});
     togglePage();
   }
 
   const viewForm = (value) => {
-    setCurrentForm(value);
+    props.fetchEncounterInfo(value.encounterId);
+    setCurrentForm({...value, type:'VIEW'});
     togglePage();
   }
 
   const editForm = (value) => {
-    setCurrentForm(value);
+    props.fetchEncounterInfo(value.encounterId);
+    setCurrentForm({...value, type:'EDIT'});
     togglePage();
   }
 
@@ -135,7 +146,7 @@ function ServiceFormPage (props) {
       </Form>
   );
 
-  const EncounterFilterComponent = ({ filterText, onFilter, onClear }) => (
+  const EncounterFilterComponent = ({ efilterText, onFilter, onClear }) => (
     <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >
           <Card>
               <CardBody>
@@ -143,7 +154,7 @@ function ServiceFormPage (props) {
                       type="search"
                       placeholder="Search by Form Name "
                       className="cr-search-form__input pull-right"
-                      value={filterText} onChange={onFilter}
+                      value={efilterText} onChange={onFilter}
                     />
               </CardBody>
           </Card>
@@ -154,18 +165,24 @@ function ServiceFormPage (props) {
     {
       name: 'Service Form',
       selector: 'formName',
-      sortable: false
+      sortable: false,
+      cell: (row) => (
+        <div>
+          <p>{row.formName}</p>
+      <small>{row.dateEncounter || ''} {' '} {row.timeCreated || ''}</small>
+        </div>
+      )
     },
     {
       cell: (row) => (
         <div>
         <IconButton color='primary' fontSize='small'   aria-label='View Form'
         title='View Form' onClick={() => viewForm(row)}>
-          <AddCircleOutlineIcon />
+          <VisibilityIcon />
         </IconButton>
          <IconButton color='primary' fontSize='small'   aria-label='Edit Form'
          title='Edit Form' onClick={() => editForm(row)}>
-           <AddCircleOutlineIcon />
+           <EditIcon />
          </IconButton>
          </div>
       ),
@@ -202,7 +219,6 @@ function ServiceFormPage (props) {
         setFilterText('')
       }
     }
-
     return (
       <FilterComponent
         onFilter={e => setFilterText(e.target.value)}
@@ -211,6 +227,22 @@ function ServiceFormPage (props) {
       />
     )
   }, [filterText, resetPaginationToggle])
+
+    const esubHeaderComponentMemo = React.useMemo(() => {
+      const handleClear = () => {
+        if (efilterText) {
+          setEResetPaginationToggle(!eresetPaginationToggle)
+          setEFilterText('')
+        }
+      }
+    return (
+      <EncounterFilterComponent
+        onFilter={e => setEFilterText(e.target.value)}
+        onClear={handleClear}
+        efilterText={efilterText}
+      />
+    )
+  }, [efilterText, eresetPaginationToggle])
 
 return (
   <div>
@@ -277,9 +309,9 @@ return (
       columns={encounterColumns(viewForm, editForm)}
       data={encounterFilteredItems}
       pagination
-      paginationResetDefaultPage={resetPaginationToggle} 
+      paginationResetDefaultPage={eresetPaginationToggle} 
       subHeader
-      subHeaderComponent={subHeaderComponentMemo}
+      subHeaderComponent={esubHeaderComponentMemo}
       highlightOnHover={true}
       subHeaderAlign={'left'}
       noTableHead={true}
@@ -298,9 +330,15 @@ return (
             <Button color="primary" className=" float-right mr-1" onClick={togglePage} >
                 Go Back
                 </Button>
-                { currentForm ?
-            <FormRenderer patientId={props.patient.patientId} formId={currentForm.id} programCode={currentForm.programCode} visitId={props.patient.visitId} onSuccess={onSuccess}/>
-            : ""}
+                { currentForm && currentForm.type === 'NEW' &&
+                  <FormRenderer patientId={props.patient.patientId} formCode={currentForm.code} programCode={currentForm.programCode} visitId={props.patient.visitId} onSuccess={onSuccess} />
+                }
+                 { currentForm && currentForm.type === 'VIEW' &&
+                  <ViewForm patientId={props.patient.patientId} formCode={currentForm.formCode} programCode={currentForm.programCode} visitId={props.patient.visitId} onSuccess={onSuccess} encounterId={currentForm.encounterId}/>
+                }
+                 { currentForm && currentForm.type === 'EDIT' &&
+                  <UpdateForm patientId={props.patient.patientId} formCode={currentForm.formCode} programCode={currentForm.programCode} visitId={props.patient.visitId} onSuccess={onSuccess} encounterId={currentForm.encounterId}/>
+                }
         </div>
   </Col>
 </Row>
@@ -310,17 +348,19 @@ return (
 )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state ) => {
   return {
     patient: state.patients.patient,
     formList: state.formManager.formList,
-    patientEncounterList: state.patients.exclusiveEncounters
+    patientEncounterList: state.patients.exclusiveEncounters,
+    encounter: state.encounter.encounter
   }
 }
 
 const mapActionToProps = {
   fetchForms: actions.fetchAll,
-  fetchPatientEncounters: patientActions.fetchPatientEncounterProgramCodeExclusionList
+  fetchPatientEncounters: patientActions.fetchPatientEncounterProgramCodeExclusionList, 
+  fetchEncounterInfo: encounterAction.fetchById
 }
 
 export default connect(mapStateToProps, mapActionToProps)(ServiceFormPage)

@@ -8,6 +8,10 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Table } from 'reactstrap';
 import {FaPencilAlt, FaTrashAlt} from 'react-icons/fa';
+import PreviousTestOrder from '../PatientConsultation/TestOrder/TestOrderHistory'
+import PreviousMedication from '../PatientConsultation/Medication/PreviousMedication'
+
+import {connect} from 'react-redux';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,7 +50,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function ClinicalHistory() {
+function ClinicalHistory(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState('one');
 
@@ -68,7 +72,7 @@ export default function ClinicalHistory() {
             {...a11yProps('one')}
           />
           <Tab value="two" label="Pharmacy" {...a11yProps('two')} />
-          <Tab value="two" label="Laboratory" {...a11yProps('two')} />
+          <Tab value="three" label="Laboratory" {...a11yProps('three')} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index="one">
@@ -116,33 +120,23 @@ export default function ClinicalHistory() {
             </Table>
       </TabPanel>
       <TabPanel value={value} index="two">
-      <Table striped>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Date of Visit</th>
-                    <th>Feeding At Present</th>
-                    <th>Outcome</th>
-                    <th>Rapid Test Result</th>
-                    <th>On Contrim</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <th scope="row">1</th>
-                <td>01/02/2020</td>
-                <td>Yes</td>
-                <td> -- </td>
-                <td> -- </td>
-                <td>Yes</td>
-                <td><FaPencilAlt />{ ' ' }<FaTrashAlt /></td>
-                </tr>
-                
-            </tbody>
-            </Table>
+      <PreviousMedication  patientId={props.patient.patientId}   />  
       </TabPanel>
-      
+      <TabPanel value={value} index="three">
+      <PreviousTestOrder  patientId={props.patient.patientId}   />  
+      </TabPanel>
     </div>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    patient: state.patients.patient
+  }
+}
+
+const mapActionToProps = {
+  
+}
+
+export default connect(mapStateToProps, mapActionToProps)(ClinicalHistory)

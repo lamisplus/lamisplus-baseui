@@ -34,16 +34,16 @@ export const fetchAll = (serviceName, formName) => dispatch => {
 
 export const fetchById = id => dispatch => {
   axios
-    .get(`${baseUrl}visits/${id}`)
+    .get(`${baseUrl}encounters/${id}`)
     .then(response => {
       dispatch({
-        type: ACTION_TYPES.CHECKIN_FETCH_BY_ID,
+        type: ACTION_TYPES.ENCOUNTER_FETCH_BY_ID,
         payload: response.data
       });
     })
     .catch(error =>
       dispatch({
-        type: ACTION_TYPES.CHECKIN_ERROR,
+        type: ACTION_TYPES.ENCOUNTER_ERROR,
         payload: "Something went wrong, please try again"
       })
     );

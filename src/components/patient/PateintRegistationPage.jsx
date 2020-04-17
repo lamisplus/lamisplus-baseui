@@ -284,7 +284,7 @@ useEffect(() => {
     setValues({ ...values, [e.target.name]: e.target.value });
     const stateId = e.target.value;
     async function getCharacters() {
-      const response = await fetch(`${url}province/` + stateId);
+      const response = await fetch(`${url}state/` + stateId+"/province");
       const provinceList = await response.json();
 
       setProvinces(provinceList);

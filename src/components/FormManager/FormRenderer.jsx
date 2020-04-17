@@ -23,20 +23,22 @@ const FormRenderer = props => {
   React.useEffect(() => {
     const onSuccess = () => {
       setShowLoadingForm(false)
-        setForm(props.form);
-        if(!props.form.resourceObject && !props.form.resourcePath){
-          setErrorMsg('Form resource not found, please contact adminstration.')
-          setShowErrorMsg(true)
-        }
       }
       const onError = errstatus => {
         setErrorMsg('Error loading form, something went wrong')
         setShowErrorMsg(true)
         setShowLoadingForm(false)
       }
-    props.fetchForm(props.formId, props.programCode, onSuccess, onError);
-  }, [props.formId]);
-
+    props.fetchForm(props.formCode, onSuccess, onError);
+  }, [props.formCode]);
+  React.useEffect(() => {
+    if(!props.form.resourceObject && !props.form.resourcePath){
+        setErrorMsg('Form resource not found, please contact adminstration.')
+        setShowErrorMsg(true)
+        return;
+      }
+      setForm(props.form);
+  },[props.form]);
   const submission = props.submission;
 
   const submitForm = ( submission) => {
@@ -55,7 +57,7 @@ const FormRenderer = props => {
       const data = {
           data: [submission.data],
           patientId: props.patientId,
-          formCode: props.form.name,
+          formCode: props.formCode,
           programCode: props.form.programCode,
           dateEncounter: formatedDate,
           visitId: props.visitId
@@ -64,6 +66,7 @@ const FormRenderer = props => {
         props.onSuccess ? props.onSuccess : onSuccess, 
         props.onError ? props.onError : onError);
   }
+
   return (
     <Page title="" >
       { (showLoadingForm) ? 
@@ -72,7 +75,7 @@ const FormRenderer = props => {
  
    <Card >
       <CardBody>
-  <h4 class="text-capitalize">{props.title || props.form.name}</h4>
+      <h4 class="text-capitalize">{'NEW '}{props.title || props.form.name}</h4>
       <hr />
       {/* <Errors errors={props.errors} /> */}
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
@@ -99,7 +102,7 @@ const FormRenderer = props => {
   );
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state = { form:{}}) => {
   return {
     form: state.formManager.form,
     formEncounter: state.formManager.formEncounter,
