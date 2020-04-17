@@ -28,26 +28,52 @@ momentLocalizer();
 
 
 const ModalSample = (props) => {
+  const [newdata, setNewdata] = useState({formdata});
 /* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
   const formdata = useSelector(state => state.laboratory.formdata);
   const dispatch = useDispatch();
   const lab_id = props.datasample.id
   console.log(lab_id)
   const labId = lab_id;
+
   useEffect(() => {
     dispatch(fetchFormById(labId));
+    setNewdata({...newdata, formdata}) 
   }, [labId]);
-        console.log(formdata)
-        const [data, setData] = useState({data:formdata})
-        //setData({...data, data:formdata.data})      
-        console.log(data)      
-        const [samples, setSamples] = useState({                                     
-                                      sample_type: "",
-                                      date_sample_collected: new Date(),
-                                      lab_test_order_status: ""
+        console.log(formdata.data) 
+        
+        const description = formdata.data ? formdata.data.description : null
+        const patient_id = formdata.data ? formdata.data.patient_id : null
+        const user_id = formdata.data ? formdata.data.user_id : null
+        const lab_test_id = formdata.data ? formdata.data.lab_test_id : null
+        const sample_type = formdata.data ? formdata.data.sample_type : null
+        const test_result = formdata.data ? formdata.data.test_result : null
+        const lab_test_group = formdata.data ? formdata.data.lab_test_group : null
+        const unit_measurement = formdata.data ? formdata.data.unit_measurement : null
+        const lab_test_group_id = formdata.data ? formdata.data.lab_test_group_id : null
+        const lab_test_order_id = formdata.data ? formdata.data.lab_test_order_id : null
+        const date_result_reported = formdata.data ? formdata.data.date_result_reported : null
+        const date_sample_collected = formdata.data ? formdata.data.date_sample_collected : null
+        const lab_test_order_status = formdata.data ? formdata.data.lab_test_order_status : null
+       
+        const [data, setData] = useState({data:{}})
+        const [samples, setSamples] = useState({                                                                         
+                                          user_id: user_id,
+                                          patient_id: patient_id,
+                                          description: description,
+                                          lab_test_id: lab_test_id,
+                                          sample_type: sample_type,
+                                          test_result:test_result,
+                                          lab_test_group: lab_test_group,
+                                          unit_measurement:unit_measurement,
+                                          lab_test_group_id:lab_test_group_id,
+                                          lab_test_order_id: lab_test_order_id,
+                                          date_result_reported: date_result_reported,
+                                          date_sample_collected: new Date(),
+                                          lab_test_order_status: lab_test_order_status 
                                     })
-
-
+ 
+          
         const [optionsample, setOptionsample] = useState([]);
         useEffect(() => {
             async function getCharacters() {
@@ -72,16 +98,27 @@ const ModalSample = (props) => {
     }
     const saveSample = e => {
      
-
+      console.log(data)
       toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
       samples['lab_test_order_status'] = 1;
       samples['date_sample_collected'] = newDatenow;
+      samples['user_id'] = user_id
+      samples['description'] = description
+      samples['patient_id'] =patient_id
+      samples['description'] = description
+      samples['lab_test_id'] = lab_test_id
+      samples['lab_test_group'] = lab_test_group
+      samples['unit_measurement'] = unit_measurement
+      samples['lab_test_group_id'] = lab_test_group_id
+      samples['lab_test_order_id'] = lab_test_order_id
+      samples['date_result_reported'] = date_result_reported
       data['data'] = samples;
-      //console.log(data)
+      console.log(data)
       e.preventDefault()
       props.createCollectedSample(data, lab_id)
     }
+    //console.log(formdata)
   return (
       
       <div >

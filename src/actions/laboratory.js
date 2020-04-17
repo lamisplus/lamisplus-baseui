@@ -113,7 +113,7 @@ export const transferSample = (samples, lab_id) => dispatch => {
     });
 };
 export const fetchFormById = id => dispatch => {
-  console.log(id)
+  //console.log(id)
   axios
     .get(`${baseUrl}form-data/${id}`)
     .then(response => {
