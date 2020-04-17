@@ -79,7 +79,7 @@ const PatientRegistration = props => {
   // const [currentId, setCurrentId] = useState(0) ;
   const classes = useStyles();
   const apicountries = url + "countries";
-  const apistate = url + "state/country/";
+  const apistate = url + "countries/";
 
   const { values, setValues, handleInputChange } = useForm(
     initialfieldState_patientRegistration
@@ -272,7 +272,7 @@ useEffect(() => {
 
   function setStateByCountryId(getCountryId) {
     async function getCharacters() {
-      const response = await fetch(apistate + getCountryId);
+      const response = await fetch(apistate + getCountryId+"/states");
       const stateList = await response.json();
       setStates(stateList.map(({ name, id }) => ({ label: name, value: id })));
     }
