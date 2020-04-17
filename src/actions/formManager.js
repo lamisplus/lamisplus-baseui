@@ -114,12 +114,12 @@ export const saveEncounter = (data, onSuccess, onError) => dispatch => {
     })
 }
 
-export const updateEncounter = (id, data, onSuccess, onError) => dispatch => {
+export const updateFormData = (id, data, onSuccess, onError) => dispatch => {
   axios
-    .put(`${baseUrl}encounters/${id}`, data)
+    .put(`${baseUrl}form-data/${id}`, data)
     .then(response => {
       dispatch({
-        type: ACTION_TYPES.FORM_SAVE_ENCOUNTER,
+        type: ACTION_TYPES.UPDATE_FORM_DATA,
         payload: response.data
       })
       onSuccess()
