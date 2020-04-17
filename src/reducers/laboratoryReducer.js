@@ -7,7 +7,7 @@ const initialState = {
   tests: [],
   testGroup: [],
   testorder:[],
-  formdata:{}
+  formdata:[]
 }
 
 const laboratoryReducer = (state = initialState, action) => {

@@ -68,10 +68,16 @@ const columns = [
   cell: row => <span>{row.dateEncounter}{' '} {row.timeCreated}</span>
   },
   {
-    name: "Total Test Order",
+    name: "Total Sample",
     selector: "test order",
     sortable: false,
     cell: row => <span>{getTotalcount(row.encounterId)}</span>
+  },
+  {
+    name: "Total Result",
+    selector: "test order",
+    sortable: false,
+    cell: row => <span>{0}</span>
   },
   {
     name: "Action",

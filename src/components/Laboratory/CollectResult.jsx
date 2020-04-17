@@ -138,8 +138,10 @@ const StyledTableRow = withStyles(theme => ({
   const togglemodal = () => setModal(!modal)
   const [modal2, setModal2] = useState(false)
   const togglemodal2 = () => setModal2(!modal2)
-  const [modal3] = useState(false);
-  const togglemodal3 = () => setModal(!modal3)
+
+  const [modal3, setModal3] = useState(false);
+  const togglemodal3 = () => setModal3(!modal3)
+
   const [collectmodal, setcollectmodal] = useState([])
   // const [encounterid, setencounterid] = useState('');
 
@@ -175,12 +177,13 @@ const StyledTableRow = withStyles(theme => ({
   // const handlelabNumber = e => {
   //   //  e.preventDefault();
     
-  //   setpatientValue({ ...patientrow, [e.target.name]: e.target.value })
-  // }
-  // const handlecollect = e => {
-  //   setChecked({...checked, [e.target.value]: e.target.value})
-  //   console.log(e)
-  // }
+
+    setpatientValue({ ...patientrow, [e.target.name]: e.target.value })
+  }
+  const handlecollect = e => {
+    setChecked({...checked, [e.target.value]: e.target.value})
+    
+  }
   const handlesample = (sampleval) => {
     setcollectmodal(sampleval);
     setModal(!modal)
@@ -188,12 +191,12 @@ const StyledTableRow = withStyles(theme => ({
   }
   const handleresult = (sampleval) => {
     setcollectmodal(sampleval);
-    setModal(!modal2)
+    setModal2(!modal2)
    
   }
   const handlereject = (sampleval) => {
     setcollectmodal(sampleval);
-    setModal(!modal3)
+    setModal3(!modal3)
    
   }
   
@@ -286,20 +289,20 @@ const StyledTableRow = withStyles(theme => ({
                                         <Tooltip title="Verify Collected Sample">
                                                 
                                                 <IconButton aria-label="Verify Sample" onClick={() =>
-                                                  handlesample(row.encounterId)}
+                                                  handlesample(row)}
                                                   >
                                                 <GoChecklist size="15" />
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title="Enter Result">
                                                 <IconButton aria-label="Enter Result" onClick={() =>
-                                                  handleresult(row.encounterId)}>
+                                                  handleresult(row)}>
                                                 <FaPlusSquare size="15" />
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title="Rejected Result">
                                                 <IconButton aria-label="Rejected Result" onClick={() =>
-                                                  handlereject(row.encounterId)}>
+                                                  handlereject(row)}>
                                                 <FaTimesCircle size="15" />
                                                 </IconButton>
                                             </Tooltip>
