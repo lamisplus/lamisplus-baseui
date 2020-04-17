@@ -14,6 +14,7 @@ momentLocalizer()
 
 const FormRenderer = props => {
   const [form, setForm] = React.useState();
+  const [formData, setFormData] = React.useState();
   const [errorMsg, setErrorMsg] = React.useState('')
   const [showErrorMsg, setShowErrorMsg] = React.useState(false)
   const [showLoading, setShowLoading] = React.useState(false)
@@ -28,8 +29,11 @@ const FormRenderer = props => {
         return null;
     }
     if(formData.length === 1){
+        setFormData(formData[0]);
       return formData[0].data;
     }
+
+    setFormData(formData);
     return formData.map(item => {
       return item.data;
     })
@@ -59,10 +63,8 @@ const FormRenderer = props => {
       setShowLoadingEncounter(true);
     }
     if(props.encounter.encounterId === props.encounterId){
-        console.log(props.encounter)
         setSubmission({data: extractFormData(props.encounter.formDataObj)});
         setShowLoadingEncounter(false);
-        console.log(submission)
     }
   }, [props.encounter]);
   
@@ -78,17 +80,10 @@ const FormRenderer = props => {
         setShowErrorMsg(true)
         setShowLoading(false)
       }
-      const encounterDate = submission['dateEncounter'] ? submission['dateEncounter'] : new Date();
-      const formatedDate = Moment(encounterDate).format('DD-MM-YYYY')
       const data = {
-          data: [submission.data],
-          patientId: props.patientId,
-          formCode: props.formCode,
-          programCode: props.form.programCode,
-          dateEncounter: formatedDate,
-          visitId: props.visitId
+          data: submission.data,
       }
-      props.saveEncounter(props.encounterId, data, 
+      props.updateFormData(formData.id, data, 
         props.onSuccess ? props.onSuccess : onSuccess, 
         props.onError ? props.onError : onError);
   }
@@ -145,7 +140,7 @@ const mapStateToProps = (state = {formManager: {}}) => {
 
 const mapActionToProps = {
   fetchForm: actions.fetchById,
-  saveEncounter: actions.updateEncounter
+  updateFormData: actions.updateFormData
 }
 
 export default connect(mapStateToProps, mapActionToProps)(FormRenderer)

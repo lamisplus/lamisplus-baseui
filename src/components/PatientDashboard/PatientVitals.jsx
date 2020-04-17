@@ -23,8 +23,8 @@ import {
    }
 
    const calculateBMI = () => {
-     if(props.vitalSigns.formData.bodyWeight && props.vitalSigns.formData.height){
-     const bmi = (props.vitalSigns.formData.bodyWeight / props.vitalSigns.formData.height / props.vitalSigns.formData.height) * 10000;
+     if(props.vitalSigns.bodyWeight && props.vitalSigns.height){
+     const bmi = (props.vitalSigns.bodyWeight / props.vitalSigns.height / props.vitalSigns.height) * 10000;
      if(bmi <= 18.5){
       setBMIStatus('Underweight');
      } 
@@ -50,8 +50,8 @@ import {
         setData({});
         setBMI()
         setBMIStatus()
-      if(props.vitalSigns && props.vitalSigns.formData){
-         setData(props.vitalSigns.formData)
+      if(props.vitalSigns){
+         setData(props.vitalSigns)
          calculateBMI() 
       } 
       

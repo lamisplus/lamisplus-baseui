@@ -140,7 +140,7 @@ export const Delete = (id, onSuccess) => dispatch => {
 
 export const fetchPatientAllergies = id => dispatch => {
   axios
-    .get(`${baseUrl}patients/${id}/encounter/25216afc-d158-4696-ada6-00df609b9a4c/d157d4e2-4031-499d-b32b-7562208a10cf/`)
+    .get(`${baseUrl}patients/${id}/encounters/d157d4e2-4031-499d-b32b-7562208a10cf/`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.PATIENT_ALLERGIES,
@@ -161,7 +161,7 @@ export const fetchPatientAllergies = id => dispatch => {
 export const fetchPatientLatestVitalSigns = (id) => dispatch => {
  if(id){
   axios
-    .get(`${baseUrl}patients/${id}/encounter/25216afc-d158-4696-ada6-00df609b9a4c/bc5d44b8-8ed1-4de0-85de-c3c6f2c91cd0`, {limit: 1, sortField: "dateEncounter", sortOrder: "desc"} )
+    .get(`${baseUrl}patients/${id}/encounters/${CODES.VITAL_SIGNS_FORM}`, {limit: 1, sortField: "dateEncounter", sortOrder: "desc"} )
     .then(response => {
       dispatch({
         type: ACTION_TYPES.PATIENT_LATEST_VITAL_SIGNS,
@@ -182,7 +182,7 @@ export const fetchPatientLatestVitalSigns = (id) => dispatch => {
 export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
   if(id){
    axios
-     .get(`${baseUrl}patients/${id}/encounter/25216afc-d158-4696-ada6-00df609b9a4c/bc5d44b8-8ed1-4de0-85de-c3c6f2c91cd0`)
+     .get(`${baseUrl}patients/${id}/encounters/${CODES.VITAL_SIGNS_FORM}`)
      .then(response => {
        dispatch({
          type: ACTION_TYPES.PATIENT_VITAL_SIGNS,
