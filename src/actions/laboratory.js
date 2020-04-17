@@ -54,6 +54,7 @@ export const fetchFormDataById = id => dispatch => {
   axios
     .get(`${baseUrl}encounters/form-data/${id}`)
     .then(response => {
+      console.log(response)
       dispatch({
         type: ACTION_TYPES.LABORATORY_TESTORDER_FOR_LAB,
         payload: response.data

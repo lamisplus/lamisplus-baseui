@@ -53,14 +53,6 @@ const PatientPrescriptions = props => {
 
   const patientId = props.location.patientId;
   const patientName = props.location.name;
-  const dispensed = 0
-  console.log(props.location.patientId)
-  console.log(props.location.name)
-
-  console.log(patientId)
-
-  console.log(props)
-
 
     useEffect(() => {
       props.fetchPatientPrescriptions(patientId);
