@@ -265,7 +265,8 @@ useEffect(() => {
   
   //Get States from selected country
   const getStates = e => {
-    const getCountryId = e.target.value;
+    const getCountryId =
+     e.target.value;
     setStateByCountryId(getCountryId);
     setValues({ ...values, countryId: getCountryId });
   };
@@ -274,7 +275,8 @@ useEffect(() => {
     async function getCharacters() {
       const response = await fetch(apistate + getCountryId);
       const stateList = await response.json();
-      setStates(stateList.map(({ name, id }) => ({ label: name, value: id })));
+      console.log(stateList)
+      // setStates(stateList.map(({ name, id }) => ({ label: name, value: id })));
     }
     getCharacters();
   }
