@@ -41,7 +41,7 @@ const ModalSample = (props) => {
     setNewdata({...newdata, formdata}) 
   }, [labId]);
         console.log(formdata.data) 
-        
+        const comment =  formdata.data ? formdata.data.comment : null
         const description = formdata.data ? formdata.data.description : null
         const patient_id = formdata.data ? formdata.data.patient_id : null
         const user_id = formdata.data ? formdata.data.user_id : null
@@ -102,6 +102,7 @@ const ModalSample = (props) => {
       toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
       samples['lab_test_order_status'] = 1;
+      samples['comment'] = comment
       samples['date_sample_collected'] = newDatenow;
       samples['user_id'] = user_id
       samples['description'] = description
