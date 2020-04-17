@@ -9,41 +9,46 @@ const columns = [
     name: 'Date',
     selector: 'dateEncounter',
     sortable: false,
-    Display: true
+    Display: true,
+    cell: row => (
+      <span>
+        {row.dateEncounter || ''} 
+      </span>
+    )
   },
   {
     name: 'Pulse(bpm)',
-    selector: 'formData.pulse',
+    selector: 'pulse',
     sortable: false,
   },
   {
     name: 'Respiratory(bpm)',
-    selector: 'formData.respiratoryRate',
+    selector: 'respiratoryRate',
     sortable: false,
   },
   {
     name: 'Temperature(c)',
-    selector: 'formData.temperature',
+    selector: 'temperature',
     sortable: false,
   },,
   {
     name: 'Blood Pressure(mmHg)',
-    selector: 'row.formData',
+    selector: 'row',
     sortable: false,
     cell: row => (
       <span>
-        {row.formData.systolic || ''} {' / '}{row.formData.diastolic || ''}
+        {row.systolic || ''} {' / '}{row.diastolic || ''}
       </span>
     )
   },,
   {
     name: 'Weight(kg)',
-    selector: 'formData.weight',
+    selector: 'weight',
     sortable: false,
   },
   {
     name: 'Height(cm)',
-    selector: 'formData.height',
+    selector: 'height',
     sortable: false,
   },
 ]
