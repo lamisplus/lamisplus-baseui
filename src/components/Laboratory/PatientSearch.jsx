@@ -2,9 +2,23 @@ import React, { useEffect } from "react";
 import DataTable from "react-data-table-component";
 import "./PatientSearch.css";
 import { Input, Form } from "reactstrap";
+import { Card } from "reactstrap";
 import { Link } from "react-router-dom";
 import { fetchAllLabTestOrder } from "actions/laboratory";
 import { connect } from "react-redux";
+import { url } from "../../api";
+
+
+function getTotalcount(formId) {
+  async function getCharacters() {
+    const response = await fetch(url + `encounters/${formId}/form-data`);
+    const totalCount = await response.json();
+    return console.log(totalCount.length) 
+    
+  }
+  getCharacters();
+  
+}
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
   <Form className="cr-search-form" onSubmit={e => e.preventDefault()}>
@@ -58,7 +72,13 @@ const columns = [
     name: "Total Test Order",
     selector: "test order",
     sortable: false,
-    cell: row => <span>{row.formData.lab_test_count}</span>
+    cell: row => <span>{getTotalcount(row.encounterId)}</span>
+  },
+  {
+    name: "Sample Collected",
+    selector: "test order",
+    sortable: false,
+    cell: row => <span>{0}</span>
   },
   {
     name: "Action",
@@ -70,10 +90,10 @@ const columns = [
             state: { getpatientlists: { row } }
           }}
         >
-          Collect Sample
+          Collect Sample  { ' '}
         </Link>
-        {/* <Link to={`/patient-lab-test/${row.encounterId}`}>
-         
+        {/* <Link to={`/patient-lab-test/${row.encounterId}/${row.hospitalNumber}`}>
+          Collect Sample
         </Link> */}
       </div>
     ),
@@ -133,8 +153,8 @@ const LaboratoryTestOrder = props => {
   }, [filterText, resetPaginationToggle]);
 
   return (
-    <div class="searchTable">
-      <card>
+    <div className="searchTable">
+      <Card>
         <cardContent>
           <DataTable
             columns={columns}
@@ -154,14 +174,13 @@ const LaboratoryTestOrder = props => {
             expandableRowsComponent={<SampleExpandedComponent />}
           />
         </cardContent>
-      </card>
+      </Card>
     </div>
   );
 };
 
 const mapStateToProps = state => {
-  //console.log('logging state');
-  //console.log(state.laboratory.list);
+
   return {
     patientsTestOrderList: state.laboratory.list
   };

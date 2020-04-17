@@ -1,6 +1,7 @@
 import axios from "axios";
-import { url as baseUrl } from "../api";
+import { url as baseUrl , LABSERVICECODE} from "../api";
 import * as ACTION_TYPES from "./types";
+import { toast } from "react-toastify";
 
 //TODO: by Jeph => Complete documentation
 
@@ -18,13 +19,13 @@ import * as ACTION_TYPES from "./types";
 
 export const fetchAllLabTestOrder = () => dispatch => {
   axios
-    .get(`${baseUrl}encounters/GENERAL_SERVICE/LABTEST_ORDER_FORM/`)
+    .get(`${baseUrl}encounters/${LABSERVICECODE}/{dateStart}/{dateEnd}`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.LABORATORY_TESTORDER,
         payload: response.data
       })
-      ///console.log(response)
+     console.log(response.data)
     })
     .catch(error =>
       dispatch({
@@ -33,54 +34,105 @@ export const fetchAllLabTestOrder = () => dispatch => {
       })
     );
 };
-export const fetchAllLabTestOrderOfPatient = () => dispatch => {
+export const fetchAllLabTestOrderOfPatient = id => dispatch => {
   axios
-    .get(`${baseUrl}encounters/GENERAL_SERVICE/LABTEST_ORDER_FORM/`)
+    .get(`${baseUrl}encounters/${id}/form-data`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.LABORATORY_TESTORDER_FOR_PATIENT,
         payload: response.data
       })
-      ///console.log(response)
     })
     .catch(error =>
       dispatch({
         type: ACTION_TYPES.ERROR_LABORATORY_TESTORDER_FOR_PATIENT,
-        payload: 'Something went wrong, please try again'
+        payload: error
       })
     );
 };
-export const createCollectedSample = (data) => dispatch => {
-  console.log(data)
+export const fetchFormDataById = id => dispatch => {
   axios
-    .put(`${baseUrl}ecounter/GENERAL_SERVICE/LABTEST_ORDER_FORM`)
+    .get(`${baseUrl}encounters/form-data/${id}`)
+    .then(response => {
+      console.log(response)
+      dispatch({
+        type: ACTION_TYPES.LABORATORY_TESTORDER_FOR_LAB,
+        payload: response.data
+      })
+    })
+    .catch(error =>
+      dispatch({
+        type: ACTION_TYPES.ERROR_LABORATORY_TESTORDER_FOR_LAB,
+        payload: error
+      })
+    );
+};
+export const createCollectedSample = (data, lab_id) => dispatch => {
+  
+  axios
+    .put(`${baseUrl}form-data/${lab_id}`, data)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.CREATE_COLLECT_SAMPLE,
         payload: response.data
       });
+     
+      toast.success("Sample Collection was successful");
+      setInterval(window.location.reload(false), 80000);
     })
-    .catch(error =>
+    .catch(error =>{
+      
       dispatch({
         type: ACTION_TYPES.ERROR_CREATE_COLLECT_SAMPLE,
-        payload: 'Something went wrong, please try again'
+        payload: error
       })
-    );
+      console.log(error)
+      toast.error("Something went wrong, please try again");
+      setInterval(window.location.reload(false), 80000);
+      //window.location.reload()
+      
+    });
 };
-export const fetchById = id => dispatch => {
+
+export const transferSample = (samples, lab_id) => dispatch => {
+ 
   axios
-    .get(`${baseUrl}visits/${id}`)
+    .put(`${baseUrl}form-data/`, samples)
     .then(response => {
       dispatch({
-        type: ACTION_TYPES.CHECKIN_FETCH_BY_ID,
+        type: ACTION_TYPES.TRANSFER_SAMPLE,
         payload: response.data
       });
+      toast.success("Sample Transfer was successful");
     })
-    .catch(error =>
+    .catch(error =>{
+      
       dispatch({
-        type: ACTION_TYPES.CHECKIN_ERROR,
-        payload: "Something went wrong, please try again"
+        type: ACTION_TYPES.ERROR_TRANSFER_SAMPLE,
+        payload: error
       })
+      toast.error("Something went wrong, please try again");
+
+    });
+};
+export const fetchFormById = id => dispatch => {
+  //console.log(id)
+  axios
+    .get(`${baseUrl}form-data/${id}`)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.FORMDATA_FETCH_BY_ID,
+        payload: response.data
+      });
+      //console.log("is getting here ") 
+    })
+    .catch(error => {
+      dispatch({
+        type: ACTION_TYPES.ERROR_FORMDATA_FETCH_BY_ID,
+        payload: error
+      })
+      console.log(error)
+    }
     );
 };
 

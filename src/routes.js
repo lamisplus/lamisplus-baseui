@@ -38,6 +38,7 @@ const LaboratoryPage = React.lazy(() =>
 );
 const TestOrder = React.lazy(() => import("components/Laboratory/TestOrder"));
 const CollectSample = React.lazy(() =>import("components/Laboratory/CollectSample"));
+const LaboratorySampleResultPage = React.lazy(() =>import("components/Laboratory/CollectResult"));
 const PatientlabTestOrder = React.lazy(() =>import("components/Laboratory/PatientlabTestOrder"));
 const CollectedSample = React.lazy(() =>
   import("components/Laboratory/CollectedSample")
@@ -51,21 +52,10 @@ const FormBuilder = React.lazy(() =>
   import("components/FormManager/FormBuilder")
 );
 const ViewForm = React.lazy(() => import("components/FormManager/ViewForm"));
-/* Pharmacy page loading */
+
 /* Pharmacy page loading */
 const PharmacyDashboard = React.lazy(() => import("./components/Pharmacy/PharmacyDashboard"))
-const PharmacyPage = React.lazy(() =>
-  import("components/Pharmacy/PharmacyPage")
-);
-const PendingPrescription = React.lazy(() =>
-  import("components/Pharmacy/PendingPrescription")
-);
-const ViewPrescription = React.lazy(() =>
-  import("components/Pharmacy/ViewPrescription")
-);
-const DispensedPrescription = React.lazy(() =>
-  import("components/Pharmacy/DispensedPrescription")
-);
+
 const AppointmentPage = React.lazy(() => import("pages/AppointmentPage"));
 const CheckInPatientPage = React.lazy(() =>
   import("components/CheckIn/CheckedInPatientPage")
@@ -77,7 +67,6 @@ const AddVitalsPage = React.lazy(() =>
   import("components/Vitals/AddVitalsPage")
 );
 // const CheckInModal = React.lazy(() => import('components/CheckIn/CheckInModal'));
-
 const EnrolledPatientsDashboard = React.lazy(() =>
   import("components/PatientConsultation/HomePage")
 );
@@ -89,6 +78,7 @@ const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split("/").pop()}`;
 };
 
+const Prescript = React.lazy(() => import("components/Pharmacy/prescriptions"))
 class Routes extends Component {
   render() {
     return (
@@ -110,13 +100,15 @@ class Routes extends Component {
               <Route exact path="/vital-signs" component={VitalSignsPage} />
               {/* Consultation Links */}
               <Route exact path="/consultation" component={ConsultationPage} />
+              
               <Route
                 exact
                 path="/consultation-dashbaord"
                 component={ConsultationDashboardPage}
               />
-
+             <Route exact path="/collect-result" component={LaboratorySampleResultPage} />
               <Route exact path="/laboratory" component={LaboratoryPage} />
+              
               <Route exact path="/view-result" component={ViewResult} />
               <Route exact path="/test-order" component={TestOrder} />
               <Route
@@ -126,33 +118,17 @@ class Routes extends Component {
               />
               <Route exact path="/test-result" component={TestResult} />
               <Route exact path="/collect-sample" component={CollectSample} />
-              <Route exact path="/patient-lab-test/:id" component={PatientlabTestOrder} />
+              <Route exact path="/patient-lab-test/:id/:patientId" component={PatientlabTestOrder} />
               <Route exact path="/patients" component={PatientsPage} />
 
               {/* Pharmacy Links */}
               <Route exact path="/pharmacy" component={PharmacyDashboard} />
               <Route
                 exact
-                path="/pending-prescription"
-                component={PendingPrescription}
-              />
-              <Route
-                exact
-                path="/view-prescription"
-                component={ViewPrescription}
-              />
-              <Route
-                exact
-                path="/dispensed-prescription"
-                component={DispensedPrescription}
-              />
-
-              <Route
-                exact
                 path="/patientPrescriptions"
                 component={PatientPrescriptions}
               />
-
+              <Route exact path="/prescriptions" component={Prescript}/>
               <Route exact path="/appointment" component={AppointmentPage} />
               <Route
                 exact

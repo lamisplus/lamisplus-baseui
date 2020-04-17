@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -7,7 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import { ToastContainer, toast } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -30,7 +30,7 @@ import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import TestOrder from './TestOrder/TestOrder';
 import Medication from './Medication/Medication';
 import ServiceForm from './ServiceForm/serviceForm';
-import { Nav, NavItem, NavLink, Badge, Card, CardBody, CardDeck,Button } from 'reactstrap';
+import { Nav, NavItem, NavLink, Badge, Card, CardBody, CardDeck } from 'reactstrap';
 import CheckInModal from 'components/CheckIn/CheckInModal';
 import ViewVitalsSearch from 'components/Vitals/ViewVitalsSearch'
 import * as actions from "actions/patients";
@@ -184,22 +184,22 @@ const useStyles = makeStyles(theme => ({
 
 function HomePage(props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-  const [checkIn, setCheckIn] = React.useState(false);
-  const [fetchingPatient, setFetchingPatient] = React.useState(false);
+  const [value, setValue] = useState(0);
+  const [checkIn, setCheckIn] = useState(false);
+  const [fetchingPatient, setFetchingPatient] = useState(false);
   const hospitalNumber = props.location.state.hospitalNumber || props.patient.hospitalNumber || '';
-  const [rPopoverOpen, setRelationshipPopoverOpen] = React.useState(false);
+  const [rPopoverOpen, setRelationshipPopoverOpen] = useState(false);
 
-  const toggleRelationshipPopOver = () => setRelationshipPopoverOpen(!rPopoverOpen);
-  const modifiers = {
-    preventOverflow: {
-      enabled: false,
-    },
-    flip: {
-      enabled: false,
-    },
-  };
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  // const toggleRelationshipPopOver = () => setRelationshipPopoverOpen(!rPopoverOpen);
+  // const modifiers = {
+  //   preventOverflow: {
+  //     enabled: false,
+  //   },
+  //   flip: {
+  //     enabled: false,
+  //   },
+  // };
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

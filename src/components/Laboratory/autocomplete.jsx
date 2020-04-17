@@ -4,12 +4,12 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {url} from '../../api'
 
-export default function FixedTags() {
+export default function FixedTags(props) {
     const [optionsample, setOptionsample] = useState([]);
     useEffect(() => {
         async function getCharacters() {
           try {
-            const response = await fetch(url+'codeset/SAMPLE_TYPE');
+            const response = await fetch(url+'application-codesets/codesetGroup?codesetGroup=SAMPLE_TYPE');
             const body = await response.json();
             setOptionsample(body.map(({ display, id }) => ({ title: display, value: id })));
           } catch (error) {
@@ -22,7 +22,7 @@ export default function FixedTags() {
   return (
     <Autocomplete
       multiple
-      id="fixed-tags-demo"
+      id="sample_type"
       options={optionsample}
       getOptionLabel={(option) => option.title}
       
@@ -33,8 +33,9 @@ export default function FixedTags() {
       }
       style={{ width: 'auto' }}
       renderInput={(params) => (
-        <TextField {...params} variant="outlined" margin="normal" label="Sample Type "/>
+        <TextField {...params} variant="outlined" margin="normal" label="Sample Type "  />
       )}
+      onChange={props.onChange}
     />
   );
 }

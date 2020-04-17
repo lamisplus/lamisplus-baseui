@@ -1,0 +1,230 @@
+import React, {useState, useEffect} from 'react';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter ,
+Form,
+Row,
+Col,
+FormGroup,
+Label,Input
+} from 'reactstrap';
+import { connect } from 'react-redux';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "react-widgets/dist/css/react-widgets.css";
+import { DateTimePicker } from 'react-widgets';
+import Moment from 'moment';
+import momentLocalizer from 'react-widgets-moment';
+import moment from "moment";
+import {url} from '../../api'
+
+import { useSelector, useDispatch } from 'react-redux';
+import { createCollectedSample, fetchFormById } from '../../actions/laboratory';
+
+
+Moment.locale('en');
+momentLocalizer();
+
+
+const ModalSampleResult = (props) => {
+  const [newdata, setNewdata] = useState({formdata});
+/* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
+  const formdata = useSelector(state => state.laboratory.formdata);
+  const dispatch = useDispatch();
+  const lab_id = props.datasample.id
+  console.log(props.datasample)
+  const labId = lab_id;
+
+  useEffect(() => {
+    dispatch(fetchFormById(labId));
+    setNewdata({...newdata, formdata}) 
+  }, [labId]);
+        console.log(formdata.data) 
+        const comment =  formdata.data ? formdata.data.comment : null
+        const description = formdata.data ? formdata.data.description : null
+        const patient_id = formdata.data ? formdata.data.patient_id : null
+        const user_id = formdata.data ? formdata.data.user_id : null
+        const lab_test_id = formdata.data ? formdata.data.lab_test_id : null
+        const sample_type = formdata.data ? formdata.data.sample_type : null
+        const test_result = formdata.data ? formdata.data.test_result : null
+        const lab_test_group = formdata.data ? formdata.data.lab_test_group : null
+        const unit_measurement = formdata.data ? formdata.data.unit_measurement : null
+        const lab_test_group_id = formdata.data ? formdata.data.lab_test_group_id : null
+        const lab_test_order_id = formdata.data ? formdata.data.lab_test_order_id : null
+        const date_result_reported = formdata.data ? formdata.data.date_result_reported : null
+        const date_sample_collected = formdata.data ? formdata.data.date_sample_collected : null
+        const lab_test_order_status = formdata.data ? formdata.data.lab_test_order_status : null
+       
+        const [data, setData] = useState({data:{}})
+        const [samples, setSamples] = useState({                                                                         
+                                          user_id: user_id,
+                                          patient_id: patient_id,
+                                          description: description,
+                                          lab_test_id: lab_test_id,
+                                          sample_type: sample_type,
+                                          test_result:test_result,
+                                          lab_test_group: lab_test_group,
+                                          unit_measurement:unit_measurement,
+                                          lab_test_group_id:lab_test_group_id,
+                                          lab_test_order_id: lab_test_order_id,
+                                          date_result_reported: date_result_reported,
+                                          date_sample_collected: new Date(),
+                                          lab_test_order_status: lab_test_order_status 
+                                    })
+ 
+          
+        const [optionsample, setOptionsample] = useState([]);
+        useEffect(() => {
+            async function getCharacters() {
+              try {
+                const response = await fetch(url+'application-codesets/codesetGroup?codesetGroup=SAMPLE_TYPE');
+                const body = await response.json();
+                setOptionsample(body.map(({ display, id }) => ({ title: display, value: id })));
+              } catch (error) {
+                console.log(error);
+              }
+            }
+            getCharacters();
+          }, []);
+       const handleInputChangeSample = e => {
+        const { name, value } = e.target
+        const fieldValue = { [name]: value }
+        setSamples({
+            ...samples,
+            ...fieldValue
+        })
+
+    }
+    const saveSample = e => {
+     
+      console.log(data)
+      toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
+      const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
+      samples['lab_test_order_status'] = 1;
+      samples['date_sample_collected'] = newDatenow;
+      samples['user_id'] = user_id
+      samples['description'] = description
+      samples['patient_id'] =patient_id
+      samples['description'] = description
+      samples['lab_test_id'] = lab_test_id
+      samples['lab_test_group'] = lab_test_group
+      samples['unit_measurement'] = unit_measurement
+      samples['lab_test_group_id'] = lab_test_group_id
+      samples['lab_test_order_id'] = lab_test_order_id
+      samples['date_sample_collected']= date_sample_collected
+      data['data'] = samples;
+      console.log(data)
+      e.preventDefault()
+      props.createCollectedSample(data, lab_id)
+    }
+    //console.log(formdata)
+    const textstyle = {
+        fontSize: '14px',
+        fontWeight: 'bolder'
+      };
+
+  return (
+      
+      <div >
+       <ToastContainer autoClose={2000} hideProgressBar />
+      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
+        
+      <Form onSubmit={saveSample}>
+        <ModalHeader toggle={props.togglestatus}>Enter Sample Result</ModalHeader>
+        <ModalBody>
+                        <Row style={{ marginTop: '20px'}}>
+                            <Col xs="4">
+                              Test 
+                              <br/>
+                              <p style={textstyle}>{lab_test_group} </p>
+
+                            
+                            </Col>
+                            <Col xs="4">
+                              Sample Test
+                              <br/>
+                             <p style={textstyle}>{description}</p>
+                              
+                              </Col>
+                            <Col xs="4">
+                              Date Of Result
+                              <br/>
+                              <DateTimePicker time={false} name="date_result_reported"  id="date_result_reported"  
+                                defaultValue={new Date()} max={new Date()}
+                                value={samples.date_result_reported}
+                                onChange={value1 =>
+                                  setSamples({ ...samples, date_result_reported: value1 })
+                                }
+                              />            
+                              </Col>
+                          
+                        </Row >
+                        <Row style={{ marginTop: '20px'}}>
+                            {/* <Col xs="4">
+                            
+                              <FormGroup>
+                                    <Label for="exampleEmail">Result</Label>
+                                    <Input type="email" name="email" id="exampleEmail" placeholder="with a placeholder" />
+                                </FormGroup>
+                            </Col> */}
+                            <Col xs="4">
+                              Unit
+                              <br/>
+                              <p style={textstyle}>{unit_measurement}</p>
+                              
+                              </Col>
+                            <Col xs="4">
+                              Sample collected
+                              <br/>
+                              <p style={textstyle}>{sample_type}<small className="text-muted">By Evans</small></p>
+                              </Col>
+                          
+                        </Row>
+                        <Row style={{ marginTop: '20px'}}>
+                            <Col xs="4">
+                            
+                              <FormGroup>
+                                    <Label for="examplePassword">File</Label>
+                                    <Input type="file" name="file"  placeholder="file upload" />
+                                </FormGroup>
+                            
+                            </Col>
+                            <Col xs="4">
+                              Date Asseyed
+                              <br/>
+                              <p style={textstyle}>{date_sample_collected}<small className="text-muted">By Evans</small></p> 
+                              
+                              </Col>
+                            
+                          
+                        </Row>
+                        <Row style={{ marginTop: '20px'}}>
+                            <Col xs="12">
+                            
+                              <FormGroup>
+                                    <Label for="examplePassword">Enter Note here</Label>
+                                    <Input
+                                      type='textarea'
+                                      name='comment'
+                                      id='comment'
+                                      onChange={handleInputChangeSample}
+                                      value = {samples.comment}                                     
+                                    >
+                                  </Input>
+                                </FormGroup>
+
+                            
+                            </Col>
+                            
+                        </Row>
+                       
+                    </ModalBody>
+        <ModalFooter>
+          <Button color="primary" type="submit" >Save Sample</Button>{' '}
+          <Button color="secondary" onClick={props.togglestatus}>Cancel</Button>
+        </ModalFooter>
+        </Form>
+      </Modal>
+    </div>
+  );
+}
+
+export default connect(null, { createCollectedSample })(ModalSampleResult);

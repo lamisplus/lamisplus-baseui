@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import { useHistory  } from "react-router-dom";
-// import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import sigInLogo from 'assets/img/signin.jpg';
+import Container from '@material-ui/core/Container';
 import logo200Image from 'assets/img/logo/logo_200.png';
 
 function Copyright() {
@@ -28,20 +27,10 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    height: '100vh',
-  },
-  image: {
-    backgroundImage: `url(${sigInLogo})`,
-    backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'dark' ? theme.palette.grey[900] : theme.palette.grey[50],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
+const useStyles = makeStyles((theme) => ({
+  
   paper: {
-    margin: theme.spacing(8, 4),
+    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -59,9 +48,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignInSide() {
-  let history = useHistory();
+export default function SignIn() {
   const classes = useStyles();
+  let history = useHistory();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -95,25 +84,28 @@ export default function SignInSide() {
       isButtonDisabled || handleLogin();
     }
   };
-
   return (
-    <Grid container component="main" className={classes.root}>
+    <div style={{  
+      //backgroundImage: `url(${sigInLogo})`,
+      backgroundColor: '#fff',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'repeat',
+      height: "100%"
+    }}>
+    <Container component="main" maxWidth="xs" >
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={9} className={classes.image} />
-      <Grid item xs={12} sm={8} md={3} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          
-            <img
+      <div className={classes.paper} >
+      <img
               src={logo200Image}
               className="rounded"
               style={{cursor: 'pointer' }}
               alt="logo"              
             />
-          <br/>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-          <form className={classes.form} noValidate>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <form className={classes.form} noValidate>
             <TextField
               error={error}
               variant="outlined"
@@ -168,8 +160,9 @@ export default function SignInSide() {
               <Copyright />
             </Box>
           </form>
-        </div>
-      </Grid>
-    </Grid>
+      </div>
+     
+    </Container>
+    </div>
   );
 }

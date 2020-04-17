@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {
   Card,
   CardBody,
@@ -6,13 +6,8 @@ import {
   Col,
   Row,
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Form,
   FormGroup,
-  Label,
   Input
 } from 'reactstrap'
 import { useState } from 'react'
@@ -47,9 +42,9 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Page from 'components/Page'
 import { connect } from 'react-redux'
-import { createCollectedSample } from '../../actions/laboratory'
-import ModalSample from './collectSampleModal';
-import ModalSampleTransfer from './transferSampleModal';
+import { fetchAllLabTestOrderOfPatient } from "actions/laboratory";
+import { fetchById } from "actions/patients";
+
 
 
 Moment.locale('en')
@@ -117,15 +112,24 @@ const StyledTableRow = withStyles(theme => ({
   }
 }))(TableRow)
 
- function CollectSample (props) {
+ function CollectSample ({ match }) {
   const classes = useStyles()
   const classes2 = useStyles2()
-  const data = [props]
+  
+  useEffect(() => {
+    const { id } = match.params.id;
+    const { patient_id } = match.params.patientId;
+    fetchById(patient_id);
+    fetchAllLabTestOrderOfPatient(id);
+  }, []); //componentDidMount
+
+
+  const data = []
   const [useData, setUsedata] = useState(data)
-  const userInfo = props.location.state.getpatientlists.row
+  const userInfo = []
 
   /* For modal popup */
-  const { className } = props
+  const { className } = ''
   const [checked, setChecked] = useState({id:'', statuscheck:false })
   const [modal, setModal] = useState(false)
   const togglemodal = () => setModal(!modal)
@@ -152,21 +156,11 @@ const StyledTableRow = withStyles(theme => ({
 
 
   const saveColllectSample = e => {
-    console.log(patientrow)
-    const newDatenow = moment(TodayDate).format('DD-MM-YYYY')
 
-    useData['formData'] = useData
-    setUsedata({...useData, formData:{"labtest":useData }})
-    console.log(useData)
-    toast.warn("Processing Sample ");
-    e.preventDefault()
-   props.createCollectedSample(collectsample)
- 
   }
   const handlelabNumber = e => {
     //  e.preventDefault();
     
-    setpatientValue({ ...patientrow, [e.target.name]: e.target.value })
   }
 
   
@@ -214,7 +208,7 @@ const transfersample = (val) => {
             </div>
             <br/>
             <Card className="mb-12">
-              <CardHeader>Test Order Details
+              <CardHeader>Test Order Details {match.params.patientId}
               <Link to="/laboratory">
                 <Button color="primary" className=" float-right mr-1" >
                         <TiArrowBack/>Go Back
@@ -337,5 +331,23 @@ const transfersample = (val) => {
   )
 }
 
+// const mapStateToProps = state => ({
+//   testorder: state.laboratory.testorder,
 
-export default connect(null, { createCollectedSample })(CollectSample)
+// })
+const mapStateToProps = (state, ownProps) => {
+  return { 
+    testorder: state.laboratory.testorder[ownProps.match.params.id],
+    patient: state.patients.patient[ownProps.match.params.patientId] 
+  
+  };
+  
+};
+
+const mapActionToProps = {
+  
+  fetchAllLabTestOrderOfPatient: fetchAllLabTestOrderOfPatient,
+  fetchById: fetchById,
+};
+
+export default connect(mapStateToProps,mapActionToProps)(CollectSample)

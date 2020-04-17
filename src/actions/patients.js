@@ -43,6 +43,7 @@ export const fetchAll = () => dispatch => {
 };
 
 export const fetchById = id => dispatch => {
+  
   axios
     .get(`${baseUrl}patients/${id}`)
     .then(response => {
@@ -54,9 +55,11 @@ export const fetchById = id => dispatch => {
     .catch(error =>
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
-        payload: "Something went wrong, please try again"
+        payload: error
       })
+      
     );
+    
 };
 
 
@@ -64,8 +67,7 @@ export const create = data => dispatch => {
   axios
     .post(`${baseUrl}patients/`, data)
     .then(response => {
-      console.log(response);
-      //console.log(response.status);
+
       dispatch({
         type: ACTION_TYPES.PATIENTS_CREATE,
         payload: response.data
@@ -135,6 +137,7 @@ export const Delete = (id, onSuccess) => dispatch => {
 // }
 
 
+
 export const fetchPatientAllergies = id => dispatch => {
   axios
     .get(`${baseUrl}patients/${id}/encounter/25216afc-d158-4696-ada6-00df609b9a4c/d157d4e2-4031-499d-b32b-7562208a10cf/`)
@@ -153,6 +156,7 @@ export const fetchPatientAllergies = id => dispatch => {
     )
    
 }
+
 
 export const fetchPatientLatestVitalSigns = (id) => dispatch => {
  if(id){

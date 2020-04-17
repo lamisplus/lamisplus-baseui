@@ -64,7 +64,7 @@ export const create = (data, onSuccess, onError )=> dispatch => {
         type: ACTION_TYPES.ENCOUNTER_ERROR,
         payload: 'Something went wrong, please try again'
       })
-      onError(error.response)
+      // onError(error.response)
     })
 }
 

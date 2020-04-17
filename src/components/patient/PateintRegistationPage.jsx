@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Page from "components/Page";
 import React, { useState, useEffect } from "react";
 import MatButton from "@material-ui/core/Button";
@@ -31,9 +32,8 @@ import moment from "moment";
 import Title from "components/Title/CardTitle";
 import { url } from "../../api";
 import { create } from "../../actions/patients";
-import { initialfieldState_patientRegsitration } from "./initailFieldState";
+import { initialfieldState_patientRegistration } from "./InitialFieldState";
 import useForm from "../Functions/UseForm";
-
 
 //Dtate Picker package
 Moment.locale("en");
@@ -81,8 +81,8 @@ const PatientRegistration = props => {
   const apicountries = url + "countries";
   const apistate = url + "state/country/";
 
-  const { values, setValues, handleInputChange, resetForm } = useForm(
-    initialfieldState_patientRegsitration
+  const { values, setValues, handleInputChange } = useForm(
+    initialfieldState_patientRegistration
   );
   /**
    * Initializing state properties
@@ -104,6 +104,7 @@ const PatientRegistration = props => {
   ];
   const [saving, setSaving] = useState(false);
   const [display, setDisplay] = useState(false);
+
     //Get countries
     useEffect(() => {
       async function getCharacters() {
@@ -179,6 +180,7 @@ useEffect(() => {
   getCharacters();
 }, []);
 /* ##### End of gender parameter from the endpoint ##########*/
+
   const findAge = date => {
     var dob = new Date(date);
     var today = new Date();
@@ -197,11 +199,11 @@ useEffect(() => {
     return m;
   };
 
-  const handleDateChange = e => {
-    const age = findAge(e.target.value);
-    setValues({ ...values, dob: e.target.values });
-    console.log(age);
-  };
+  // const handleDateChange = e => {
+  //   const age = findAge(e.target.value);
+  //   setValues({ ...values, dob: e.target.values });
+  //   console.log(age);
+  // };
 
   /**
    * Estimates the dob of an individual given
@@ -210,8 +212,8 @@ useEffect(() => {
     const newage = (values["age"] = age);
     var d = new Date();
     var year = d.getFullYear();
-    var month = d.getMonth();
-    var day = d.getDate();
+    // var month = d.getMonth();
+    // var day = d.getDate();
     var c = new Date(year - newage, 6, 15);
 
     return c;
@@ -241,6 +243,24 @@ useEffect(() => {
     }
   };
 
+
+
+
+  useEffect(() => {
+     getCharacters();
+   }); 
+
+     async function getCharacters() {
+       try {
+         const countries = await axios.get(apicountries);
+         setCountries(countries.data.map(({ name, id }) => ({ label: name, value: id })));
+         const defaultCountryId = countries.data.find(x => x.name === "Nigeria").id;
+         setValues({ ...values, countryId: defaultCountryId });
+         setStateByCountryId(defaultCountryId);
+       } catch (error) {
+         console.log(error);
+       }
+     }
 
   
   //Get States from selected country
@@ -307,15 +327,15 @@ useEffect(() => {
     setRelative({ ...relative, [e.target.name]: e.target.value });
   };
 
-  const calculateAge = e => {
-    // ccnst calAge = moment().subtract(e.target.value, 'years');
-    const calculatedAge = moment()
-      .set({ month: 6, day: 15 })
-      .subtract(e.target.value, "year")
-      .format("DD/MM/YYYY");
-    console.log(calculatedAge);
-    setValues({ ...values, dateOfBirth: new Date(calculatedAge) });
-  };
+  // const calculateAge = e => {
+  //   // ccnst calAge = moment().subtract(e.target.value, 'years');
+  //   const calculatedAge = moment()
+  //     .set({ month: 6, day: 15 })
+  //     .subtract(e.target.value, "year")
+  //     .format("DD/MM/YYYY");
+  //   console.log(calculatedAge);
+  //   setValues({ ...values, dateOfBirth: new Date(calculatedAge) });
+  // };
   //
 
   // setValues({...values, dateRegistration: newDatenow});
@@ -357,6 +377,11 @@ useEffect(() => {
               <CardContent>
                 <Title>
                   Basic Information <br />
+                  <MatButton
+                    variant="contained"
+                    color="primary"
+                    className=" float-right mr-1" >
+                    </MatButton>
 
                 </Title>
                 <br />
