@@ -4,9 +4,12 @@ Form,
 Row,
 Col,
 FormGroup,
-Label,Input
+Label
 } from 'reactstrap';
 import { connect } from 'react-redux';
+import Chip from '@material-ui/core/Chip';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
@@ -24,7 +27,7 @@ Moment.locale('en');
 momentLocalizer();
 
 
-const ModalSampleResult = (props) => {
+const ModalSample = (props) => {
   const [newdata, setNewdata] = useState({formdata});
 /* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
   const formdata = useSelector(state => state.laboratory.formdata);
@@ -99,6 +102,7 @@ const ModalSampleResult = (props) => {
       toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
       samples['lab_test_order_status'] = 1;
+      samples['comment'] = comment
       samples['date_sample_collected'] = newDatenow;
       samples['user_id'] = user_id
       samples['description'] = description
@@ -109,114 +113,71 @@ const ModalSampleResult = (props) => {
       samples['unit_measurement'] = unit_measurement
       samples['lab_test_group_id'] = lab_test_group_id
       samples['lab_test_order_id'] = lab_test_order_id
-      samples['date_sample_collected']= date_sample_collected
+      samples['date_result_reported'] = date_result_reported
       data['data'] = samples;
       console.log(data)
       e.preventDefault()
       props.createCollectedSample(data, lab_id)
     }
     //console.log(formdata)
-    const textstyle = {
-        fontSize: '14px',
-        fontWeight: 'bolder'
-      };
-
   return (
       
       <div >
-       <ToastContainer autoClose={2000} hideProgressBar />
-      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
+       <ToastContainer autoClose={3000} hideProgressBar />
+      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className}>
         
       <Form onSubmit={saveSample}>
-        <ModalHeader toggle={props.togglestatus}>Enter Sample Result</ModalHeader>
+        <ModalHeader toggle={props.togglestatus}>Collect Sample</ModalHeader>
         <ModalBody>
-                        <Row style={{ marginTop: '20px'}}>
-                            <Col xs="4">
-                              Test 
-                              <br/>
-                              <p style={textstyle}>{lab_test_group} </p>
-
-                            
-                            </Col>
-                            <Col xs="4">
-                              Sample Test
-                              <br/>
-                             <p style={textstyle}>{description}</p>
-                              
-                              </Col>
-                            <Col xs="4">
-                              Date Of Result
-                              <br/>
-                              <DateTimePicker time={false} name="date_result_reported"  id="date_result_reported"  
-                                defaultValue={new Date()} max={new Date()}
-                                value={samples.date_result_reported}
-                                onChange={value1 =>
-                                  setSamples({ ...samples, date_result_reported: value1 })
-                                }
-                              />            
-                              </Col>
-                          
-                        </Row >
-                        <Row style={{ marginTop: '20px'}}>
-                            {/* <Col xs="4">
-                            
-                              <FormGroup>
-                                    <Label for="exampleEmail">Result</Label>
-                                    <Input type="email" name="email" id="exampleEmail" placeholder="with a placeholder" />
-                                </FormGroup>
-                            </Col> */}
-                            <Col xs="4">
-                              Unit
-                              <br/>
-                              <p style={textstyle}>{unit_measurement}</p>
-                              
-                              </Col>
-                            <Col xs="4">
-                              Sample collected
-                              <br/>
-                              <p style={textstyle}>{sample_type}<small className="text-muted">By Evans</small></p>
-                              </Col>
-                          
-                        </Row>
-                        <Row style={{ marginTop: '20px'}}>
-                            <Col xs="4">
-                            
-                              <FormGroup>
-                                    <Label for="examplePassword">File</Label>
-                                    <Input type="file" name="file"  placeholder="file upload" />
-                                </FormGroup>
-                            
-                            </Col>
-                            <Col xs="4">
-                              Date Asseyed
-                              <br/>
-                              <p style={textstyle}>{date_sample_collected}<small className="text-muted">By Evans</small></p> 
-                              
-                              </Col>
-                            
-                          
-                        </Row>
-                        <Row style={{ marginTop: '20px'}}>
-                            <Col xs="12">
-                            
-                              <FormGroup>
-                                    <Label for="examplePassword">Enter Note here</Label>
-                                    <Input
-                                      type='textarea'
-                                      name='comment'
-                                      id='comment'
-                                      onChange={handleInputChangeSample}
-                                      value = {samples.comment}                                     
-                                    >
-                                  </Input>
-                                </FormGroup>
-
-                            
-                            </Col>
-                            
-                        </Row>
-                       
-                    </ModalBody>
+        <Row >
+        <Col md={12}>
+          <p>Sample Type  </p>
+          
+          <FormGroup>
+            
+            <Label for='maritalStatus'>Date Collected</Label>
+            
+            <DateTimePicker
+                        time={false}
+                        name="date_sample_collected"
+                        id="date_sample_collected"
+                        value={samples.date_sample_collected}
+                        onChange={value1 =>
+                          setSamples({ ...samples, date_sample_collected: value1 })
+                        }
+                        defaultValue={new Date()}
+                        max={new Date()}
+                        required
+                      /> 
+          </FormGroup>
+          <FormGroup>
+            <Label for=''>Sample Type  </Label>
+              <Autocomplete
+                multiple
+                id="sample_type"
+                options={optionsample}
+                getOptionLabel={(option) => option.title}
+                onChange={(e, i) => setSamples({ ...samples, sample_type: i })}
+                renderTags={(value, getTagProps) =>
+                  value.map((option, index) => (
+                    <Chip label={option.title} {...getTagProps({ index })} disabled={index === 0} />
+                  ))
+                }
+                style={{ width: 'auto' }}
+                renderInput={(params) => (
+                  <TextField {...params} variant="outlined" margin="normal" label="Sample Type "  />
+                )}
+                // onChange={(e, value) =>
+                //   setSamples({ ...samples, sample_type: value })
+                // }
+                
+                // value={samples.sample_type}
+              />
+            {/* <FixedTags onChange={handleInputChangeSample} value={samples.sample_type} /> */}
+         </FormGroup>
+        </Col>
+    </Row>
+        </ModalBody>
         <ModalFooter>
           <Button color="primary" type="submit" >Save Sample</Button>{' '}
           <Button color="secondary" onClick={props.togglestatus}>Cancel</Button>
@@ -227,4 +188,4 @@ const ModalSampleResult = (props) => {
   );
 }
 
-export default connect(null, { createCollectedSample })(ModalSampleResult);
+export default connect(null, { createCollectedSample, fetchFormById })(ModalSample);
