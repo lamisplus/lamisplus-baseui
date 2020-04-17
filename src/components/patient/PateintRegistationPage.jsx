@@ -81,7 +81,7 @@ const PatientRegistration = props => {
   const apicountries = url + "countries";
   const apistate = url + "state/country/";
 
-  const { values, setValues, handleInputChange, resetForm } = useForm(
+  const { values, setValues, handleInputChange } = useForm(
     initialfieldState_patientRegistration
   );
   /**
@@ -199,11 +199,11 @@ useEffect(() => {
     return m;
   };
 
-  const handleDateChange = e => {
-    const age = findAge(e.target.value);
-    setValues({ ...values, dob: e.target.values });
-    console.log(age);
-  };
+  // const handleDateChange = e => {
+  //   const age = findAge(e.target.value);
+  //   setValues({ ...values, dob: e.target.values });
+  //   console.log(age);
+  // };
 
   /**
    * Estimates the dob of an individual given
@@ -212,8 +212,8 @@ useEffect(() => {
     const newage = (values["age"] = age);
     var d = new Date();
     var year = d.getFullYear();
-    var month = d.getMonth();
-    var day = d.getDate();
+    // var month = d.getMonth();
+    // var day = d.getDate();
     var c = new Date(year - newage, 6, 15);
 
     return c;
@@ -327,15 +327,15 @@ useEffect(() => {
     setRelative({ ...relative, [e.target.name]: e.target.value });
   };
 
-  const calculateAge = e => {
-    // ccnst calAge = moment().subtract(e.target.value, 'years');
-    const calculatedAge = moment()
-      .set({ month: 6, day: 15 })
-      .subtract(e.target.value, "year")
-      .format("DD/MM/YYYY");
-    console.log(calculatedAge);
-    setValues({ ...values, dateOfBirth: new Date(calculatedAge) });
-  };
+  // const calculateAge = e => {
+  //   // ccnst calAge = moment().subtract(e.target.value, 'years');
+  //   const calculatedAge = moment()
+  //     .set({ month: 6, day: 15 })
+  //     .subtract(e.target.value, "year")
+  //     .format("DD/MM/YYYY");
+  //   console.log(calculatedAge);
+  //   setValues({ ...values, dateOfBirth: new Date(calculatedAge) });
+  // };
   //
 
   // setValues({...values, dateRegistration: newDatenow});
