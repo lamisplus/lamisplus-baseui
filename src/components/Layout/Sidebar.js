@@ -6,7 +6,7 @@ import {
   MdDashboard,
 } from 'react-icons/md';
 // import { GiTreeBeehive} from 'react-icons/gi';
-import { FaUserPlus, FaXRay, FaUsers} from 'react-icons/fa';
+import { FaUserPlus, FaXRay} from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import {
   Nav,

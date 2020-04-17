@@ -8,8 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import { MdDashboard, MdContacts } from 'react-icons/md';
-import { GiFiles, GiTestTubes } from 'react-icons/gi';
-import { FaBriefcaseMedical } from "react-icons/fa";
 import {Card, CardBody, CardDeck, CardHeader} from 'reactstrap';
 import { Bar, Pie } from 'react-chartjs-2';
 import { getColor } from 'utils/colors';
@@ -153,11 +151,11 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const cardHeight = {
-    height: 200,
-    position: 'relative',
-    overflow: 'auto',
-};
+// const cardHeight = {
+//     height: 200,
+//     position: 'relative',
+//     overflow: 'auto',
+// };
 
 
 const genPieData = () => {
@@ -240,9 +238,6 @@ const userProgressTableData = [
 ];
 
 const ScrollableTabsButtonForce = (props) => {
-
-    console.log(props);
-
     useEffect(() => {
       props.fetchPrescriptions();
     }, []);

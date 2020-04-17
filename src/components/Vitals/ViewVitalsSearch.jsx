@@ -25,7 +25,7 @@ const columns = [
     name: 'Temperature(c)',
     selector: 'formData.temperature',
     sortable: false,
-  },,
+  },
   {
     name: 'Blood Pressure(mmHg)',
     selector: 'row.formData',
@@ -35,7 +35,7 @@ const columns = [
         {row.formData.systolic || ''} {' / '}{row.formData.diastolic || ''}
       </span>
     )
-  },,
+  },
   {
     name: 'Weight(kg)',
     selector: 'formData.weight',
@@ -45,7 +45,7 @@ const columns = [
     name: 'Height(cm)',
     selector: 'formData.height',
     sortable: false,
-  },
+  }
 ]
 function DataTableList (props) {
   const [errorMsg, setErrorMsg] = React.useState('')
