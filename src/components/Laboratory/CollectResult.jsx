@@ -287,20 +287,20 @@ const StyledTableRow = withStyles(theme => ({
                                         <Tooltip title="Verify Collected Sample">
                                                 
                                                 <IconButton aria-label="Verify Sample" onClick={() =>
-                                                  handlesample(row.encounterId)}
+                                                  handlesample(row)}
                                                   >
                                                 <GoChecklist size="15" />
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title="Enter Result">
                                                 <IconButton aria-label="Enter Result" onClick={() =>
-                                                  handleresult(row.encounterId)}>
+                                                  handleresult(row)}>
                                                 <FaPlusSquare size="15" />
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title="Rejected Result">
                                                 <IconButton aria-label="Rejected Result" onClick={() =>
-                                                  handlereject(row.encounterId)}>
+                                                  handlereject(row)}>
                                                 <FaTimesCircle size="15" />
                                                 </IconButton>
                                             </Tooltip>
