@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "http://lamisplus.org/demo/precache-manifest.174b7e1bbe20af6ee4b6211a66794570.js"
+  "http://lamisplus.org/demo/precache-manifest.97cd8021a5e6f5827b9dd59d567215d3.js"
 );
 
 workbox.clientsClaim();
