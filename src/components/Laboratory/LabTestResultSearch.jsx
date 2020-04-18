@@ -14,7 +14,7 @@ const PatientSearch = (props) => {
   return (
     <div>
       <MaterialTable
-        title="Laboratry Test Order Table"
+        title="Laboratry Test Result Table"
         columns={[
           {
             title: "Patient Name",
@@ -23,12 +23,12 @@ const PatientSearch = (props) => {
           { title: "Patient ID", field: "Id" },
           { title: "Test Order Date", field: "date", type: "date" },
           {
-            title: "Test  Count",
+            title: "Total Sample  Count",
             field: "count",
             filtering: false
           },
           {
-            title: "Total Sample Collected",
+            title: "Total Test Result",
             field: "samplecount",
             filtering: false
           },
@@ -44,7 +44,13 @@ const PatientSearch = (props) => {
           date: row.dateEncounter,
           count: row.formDataObj.length,
           samplecount: 0,
-          actions: <Link to ={{ pathname: "/collect-sample",  getpatientlists:row, patientName: row.firstName + ' ' + row.lastName}}  style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>Collect Sample</Link>
+          actions: <Link to ={{ 
+                                pathname: "/collect-result",  
+                                state: { getpatientlists:{row}}, 
+                                patientName: row.firstName + ' ' + row.lastName}}  
+                                style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>
+                                Enter Result
+                    </Link>
           
         }))}
         options={{

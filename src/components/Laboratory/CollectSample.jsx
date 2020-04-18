@@ -114,15 +114,17 @@ const StyledTableRow = withStyles(theme => ({
   }
 }))(TableRow)
 
- function CollectSample (props) {
+ function CollectSample  (props){
   const classes = useStyles()
   const classes2 = useStyles2()
   const testorder = useSelector(state => state.laboratory.testorder);
   const PatientDetail = useSelector(state => state.patients.patient);
   const dispatch = useDispatch();
+  const forms = props.location.getpatientlists ;
+
   useEffect(() => {
-    const personId = props.location.state.getpatientlists.row.hospitalNumber;
-    const ecounterId = props.location.state.getpatientlists.row.encounterId;
+    const personId = forms.hospitalNumber;
+    const ecounterId = forms.encounterId;
     dispatch(fetchAllLabTestOrderOfPatient(ecounterId));
     dispatch(fetchById(personId));
   }, [fetchAllLabTestOrderOfPatient,fetchById]); //componentDidMount  
@@ -135,8 +137,8 @@ const StyledTableRow = withStyles(theme => ({
     });
   //Make the list contain unique list of Data 
   const uniqueValues = [...new Set(labTestType)];
-  const userInfo = props.location.state.getpatientlists.row
- console.log(props)
+  const userInfo = props.location.getpatientlists
+ console.log(userInfo)
   const { className } = props
   const [checked, setChecked] = useState({id:'', statuscheck:false })
   const [modal, setModal] = useState(false)
@@ -222,7 +224,7 @@ const transfersample = (val) => {
                     <Typography className={classes2.heading}>
                         DOB:  {userInfo.dob}
                         <br/>
-                        Phone Numbers :  {PatientDetail.dateRegistration || 'N/A'}
+                        Phone Numbers :  {userInfo.dob || 'N/A'}
                     </Typography>
                 </div>
               </ExpansionPanelSummary>
@@ -306,15 +308,22 @@ const transfersample = (val) => {
                                 {/* date_sample_collected */}
                               </TableCell>
                               <TableCell align='center'>
-                                <Button  size="sm" color="info" onClick={() =>
-                                      handlesample(row)}>Collect Sample
-                                </Button>
+                              <a href="#" className="alert-link"
+                                  onClick={() =>
+                                    handlesample(row)}
+                              >
+                                    Collect Sample
+                              </a>
                                 
                               </TableCell>
                               <TableCell align='center'>
-                              <Button  size="sm" color="warning" onClick={() =>
-                                      transfersample(row)}>Transfer Sample
-                                </Button>
+                              
+                                <a href="#"  className="text-info"
+                                  onClick={() =>
+                                    transfersample(row)}
+                              >
+                                    Transfer Sample
+                              </a>
                               </TableCell>
                             </StyledTableRow>
                           ))}

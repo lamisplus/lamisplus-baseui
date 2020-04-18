@@ -19,12 +19,9 @@ const PatientSearch = (props) => {
           { title: "Patient ID", field: "Id" },
           { title: "Prescription Date", field: "date", type: "date" },
           {
-            title: "Status",
-            field: "status",
-            lookup: {
-              0: <span className="note">dispensed</span>,
-              1: "pending",
-            },
+            title: "Total Count",
+            field: "count",
+            filtering: false
           },
           {
             title: "Action",
@@ -36,8 +33,8 @@ const PatientSearch = (props) => {
           name: prescription.firstName,
           Id: prescription.patientId,
           date: prescription.dateEncounter,
-          status: 0,
-          actions: <Link to ={{ pathname: "/patientPrescriptions", name: prescription.firstName +" "+ prescription.lastName, patientId : prescription.patientId}}  style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>View</Link>
+          count: prescription.formDataObj.length,
+          actions: <Link to ={{ pathname: "/patientPrescriptions", forms:prescription.formDataObj, patientName: prescription.firstName + ' ' + prescription.lastName}}  style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>View</Link>
       
         }))}
         options={{

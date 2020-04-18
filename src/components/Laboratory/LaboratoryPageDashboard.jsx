@@ -13,8 +13,7 @@ import {
     MdDashboard,
     MdContacts
   } from 'react-icons/md';
-import {GiFiles,GiTestTubes } from 'react-icons/gi';  
-import { FaBriefcaseMedical} from "react-icons/fa"; 
+import {GiFiles} from 'react-icons/gi';  
 
 import { 
   // Nav, NavItem, NavLink, Badge, 
@@ -23,9 +22,11 @@ import { Bar, Pie } from 'react-chartjs-2';
 import { getColor } from 'utils/colors';
 import { randomNum } from 'utils/demos';
 import UserProgressTable from 'components/UserProgressTable';
-import TestOrderList from './PatientSearch';
-import LabTestResult from './LabTestResult';
-import LabTestResults from './LabTestResults';
+// import TestOrderList from './PatientSearch';
+// import LabTestResult from './LabTestResult';
+// import LabTestResults from './LabTestResults';
+import LabTestOrderSearch from './LabTestOrderSearch';
+import LabTestResultSearch from './LabTestResultSearch';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -272,8 +273,8 @@ export default function ScrollableTabsButtonForce(props) {
         >
           <Tab className={classes.title} label="Dashboard" icon={<MdDashboard />} {...a11yProps(0)} />         
           <Tab className={classes.title} label="Lab. Test Orders" icon={<MdContacts />} {...a11yProps(1)} />
-          {/* <Tab className={classes.title} label="Lab. Results" icon={<GiFiles />} {...a11yProps(2)} /> */}
-          <Tab className={classes.title} label="Lab. Results " icon={<GiFiles />} {...a11yProps(2)} />
+          {/* <Tab className={classes.title} label="Lab. Results 2" icon={<GiFiles />} {...a11yProps(2)} /> */}
+          <Tab className={classes.title} label="Lab. Results " icon={<GiFiles />} {...a11yProps(3)} />
         </Tabs>
         <div>
      
@@ -337,25 +338,21 @@ export default function ScrollableTabsButtonForce(props) {
 
 {/* Begining of Service Form */}
 <TabPanel value={value} index={1}>
- 
-    <TestOrderList />
-
+    <LabTestOrderSearch />
+    {/* <TestOrderList /> */}
 </TabPanel>     
  {/* Begining of consultation  */}
- {/* <TabPanel value={value} index={2}>
-      
-  <LabTestResult />
-              
-</TabPanel> */}
-<TabPanel value={value} index={2}>
-      
-  <LabTestResults />
-              
+ <TabPanel value={value} index={2}>
+  <LabTestOrderSearch />          
+</TabPanel>
+<TabPanel value={value} index={3}>      
+  {/* <LabTestResults />   */}
+  <LabTestResultSearch />            
 </TabPanel>
 
-<TabPanel value={value} index={3}>
-  {/* <TestOrder getpatientdetails={props.location.state } height={cardHeight}/> */}
-</TabPanel>
+{/* <TabPanel value={value} index={3}>
+  <TestOrder getpatientdetails={props.location.state } height={cardHeight}/> 
+</TabPanel> */}
     {/* End of consultation */}
     <TabPanel value={value} index={4}>
         {/* Card stats */}

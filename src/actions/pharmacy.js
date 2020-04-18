@@ -18,6 +18,7 @@ export const fetchPrescriptions = () => dispatch => {
       `${url}encounters/4ab293ff-6837-41e8-aa85-14f25ce59ef0/{dateStart}/{dateEnd}`
     )
     .then((response) => {
+      console.log(response)
       dispatch({
         type: ACTION_TYPES.PHARMACY_FETCH_PRESCRIPTIONS,
         payload: response.data,

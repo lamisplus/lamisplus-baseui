@@ -51,31 +51,37 @@ const PatientPrescriptions = props => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
 
-  const patientId = props.location.patientId;
-  const patientName = props.location.name;
+  // const patientName = props.location.patientName;
 
-    useEffect(() => {
-      props.fetchPatientPrescriptions(patientId);
-    }, []);
+  // console.log(props.location.forms['0'].data)
+  // console.log(props.location)
+  // const patientId = props.location.patientId;
+  const forms = props.location.forms;
+  const patientName = props.location.patientName;
 
-    console.log(props.prescriptions)
+  // data.map(da => console.log(da.data))
+    // useEffect(() => {
+    //   props.fetchPatientPrescriptions(patientId);
+    // }, []);
 
-  const datas = [{
-    drugName: "Paracetamol 500 mg (tablets)",
-    drugId: "56",
-    comment: " 2 (3times daily) 13 tablets Start on 12/01/2020 for 2 weeks"
-  },
-    {
-    gender: "Male",
-    drugName: "Paracetamol 500 mg (tablets)",
-    drugId: "56",
-    comment: " 2 (3times daily) 13 tablets Start on 12/01/2020 for 2 weeks"
-    },
-    {
-    drugName: "Paracetamol 500 mg (tablets)",
-    drugId: "56",
-    comment: " 2 (3times daily) 13 tablets Start on 12/01/2020 for 2 weeks"
-  }]
+    // console.log(props.prescriptions)
+
+  // const datas = [{
+  //   drugName: "Paracetamol 500 mg (tablets)",
+  //   drugId: "56",
+  //   comment: " 2 (3times daily) 13 tablets Start on 12/01/2020 for 2 weeks"
+  // },
+  //   {
+  //   gender: "Male",
+  //   drugName: "Paracetamol 500 mg (tablets)",
+  //   drugId: "56",
+  //   comment: " 2 (3times daily) 13 tablets Start on 12/01/2020 for 2 weeks"
+  //   },
+  //   {
+  //   drugName: "Paracetamol 500 mg (tablets)",
+  //   drugId: "56",
+  //   comment: " 2 (3times daily) 13 tablets Start on 12/01/2020 for 2 weeks"
+  // }]
 
   
 
@@ -104,19 +110,19 @@ const PatientPrescriptions = props => {
           </thead>
           <tbody>
             {props.prescriptions ? (
-              datas.map((data) => (
+              forms.map((form) => (
                 <Fragment>
                   {" "}
                   <tr style={{marginBottom: "10 rem"}}>
                     <td>
                       <span>
-                        <b>{data.drugName}</b>
+                        <b>{form.data.generic_name}</b>
                       </span>
                       <br />
-                      <span>{data.comment}</span>
+                      <span>{form.data.comment}</span>
                     </td>
                     <td>
-                      <span>Administer adequately</span>
+                      <span>{form.data.comment}</span>
                     </td>
                     <td>
                       <VisibilityIcon
