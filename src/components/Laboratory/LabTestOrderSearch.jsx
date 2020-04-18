@@ -44,7 +44,14 @@ const PatientSearch = (props) => {
           date: row.dateEncounter,
           count: row.formDataObj.length,
           samplecount: 0,
-          actions: <Link to ={{ pathname: "/collect-sample",  getpatientlists:row, patientName: row.firstName + ' ' + row.lastName}}  style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>Collect Sample</Link>
+          actions: <Link to ={{ 
+                                pathname: "/collect-sample",  
+                                state: { getpatientlists:{row}}, 
+                                patientName: row.firstName + ' ' + row.lastName}} 
+                                style={{ cursor: "pointer", color: "blue", 
+                                fontStyle: "bold" }}>
+                                Collect Sample
+                                </Link>
           
         }))}
         options={{

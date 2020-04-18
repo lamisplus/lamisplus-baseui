@@ -261,7 +261,7 @@ export default function ScrollableTabsButtonForce(props) {
             {/* <PatientDetailCard getpatientdetails={props.location.state }/>    */}
         </div> 
 
-      <AppBar position="static" >
+      <AppBar position="static" color="transparent">
         <Tabs
           value={value}
           onChange={handleChange}
@@ -273,8 +273,8 @@ export default function ScrollableTabsButtonForce(props) {
         >
           <Tab className={classes.title} label="Dashboard" icon={<MdDashboard />} {...a11yProps(0)} />         
           <Tab className={classes.title} label="Lab. Test Orders" icon={<MdContacts />} {...a11yProps(1)} />
-          {/* <Tab className={classes.title} label="Lab. Results 2" icon={<GiFiles />} {...a11yProps(2)} /> */}
-          <Tab className={classes.title} label="Lab. Results " icon={<GiFiles />} {...a11yProps(3)} />
+          <Tab className={classes.title} label="Lab. Results " icon={<GiFiles />} {...a11yProps(2)} />
+          {/* <Tab className={classes.title} label="Lab. Results " icon={<GiFiles />} {...a11yProps(3)} /> */}
         </Tabs>
         <div>
      
@@ -343,16 +343,13 @@ export default function ScrollableTabsButtonForce(props) {
 </TabPanel>     
  {/* Begining of consultation  */}
  <TabPanel value={value} index={2}>
-  <LabTestOrderSearch />          
+  <LabTestResultSearch />          
 </TabPanel>
-<TabPanel value={value} index={3}>      
-  {/* <LabTestResults />   */}
+{/* <TabPanel value={value} index={3}>      
+<LabTestResults />   
   <LabTestResultSearch />            
-</TabPanel>
-
-{/* <TabPanel value={value} index={3}>
-  <TestOrder getpatientdetails={props.location.state } height={cardHeight}/> 
 </TabPanel> */}
+
     {/* End of consultation */}
     <TabPanel value={value} index={4}>
         {/* Card stats */}
