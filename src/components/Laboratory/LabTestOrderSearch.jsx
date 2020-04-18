@@ -10,7 +10,9 @@ const PatientSearch = (props) => {
       useEffect(() => {
         props.fetchAllLabTestOrderToday();
       }, []); //componentDidMount
- 
+function getTotalcount(formId) {
+    return formId
+}     
   return (
     <div>
       <MaterialTable
@@ -38,13 +40,13 @@ const PatientSearch = (props) => {
             filtering: false,
           },
         ]}
-        ///isLoading={props.patientsTestOrderList.isLoading}
+      
         data={props.patientsTestOrderList.map((row) => ({
           name: row.firstName +  ' ' + row.lastName,
           Id: row.patientId,
           date: row.dateEncounter,
           count: row.formDataObj.length,
-          samplecount: 0,
+          samplecount: getTotalcount(row.formDataObj.length),
           actions: <Link to ={{ 
                                 pathname: "/collect-sample",  
                                 state: { getpatientlists:{row}}, 

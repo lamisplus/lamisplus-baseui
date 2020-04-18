@@ -15,15 +15,9 @@ import { useState , useEffect} from 'react'
 import { MdSave } from 'react-icons/md'
 import { TiArrowBack } from 'react-icons/ti'
 import MatButton from '@material-ui/core/Button'
-
 import 'react-datepicker/dist/react-datepicker.css'
-import ExpansionPanel from '@material-ui/core/ExpansionPanel'
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import Typography from '@material-ui/core/Typography'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
-
 import Table from '@material-ui/core/Table'
 
 import TableBody from '@material-ui/core/TableBody'
@@ -118,11 +112,9 @@ const StyledTableRow = withStyles(theme => ({
 
  function CollectSample  (props){
   const encounterresult = props.location.state.getpatientlists.row ;
-  
   const classes = useStyles()
   const classes2 = useStyles2()
   const testorder = useSelector(state => state.laboratory.testorder);
-  const PatientDetail = useSelector(state => state.patients.patient);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -132,16 +124,18 @@ const StyledTableRow = withStyles(theme => ({
     dispatch(fetchById(personId));
   }, [fetchAllLabTestOrderOfPatient,fetchById]); //componentDidMount  
   const data = [testorder]
+  const newsample =  data[0] ? data[0] : null
+  
   const [useData, setUsedata] = useState(data)
+  
   //Get list of test type
   const [labTestType, setLabTestType] = useState([])
-        data[0].forEach(function(value, index, array) {
+        newsample.forEach(function(value, index, array) {
         labTestType.push(value['data'].lab_test_group);
     });
   //Make the list contain unique list of Data 
   const uniqueValues = [...new Set(labTestType)];
   const userInfo = encounterresult
- console.log(userInfo)
   const { className } = props
   const [checked, setChecked] = useState({id:'', statuscheck:false })
   const [modal, setModal] = useState(false)
@@ -166,11 +160,7 @@ const StyledTableRow = withStyles(theme => ({
         visitId: 0
   })
   //const newDate = moment(patientrow.date_sample_collected).format('DD-MM-YYYY');
-
-
   const saveColllectSample = e => {
-    console.log(patientrow)
-    const newDatenow = moment(TodayDate).format('DD-MM-YYYY')
 
     useData['formData'] = useData
     setUsedata({...useData, formData:{"labtest":useData }})
@@ -203,9 +193,10 @@ const transfersample = (val) => {
 
 const getGroup = e => {
   const getvalue =e.target.value;
-  console.log(getvalue)
-  // setStateByCountryId(getCountryId); 
-  // setValues({ ...values, countryId: getCountryId });
+  const testing = newsample.length>0?newsample:null
+  console.log(testing.data)
+  const getnew = data[0].find(x => x.lab_test_group === 'Haematology')
+  console.log(getnew) 
 };
 
   return (
@@ -282,7 +273,7 @@ const getGroup = e => {
                         </TableHead>
                         <TableBody>
                           
-                            {data[0].map(row => (
+                            {newsample.map(row => (
                             
                             <StyledTableRow key={row.id}>
                               <TableCell component='th' scope='row'>

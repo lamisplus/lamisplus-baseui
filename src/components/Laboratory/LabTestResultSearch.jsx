@@ -58,8 +58,19 @@ const PatientSearch = (props) => {
             backgroundColor: "#1D4380",
             color: "#FFF",
           },
+          searchFieldStyle: {
+            width : '300%',
+            margingLeft: '250px',
+          },
           filtering: true,
+          exportButton: true,
+          searchFieldAlignment: 'left',
+          icon: 'refresh',
+           tooltip: 'Refresh Data',
+            isFreeAction: true,
+            onClick: () => this.tableRef.current && this.tableRef.current.onQueryChange(),
         }}
+        
       />
     </div>
   );
