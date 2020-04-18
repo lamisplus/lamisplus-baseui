@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter ,
+import {  Modal, ModalHeader, ModalBody, ModalFooter ,
 Form,
 Row,
 Col,
 FormGroup,
 Label
 } from 'reactstrap';
+import MatButton from '@material-ui/core/Button'
+import { makeStyles } from '@material-ui/core/styles'
+import SaveIcon from '@material-ui/icons/Save'
+import CancelIcon from '@material-ui/icons/Cancel'
 import { connect } from 'react-redux';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
@@ -25,9 +29,43 @@ import { createCollectedSample, fetchFormById } from '../../actions/laboratory';
 
 Moment.locale('en');
 momentLocalizer();
+const useStyles = makeStyles(theme => ({
+  card: {
+    margin: theme.spacing(20),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3)
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2)
+  },
+  cardBottom: {
+    marginBottom: 20
+  },
+  Select: {
+    height: 45,
+    width: 350
+  },
+  button: {
+    margin: theme.spacing(1)
+  },
 
+  root: {
+    '& > *': {
+      margin: theme.spacing(1)
+    }
+  },
+  input: {
+    display: 'none'
+  }
+}))
 
 const ModalSample = (props) => {
+  const classes = useStyles()
   const [newdata, setNewdata] = useState({formdata});
 /* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
   const formdata = useSelector(state => state.laboratory.formdata);
@@ -179,8 +217,26 @@ const ModalSample = (props) => {
     </Row>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" type="submit" >Save Sample</Button>{' '}
-          <Button color="secondary" onClick={props.togglestatus}>Cancel</Button>
+        <MatButton
+            type='submit'
+            variant='contained'
+            color='primary'
+            className={classes.button}
+            startIcon={<SaveIcon />}
+          >
+            Save Sample
+          </MatButton>
+          <MatButton
+            variant='contained'
+            color='default'
+            onClick={props.togglestatus}
+            className={classes.button}
+            startIcon={<CancelIcon />}
+          >
+            Cancel
+          </MatButton>
+          
+          
         </ModalFooter>
         </Form>
       </Modal>

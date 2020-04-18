@@ -274,6 +274,7 @@ useEffect(() => {
   function setStateByCountryId(getCountryId) {
     async function getCharacters() {
       const response = await fetch(apistate + getCountryId+"/states");
+      console.log(response)
       const stateList = await response.json();
       console.log(stateList)
       // setStates(stateList.map(({ name, id }) => ({ label: name, value: id })));

@@ -44,6 +44,7 @@ import ModalSampleVerify from './VerifySample';
 import ModalSampleResult from './EnterResult';
 import ModalSampleReject from './SampleRejection';
 import { useSelector, useDispatch } from 'react-redux';
+import PatientDetailCard from 'components/Functions/PatientDetailCard';
 
 
 Moment.locale('en')
@@ -202,31 +203,7 @@ const StyledTableRow = withStyles(theme => ({
       <Row>
         <Col>
           <div className={classes2.inforoot}>
-            <ExpansionPanel
-              defaultExpanded
-              style={{ backgroundColor: '#F5F5F5' }}
-            >
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls='panel1c-content'
-                id='panel1c-header'
-              >
-                <div className={classes2.column}>
-                    <Typography className={classes.heading}>
-                        Name:  {userInfo.firstName} {' '} {userInfo.lastName}
-                        <br/>
-                        Gender: {userInfo.gender || 'N/A'} 
-                    </Typography>
-                </div>
-                <div className={classes2.column}>
-                    <Typography className={classes2.heading}>
-                        DOB:  {userInfo.dob}
-                        <br/>
-                        Phone Number :  {PatientDetail.dateRegistration || 'N/A'}
-                    </Typography>
-                </div>
-              </ExpansionPanelSummary>
-            </ExpansionPanel>
+          <PatientDetailCard getpatientdetails={ props.location.state }/>  
             </div>
             <br/>
             <Card className="mb-12">
@@ -272,9 +249,9 @@ const StyledTableRow = withStyles(theme => ({
                             
                             <StyledTableRow key={row.id}>
                               <TableCell component='th' scope='row'>
-                                {row.data.description}
+                                {row.data.description ===""?"Null ":row.data.description}
                               </TableCell>
-                              <TableCell align='center'>{row.data.sample_type===""?"Not Collected Yet ":row.data.sample_type}</TableCell>
+                              <TableCell align='center'>{row.data.sample_type===""?"Null ":row.data.sample_type}</TableCell>
                               <TableCell align='center'>
                               {userInfo.dateEncounter} 
                                 {/* date_sample_collected */}

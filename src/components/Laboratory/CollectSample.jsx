@@ -47,6 +47,7 @@ import {  fetchAllLabTestOrderOfPatient } from '../../actions/laboratory'
 import ModalSample from './collectSampleModal';
 import ModalSampleTransfer from './transferSampleModal';
 import { useSelector, useDispatch } from 'react-redux';
+import PatientDetailCard from 'components/Functions/PatientDetailCard';
 
 
 Moment.locale('en')
@@ -115,16 +116,17 @@ const StyledTableRow = withStyles(theme => ({
 }))(TableRow)
 
  function CollectSample  (props){
+  const encounterresult = props.location.state.getpatientlists.row ;
+  
   const classes = useStyles()
   const classes2 = useStyles2()
   const testorder = useSelector(state => state.laboratory.testorder);
   const PatientDetail = useSelector(state => state.patients.patient);
   const dispatch = useDispatch();
-  const forms = props.location.getpatientlists ;
 
   useEffect(() => {
-    const personId = forms.hospitalNumber;
-    const ecounterId = forms.encounterId;
+    const personId = encounterresult.hospitalNumber;
+    const ecounterId = encounterresult.encounterId;
     dispatch(fetchAllLabTestOrderOfPatient(ecounterId));
     dispatch(fetchById(personId));
   }, [fetchAllLabTestOrderOfPatient,fetchById]); //componentDidMount  
@@ -137,7 +139,7 @@ const StyledTableRow = withStyles(theme => ({
     });
   //Make the list contain unique list of Data 
   const uniqueValues = [...new Set(labTestType)];
-  const userInfo = props.location.getpatientlists
+  const userInfo = encounterresult
  console.log(userInfo)
   const { className } = props
   const [checked, setChecked] = useState({id:'', statuscheck:false })
@@ -204,31 +206,7 @@ const transfersample = (val) => {
       <Row>
         <Col>
           <div className={classes2.inforoot}>
-            <ExpansionPanel
-              defaultExpanded
-              style={{ backgroundColor: '#F5F5F5' }}
-            >
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls='panel1c-content'
-                id='panel1c-header'
-              >
-                <div className={classes2.column}>
-                    <Typography className={classes.heading}>
-                        Name:  {userInfo.firstName} {' '} {userInfo.lastName}
-                        <br/>
-                        Gender: {userInfo.gender || 'N/A'} 
-                    </Typography>
-                </div>
-                <div className={classes2.column}>
-                    <Typography className={classes2.heading}>
-                        DOB:  {userInfo.dob}
-                        <br/>
-                        Phone Numbers :  {userInfo.dob || 'N/A'}
-                    </Typography>
-                </div>
-              </ExpansionPanelSummary>
-            </ExpansionPanel>
+             <PatientDetailCard getpatientdetails={ props.location.state }/>  
             </div>
             <br/>
             <Card className="mb-12">
@@ -300,30 +278,30 @@ const transfersample = (val) => {
                             
                             <StyledTableRow key={row.id}>
                               <TableCell component='th' scope='row'>
-                                {row.data.description}
+                                {row.data.description===""?"Null ":row.data.description}
                               </TableCell>
-                              <TableCell align='center'>{row.data.sample_type===""?"Not Collected Yet ":row.data.sample_type}</TableCell>
+                              <TableCell align='center'>{row.data.sample_type===""?"Null ":row.data.sample_type}</TableCell>
                               <TableCell align='center'>
                               {userInfo.dateEncounter} 
                                 {/* date_sample_collected */}
                               </TableCell>
                               <TableCell align='center'>
-                              <a href="#" className="alert-link"
+                              <p  className="text-success"
                                   onClick={() =>
                                     handlesample(row)}
                               >
                                     Collect Sample
-                              </a>
+                              </p>
                                 
                               </TableCell>
                               <TableCell align='center'>
                               
-                                <a href="#"  className="text-info"
+                                <p  className="text-info"
                                   onClick={() =>
                                     transfersample(row)}
                               >
                                     Transfer Sample
-                              </a>
+                              </p>
                               </TableCell>
                             </StyledTableRow>
                           ))}
