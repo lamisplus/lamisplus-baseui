@@ -100,9 +100,10 @@ const useStyles = makeStyles({
 })
 const StyledTableCell = withStyles(theme => ({
   head: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: '#1D4380',
     color: theme.palette.common.white
   },
+ 
   body: {
     fontSize: 11
   }
@@ -200,6 +201,13 @@ const transfersample = (val) => {
 
 }
 
+const getGroup = e => {
+  const getvalue =e.target.value;
+  console.log(getvalue)
+  // setStateByCountryId(getCountryId); 
+  // setValues({ ...values, countryId: getCountryId });
+};
+
   return (
     <Page title='Collect Sample'>
       <ToastContainer autoClose={2000} />
@@ -229,9 +237,9 @@ const transfersample = (val) => {
 
                               <Input
                                 type="select"
-                                name="relationshipTypeId"
-                                id="relationshipTypeId"
-                                
+                                name="testgroup"
+                                id="testgroup"
+                                onChange={getGroup}
                               >
                                 <option value="">
                                   Select Lab Test Group 
@@ -253,8 +261,8 @@ const transfersample = (val) => {
                         className={classes.table}
                         aria-label='caption table'
                       >
-                        <TableHead style={{ fontWeight: 'bolder' }}>
-                          <TableRow>
+                        <TableHead style={{ fontWeight: 'bolder', backgroundColor:'#1D4380' }}>
+                          <TableRow style={{  backgroundColor:'#1D4380' }}>
                             <StyledTableCell align='center'>
                               Test
                             </StyledTableCell>
@@ -289,6 +297,7 @@ const transfersample = (val) => {
                               <p  className="text-success"
                                   onClick={() =>
                                     handlesample(row)}
+                                    style={{ cursor: 'pointer'}}
                               >
                                     Collect Sample
                               </p>
@@ -299,6 +308,7 @@ const transfersample = (val) => {
                                 <p  className="text-info"
                                   onClick={() =>
                                     transfersample(row)}
+                                    style={{ cursor: 'pointer'}}
                               >
                                     Transfer Sample
                               </p>

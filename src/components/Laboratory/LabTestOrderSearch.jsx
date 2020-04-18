@@ -38,6 +38,7 @@ const PatientSearch = (props) => {
             filtering: false,
           },
         ]}
+        ///isLoading={props.patientsTestOrderList.isLoading}
         data={props.patientsTestOrderList.map((row) => ({
           name: row.firstName +  ' ' + row.lastName,
           Id: row.patientId,
@@ -59,7 +60,18 @@ const PatientSearch = (props) => {
             backgroundColor: "#1D4380",
             color: "#FFF",
           },
+          
+          searchFieldStyle: {
+            width : '300%',
+            margingLeft: '250px',
+          },
           filtering: true,
+          exportButton: true,
+          searchFieldAlignment: 'left',
+          icon: 'refresh',
+           tooltip: 'Refresh Data',
+            isFreeAction: true,
+            onClick: () => this.tableRef.current && this.tableRef.current.onQueryChange(),
         }}
       />
     </div>

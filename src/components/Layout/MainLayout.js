@@ -24,30 +24,30 @@ class MainLayout extends React.Component {
   componentDidMount() {
     this.checkBreakpoint(this.props.breakpoint);
 
-    setTimeout(() => {
-      if (!this.notificationSystem) {
-        return;
-      }
+    // setTimeout(() => {
+    //   if (!this.notificationSystem) {
+    //     return;
+    //   }
 
-      this.notificationSystem.addNotification({
-        title: <MdImportantDevices />,
-        message: 'Welome to Lamis PLus',
-        level: 'info',
-      });
-    }, 1500);
+    //   this.notificationSystem.addNotification({
+    //     title: <MdImportantDevices />,
+    //     message: 'Welome to Lamis PLus',
+    //     level: 'info',
+    //   });
+    // }, 1500);
 
-    setTimeout(() => {
-      if (!this.notificationSystem) {
-        return;
-      }
+    // setTimeout(() => {
+    //   if (!this.notificationSystem) {
+    //     return;
+    //   }
 
-      this.notificationSystem.addNotification({
-        title: <MdLoyalty />,
-        message:
-          'If you need help please contact support at LamisPlus',
-        level: 'info',
-      });
-    }, 2500);
+    //   this.notificationSystem.addNotification({
+    //     title: <MdLoyalty />,
+    //     message:
+    //       'If you need help please contact support at LamisPlus',
+    //     level: 'info',
+    //   });
+    // }, 2500);
   }
 
   // close sidebar when

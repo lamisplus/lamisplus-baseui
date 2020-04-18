@@ -169,8 +169,7 @@ const ModalSample = (props) => {
         <ModalBody>
         <Row >
         <Col md={12}>
-          <p>Sample Type  </p>
-          
+         
           <FormGroup>
             
             <Label for='maritalStatus'>Date Collected</Label>
@@ -189,7 +188,7 @@ const ModalSample = (props) => {
                       /> 
           </FormGroup>
           <FormGroup>
-            <Label for=''>Sample Type  </Label>
+            
               <Autocomplete
                 multiple
                 id="sample_type"
@@ -205,11 +204,7 @@ const ModalSample = (props) => {
                 renderInput={(params) => (
                   <TextField {...params} variant="outlined" margin="normal" label="Sample Type "  />
                 )}
-                // onChange={(e, value) =>
-                //   setSamples({ ...samples, sample_type: value })
-                // }
                 
-                // value={samples.sample_type}
               />
             {/* <FixedTags onChange={handleInputChangeSample} value={samples.sample_type} /> */}
          </FormGroup>
@@ -224,7 +219,7 @@ const ModalSample = (props) => {
             className={classes.button}
             startIcon={<SaveIcon />}
           >
-            Save Sample
+            Save 
           </MatButton>
           <MatButton
             variant='contained'

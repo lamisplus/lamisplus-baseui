@@ -203,7 +203,8 @@ const ModalSample = (props) => {
               name='comment'
               id='comment'
               onChange={handleInputChangeSample}
-               value = {samples.comment}                                     
+               value = {samples.comment}
+                                                    
             >
                                      
             </Input>

@@ -84,7 +84,7 @@ class Routes extends Component {
     return (
       <BrowserRouter basename={getBasename()} history={history}>
         <Switch>
-          {/* <Route  path="/signin" component={SignInSide} /> */}
+         
           <LayoutRoute exact path="/" layout={EmptyLayout} component={SignIn} />
 
           <MainLayout breakpoint={this.props.breakpoint}>
@@ -154,7 +154,7 @@ class Routes extends Component {
           </MainLayout>
           <Redirect to="/" />
         </Switch>
-        {/* <ToastContainer autoClose={3000} hideProgressBar /> */}
+        
       </BrowserRouter>
     );
   }
