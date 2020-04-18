@@ -53,3 +53,42 @@ export const fetchPatientPrescriptions = (patientId) => dispatch => {
     });
 
 }
+// export const fetchEncounterById = (encounterId) => (dispatch) => {
+//          console.log(encounterId);
+//          axios
+//            .get(
+//              `${url}encounters/${encounterId}/form-data`
+//            )
+//            .then((response) => {
+//              dispatch({
+//                type: ACTION_TYPES.FETCH_ENCOUNTER_BY_ID,
+//                payload: response.data,
+//              });
+//            })
+//            .catch((error) => {
+//              console.log("Pharmacy Error: ", error);
+//              dispatch({
+//                type: ACTION_TYPES.PHARMACY_ERROR,
+//                payload: "Something went wrong",
+//              });
+//            });
+// };
+       
+// axios.put(`${url}form-data/${formId}`)
+export const updatePrescriptionStatus = (formId, data) => (dispatch) => {
+         axios
+           .put( `${url}form-data/${formId}`, data)
+           .then((response) => {
+             dispatch({
+               type: ACTION_TYPES.UPDATE_PRESCRIPTION_STATUS,
+               payload: response.data,
+             });
+           })
+           .catch((error) => {
+             console.log("Pharmacy Error: ", error);
+             dispatch({
+               type: ACTION_TYPES.PHARMACY_ERROR,
+               payload: "Something went wrong",
+             });
+           });
+       };

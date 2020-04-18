@@ -267,7 +267,7 @@ useEffect(() => {
   const getStates = e => {
     const getCountryId =
      e.target.value;
-    setStateByCountryId(getCountryId);
+    setStateByCountryId(getCountryId); 
     setValues({ ...values, countryId: getCountryId });
   };
 
