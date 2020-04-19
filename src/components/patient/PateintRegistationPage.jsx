@@ -333,18 +333,7 @@ useEffect(() => {
     setRelative({ ...relative, [e.target.name]: e.target.value });
   };
 
-  // const calculateAge = e => {
-  //   // ccnst calAge = moment().subtract(e.target.value, 'years');
-  //   const calculatedAge = moment()
-  //     .set({ month: 6, day: 15 })
-  //     .subtract(e.target.value, "year")
-  //     .format("DD/MM/YYYY");
-  //   console.log(calculatedAge);
-  //   setValues({ ...values, dateOfBirth: new Date(calculatedAge) });
-  // };
-  //
 
-  // setValues({...values, dateRegistration: newDatenow});
   //The Submit Button Implemenatation
   const handleSubmit = e => {
     e.preventDefault();
@@ -380,11 +369,11 @@ useEffect(() => {
               <CardContent>
                 <Title>
                   Basic Information <br />
-                  <MatButton
+                  {/* <MatButton
                     variant="contained"
                     color="primary"
                     className=" float-right mr-1" >
-                    </MatButton>
+                    </MatButton> */}
 
                 </Title>
                 <br />
@@ -399,7 +388,7 @@ useEffect(() => {
                         placeholder="Patient ID "
                         value={values.hospitalNumber}
                         onChange={handleInputChange}
-                        required
+
                       />
                     </FormGroup>
                   </Col>
@@ -916,6 +905,7 @@ useEffect(() => {
                 </MatButton>
 
                 <MatButton
+                  variant="contained"
                   className={classes.button}
                   startIcon={<CancelIcon />}
                 >
