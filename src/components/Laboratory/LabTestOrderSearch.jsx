@@ -19,7 +19,7 @@ function getTotalcount(formId) {
   return (
     <div>
       <MaterialTable
-        title="Laboratry Test Orders"
+        title="Laboratory Test Orders"
         columns={[
           {
             title: "Patient Name",
