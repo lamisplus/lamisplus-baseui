@@ -95,6 +95,7 @@ const PatientPrescriptions = props => {
   const { className } = props;
 
 const [selectedDate, setSelectedDate] = useState(new Date('2014-08-18T21:11:54'));
+const [selectedTime, setSelectedTime] = useState(new Date('2014-08-18T21:11:54'));
 const [selectedText, setSelectedText] = useState(" ");
 const [quantityDispensed, setQuantityDispensed] = useState(0);
 
@@ -105,10 +106,17 @@ const [quantityDispensed, setQuantityDispensed] = useState(0);
   const handleChange = (text) => {
     setSelectedText(text);
   }
+  const handleTimeChange = (time) => {
+    setSelectedTime(time);
+  }
 
-  const handleChange = (text) => {
-    setQuantityDispensed(quantityDispensed);
+  const handleQuantityChange = () => {
+    setQuantityDispensed();
   };
+  const handleTextChange = () => {
+    setQuantityDispensed();
+  };
+  
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
