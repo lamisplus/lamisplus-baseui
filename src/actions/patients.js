@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
  * fetchPatientVitals()
  * fetchPatientAllergies()
  * fetchPatientLatestVitalSigns()
+ * fetchCountries()
  * @method GET => fetchPatientTestOrders()  get all patient's lab order encounter: params {patientId}{formName} || query {null}
  * @method GET => fetchPatientEncounters() get all patient's encounter: params{patientId, onSuccess, onError} || query{null}
  * @method GET => fetchPatientEncounterProgramCodeExclusionList() get all patient's encounter that is not general service: params{patientId, onSuccess, onError} || query{null}
@@ -316,4 +317,21 @@ export const fetchPatientEncounterProgramCodeExclusionList = (id, onSuccess, onE
       }
      )
      }  
+ }
+
+export const fetchCountries = () => dispatch => {
+  axios(`${baseUrl}countries`)
+    .then(response => {
+      console.log(response)
+      dispatch({
+        type: ACTION_TYPES.FETCH_COUNTRIES,
+        payload: response.data
+      })
+    })
+    .catch(error => {
+      dispatch({
+        type: ACTION_TYPES.PATIENTS_ERROR,
+        payload: 'Something went wrong, please try again'
+    })
+  })
  }

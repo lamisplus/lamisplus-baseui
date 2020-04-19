@@ -10,6 +10,8 @@ import {
     CardHeader,
     Col,
     Row,
+    FormGroup,
+    Label,
     Button
   } from 'reactstrap';
   import DataTable from 'react-data-table-component';
@@ -26,6 +28,7 @@ import {
   import * as CODES from "api/codes";
   import EditIcon from '@material-ui/icons/Edit';
   import VisibilityIcon from '@material-ui/icons/Visibility';
+  import Select from 'react-select';
 
 const cardStyle = {
   borderColor: '#fff',
@@ -40,6 +43,8 @@ function ServiceFormPage (props) {
   const [message, setMessage] = useState('')
   const [encounterMessage, setEncounterMessage] = useState('')
   const [serviceForms, setServiceForms] = useState([])
+  const [programs, setPrograms] = useState([])
+  const [filteredForms, setFilteredForms] = useState([])
   const [filterText, setFilterText] = React.useState('')
   const [efilterText, setEFilterText] = React.useState('')
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false)
@@ -59,6 +64,10 @@ function ServiceFormPage (props) {
         item.formName.toLowerCase().includes(efilterText.toLowerCase()))) 
 
   const togglePage = () => {
+    if(showFormPage){
+      //clear the current form value.
+      setCurrentForm(null);
+    }
       return setShowFormPage(!showFormPage);
   }
 
@@ -76,10 +85,28 @@ function ServiceFormPage (props) {
   }, []);
 
   React.useEffect(() => {
+    setShowLoading(true)
+    const onSuccess = () => {
+        setShowLoading(false)
+      }
+      const onError = () => {
+        setMessage('Could not fetch available services. Please try again later')
+        setShowLoading(false)
+        setPrograms([]);
+      }
+    props.fetchPrograms(onSuccess, onError);
+  }, []);
+
+  React.useEffect(() => {
     const filteredForms = props.formList.filter(x => x.programCode !== CODES.GENERAL_SERVICE);
     setServiceForms(filteredForms);
   }, [props.formList]);
 
+  React.useEffect(() => {
+    setPrograms(props.programList.map(({ name, code }) => ({ label: name, value: code }))
+    .filter(x => x.value !== CODES.GENERAL_SERVICE)
+    );
+}, [props.programList]);
 
   const fetchEncounters = () => {
     setShowEncounterLoading(true)
@@ -108,8 +135,10 @@ function ServiceFormPage (props) {
     console.log(patientEncounters)
   }, [props.patientEncounterList]);
 
- const loadForm = (value) => {
-    setCurrentForm({...value, type:'NEW'});
+ const loadForm = () => {
+    if(!currentForm){
+      return;
+    }
     togglePage();
   }
 
@@ -244,6 +273,13 @@ function ServiceFormPage (props) {
     )
   }, [efilterText, eresetPaginationToggle])
 
+  const handleProgramChange = (newValue: any, actionMeta: any) => {
+      setFilteredForms(serviceForms.filter(x => x.programCode === newValue.value))
+   };
+   const handleChange = (newValue: any, actionMeta: any) => {
+    setCurrentForm({...newValue, type:'NEW'});
+   };
+
 return (
   <div>
     { !showFormPage ?
@@ -257,30 +293,24 @@ return (
                           {message}
                         </Alert> : ""
                          }
-                        {
-                          showLoading ? 
-                          <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-                        <span>  Fetching Service Forms &nbsp; </span> <Spinner animation="border" role="status" >
-                          <span className="sr-only"></span>
-                          </Spinner></div>
-                          : ""
-                        }
-{ (serviceForms && serviceForms.length) > 0 ? 
-<div>
-    <DataTable
-      columns={columns(loadForm)}
-      data={filteredItems}
-      pagination
-      paginationResetDefaultPage={resetPaginationToggle} 
-      subHeader
-      subHeaderComponent={subHeaderComponentMemo}
-      highlightOnHover={true}
-      subHeaderAlign={'left'}
-      noTableHead={true}
-      noHeader={true}
-    />
 
-      </div> : ""}
+<div>
+<Col md={12}> <FormGroup>
+ <Label for="services">Select A Service  </Label>
+ <Select required isMulti={false} onChange={handleProgramChange} options={programs} />
+ </FormGroup> 
+ {showLoading ?   <span>Fetching services <i class="fa fa-spinner fa-spin"></i></span> : ""}
+ </Col>
+ <Col md={12}> <FormGroup>
+ <Label for="services">Select Service Form </Label>
+ <Select required isMulti={false} onChange={handleChange} 
+ options={filteredForms.map(x => ({...x, label:x.name, value:x.id}))} />
+ </FormGroup> </Col>
+ <Button color="primary" className=" float-right mr-1" onClick={loadForm} >
+                Open Form
+                </Button>
+
+      </div>
 
                         </CardBody>
                         </Card>
@@ -352,6 +382,7 @@ const mapStateToProps = (state ) => {
   return {
     patient: state.patients.patient,
     formList: state.formManager.formList,
+    programList: state.formManager.programList,
     patientEncounterList: state.patients.exclusiveEncounters,
     encounter: state.encounter.encounter
   }
@@ -359,6 +390,7 @@ const mapStateToProps = (state ) => {
 
 const mapActionToProps = {
   fetchForms: actions.fetchAll,
+  fetchPrograms: actions.fetchAllPrograms,
   fetchPatientEncounters: patientActions.fetchPatientEncounterProgramCodeExclusionList, 
   fetchEncounterInfo: encounterAction.fetchById
 }

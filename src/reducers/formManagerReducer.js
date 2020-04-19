@@ -3,7 +3,7 @@ import * as ACTION_TYPES from '../actions/types'
 //     list: []
 // }
 
-const formManagerReducer = (state = { formList:[],  form:{}, formEncounter:{}, errors:""}, action) => {
+const formManagerReducer = (state = { formList:[],  form:{}, formEncounter:{}, errors:"", programList:[]}, action) => {
   switch (action.type) {
     case ACTION_TYPES.FORM_FETCH_ALL:
       return {...state, formList:action.payload}
@@ -17,9 +17,12 @@ const formManagerReducer = (state = { formList:[],  form:{}, formEncounter:{}, e
     case ACTION_TYPES.FORM_SAVE_ENCOUNTER:
       return {...state, formEncounter:action.payload}  
      
-      case ACTION_TYPES.FORM_ERROR:
-        return {...state, errors:action.payload}  
-    
+    case ACTION_TYPES.FORM_ERROR:
+      return {...state, errors:action.payload}  
+        
+    case ACTION_TYPES.PROGRAM_FETCH_ALL:
+      return {...state, programList:action.payload}   
+        
     default:
       return state
   }

@@ -21,7 +21,7 @@ const PatientSearch = (props) => {
           {
             title: "Total Count",
             field: "count",
-            filtering: false
+            filtering: false,
           },
           {
             title: "Action",
@@ -34,8 +34,28 @@ const PatientSearch = (props) => {
           Id: prescription.patientId,
           date: prescription.dateEncounter,
           count: prescription.formDataObj.length,
-          actions: <Link to ={{ pathname: "/patientPrescriptions", forms:prescription.formDataObj, patientName: prescription.firstName + ' ' + prescription.lastName}}  style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>View</Link>
-      
+          actions: (
+            <Link
+              to={{
+                pathname: "/patientPrescriptions",
+                forms: prescription.formDataObj,
+                patientName:
+                  prescription.firstName + " " + prescription.lastName,
+              }}
+              style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}
+            >
+              <button
+                style={{
+                  borderRadius: "5px",
+                  padding: "0.2rem 0.5rem",
+                  backgroundColor: "1f4380",
+                  outline: "none",
+                }}
+              >
+                view
+              </button>
+            </Link>
+          ),
         }))}
         options={{
           headerStyle: {
@@ -43,6 +63,10 @@ const PatientSearch = (props) => {
             color: "#FFF",
           },
           filtering: true,
+          searchFieldStyle: {
+            margin: "auto"
+          
+          },
         }}
       />
     </div>

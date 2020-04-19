@@ -34,6 +34,7 @@ import { url } from "../../api";
 import { create } from "../../actions/patients";
 import { initialfieldState_patientRegistration } from "./InitialFieldState";
 import useForm from "../Functions/UseForm";
+import {fetchCountries} from "../../actions/patients";
 
 //Dtate Picker package
 Moment.locale("en");
@@ -81,6 +82,7 @@ const PatientRegistration = props => {
   const apicountries = url + "countries";
   const apistate = url + "countries/";
 
+  
   const { values, setValues, handleInputChange } = useForm(
     initialfieldState_patientRegistration
   );
@@ -106,7 +108,8 @@ const PatientRegistration = props => {
   const [display, setDisplay] = useState(false);
 
     //Get countries
-    useEffect(() => {
+  useEffect(() => {
+    props.fetchCountries();
       async function getCharacters() {
         try {
           const response = await fetch(apicountries);
@@ -949,10 +952,10 @@ function RelativeList({
 }
 
 const mapStateToProps = state => ({
-  
+  countries: state.patients.countries,
   status: state.patients.status,
  // errormsg:state.patients.errormsg
 });
 
 
-export default connect(mapStateToProps, { create })(PatientRegistration);
+export default connect(mapStateToProps, { create, fetchCountries })(PatientRegistration);
