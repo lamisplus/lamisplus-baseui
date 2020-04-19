@@ -174,7 +174,7 @@ const ModalSampleTransfer = (props) => {
           {/* <p>Sample Type {datasample.data.description}  </p> */}
           <FormGroup>
             
-            <Label for='maritalStatus'>Date Collected</Label>
+            <Label for='maritalStatus'>Date Transfer</Label>
             
             <DateTimePicker
                         time={false}
@@ -188,6 +188,15 @@ const ModalSampleTransfer = (props) => {
                         max={new Date()}
                         required
                       /> 
+          </FormGroup>
+          <FormGroup>
+            <Label for="exampleSelect">Lab Transfer To</Label>
+            <Input type="select" name="lab_test_order_status" id="lab_test_order_status" 
+            
+            >
+              <option value=""></option>
+             
+            </Input>
           </FormGroup>
           <FormGroup>
             
@@ -216,7 +225,7 @@ const ModalSampleTransfer = (props) => {
             className={classes.button}
             startIcon={<SaveIcon />}
           >
-            Transfer Sample
+            Ok
           </MatButton>
           <MatButton
             variant='contained'

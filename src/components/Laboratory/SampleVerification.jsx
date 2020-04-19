@@ -198,7 +198,7 @@ const StyledTableRow = withStyles(theme => ({
   
 
   return (
-    <Page title='Collect Result'>
+    <Page title='Sample Verification'>
       <ToastContainer autoClose={2000} />
       <Row>
         <Col>

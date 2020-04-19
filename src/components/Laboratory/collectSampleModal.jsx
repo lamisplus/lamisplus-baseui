@@ -188,7 +188,7 @@ const ModalSample = (props) => {
                       /> 
           </FormGroup>
           <FormGroup>
-            
+          <Label for='maritalStatus'>Sample Type</Label>
               <Autocomplete
                 multiple
                 id="sample_type"
@@ -202,7 +202,7 @@ const ModalSample = (props) => {
                 }
                 style={{ width: 'auto' }}
                 renderInput={(params) => (
-                  <TextField {...params} variant="outlined" margin="normal" label="Sample Type "  />
+                  <TextField {...params} variant="outlined" margin="normal"  />
                 )}
                 
               />
@@ -219,7 +219,7 @@ const ModalSample = (props) => {
             className={classes.button}
             startIcon={<SaveIcon />}
           >
-            Save 
+            Ok 
           </MatButton>
           <MatButton
             variant='contained'

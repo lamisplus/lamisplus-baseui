@@ -258,7 +258,7 @@ const ModalSampleResult = (props) => {
                                     <Label for="exampleSelect">Select Result Type</Label>
                                     <Input type="select" name="lab_test_order_status" id="lab_test_order_status"                      
                                       >
-                                      <option value="">Please Select Result </option>
+                                      <option value=""></option>
                                       <option value="1">Positive</option>
                                       <option value="2">Negative</option>
                                     </Input>
@@ -293,7 +293,7 @@ const ModalSampleResult = (props) => {
             className={classes.button}
             startIcon={<SaveIcon />}
           >
-            Save Sample
+            Save 
           </MatButton>
           <MatButton
             variant='contained'

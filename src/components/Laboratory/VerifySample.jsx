@@ -190,9 +190,9 @@ const ModalSample = (props) => {
             <Input type="select" name="lab_test_order_status" id="lab_test_order_status" 
             value={samples.lab_test_order_status}
             onChange={handleInputChangeSample}>
-              <option value="">Please Select Option</option>
-              <option value="3">Valid Sample</option>
-              <option value="4">Not Valid</option>
+              <option value=""></option>
+              <option value="3">Sample Valid </option>
+              <option value="4">Sample Rejected</option>
             </Input>
           </FormGroup>
           <FormGroup>
@@ -223,7 +223,7 @@ const ModalSample = (props) => {
             className={classes.button}
             startIcon={<SaveIcon />}
           >
-            Save Sample
+            Ok
           </MatButton>
           <MatButton
             variant='contained'

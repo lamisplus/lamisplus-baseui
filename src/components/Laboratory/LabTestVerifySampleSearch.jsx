@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
 import { fetchAllLabTestOrder } from "actions/laboratory";
 import "./laboratory.css";
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 
@@ -13,27 +13,25 @@ const PatientSearch = (props) => {
       useEffect(() => {
         props.fetchAllLabTestOrderToday();
       }, []); //componentDidMount
-function getTotalcount(formId) {
-    return formId
-}     
+ 
   return (
     <div>
       <MaterialTable
-        title="Laboratry Test Orders"
+        title="Sample Verifications "
         columns={[
           {
             title: "Patient Name",
             field: "name",
           },
           { title: "Patient ID", field: "Id" },
-          { title: "Order Date", field: "date", type: "date" },
+          { title: "Test Order Date", field: "date", type: "date" },
           {
-            title: "Test  Count",
+            title: "Total Sample  Count",
             field: "count",
             filtering: false
           },
           {
-            title: "Sample Collected",
+            title: "Total Test Result",
             field: "samplecount",
             filtering: false
           },
@@ -43,35 +41,30 @@ function getTotalcount(formId) {
             filtering: false,
           },
         ]}
-      
         data={props.patientsTestOrderList.map((row) => ({
           name: row.firstName +  ' ' + row.lastName,
           Id: row.patientId,
           date: row.dateEncounter,
           count: row.formDataObj.length,
-          samplecount: getTotalcount(row.formDataObj.length),
+          samplecount: 0,
           actions: <Link to ={{ 
-                                pathname: "/collect-sample",  
+                                pathname: "/sample-verifiction",  
                                 state: { getpatientlists:{row}}, 
-                                patientName: row.firstName + ' ' + row.lastName}} 
-                                style={{ cursor: "pointer", color: "blue", 
-                                fontStyle: "bold" }}>
-                                  <Tooltip title="Collect Sample">
-                                    <IconButton aria-label="Collect Sample" >
-                                      <VisibilityIcon color="primary"/>
+                                patientName: row.firstName + ' ' + row.lastName}}  
+                                style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>
+                                <Tooltip title="Sample Verification">
+                                    <IconButton aria-label="Sample Verification" >
+                                      <CenterFocusWeakIcon color="primary"/>
                                   </IconButton>
                                   </Tooltip>
-                                </Link>
+                    </Link>
           
         }))}
-        
         options={{
-          actionsColumnIndex: -1,
           headerStyle: {
             backgroundColor: "#eee",
             color: "#000",
           },
-          
           searchFieldStyle: {
             width : '300%',
             margingLeft: '250px',
@@ -84,6 +77,7 @@ function getTotalcount(formId) {
             isFreeAction: true,
             onClick: () => this.tableRef.current && this.tableRef.current.onQueryChange(),
         }}
+        
       />
     </div>
   );

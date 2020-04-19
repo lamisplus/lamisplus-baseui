@@ -19,7 +19,10 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import Table from '@material-ui/core/Table'
-
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import {FaPlusSquare} from 'react-icons/fa';
+import {TiArrowForward} from 'react-icons/ti'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import 'react-widgets/dist/css/react-widgets.css'
@@ -233,7 +236,7 @@ const getGroup = e => {
                                 onChange={getGroup}
                               >
                                 <option value="">
-                                  Select Lab Test Group 
+                                   
                                 </option>
                                   {
                                     
@@ -264,10 +267,10 @@ const getGroup = e => {
                               Date Requested
                             </StyledTableCell>
                             <StyledTableCell align='center'>
-                              Collected
+                              Status
                             </StyledTableCell>
                             <StyledTableCell align='center'>
-                              Refered
+                              Actions
                             </StyledTableCell>
                           </TableRow>
                         </TableHead>
@@ -285,24 +288,23 @@ const getGroup = e => {
                                 {/* date_sample_collected */}
                               </TableCell>
                               <TableCell align='center'>
-                              <p  className="text-success"
-                                  onClick={() =>
-                                    handlesample(row)}
-                                    style={{ cursor: 'pointer'}}
-                              >
-                                    Collect Sample
-                              </p>
-                                
+                               
+                                --
                               </TableCell>
                               <TableCell align='center'>
                               
-                                <p  className="text-info"
-                                  onClick={() =>
-                                    transfersample(row)}
-                                    style={{ cursor: 'pointer'}}
-                              >
-                                    Transfer Sample
-                              </p>
+                              <Tooltip title="Collect Sample">
+                                    <IconButton aria-label="Collect Sample" onClick={() =>
+                                      handlesample(row)}>
+                                    <FaPlusSquare size="15" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Transfer Sample">
+                                    <IconButton aria-label="Transfer Sample" onClick={() =>
+                                      transfersample(row)}>
+                                    <TiArrowForward size="15" />
+                                    </IconButton>
+                                </Tooltip>
                               </TableCell>
                             </StyledTableRow>
                           ))}

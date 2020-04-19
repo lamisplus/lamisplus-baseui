@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
 import { fetchAllLabTestOrder } from "actions/laboratory";
 import "./laboratory.css";
+import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 
 const PatientSearch = (props) => {
       useEffect(() => {
@@ -14,7 +17,7 @@ const PatientSearch = (props) => {
   return (
     <div>
       <MaterialTable
-        title="Laboratry Test Result Table"
+        title="Laboratry Test Results"
         columns={[
           {
             title: "Patient Name",
@@ -49,14 +52,18 @@ const PatientSearch = (props) => {
                                 state: { getpatientlists:{row}}, 
                                 patientName: row.firstName + ' ' + row.lastName}}  
                                 style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>
-                                Enter Result
+                                <Tooltip title="Enter Result">
+                                    <IconButton aria-label="ENTER RESULT" >
+                                      <CenterFocusWeakIcon color="primary"/>
+                                  </IconButton>
+                                  </Tooltip>
                     </Link>
           
         }))}
         options={{
           headerStyle: {
-            backgroundColor: "#1D4380",
-            color: "#FFF",
+            backgroundColor: "#eee",
+            color: "#000",
           },
           searchFieldStyle: {
             width : '300%',

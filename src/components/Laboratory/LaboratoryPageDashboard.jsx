@@ -27,6 +27,7 @@ import UserProgressTable from 'components/UserProgressTable';
 // import LabTestResults from './LabTestResults';
 import LabTestOrderSearch from './LabTestOrderSearch';
 import LabTestResultSearch from './LabTestResultSearch';
+import LabTestVerifySampleSearch from './LabTestVerifySampleSearch'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -272,9 +273,9 @@ export default function ScrollableTabsButtonForce(props) {
           aria-label="scrollable force tabs example"
         >
           <Tab className={classes.title} label="Dashboard" icon={<MdDashboard />} {...a11yProps(0)} />         
-          <Tab className={classes.title} label="Lab. Test Orders" icon={<MdContacts />} {...a11yProps(1)} />
-          <Tab className={classes.title} label="Lab. Results " icon={<GiFiles />} {...a11yProps(2)} />
-          {/* <Tab className={classes.title} label="Lab. Results " icon={<GiFiles />} {...a11yProps(3)} /> */}
+          <Tab className={classes.title} label="Lab Test Orders" icon={<MdContacts />} {...a11yProps(1)} />
+          <Tab className={classes.title} label="Sample Verification " icon={<GiFiles />} {...a11yProps(2)} />
+          <Tab className={classes.title} label="Lab Results " icon={<GiFiles />} {...a11yProps(3)} />
         </Tabs>
         <div>
      
@@ -343,12 +344,12 @@ export default function ScrollableTabsButtonForce(props) {
 </TabPanel>     
  {/* Begining of consultation  */}
  <TabPanel value={value} index={2}>
-  <LabTestResultSearch />          
+  <LabTestVerifySampleSearch />          
 </TabPanel>
-{/* <TabPanel value={value} index={3}>      
-<LabTestResults />   
+<TabPanel value={value} index={3}>      
+   
   <LabTestResultSearch />            
-</TabPanel> */}
+</TabPanel>
 
     {/* End of consultation */}
     <TabPanel value={value} index={4}>
