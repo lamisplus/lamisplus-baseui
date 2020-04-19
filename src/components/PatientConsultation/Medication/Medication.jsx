@@ -385,8 +385,9 @@ function NewDrugOrderForm({addDrugs, drugOrder, fetchingDrugs}){
         isMulti={false}
         onChange={handleChange}
         options={drugOrder}
+        isLoading={fetchingDrugs}
       />
-       {fetchingDrugs ?   <span>Fetching drugs <i class="fa fa-spinner fa-spin"></i></span> : ""}
+      
                                             </FormGroup>  
                                         </Col>
                                         <Col md={12}>
