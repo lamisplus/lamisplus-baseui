@@ -55,12 +55,17 @@ const useStyles2 = makeStyles(theme => ({
     width: '100%',
     marging: theme.spacing(5)
   },
+  inforoot2: {
+    fontSize: 11,
+    padding: 2,
+    
+},
   heading: {
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: theme.typography.pxToRem(5),
     fontWeight: 500
   },
   secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: theme.typography.pxToRem(5),
     color: theme.palette.text.secondary,
     fontWeight: 500
   },
@@ -208,6 +213,7 @@ const getGroup = e => {
       <Row>
         <Col>
           <div className={classes2.inforoot}>
+            
              <PatientDetailCard getpatientdetails={ props.location.state }/>  
             </div>
             <br/>

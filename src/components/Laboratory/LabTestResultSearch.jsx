@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
 import { fetchAllLabTestOrder } from "actions/laboratory";
 import "./laboratory.css";
-import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
+import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 
@@ -26,12 +26,12 @@ const PatientSearch = (props) => {
           { title: "Patient ID", field: "Id" },
           { title: "Test Order Date", field: "date", type: "date" },
           {
-            title: "Total Sample  Count",
+            title: "Total Sample ",
             field: "count",
             filtering: false
           },
           {
-            title: "Total Test Result",
+            title: "Total Result",
             field: "samplecount",
             filtering: false
           },
@@ -54,7 +54,7 @@ const PatientSearch = (props) => {
                                 style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>
                                 <Tooltip title="Enter Result">
                                     <IconButton aria-label="ENTER RESULT" >
-                                      <CenterFocusWeakIcon color="primary"/>
+                                      <NoteAddIcon color="primary"/>
                                   </IconButton>
                                   </Tooltip>
                     </Link>

@@ -24,15 +24,15 @@ const PatientSearch = (props) => {
             field: "name",
           },
           { title: "Patient ID", field: "Id" },
-          { title: "Test Order Date", field: "date", type: "date" },
+          { title: "Order Date", field: "date", type: "date" },
           {
-            title: "Total Sample  Count",
+            title: "Test  Sample",
             field: "count",
             filtering: false
           },
           {
-            title: "Total Test Result",
-            field: "samplecount",
+            title: "Total Verified",
+            field: "samplecverify",
             filtering: false
           },
           {
