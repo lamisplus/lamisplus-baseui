@@ -2,8 +2,7 @@ import axios from "axios";
 import { url as baseUrl } from "../api";
 import * as ACTION_TYPES from "./types";
 import * as CODES from "api/codes";
-
-//TODO: by Jeph => Complete documentation
+import { toast } from "react-toastify";
 
 /**
  * @Actions
@@ -64,6 +63,7 @@ export const fetchById = id => dispatch => {
 
 
 export const create = data => dispatch => {
+  console.log(data);
   axios
     .post(`${baseUrl}patients/`, data)
     .then(response => {
@@ -72,14 +72,16 @@ export const create = data => dispatch => {
         type: ACTION_TYPES.PATIENTS_CREATE,
         payload: response.data
       });
-      // console.log(response.data)
+      console.log(response.data);
+      //toast.success(response.data);
     })
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
         payload: error.response.data.apierror.message
       });
-       console.log(error.response.data.apierror.message);
+       toast.error(error.response.data.apierror.message);
+       //console.log(error.response.data.apierror.message);
     });
 };
 
