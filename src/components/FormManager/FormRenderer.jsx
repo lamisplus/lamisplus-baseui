@@ -32,7 +32,9 @@ const FormRenderer = props => {
     props.fetchForm(props.formCode, onSuccess, onError);
   }, [props.formCode]);
   React.useEffect(() => {
-    if(!props.form.resourceObject && !props.form.resourcePath){
+    setErrorMsg('')
+    setShowErrorMsg(false)
+    if( props.form.name && !props.form.resourceObject){
         setErrorMsg('Form resource not found, please contact adminstration.')
         setShowErrorMsg(true)
         return;
