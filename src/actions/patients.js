@@ -72,15 +72,20 @@ export const create = data => dispatch => {
         type: ACTION_TYPES.PATIENTS_CREATE,
         payload: response.data
       });
-      console.log(response.data);
-      //toast.success(response.data);
+      console.log(response);
+      toast.success("Patient Register Save Successfully!");
     })
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
         payload: error.response.data.apierror.message
       });
-       toast.error(error.response.data.apierror.message);
+      if(error.response.data.apierror.message===null || error.response.data.apierror.message===""){
+        toast.error("Something went wrong");
+      }else{
+        toast.error(error.response.data.apierror.message);
+      }
+       
        //console.log(error.response.data.apierror.message);
     });
 };
