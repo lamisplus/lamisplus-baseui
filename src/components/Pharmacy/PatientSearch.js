@@ -49,7 +49,7 @@ const PatientSearch = (props) => {
                   borderRadius: "5px",
                   padding: "0.2rem 0.5rem",
                   backgroundColor: "1f4380",
-                  outline: "none"
+                  outline: "none",
                 }}
               >
                 view
@@ -63,6 +63,10 @@ const PatientSearch = (props) => {
             color: "#FFF",
           },
           filtering: true,
+          searchFieldStyle: {
+            margin: "auto"
+          
+          },
         }}
       />
     </div>
