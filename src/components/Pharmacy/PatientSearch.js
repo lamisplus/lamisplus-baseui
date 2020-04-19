@@ -3,6 +3,9 @@ import MaterialTable from 'material-table';
 import { useSelector} from 'react-redux';
 import { Link } from 'react-router-dom'
 import "./patientPrescriptions.css";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
 
 const PatientSearch = (props) => {
   const prescriptions = useSelector(state => state.pharmacy.allPrescriptions)
@@ -19,7 +22,12 @@ const PatientSearch = (props) => {
           { title: "Patient ID", field: "Id" },
           { title: "Prescription Date", field: "date", type: "date" },
           {
-            title: "Total Count",
+            title: "Total Prescribed",
+            field: "count",
+            filtering: false,
+          },
+          {
+            title: "Total Dispensed",
             field: "count",
             filtering: false,
           },
@@ -41,32 +49,29 @@ const PatientSearch = (props) => {
                 forms: prescription.formDataObj,
                 patientName:
                   prescription.firstName + " " + prescription.lastName,
+                encounterId: prescription.encounterId,
               }}
               style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}
             >
-              <button
-                style={{
-                  borderRadius: "5px",
-                  padding: "0.2rem 0.5rem",
-                  backgroundColor: "1f4380",
-                  outline: "none",
-                }}
-              >
-                view
-              </button>
+              <Tooltip title="Collect Sample">
+                <IconButton aria-label="Collect Sample">
+                  <VisibilityIcon color="primary" />
+                </IconButton>
+              </Tooltip>
             </Link>
           ),
         }))}
         options={{
           headerStyle: {
-            backgroundColor: "#1D4380",
-            color: "#FFF",
+            backgroundColor: "#9f9fa5",
+            color: "#000000",
           },
           filtering: true,
           searchFieldStyle: {
-            margin: "auto"
-          
+            width: "300%",
+            margingLeft: "500px",
           },
+          searchFieldAlignment: "left"
         }}
       />
     </div>

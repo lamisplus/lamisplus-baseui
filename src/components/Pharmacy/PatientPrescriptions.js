@@ -126,9 +126,12 @@ const [quantityDispensed, setQuantityDispensed] = useState(0);
   const handleClose = () => {
     setOpen(false);
   };
-  const handleDispense = (formData, formId) => {
-    formData.prescription_status = 1
-    props.updatePrescriptionStatus(formId, formData);
+  const handleDispense = (formData, formId, encounterId) => {
+    formData.prescription_status = 1;
+    const updatedData= {
+      data: { ...formData }
+    }
+    props.updatePrescriptionStatus(formId, updatedData);
     console.log(formId)
     setOpen(false);
   };
@@ -220,7 +223,7 @@ const [quantityDispensed, setQuantityDispensed] = useState(0);
               className={className}
               size="lg"
             >
-              <ModalHeader toggle={toggle2}>Precription Details</ModalHeader>
+              <ModalHeader toggle={toggle2}>Prescription Details</ModalHeader>
               <ModalBody>
                 <Row style={{ marginTop: "20px" }}>
                   <Col xs="12">
