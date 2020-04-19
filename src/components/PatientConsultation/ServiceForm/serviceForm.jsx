@@ -39,6 +39,7 @@ const cardStyle = {
 
 function ServiceFormPage (props) {
   const [showLoading, setShowLoading] = useState(false)
+  const [showServiceFormLoading, setShowServiceFormLoading] = useState(false)
   const [showEncounterLoading, setShowEncounterLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [encounterMessage, setEncounterMessage] = useState('')
@@ -72,13 +73,13 @@ function ServiceFormPage (props) {
   }
 
   React.useEffect(() => {
-    setShowLoading(true)
+    setShowServiceFormLoading(true)
     const onSuccess = () => {
-        setShowLoading(false)
+      setShowServiceFormLoading(false)
       }
       const onError = () => {
         setMessage('Could not fetch available service forms. Please try again later')
-        setShowLoading(false)
+        setShowServiceFormLoading(false)
         setServiceForms([]);
       }
     props.fetchForms(onSuccess, onError);
@@ -297,14 +298,14 @@ return (
 <div>
 <Col md={12}> <FormGroup>
  <Label for="services">Select A Service  </Label>
- <Select required isMulti={false} onChange={handleProgramChange} options={programs} />
+ <Select required isMulti={false} onChange={handleProgramChange} options={programs} isLoading={showLoading} />
  </FormGroup> 
- {showLoading ?   <span>Fetching services <i class="fa fa-spinner fa-spin"></i></span> : ""}
+ 
  </Col>
  <Col md={12}> <FormGroup>
  <Label for="services">Select Service Form </Label>
- <Select required isMulti={false} onChange={handleChange} 
- options={filteredForms.map(x => ({...x, label:x.name, value:x.id}))} />
+ <Select required isMulti={false} onChange={handleChange}  isLoading={showServiceFormLoading}
+ options={filteredForms.map(x => ({...x, label:x.name, value:x.id}))}  />
  </FormGroup> </Col>
  <Button color="primary" className=" float-right mr-1" onClick={loadForm} >
                 Open Form

@@ -174,6 +174,7 @@ return (
                                     <Label for="testGroup">Select Test</Label>
                                     <Select
         isMulti={true}
+        value={testOrders}
         onChange={handleChange}
         options={tests.map(x => ({...x, label:x.name, value:x.id}))}
       />

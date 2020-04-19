@@ -23,11 +23,7 @@ const PatientPage = props => {
   const classes = useStyles();
 
   return (
-    <Page title="Patients">
-      <Alert color="primary">
-        <TiWarningOutline size="30" className=" text-dark" /> {"  "}
-        Note : All Available Patients in the system can be search here
-      </Alert>
+    <div>
       <Card className={classes.cardBottom}>
         <CardContent>
           <Title>
@@ -47,7 +43,7 @@ const PatientPage = props => {
           <PatientList />
         </CardContent>
       </Card>
-    </Page>
+    </div>
   );
 };
 

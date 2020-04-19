@@ -30,7 +30,7 @@ return (
                 >
                <  Row className={classes.root}>
                   <Col md={4}>
-                     <span> Patient ID : <b>{props.patient.patientId}</b></span>
+                     <span> Patient ID : <b>{props.patient.hospitalNumber}</b></span>
                   </Col>
                   
                   <Col md={4}>
