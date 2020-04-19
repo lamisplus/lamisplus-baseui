@@ -283,28 +283,26 @@ const ModalSampleResult = (props) => {
                             </Col>
                             
                         </Row>
-                       
+                        <MatButton
+                            type='submit'
+                            variant='contained'
+                            color='primary'
+                            className={classes.button}
+                            startIcon={<SaveIcon />}
+                          >
+                            Save 
+                          </MatButton>
+                          <MatButton
+                            variant='contained'
+                            color='default'
+                            onClick={props.togglestatus}
+                            className={classes.button}
+                            startIcon={<CancelIcon />}
+                          >
+                            Cancel
+                          </MatButton>
                     </ModalBody>
-        <ModalFooter>
-        <MatButton
-            type='submit'
-            variant='contained'
-            color='primary'
-            className={classes.button}
-            startIcon={<SaveIcon />}
-          >
-            Save 
-          </MatButton>
-          <MatButton
-            variant='contained'
-            color='default'
-            onClick={props.togglestatus}
-            className={classes.button}
-            startIcon={<CancelIcon />}
-          >
-            Cancel
-          </MatButton>
-        </ModalFooter>
+        
         </Form>
       </Modal>
     </div>

@@ -213,10 +213,8 @@ const ModalSample = (props) => {
             
          </FormGroup>
         </Col>
-    </Row>
-        </ModalBody>
-        <ModalFooter>
-        <MatButton
+     </Row>
+     <MatButton
             type='submit'
             variant='contained'
             color='primary'
@@ -234,7 +232,8 @@ const ModalSample = (props) => {
           >
             Cancel
           </MatButton>
-        </ModalFooter>
+        </ModalBody>
+        
         </Form>
       </Modal>
     </div>

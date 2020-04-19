@@ -28,7 +28,7 @@ function getTotalcount(formId) {
           { title: "Patient ID", field: "Id" },
           { title: "Order Date", field: "date", type: "date" },
           {
-            title: "Test  Count",
+            title: "Total  Orders",
             field: "count",
             filtering: false
           },

@@ -4,7 +4,7 @@ Form,
 Row,
 Col,
 FormGroup,
-Label
+Label,Card, CardBody
 } from 'reactstrap';
 import MatButton from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
@@ -161,6 +161,8 @@ const ModalSample = (props) => {
   return (
       
       <div >
+        <Card >
+        <CardBody>
        <ToastContainer autoClose={3000} hideProgressBar />
       <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className}>
         
@@ -210,9 +212,7 @@ const ModalSample = (props) => {
          </FormGroup>
         </Col>
     </Row>
-        </ModalBody>
-        <ModalFooter>
-        <MatButton
+       <MatButton
             type='submit'
             variant='contained'
             color='primary'
@@ -230,11 +230,12 @@ const ModalSample = (props) => {
           >
             Cancel
           </MatButton>
-          
-          
-        </ModalFooter>
+        </ModalBody>
+       
         </Form>
       </Modal>
+     </CardBody>
+     </Card>
     </div>
   );
 }

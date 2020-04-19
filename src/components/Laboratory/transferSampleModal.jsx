@@ -214,11 +214,9 @@ const ModalSampleTransfer = (props) => {
           </FormGroup>
           
         </Col>
-    </Row>
-        </ModalBody>
-        <ModalFooter>
+       </Row>
 
-        <MatButton
+          <MatButton
             type='submit'
             variant='contained'
             color='primary'
@@ -236,8 +234,8 @@ const ModalSampleTransfer = (props) => {
           >
             Cancel
           </MatButton>
-          
-        </ModalFooter>
+        </ModalBody>
+        
         </Form>
       </Modal>
     </div>
