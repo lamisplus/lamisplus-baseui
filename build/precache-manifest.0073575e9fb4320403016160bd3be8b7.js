@@ -44,8 +44,8 @@ self.__precacheManifest = [
     "url": "http://lamisplus.org/demo/static/js/main.bf88a405.chunk.js"
   },
   {
-    "revision": "317a192ea16e1a7a926c",
-    "url": "http://lamisplus.org/demo/static/js/runtime~main.44afc852.js"
+    "revision": "d5c30fe07127e260abfd",
+    "url": "http://lamisplus.org/demo/static/js/runtime~main.dfa76fb8.js"
   },
   {
     "revision": "a7aafa92ff1080c0cd86",
@@ -140,12 +140,12 @@ self.__precacheManifest = [
     "url": "http://lamisplus.org/demo/static/js/23.cda92034.chunk.js"
   },
   {
-    "revision": "2adad45128901b863764",
+    "revision": "3e6f91be3c1e9e634245",
     "url": "http://lamisplus.org/demo/static/css/24.027755a6.chunk.css"
   },
   {
-    "revision": "2adad45128901b863764",
-    "url": "http://lamisplus.org/demo/static/js/24.371980bf.chunk.js"
+    "revision": "3e6f91be3c1e9e634245",
+    "url": "http://lamisplus.org/demo/static/js/24.7d0a26e0.chunk.js"
   },
   {
     "revision": "63e67c3db9137f967a3d",
@@ -304,28 +304,24 @@ self.__precacheManifest = [
     "url": "http://lamisplus.org/demo/static/media/fontawesome-webfont.674f50d2.eot"
   },
   {
-    "revision": "b06871f281fee6b241d60582ae9369b9",
-    "url": "http://lamisplus.org/demo/static/media/fontawesome-webfont.b06871f2.ttf"
-  },
-  {
     "revision": "fee66e712a8a08eef5805a46892932ad",
     "url": "http://lamisplus.org/demo/static/media/fontawesome-webfont.fee66e71.woff"
   },
   {
-    "revision": "912ec66d7572ff821749319396470bde",
-    "url": "http://lamisplus.org/demo/static/media/fontawesome-webfont.912ec66d.svg"
+    "revision": "b06871f281fee6b241d60582ae9369b9",
+    "url": "http://lamisplus.org/demo/static/media/fontawesome-webfont.b06871f2.ttf"
   },
   {
     "revision": "af7ae505a9eed503f8b8e6982036873e",
     "url": "http://lamisplus.org/demo/static/media/fontawesome-webfont.af7ae505.woff2"
   },
   {
-    "revision": "12f0820c451bdc75f4d1ef97732bf6e8",
-    "url": "http://lamisplus.org/demo/static/media/rw-widgets.12f0820c.woff"
+    "revision": "912ec66d7572ff821749319396470bde",
+    "url": "http://lamisplus.org/demo/static/media/fontawesome-webfont.912ec66d.svg"
   },
   {
-    "revision": "eceddf474df95d8d4a7e316668c3be85",
-    "url": "http://lamisplus.org/demo/static/media/rw-widgets.eceddf47.ttf"
+    "revision": "12f0820c451bdc75f4d1ef97732bf6e8",
+    "url": "http://lamisplus.org/demo/static/media/rw-widgets.12f0820c.woff"
   },
   {
     "revision": "792dcd18baf5f544aabcad1883d673c2",
@@ -336,11 +332,15 @@ self.__precacheManifest = [
     "url": "http://lamisplus.org/demo/static/media/rw-widgets.bc7c4a59.eot"
   },
   {
+    "revision": "eceddf474df95d8d4a7e316668c3be85",
+    "url": "http://lamisplus.org/demo/static/media/rw-widgets.eceddf47.ttf"
+  },
+  {
     "revision": "a770b6797b68e3f8920e473eb824bac0",
     "url": "http://lamisplus.org/demo/static/media/loader-big.a770b679.gif"
   },
   {
-    "revision": "afdb93cbdb1686dce6c6b6b468abddf4",
+    "revision": "767543576dbfdddfd2d9dc6c2fa3e46b",
     "url": "http://lamisplus.org/demo/index.html"
   }
 ];
