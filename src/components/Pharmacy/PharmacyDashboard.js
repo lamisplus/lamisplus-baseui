@@ -255,7 +255,7 @@ const ScrollableTabsButtonForce = (props) => {
           {/* <PatientDetailCard getpatientdetails={props.location.state }/>    */}
         </div>
 
-        <AppBar position="static" color="transparent">
+        <AppBar position="static">
           <Tabs
             value={value}
             onChange={handleChange}

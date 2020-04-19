@@ -32,7 +32,7 @@ const ConsultationPage = () => {
             <TiWarningOutline 
                 size="30"
                 className=" text-dark"/>  { '  '} 
-                Note : Only checked in Patients can be search here
+                Note : Only checked in Patients can be searched here
             </Alert>
         <Card className={classes.cardBottom}>  
             <CardContent>

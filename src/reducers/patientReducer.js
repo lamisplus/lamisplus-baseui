@@ -25,7 +25,6 @@ const patientReducer = (state = initialState, action) => {
       return { ...state, status: action.payload }
 
       case ACTION_TYPES.PATIENTS_ERROR:
-
         return { ...state, errormsg: action.payload }
   
 
@@ -54,7 +53,10 @@ const patientReducer = (state = initialState, action) => {
       return {...state, exclusiveEncounters: action.payload }
       
     case ACTION_TYPES.PATIENT_LAB_ORDERS:
-        return { ...state, previousTestOrders: action.payload }
+      return { ...state, previousTestOrders: action.payload }
+    
+    case ACTION_TYPES.FETCH_COUNTRIES:
+        return { ...state, countries: action.payload }
  
     default:
       return state

@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
  * fetchPatientVitals()
  * fetchPatientAllergies()
  * fetchPatientLatestVitalSigns()
+ * fetchCountries()
  * @method GET => fetchPatientTestOrders()  get all patient's lab order encounter: params {patientId}{formName} || query {null}
  * @method GET => fetchPatientEncounters() get all patient's encounter: params{patientId, onSuccess, onError} || query{null}
  * @method GET => fetchPatientEncounterProgramCodeExclusionList() get all patient's encounter that is not general service: params{patientId, onSuccess, onError} || query{null}
@@ -72,15 +73,20 @@ export const create = data => dispatch => {
         type: ACTION_TYPES.PATIENTS_CREATE,
         payload: response.data
       });
-      console.log(response.data);
-      //toast.success(response.data);
+      console.log(response);
+      toast.success("Patient Register Save Successfully!");
     })
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
         payload: error.response.data.apierror.message
       });
-       toast.error(error.response.data.apierror.message);
+      if(error.response.data.apierror.message===null || error.response.data.apierror.message===""){
+        toast.error("Something went wrong");
+      }else{
+        toast.error(error.response.data.apierror.message);
+      }
+       
        //console.log(error.response.data.apierror.message);
     });
 };
@@ -311,4 +317,21 @@ export const fetchPatientEncounterProgramCodeExclusionList = (id, onSuccess, onE
       }
      )
      }  
+ }
+
+export const fetchCountries = () => dispatch => {
+  axios(`${baseUrl}countries`)
+    .then(response => {
+      console.log(response)
+      dispatch({
+        type: ACTION_TYPES.FETCH_COUNTRIES,
+        payload: response.data
+      })
+    })
+    .catch(error => {
+      dispatch({
+        type: ACTION_TYPES.PATIENTS_ERROR,
+        payload: 'Something went wrong, please try again'
+    })
+  })
  }
