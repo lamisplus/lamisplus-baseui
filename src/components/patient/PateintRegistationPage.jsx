@@ -129,7 +129,7 @@ const PatientRegistration = props => {
 useEffect(() => {
   async function getCharacters() {
     try {
-      const response = await fetch(url+'codeset/GENDER');
+      const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=GENDER');
       const body = await response.json();
       setGender(body.map(({ display, id }) => ({ label: display, value: id })));
     } catch (error) {
@@ -144,7 +144,7 @@ useEffect(() => {
 useEffect(() => {
   async function getCharacters() {
     try {
-      const response = await fetch(url+'codeset/OCCUPATION');
+      const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=OCCUPATION');
       const body = await response.json();
       setOccupation(body.map(({ display, id }) => ({ label: display, value: id })));
     } catch (error) {
@@ -158,7 +158,7 @@ useEffect(() => {
 useEffect(() => {
   async function getCharacters() {
     try {
-      const response = await fetch(url+'codeset/EDUCATION');
+      const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=EDUCATION');
       const body = await response.json();
       setQualification(body.map(({ display, id }) => ({ label: display, value: id })));
     } catch (error) {
@@ -173,7 +173,7 @@ useEffect(() => {
 useEffect(() => {
   async function getCharacters() {
     try {
-      const response = await fetch(url+'codeset/MARITAL_STATUS');
+      const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=MARITAL_STATUS');
       const body = await response.json();
       setMaterialStatus(body.map(({ display, id }) => ({ label: display, value: id })));
     } catch (error) {
@@ -406,7 +406,7 @@ useEffect(() => {
 
                   <Col md={4}>
                     <FormGroup>
-                      <Label for="middleName">Date Of Registration</Label>
+                      <Label for="middleName">Date Of Registration *</Label>
 
                       <DateTimePicker
                         time={false}
@@ -489,7 +489,7 @@ useEffect(() => {
                   </Col>
                   <Col md={4}>
                     <FormGroup>
-                      <Label for="occupation">Occupation</Label>
+                      <Label for="occupation">Occupation *</Label>
                       <Input
                         type="select"
                         name="occupationId"
@@ -507,7 +507,7 @@ useEffect(() => {
                   </Col>
                   <Col md={4}>
                     <FormGroup>
-                      <Label for="qualification">Hightest Qualification</Label>
+                      <Label for="qualification">Hightest Qualification *</Label>
                       <Input
                         type="select"
                         name="educationId"
@@ -526,7 +526,7 @@ useEffect(() => {
                 <Row form>
                   <Col md={4}>
                     <FormGroup>
-                      <Label for="maritalStatus">Marital Status</Label>
+                      <Label for="maritalStatus">Marital Status *</Label>
                       <Input
                         type="select"
                         name="maritalStatusId"
@@ -545,7 +545,7 @@ useEffect(() => {
                   <Col md={4}>
                     {!display ? (
                       <FormGroup>
-                        <Label>Date OF Birth</Label>
+                        <Label>Date OF Birth *</Label>
                         <DateTimePicker
                           time={false}
                           name="dob"
@@ -600,7 +600,7 @@ useEffect(() => {
                 <Row form>
                   <Col md={4}>
                     <FormGroup>
-                      <Label for="phoneNumber">Phone Number</Label>
+                      <Label for="phoneNumber">Phone Number *</Label>
                       <Input
                         type="text"
                         name="phoneNumber"
@@ -650,7 +650,7 @@ useEffect(() => {
                         <Row form>
                           <Col md={4}>
                             <FormGroup>
-                              <Label for="country">Country</Label>
+                              <Label for="country">Country *</Label>
                               <Input
                                 type="select"
                                 name="countryId"
@@ -669,7 +669,7 @@ useEffect(() => {
 
                           <Col md={4}>
                             <FormGroup>
-                              <Label for="stressAddress">State</Label>
+                              <Label for="stressAddress">State *</Label>
                               <Input
                                 type="select"
                                 name="stateId"
@@ -688,7 +688,7 @@ useEffect(() => {
                           </Col>
                           <Col md={4}>
                             <FormGroup>
-                              <Label for="lga">Province/District/LGA </Label>
+                              <Label for="lga">Province/District/LGA *</Label>
                               <Input
                                 type="select"
                                 name="provinceId"
