@@ -34,6 +34,26 @@ export const fetchAll = (onSuccess, onError) => dispatch => {
     })
 }
 
+export const fetchAllPrograms = (onSuccess, onError) => dispatch => {
+  axios
+    .get(`${baseUrl}programs`)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.PROGRAM_FETCH_ALL,
+        payload: response.data
+      })
+      onSuccess()
+    })
+    .catch(error => {
+      onError()
+      dispatch({
+        type: ACTION_TYPES.FORM_ERROR,
+        payload: 'Something went wrong, please try again'
+      })
+      
+    })
+}
+
 export const fetchById = (id, onSuccess, onError) => dispatch => {
   dispatch({
     type: ACTION_TYPES.FORM_FETCH_BY_ID,
