@@ -93,10 +93,21 @@ const PatientPrescriptions = props => {
   const toggle2 = () => setModal2(!modal2);
 
   const { className } = props;
-const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
+
+const [selectedDate, setSelectedDate] = useState(new Date('2014-08-18T21:11:54'));
+const [selectedText, setSelectedText] = useState(" ");
+const [quantityDispensed, setQuantityDispensed] = useState(0);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
+  };
+
+  const handleChange = (text) => {
+    setSelectedText(text);
+  }
+
+  const handleChange = (text) => {
+    setQuantityDispensed(quantityDispensed);
   };
   const [open, setOpen] = useState(false);
 
@@ -266,8 +277,8 @@ const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:1
               <DialogContent>
                 <DialogContentText>
                   Please fill in the details below to dispense{" "}
-                  {form.data.generic_name} for {patientName} <br /> Qty Prescribed:
-                  10
+                  {form.data.generic_name} for {patientName} <br /> Qty
+                  Prescribed: 10
                 </DialogContentText>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
@@ -287,8 +298,8 @@ const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:1
                     margin="normal"
                     id="time-picker"
                     label="Enter time dispensed"
-                    value={selectedDate}
-                    onChange={handleDateChange}
+                    value={selectedTime}
+                    onChange={handleTimeChange}
                     KeyboardButtonProps={{
                       "aria-label": "change time",
                     }}
@@ -302,7 +313,8 @@ const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:1
                   id="name"
                   label="Quantity Dispensed"
                   type="number"
-          
+                  value={quantityDispensed}
+                  onChange={handleChange}
                 />
                 <br />
                 <br />
@@ -311,6 +323,7 @@ const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:1
                   id="name"
                   label="Additional Comments"
                   type="text"
+                  onChange={handleChange}
                   fullWidth
                 />
               </DialogContent>
