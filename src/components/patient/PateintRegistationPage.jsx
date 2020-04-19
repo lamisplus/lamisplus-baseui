@@ -18,7 +18,7 @@ import CancelIcon from "@material-ui/icons/Cancel";
 // import { IoMdFingerPrint } from "react-icons/io";
 // import { FaFileImport } from "react-icons/fa";
 import { FaPlusSquare } from "react-icons/fa";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { connect } from "react-redux";
@@ -248,7 +248,7 @@ useEffect(() => {
 
   useEffect(() => {
      getCharacters();
-   }); 
+   }, []); 
 
      async function getCharacters() {
        try {
@@ -342,7 +342,7 @@ useEffect(() => {
     values["personRelativesDTO"] = relatives;
     values["dob"] = dateOfBirth;
     //console.log(values);
-    setSaving(true);
+    //setSaving(true);
     props.create(values);
     //toast.success("Registration Successful")
   
@@ -354,9 +354,6 @@ useEffect(() => {
       <Alert color="primary">
         All Information with Asterisks(*) are compulsory
       </Alert>
-      {props.status === 201 &&
-          toast.success("Registration Successful")
-      }
       
       <Form onSubmit={handleSubmit}>
         {/* First  row form entry  for Demographics*/}
