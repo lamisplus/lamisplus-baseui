@@ -62,7 +62,7 @@ const PatientSearch = (props) => {
         }))}
         options={{
           headerStyle: {
-            backgroundColor: "#eee",
+            backgroundColor: "#9F9FA5",
             color: "#000",
           },
           searchFieldStyle: {

@@ -46,7 +46,7 @@ const PatientSearch = (props) => {
           Id: row.patientId,
           date: row.dateEncounter,
           count: row.formDataObj.length,
-          samplecount: 0,
+          samplecverify: 0,
           actions: <Link to ={{ 
                                 pathname: "/sample-verifiction",  
                                 state: { getpatientlists:{row}}, 
@@ -62,7 +62,7 @@ const PatientSearch = (props) => {
         }))}
         options={{
           headerStyle: {
-            backgroundColor: "#eee",
+            backgroundColor: "#9F9FA5",
             color: "#000",
           },
           searchFieldStyle: {

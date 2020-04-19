@@ -30,12 +30,12 @@ function getTotalcount(formId) {
           {
             title: "Total  Orders",
             field: "count",
-            filtering: false
+            filtering: false,
           },
           {
             title: "Sample Collected",
             field: "samplecount",
-            filtering: false
+            filtering: false,
           },
           {
             title: "Action",
@@ -68,15 +68,17 @@ function getTotalcount(formId) {
         options={{
           actionsColumnIndex: -1,
           headerStyle: {
-            backgroundColor: "#eee",
+            backgroundColor: "#9F9FA5",
             color: "#000",
+            margin: "auto"
           },
-          
+          filtering: true,
+         
           searchFieldStyle: {
             width : '300%',
             margingLeft: '250px',
           },
-          filtering: true,
+      
           exportButton: true,
           searchFieldAlignment: 'left',
           icon: 'refresh',
