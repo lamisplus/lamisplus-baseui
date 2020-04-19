@@ -45,6 +45,7 @@ const CollectedSample = React.lazy(() =>
 );
 const ViewResult = React.lazy(() => import("components/Laboratory/ViewResult"));
 const TestResult = React.lazy(() => import("components/Laboratory/TestResult"));
+const SampleVerification = React.lazy(() => import("components/Laboratory/SampleVerification"));
 const PatientsPage = React.lazy(() =>
   import("components/patient/PatientsPage")
 );
@@ -111,6 +112,7 @@ class Routes extends Component {
               
               <Route exact path="/view-result" component={ViewResult} />
               <Route exact path="/test-order" component={TestOrder} />
+              <Route exact path="/sample-verifiction" component={SampleVerification} />
               <Route
                 exact
                 path="/collected-sample"

@@ -15,17 +15,14 @@ import { useState , useEffect} from 'react'
 import { MdSave } from 'react-icons/md'
 import { TiArrowBack } from 'react-icons/ti'
 import MatButton from '@material-ui/core/Button'
-
 import 'react-datepicker/dist/react-datepicker.css'
-import ExpansionPanel from '@material-ui/core/ExpansionPanel'
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import Typography from '@material-ui/core/Typography'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
-
 import Table from '@material-ui/core/Table'
-
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import {FaPlusSquare} from 'react-icons/fa';
+import {TiArrowForward} from 'react-icons/ti'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import 'react-widgets/dist/css/react-widgets.css'
@@ -58,12 +55,17 @@ const useStyles2 = makeStyles(theme => ({
     width: '100%',
     marging: theme.spacing(5)
   },
+  inforoot2: {
+    fontSize: 11,
+    padding: 2,
+    
+},
   heading: {
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: theme.typography.pxToRem(5),
     fontWeight: 500
   },
   secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: theme.typography.pxToRem(5),
     color: theme.palette.text.secondary,
     fontWeight: 500
   },
@@ -118,11 +120,9 @@ const StyledTableRow = withStyles(theme => ({
 
  function CollectSample  (props){
   const encounterresult = props.location.state.getpatientlists.row ;
-  
   const classes = useStyles()
   const classes2 = useStyles2()
   const testorder = useSelector(state => state.laboratory.testorder);
-  const PatientDetail = useSelector(state => state.patients.patient);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -132,16 +132,18 @@ const StyledTableRow = withStyles(theme => ({
     dispatch(fetchById(personId));
   }, [fetchAllLabTestOrderOfPatient,fetchById]); //componentDidMount  
   const data = [testorder]
+  const newsample =  data[0] ? data[0] : null
+  
   const [useData, setUsedata] = useState(data)
+  
   //Get list of test type
   const [labTestType, setLabTestType] = useState([])
-        data[0].forEach(function(value, index, array) {
+        newsample.forEach(function(value, index, array) {
         labTestType.push(value['data'].lab_test_group);
     });
   //Make the list contain unique list of Data 
   const uniqueValues = [...new Set(labTestType)];
   const userInfo = encounterresult
- console.log(userInfo)
   const { className } = props
   const [checked, setChecked] = useState({id:'', statuscheck:false })
   const [modal, setModal] = useState(false)
@@ -166,11 +168,7 @@ const StyledTableRow = withStyles(theme => ({
         visitId: 0
   })
   //const newDate = moment(patientrow.date_sample_collected).format('DD-MM-YYYY');
-
-
   const saveColllectSample = e => {
-    console.log(patientrow)
-    const newDatenow = moment(TodayDate).format('DD-MM-YYYY')
 
     useData['formData'] = useData
     setUsedata({...useData, formData:{"labtest":useData }})
@@ -203,9 +201,10 @@ const transfersample = (val) => {
 
 const getGroup = e => {
   const getvalue =e.target.value;
-  console.log(getvalue)
-  // setStateByCountryId(getCountryId); 
-  // setValues({ ...values, countryId: getCountryId });
+  const testing = newsample.length>0?newsample:null
+  console.log(testing.data)
+  const getnew = data[0].find(x => x.lab_test_group === 'Haematology')
+  console.log(getnew) 
 };
 
   return (
@@ -214,6 +213,7 @@ const getGroup = e => {
       <Row>
         <Col>
           <div className={classes2.inforoot}>
+            
              <PatientDetailCard getpatientdetails={ props.location.state }/>  
             </div>
             <br/>
@@ -242,7 +242,7 @@ const getGroup = e => {
                                 onChange={getGroup}
                               >
                                 <option value="">
-                                  Select Lab Test Group 
+                                   
                                 </option>
                                   {
                                     
@@ -273,16 +273,16 @@ const getGroup = e => {
                               Date Requested
                             </StyledTableCell>
                             <StyledTableCell align='center'>
-                              Collected
+                              Status
                             </StyledTableCell>
                             <StyledTableCell align='center'>
-                              Refered
+                              Actions
                             </StyledTableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
                           
-                            {data[0].map(row => (
+                            {newsample.map(row => (
                             
                             <StyledTableRow key={row.id}>
                               <TableCell component='th' scope='row'>
@@ -294,24 +294,23 @@ const getGroup = e => {
                                 {/* date_sample_collected */}
                               </TableCell>
                               <TableCell align='center'>
-                              <p  className="text-success"
-                                  onClick={() =>
-                                    handlesample(row)}
-                                    style={{ cursor: 'pointer'}}
-                              >
-                                    Collect Sample
-                              </p>
-                                
+                               
+                                --
                               </TableCell>
                               <TableCell align='center'>
                               
-                                <p  className="text-info"
-                                  onClick={() =>
-                                    transfersample(row)}
-                                    style={{ cursor: 'pointer'}}
-                              >
-                                    Transfer Sample
-                              </p>
+                              <Tooltip title="Collect Sample">
+                                    <IconButton aria-label="Collect Sample" onClick={() =>
+                                      handlesample(row)}>
+                                    <FaPlusSquare size="15" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Transfer Sample">
+                                    <IconButton aria-label="Transfer Sample" onClick={() =>
+                                      transfersample(row)}>
+                                    <TiArrowForward size="15" />
+                                    </IconButton>
+                                </Tooltip>
                               </TableCell>
                             </StyledTableRow>
                           ))}

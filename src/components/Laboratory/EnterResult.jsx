@@ -91,7 +91,7 @@ const ModalSampleResult = (props) => {
         const date_result_reported = formdata.data ? formdata.data.date_result_reported : null
         const date_sample_collected = formdata.data ? formdata.data.date_sample_collected : null
         const lab_test_order_status = formdata.data ? formdata.data.lab_test_order_status : null
-       
+        const [samplesType, setSamplesType] = useState(0)
         const [data, setData] = useState({data:{}})
         const [samples, setSamples] = useState({                                                                         
                                           user_id: user_id,
@@ -132,6 +132,13 @@ const ModalSampleResult = (props) => {
         })
 
     }
+
+    const handleInputSampleType = e => {
+      const fieldValue = e.target.value      
+      setSamplesType(fieldValue)
+      console.log(fieldValue)
+      console.log(samplesType)
+  }
     const saveSample = e => {
      
       console.log(data)
@@ -197,13 +204,13 @@ const ModalSampleResult = (props) => {
                           
                         </Row >
                         <Row style={{ marginTop: '20px'}}>
-                            {/* <Col xs="4">
+                            <Col xs="4">
+                              Date Asseyed
+                              <br/>
+                              <p style={textstyle}>{date_sample_collected}<small className="text-muted">By Evans</small></p> 
+                              
+                              </Col>
                             
-                              <FormGroup>
-                                    <Label for="exampleEmail">Result</Label>
-                                    <Input type="email" name="email" id="exampleEmail" placeholder="with a placeholder" />
-                                </FormGroup>
-                            </Col> */}
                             <Col xs="4">
                               Unit
                               <br/>
@@ -218,28 +225,22 @@ const ModalSampleResult = (props) => {
                           
                         </Row>
                         <Row style={{ marginTop: '20px'}}>
+                         
                             <Col xs="4">
-                            
                               <FormGroup>
-                                    <Label for="examplePassword">File</Label>
-                                    <Input type="file" name="file"  placeholder="file upload" />
-                                </FormGroup>
-                            
+                                  <Label for="exampleSelect">Result Type</Label>
+                                  <Input type="select" name="lab_test_order_status" id="lab_test_order_status"                      
+                                    onChange={handleInputSampleType}>
+                                    <option value="">Please Select </option>
+                                    <option value="1">Simple Result</option>
+                                    <option value="2">Compound Result</option>
+                                  </Input>
+                              </FormGroup>
                             </Col>
-                            <Col xs="4">
-                              Date Asseyed
-                              <br/>
-                              <p style={textstyle}>{date_sample_collected}<small className="text-muted">By Evans</small></p> 
-                              
-                              </Col>
-                            
-                          
-                        </Row>
-                        <Row style={{ marginTop: '20px'}}>
-                            <Col xs="12">
-                            
+                            {samplesType ==="1" ?
+                              <Col xs="8">
                               <FormGroup>
-                                    <Label for="examplePassword">Enter Note here</Label>
+                                    <Label for="examplePassword">Enter Result Note </Label>
                                     <Input
                                       type='textarea'
                                       name='comment'
@@ -249,33 +250,59 @@ const ModalSampleResult = (props) => {
                                     >
                                   </Input>
                                 </FormGroup>
+                                </Col>
+                              :
 
+                              <Col xs="8">
+                                <FormGroup>
+                                    <Label for="exampleSelect">Select Result Type</Label>
+                                    <Input type="select" name="lab_test_order_status" id="lab_test_order_status"                      
+                                      >
+                                      <option value=""></option>
+                                      <option value="1">Positive</option>
+                                      <option value="2">Negative</option>
+                                    </Input>
+                                </FormGroup>
+                              </Col>
+                            }
+                            {/* <Col xs="4">
                             
+                              <FormGroup>
+                                    <Label for="examplePassword">File</Label>
+                                    <Input type="file" name="file"  placeholder="file upload" />
+                                </FormGroup>
+                            
+                            </Col> */}
+                            
+                          
+                        </Row>
+                        <Row style={{ marginTop: '20px'}}>
+                            <Col xs="12">
+                           
+                         
                             </Col>
                             
                         </Row>
-                       
+                        <MatButton
+                            type='submit'
+                            variant='contained'
+                            color='primary'
+                            className={classes.button}
+                            startIcon={<SaveIcon />}
+                          >
+                            Save 
+                          </MatButton>
+                          <MatButton
+                            variant='contained'
+                            color='default'
+                            onClick={props.togglestatus}
+                            className={classes.button}
+                            startIcon={<CancelIcon />}
+                          >
+                            Cancel
+                          </MatButton>
                     </ModalBody>
-        <ModalFooter>
-        <MatButton
-            type='submit'
-            variant='contained'
-            color='primary'
-            className={classes.button}
-            startIcon={<SaveIcon />}
-          >
-            Save Sample
-          </MatButton>
-          <MatButton
-            variant='contained'
-            color='default'
-            onClick={props.togglestatus}
-            className={classes.button}
-            startIcon={<CancelIcon />}
-          >
-            Cancel
-          </MatButton>
-        </ModalFooter>
+        
         </Form>
       </Modal>
     </div>
