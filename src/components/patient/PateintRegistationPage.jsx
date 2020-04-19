@@ -277,7 +277,7 @@ useEffect(() => {
       console.log(response)
       const stateList = await response.json();
       console.log(stateList)
-      // setStates(stateList.map(({ name, id }) => ({ label: name, value: id })));
+      setStates(stateList.map(({ name, id }) => ({ label: name, value: id })));
     }
     getCharacters();
   }
@@ -287,7 +287,7 @@ useEffect(() => {
     setValues({ ...values, [e.target.name]: e.target.value });
     const stateId = e.target.value;
     async function getCharacters() {
-      const response = await fetch(`${url}state/` + stateId+"/province");
+      const response = await fetch(`${url}state/` + stateId+"/provinces");
       const provinceList = await response.json();
 
       setProvinces(provinceList);
@@ -367,9 +367,6 @@ useEffect(() => {
       </Alert>
       {props.status === 201 &&
           toast.success("Registration Successful")
-      }
-      {props.errormsg===undefined ||  props.errormsg==="" ? " ":
-        toast.warn(props.errormsg)
       }
       
       <Form onSubmit={handleSubmit}>
@@ -967,7 +964,7 @@ function RelativeList({
 const mapStateToProps = state => ({
   
   status: state.patients.status,
-  errormsg:state.patients.errormsg
+ // errormsg:state.patients.errormsg
 });
 
 
