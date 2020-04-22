@@ -393,7 +393,7 @@ useEffect(() => {
                         type="text"
                         name="hospitalNumber"
                         id="hospitalNumber"
-                        placeholder="Patient ID "
+                      
                         value={values.hospitalNumber}
                         onChange={handleInputChange}
 
@@ -428,7 +428,7 @@ useEffect(() => {
                         type="text"
                         name="firstName"
                         id="firstName"
-                        placeholder="First Name"
+                        
                         value={values.firstName}
                         onChange={handleInputChange}
                         
@@ -443,7 +443,7 @@ useEffect(() => {
                         type="text"
                         name="otherNames"
                         id="otherNames"
-                        placeholder="Middle Name"
+                       
                         onChange={handleInputChange}
                         value={values.otherNames}
                       />
@@ -456,7 +456,7 @@ useEffect(() => {
                         type="text"
                         name="lastName"
                         id="lastName"
-                        placeholder="Last Name"
+                        
                         onChange={handleInputChange}
                         value={values.lastName}
                         required
@@ -602,7 +602,7 @@ useEffect(() => {
                         type="text"
                         name="phoneNumber"
                         id="phoneNumber"
-                        placeholder="Phone Number"
+                       
                         value={values.mobilePhoneNumber}
                         onChange={handleInputChange}
                       />
@@ -615,7 +615,7 @@ useEffect(() => {
                         type="text"
                         name="alternatePhoneNumber"
                         id="alternatePhoneNumber"
-                        placeholder="Alternative Number"
+                       
                         value={values.alternatePhoneNumber}
                         onChange={handleInputChange}
                       />
@@ -628,7 +628,7 @@ useEffect(() => {
                         type="email"
                         name="email"
                         id="email"
-                        placeholder="Email Address"
+                       
                         value={values.email}
                         onChange={handleInputChange}
                       />
@@ -671,7 +671,7 @@ useEffect(() => {
                                 type="select"
                                 name="stateId"
                                 id="stateId"
-                                placeholder="Select State"
+                                
                                 value={values.stateId}
                                 onChange={getProvinces}
                               >
@@ -690,7 +690,7 @@ useEffect(() => {
                                 type="select"
                                 name="provinceId"
                                 id="provinceId"
-                                placeholder="Select Province"
+                               
                                 value={values.provinceId}
                                 
                               >
@@ -719,7 +719,7 @@ useEffect(() => {
                                 type="text"
                                 name="city"
                                 id="city"
-                                placeholder="City"
+                               
                                 value={values.city}
                                 onChange={handleInputChange}
                               />
@@ -733,7 +733,7 @@ useEffect(() => {
                                 type="text"
                                 name="landmark"
                                 id="landmark"
-                                placeholder="Land Mark"
+                              
                                 value={values.landmark}
                                 onChange={handleInputChange}
                               />
@@ -799,7 +799,7 @@ useEffect(() => {
                         name="firstName"
                         id="firstName"
                         value={relative.firstName}
-                        placeholder="First Name"
+                        
                         onChange={onRelativeChange}
                       />
                     </FormGroup>
@@ -811,7 +811,7 @@ useEffect(() => {
                         type="text"
                         name="otherNames"
                         id="otherNames"
-                        placeholder="Middle Name"
+                      
                         value={relative.otherNames}
                         onChange={onRelativeChange}
                       />
@@ -824,7 +824,7 @@ useEffect(() => {
                         type="text"
                         name="lastName"
                         id="lastName"
-                        placeholder="Last Name"
+                       
                         value={relative.lastName}
                         onChange={onRelativeChange}
                       />
@@ -840,7 +840,7 @@ useEffect(() => {
                         type="text"
                         name="relativePhoneNumber"
                         id="relativePhoneNumber"
-                        placeholder="Relative Phone No."
+                        
                         value={relative.mobilePhoneNumber}
                         onChange={e =>
                           setRelative({
@@ -858,7 +858,7 @@ useEffect(() => {
                         type="text"
                         name="email"
                         id="email"
-                        placeholder="Relative Email Address"
+                        
                         value={relative.email}
                         onChange={onRelativeChange}
                       />
@@ -871,7 +871,7 @@ useEffect(() => {
                         type="text"
                         name="address"
                         id="address"
-                        placeholder="Relative Address"
+                       
                         onChange={onRelativeChange}
                         value={relative.address}
                       />
