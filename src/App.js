@@ -1,8 +1,8 @@
 import React from 'react'
 import componentQueries from 'react-component-queries'
 import { Provider } from 'react-redux'
-import store from './store'
-import Routes from './routes'
+import store from './../src/main/webapp/store'
+import Routes from './../src/main/webapp/routes'
 //import { ToastProvider } from 'react-toast-notifications'
 
 const App = () => {
