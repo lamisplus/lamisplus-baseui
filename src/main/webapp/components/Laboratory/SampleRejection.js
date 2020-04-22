@@ -92,8 +92,9 @@ const ModalSampleResult = (props) => {
         const date_result_reported = formdata.data ? formdata.data.date_result_reported : null
         const date_sample_collected = formdata.data ? formdata.data.date_sample_collected : null
         const lab_test_order_status = formdata.data ? formdata.data.lab_test_order_status : null
-       
-        const [data, setData] = useState({data:{}})
+        const encounterId = formdata.encounterId ? formdata.encounterId : null
+        
+        const [data, setData] = useState({data:{}, encounterId:""})
         const [samples, setSamples] = useState({                                                                         
                                           user_id: user_id,
                                           patient_id: patient_id,
@@ -151,6 +152,7 @@ const ModalSampleResult = (props) => {
       samples['lab_test_order_id'] = lab_test_order_id
       samples['date_result_reported'] = date_result_reported
       data['data'] = samples;
+      data['encounterId'] = encounterId;
       console.log(data)
       e.preventDefault()
       props.createCollectedSample(data, lab_id)

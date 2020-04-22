@@ -9,17 +9,14 @@ import {
   Form
 } from 'reactstrap'
 import { useState , useEffect} from 'react'
+import { FaPlusSquare } from 'react-icons/fa'
 import { TiArrowBack } from 'react-icons/ti'
 import 'react-datepicker/dist/react-datepicker.css'
-import ExpansionPanel from '@material-ui/core/ExpansionPanel'
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import Typography from '@material-ui/core/Typography'
+
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import Table from '@material-ui/core/Table'
 
-import {GoChecklist} from 'react-icons/go';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import TableBody from '@material-ui/core/TableBody'
@@ -97,7 +94,7 @@ const useStyles = makeStyles({
 })
 const StyledTableCell = withStyles(theme => ({
   head: {
-    backgroundColor: '#1D4380',
+    backgroundColor: '#3E51B5',
     color: theme.palette.common.white
   },
   body: {
@@ -271,20 +268,20 @@ const StyledTableRow = withStyles(theme => ({
                               </TableCell>
                               
                               <TableCell align="center">
-                                        <Tooltip title="Verify Collected Sample">
+                                          {/* <Tooltip title="Verify Collected Sample">
                                                 
                                                 <IconButton aria-label="Verify Sample" onClick={() =>
                                                   handlesample(row)}
                                                   >
                                                 <GoChecklist size="15" />
                                                 </IconButton>
-                                            </Tooltip>
-                                            {/* <Tooltip title="Enter Result">
+                                            </Tooltip> */}
+                                            <Tooltip title="Enter Result">
                                                 <IconButton aria-label="Enter Result" onClick={() =>
                                                   handleresult(row)}>
                                                 <FaPlusSquare size="15" />
                                                 </IconButton>
-                                            </Tooltip> */}
+                                            </Tooltip>
                                             {/* <Tooltip title="Rejected Result">
                                                 <IconButton aria-label="Rejected Result" onClick={() =>
                                                   handlereject(row)}>
