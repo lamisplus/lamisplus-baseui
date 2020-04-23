@@ -233,9 +233,9 @@ const ModalSampleResult = (props) => {
                                   <Label for="exampleSelect">Result Type</Label>
                                   <Input type="select" name="lab_test_order_status" id="lab_test_order_status"                      
                                     onChange={handleInputSampleType}>
-                                    <option value="">Please Select </option>
-                                    <option value="1">Simple Result</option>
-                                    <option value="2">Compound Result</option>
+                                    <option value=""> </option>
+                                    <option value="1">Basic Result</option>
+                                    <option value="2">Other Result</option>
                                   </Input>
                               </FormGroup>
                             </Col>

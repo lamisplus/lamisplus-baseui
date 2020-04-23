@@ -259,7 +259,7 @@ const StyledTableRow = withStyles(theme => ({
                         </TableHead>
                         <TableBody>
                           
-                            {data[0].map(row => (
+                            {!loading ?  data[0].map(row => (
                             
                             <StyledTableRow key={row.id}>
                               <TableCell component='th' scope='row'>
@@ -294,7 +294,12 @@ const StyledTableRow = withStyles(theme => ({
                                             </Tooltip> */}
                                     </TableCell>
                             </StyledTableRow>
-                          ))}
+                          ))
+                          
+                          :
+                          <p> <Spinner color="primary" /> Loading Please Wait</p>
+
+                          }
                         </TableBody>
                       </Table>
                     </TableContainer>
