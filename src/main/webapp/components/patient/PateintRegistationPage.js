@@ -104,7 +104,7 @@ const PatientRegistration = props => {
   ];
   const [saving, setSaving] = useState(false);
   const [display, setDisplay] = useState(false);
-
+  const [estimated, setEstimated] = useState(false);
     //Get countries
     useEffect(() => {
       async function getCharacters() {
@@ -573,14 +573,26 @@ useEffect(() => {
                             id="age"
                             type="text"
                             name="age"
-                            placeholder="Age"
+                            
                             onChange={onAgeInputChange}
+                            //disabled={!estimated? "disabled": ""}
                           />
                         </FormGroup>
                       </Col>
                     </Row>
                   </Col>
-                  <Col md={4}></Col>
+                  <Col md={4}>
+                  {/* <FormGroup check>
+                      <Label check>
+                        <Input type="checkbox" onChange={value1 =>
+                            setEstimated(true)
+                          }
+                          // checked={estimated? "checked": ""}
+                          />{' '}
+                          Estimated Date of Birth
+                      </Label>
+                    </FormGroup> */}
+                  </Col>
                 </Row>
               </CardContent>
             </Card>

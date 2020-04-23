@@ -34,6 +34,9 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
+import MatButton from '@material-ui/core/Button'
+import SaveIcon from '@material-ui/icons/Save'
+import CancelIcon from '@material-ui/icons/Cancel'
 
 import {
   MuiPickersUtilsProvider,
@@ -337,12 +340,26 @@ const PatientPrescriptions = (props) => {
                       />
                     </DialogContent>
                     <DialogActions>
-                      <Button onClick={handleClose} color="danger">
-                        cancel
-                      </Button>
-                      <Button onClick={handleDispense} color="primary">
-                        save
-                      </Button>
+                    <MatButton
+                      type='submit'
+                      variant='contained'
+                      color='primary'
+                      onClick={handleDispense}
+                      className={classes.button}
+                      startIcon={<SaveIcon />}
+                    >
+                      Ok 
+                    </MatButton>
+                    <MatButton
+                      variant='contained'
+                      color='default'
+                      onClick={handleClose}
+                      className={classes.button}
+                      startIcon={<CancelIcon />}
+                    >
+                      Cancel
+                    </MatButton>
+                     
                     </DialogActions>
                   </Dialog>
                 </TableBody>
