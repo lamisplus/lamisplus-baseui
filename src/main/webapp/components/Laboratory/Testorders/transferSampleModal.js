@@ -1,14 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter ,
-Form,
-Row,
-Col,
-FormGroup,
-Label,
-Input
+import { Modal, ModalHeader, ModalBody,Form,Row,Col,FormGroup,Label,Input
 } from 'reactstrap';
 import { connect } from 'react-redux';
-import { ToastContainer, toast } from "react-toastify";
 import MatButton from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import SaveIcon from '@material-ui/icons/Save'
@@ -19,10 +12,10 @@ import { DateTimePicker } from 'react-widgets';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
-import {url} from '../../api'
+import {url} from '../../../api'
 
 import { useSelector, useDispatch } from 'react-redux';
-import { createCollectedSample, fetchFormById } from '../../actions/laboratory';
+import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
 
 
 Moment.locale('en');
@@ -97,7 +90,7 @@ const ModalSampleTransfer = (props) => {
           //const [newcomment, setNewcomment] = useState('')
           const [samples, setSamples] = useState({ 
                                             comment: comment,
-                                            sample_type:sample_type,                                                                        
+                                                                                                                  
                                             user_id: user_id,
                                             patient_id: patient_id,
                                             description: description,

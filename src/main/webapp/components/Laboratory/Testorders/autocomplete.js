@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import {url} from '../../api'
+import {url} from '../../../api'
 
 export default function FixedTags(props) {
     const [optionsample, setOptionsample] = useState([]);

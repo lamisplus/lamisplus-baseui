@@ -22,12 +22,9 @@ import { Bar, Pie } from 'react-chartjs-2';
 import { getColor } from 'utils/colors';
 import { randomNum } from 'utils/demos';
 import UserProgressTable from 'components/UserProgressTable';
-// import TestOrderList from './PatientSearch';
-// import LabTestResult from './LabTestResult';
-// import LabTestResults from './LabTestResults';
-import LabTestOrderSearch from './LabTestOrderSearch';
-import LabTestResultSearch from './LabTestResultSearch';
-import LabTestVerifySampleSearch from './LabTestVerifySampleSearch'
+import LabTestOrderSearch from './Testorders/LabTestOrderSearch';
+import LabTestResultSearch from './TestResult/LabTestResultSearch';
+import LabTestVerifySampleSearch from './Sampleverifications/LabTestVerifySampleSearch'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

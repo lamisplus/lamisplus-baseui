@@ -1,98 +1,42 @@
 import React from 'react'
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Row,
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input
-} from 'reactstrap'
+import {Card, CardBody,CardHeader,Col,Row,Button, Form,FormGroup,Label,Input} from 'reactstrap'
 import { useState , useEffect} from 'react'
 import { MdSave } from 'react-icons/md'
 import { TiArrowBack } from 'react-icons/ti'
 import MatButton from '@material-ui/core/Button'
 import 'react-datepicker/dist/react-datepicker.css'
-import { makeStyles, withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
-import Table from '@material-ui/core/Table'
+//import Table from '@material-ui/core/Table'
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import {FaPlusSquare} from 'react-icons/fa';
 import {TiArrowForward} from 'react-icons/ti'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
 import 'react-widgets/dist/css/react-widgets.css'
 //Date Picker
 import { DateTimePicker } from 'react-widgets'
 import Moment from 'moment'
 import momentLocalizer from 'react-widgets-moment'
 import moment from 'moment'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableRow from '@material-ui/core/TableRow'
-import TableHead from '@material-ui/core/TableHead'
-import Paper from '@material-ui/core/Paper'
 import { toast } from 'react-toastify'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Page from 'components/Page'
-import {  fetchById } from '../../actions/patients'
-import {  fetchAllLabTestOrderOfPatient } from '../../actions/laboratory'
+import {  fetchById } from '../../../actions/patients'
+import {  fetchAllLabTestOrderOfPatient } from '../../../actions/laboratory'
 import ModalSample from './collectSampleModal';
 import ModalSampleTransfer from './transferSampleModal';
+import ModalSampleType from './sampleTypeModal'
 import { useSelector, useDispatch } from 'react-redux';
 import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import { Spinner } from 'reactstrap';
+import { Table } from 'reactstrap';
+import { Badge } from 'reactstrap';
 
 
 Moment.locale('en')
 momentLocalizer()
 
-const useStyles2 = makeStyles(theme => ({
-  inforoot: {
-    width: '100%',
-    marging: theme.spacing(5)
-  },
-  inforoot2: {
-    fontSize: 11,
-    padding: 2,
-    
-},
-  heading: {
-    fontSize: theme.typography.pxToRem(5),
-    fontWeight: 500
-  },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(5),
-    color: theme.palette.text.secondary,
-    fontWeight: 500
-  },
-  icon: {
-    verticalAlign: 'bottom',
-    height: 20,
-    width: 20
-  },
-  details: {
-    alignItems: 'center'
-  },
-  column: {
-    flexBasis: '33.33%'
-  },
-  helper: {
-    borderLeft: `2px solid ${theme.palette.divider}`,
-    padding: theme.spacing(1, 2)
-  },
-  link: {
-    color: theme.palette.primary.main,
-    textDecoration: 'none',
-    '&:hover': {
-      textDecoration: 'underline'
-    }
-  }
-}))
 const useStyles = makeStyles({
   root: {
     width: '100%'
@@ -101,28 +45,13 @@ const useStyles = makeStyles({
     maxHeight: 440
   }
 })
-const StyledTableCell = withStyles(theme => ({
-  head: {
-    backgroundColor: '#3E51B5',
-    color: theme.palette.common.white
-  },
- 
-  body: {
-    fontSize: 11
-  }
-}))(TableCell)
-const StyledTableRow = withStyles(theme => ({
-  root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.background.default
-    }
-  }
-}))(TableRow)
+
 
  function CollectSample  (props){
-  const encounterresult = props.location.state.getpatientlists.row ;
+   
+  const encounterresult = props.location.state.formdata.row ;
+
   const classes = useStyles()
-  const classes2 = useStyles2()
   const testorder = useSelector(state => state.laboratory.testorder);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState('')
@@ -140,27 +69,29 @@ const StyledTableRow = withStyles(theme => ({
     dispatch(fetchById(personId,onSuccess,onError));
   }, [fetchAllLabTestOrderOfPatient,fetchById]); //componentDidMount  
   const data = [testorder]
-  const newsample =  data[0] ? data[0] : null
-  
+  const newsample =  data[0] ? data[0] : null 
   const [useData, setUsedata] = useState(data)
-  
+  ///const formdata=newsample
+   console.log(newsample)
   //Get list of test type
   const [labTestType, setLabTestType] = useState([])
+
         newsample.forEach(function(value, index, array) {
         labTestType.push(value['data'].lab_test_group);
     });
   //Make the list contain unique list of Data 
   const uniqueValues = [...new Set(labTestType)];
   const userInfo = encounterresult
-  const { className } = props
-  const [checked, setChecked] = useState({id:'', statuscheck:false })
-  const [modal, setModal] = useState(false)
+  const [modal, setModal] = useState(false) //Modal to collect sample 
   const togglemodal = () => setModal(!modal)
-  const [modal2, setModal2] = useState(false)
+  const [modal2, setModal2] = useState(false)//modal to transfer sample
   const togglemodal2 = () => setModal2(!modal2)
-  const [collectmodal, setcollectmodal] = useState([])
+  const [modal3, setModal3] = useState(false)//modal to Sample Types 
+  const togglemodal3 = () => setModal3(!modal3)
+  const [collectmodal, setcollectmodal] = useState([])//to collect array of datas into the modal and pass it as props
+  const [samplelist, setSamplelist] = useState([])
   // const [encounterid, setencounterid] = useState('');
-  const [labNum, setlabNum] = useState({lab_number:''})
+  // const [labNum, setlabNum] = useState({lab_number:''})
   //const [patientrow, setpatientValue] = useState({date_sample_collected:new Date(), sample_collected:''});
   const TodayDate = moment(new Date()).format('DD-MM-YYYY')
   const [patientrow, setpatientValue] = useState({
@@ -175,6 +106,7 @@ const StyledTableRow = withStyles(theme => ({
         serviceName: "GENERAL_SERVICE",
         visitId: 0
   })
+  console.log(setCollectsample)
   //const newDate = moment(patientrow.date_sample_collected).format('DD-MM-YYYY');
   const saveColllectSample = e => {
 
@@ -192,18 +124,18 @@ const StyledTableRow = withStyles(theme => ({
     setpatientValue({ ...patientrow, [e.target.name]: e.target.value })
   }
 
-const handlesample = (sampleval) => {
-  
+const handlesample = (sampleval) => {  
    setcollectmodal(sampleval);
-   setModal(!modal)
-  
+   setModal(!modal) 
 }
 const transfersample = (val) => {
   setModal2(!modal2)
- setcollectmodal(val);
-
+  setcollectmodal(val);
 }
-
+const viewSampleTypes = (values) => {
+  setModal3(!modal3)
+  setSamplelist(values);
+}
 const getGroup = e => {
   const getvalue =e.target.value;
   const testing = newsample.length>0?newsample:null
@@ -214,16 +146,28 @@ const getGroup = e => {
 //This is function to check for the status of each collection to display on the tablist below 
 const samplestatus = e =>{
   if(e===1){
-    return <p>Sample Collected</p>
+    return <p><Badge  color="light">Sample Collected</Badge></p>
   }else if(e===2){
-    return <p>Sample Transfered</p>
+    return <p><Badge  color="light">Sample Transfered</Badge></p>
   }else{
-    return <p>--</p>
+    return <p>{"null"}</p>
+  }
+}
+//Check if sample type is not empty 
+const samples = e =>{
+  console.log(e)
+  if(e==="" || e===null){
+    return <p>---</p>
+  }else{
+    return <p><Badge color="info" style={{ cursor:'pointer'}}
+      onClick={() =>
+      viewSampleTypes(e)}
+      >view samples</Badge></p>
   }
 }
 //This is function to check for the status of each collection to display on the tablist below 
 const sampleAction = (e,rowdata) =>{
-  if(e===""){
+  if(e!=="" && e!==0){
   return <p> { }</p>
   }else{
     return (
@@ -249,7 +193,7 @@ const sampleAction = (e,rowdata) =>{
       <ToastContainer autoClose={2000} />
       <Row>
         <Col>
-          <div className={classes2.inforoot}>
+          <div >
             {!loading ?
              <PatientDetailCard getpatientdetails={ props.location.state }/>  
              :
@@ -281,11 +225,9 @@ const sampleAction = (e,rowdata) =>{
                                 id="testgroup"
                                 onChange={getGroup}
                               >
-                                <option value="">
-                                   
+                                <option value="">    
                                 </option>
                                   {
-                                    
                                     uniqueValues.map(x => 
                                       <option key={x} value={x}>
                                         {x}
@@ -296,63 +238,32 @@ const sampleAction = (e,rowdata) =>{
                           </Col>
                       </Row>
                     <Form onSubmit={saveColllectSample}>
-                     
-                    <TableContainer component={Paper}>
-                      <Table
-                        className={classes.table}
-                        aria-label='caption table'
-                      >
-                        <TableHead style={{ fontWeight: 'bolder', backgroundColor:'#1D4380' }}>
-                          <TableRow style={{  backgroundColor:'#1D4380' }}>
-                            <StyledTableCell align='center'>
-                              Test
-                            </StyledTableCell>
-                            <StyledTableCell align='center'>
-                              Sample Type
-                            </StyledTableCell>
-                            <StyledTableCell align='center'>
-                              Date Requested
-                            </StyledTableCell>
-                            <StyledTableCell align='center'>
-                              Status
-                            </StyledTableCell>
-                            <StyledTableCell align='center'>
-                              Actions
-                            </StyledTableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        
-                            {!loading ? newsample.map(row => (
-                            
-                            <StyledTableRow key={row.id}>
-                              <TableCell component='th' scope='row'>
-                                {row.data.description===""?"Null ":row.data.description}
-                              </TableCell>
-                              <TableCell align='center'>{row.data.sample_type===""?"Null ":row.data.sample_type}</TableCell>
-                              <TableCell align='center'>
-                              {userInfo.dateEncounter} 
-                               
-                              </TableCell>
-                              <TableCell align='center'>
-                               
-                              {samplestatus(row.lab_test_order_status)}
-                              </TableCell>
-                              <TableCell align='center'>
-                              {sampleAction(row.lab_test_order_status, row)}
-                                
-                                  
-                              </TableCell>
-                            </StyledTableRow>
-                          ))
-                          :
-                          <p> <Spinner color="primary" /> Loading Please Wait</p>
-
-                          }
+                      <Table style={{ fontWeight: 'bolder', borderColor:"#000"}} striped>
+                        <thead style={{  backgroundColor:'#3E51B5', color:"#fff" }}>
+                          <tr>
+                            <th>Test</th>
+                            <th>Sample Type</th>
+                            <th>Date Requested</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {!loading ? newsample.map((row) => (
                           
-                        </TableBody>
+                          <tr key={row.id}>
+                            <th scope="row">{row.data.description===""?"Null ":row.data.description}</th>
+                            <td>{samples(row.data.sample_type)}</td>
+                            <td> {!row.dateEncounter?null:row.dateEncounter} </td>
+                            <td>{samplestatus(row.data.lab_test_order_status)} </td>
+                            <td>{sampleAction(row.data.lab_test_order_status, row)}</td>
+                          </tr>
+                        ))
+                        :<p> <Spinner color="primary" /> Loading Please Wait</p>
+                        } 
+                        </tbody>
                       </Table>
-                    </TableContainer>
+                    
                     <br />
                     
                       <Row form>
@@ -407,7 +318,7 @@ const sampleAction = (e,rowdata) =>{
       </Row>
       <ModalSample modalstatus={modal} togglestatus={togglemodal} datasample={collectmodal} testorder={data}  userInfo={userInfo} useData={useData}/>
       <ModalSampleTransfer modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal} testorder={data}  userInfo={userInfo} useData={useData}/>
-      
+      <ModalSampleType modalstatus={modal3} togglestatus={togglemodal3} samptypelist={samplelist} />
     </Page>
   )
 }

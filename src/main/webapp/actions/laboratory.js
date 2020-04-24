@@ -24,6 +24,7 @@ export const fetchAllLabTestOrder = (onSuccess, onError) => dispatch => {
         type: ACTION_TYPES.LABORATORY_TESTORDER,
         payload: response.data
       })
+      console.log(response)
       onSuccess();
     })
     .catch(error => {
@@ -32,6 +33,7 @@ export const fetchAllLabTestOrder = (onSuccess, onError) => dispatch => {
         payload: 'Something went wrong, please try again'
       })
       onError();
+      console.log(error)
     });
 }
 };
@@ -53,6 +55,7 @@ export const fetchAllLabTestOrderOfPatient = (id, onSuccess, onError )=> dispatc
         payload: error
       })
       onError();
+      console.log(error)
     }
     );
 }

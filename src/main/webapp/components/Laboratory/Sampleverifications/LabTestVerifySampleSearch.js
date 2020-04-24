@@ -3,47 +3,45 @@ import React, {useEffect, useState} from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
-import { fetchAllLabTestOrder } from "actions/laboratory";
-import "./laboratory.css";
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import { fetchAllLabTestOrder } from "./../../../actions/laboratory";
+import "./../laboratory.css";
+import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 
 const PatientSearch = (props) => {
   const [loading, setLoading] = useState('')
-      useEffect(() => {
-        setLoading('true');
-        const onSuccess = () => {
-          setLoading(false)
-        }
-        const onError = () => {
-          setLoading(false)     
-        }
-        props.fetchAllLabTestOrderToday(onSuccess,onError);
+  useEffect(() => {
+    setLoading('true');
+    const onSuccess = () => {
+      setLoading(false)
+    }
+    const onError = () => {
+      setLoading(false)     
+    }
+        props.fetchAllLabTestOrderToday(onSuccess, onError);
       }, []); //componentDidMount
-function getTotalcount(formId) {
-    return formId
-}     
+ 
   return (
     <div>
       <MaterialTable
-        title="Laboratory Test Orders"
+        title="Laboratry Sample Verification"
         columns={[
           {
             title: "Patient Name",
             field: "name",
           },
           { title: "Patient ID", field: "Id" },
-          { title: "Order Date", field: "date", type: "date" },
+          { title: "Test Order Date", field: "date", type: "date" },
           {
-            title: "Total  Orders",
+            title: "Total Sample ",
             field: "count",
-            filtering: false,
+            filtering: false
           },
           {
-            title: "Sample Collected",
+            title: "Total Verified ",
             field: "samplecount",
-            filtering: false,
+            filtering: false
           },
           {
             title: "Action",
@@ -57,40 +55,39 @@ function getTotalcount(formId) {
           Id: row.patientId,
           date: row.dateEncounter,
           count: row.formDataObj.length,
-          samplecount: getTotalcount(row.formDataObj.length),
+          samplecount: 0,
           actions: <Link to ={{ 
-                                pathname: "/collect-sample",  
-                                state: { getpatientlists:{row}}, 
-                                patientName: row.firstName + ' ' + row.lastName}} 
-                                style={{ cursor: "pointer", color: "blue", 
-                                fontStyle: "bold" }}>
-                                  <Tooltip title="Collect Sample">
-                                    <IconButton aria-label="Collect Sample" >
-                                      <VisibilityIcon color="primary"/>
-                                  </IconButton>
-                                  </Tooltip>
-                                </Link>
-          
-        }))}
-        
+                              pathname: "/sample-verification",  
+                              state: { getpatientlists:{row}}, 
+                              patientName: row.firstName + ' ' + row.lastName}}  
+                              style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>
+                              <Tooltip title="Sample Verification">
+                                  <IconButton aria-label="Sample Verification" >
+                                    <CenterFocusWeakIcon color="primary"/>
+                                </IconButton>
+                                </Tooltip>
+                  </Link>
+
+            }))}
         options={{
-          actionsColumnIndex: -1,
+          filtering:false,
           headerStyle: {
             backgroundColor: "#9F9FA5",
             color: "#000",
-            margin: "auto"
           },
-          filtering: true,
-         
           searchFieldStyle: {
             width : '300%',
             margingLeft: '250px',
           },
-      
+          
           exportButton: true,
           searchFieldAlignment: 'left',
-          
+          icon: 'refresh',
+           tooltip: 'Refresh Data',
+            isFreeAction: true,
+            onClick: () => this.tableRef.current && this.tableRef.current.onQueryChange(),
         }}
+        
       />
     </div>
   );

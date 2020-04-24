@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter ,
+import {  Modal, ModalHeader, ModalBody, ModalFooter ,
 Form,
 Row,
 Col,
@@ -7,7 +7,10 @@ FormGroup,
 Label,Input
 } from 'reactstrap';
 import { connect } from 'react-redux';
-
+import MatButton from '@material-ui/core/Button'
+import { makeStyles } from '@material-ui/core/styles'
+import SaveIcon from '@material-ui/icons/Save'
+import CancelIcon from '@material-ui/icons/Cancel'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
@@ -15,14 +18,10 @@ import { DateTimePicker } from 'react-widgets';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
-import {url} from '../../api'
+import {url} from '../../../api'
 
 import { useSelector, useDispatch } from 'react-redux';
-import { createCollectedSample, fetchFormById } from '../../actions/laboratory';
-import MatButton from '@material-ui/core/Button'
-import { makeStyles } from '@material-ui/core/styles'
-import SaveIcon from '@material-ui/icons/Save'
-import CancelIcon from '@material-ui/icons/Cancel'
+import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -63,7 +62,7 @@ Moment.locale('en');
 momentLocalizer();
 
 
-const ModalSampleResult = (props) => {
+const ModalSample = (props) => {
   const classes = useStyles()
   const [newdata, setNewdata] = useState({formdata});
 /* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
@@ -92,9 +91,8 @@ const ModalSampleResult = (props) => {
         const date_result_reported = formdata.data ? formdata.data.date_result_reported : null
         const date_sample_collected = formdata.data ? formdata.data.date_sample_collected : null
         const lab_test_order_status = formdata.data ? formdata.data.lab_test_order_status : null
-        const encounterId = formdata.encounterId ? formdata.encounterId : null
-        
-        const [data, setData] = useState({data:{}, encounterId:""})
+       
+        const [data, setData] = useState({data:{}})
         const [samples, setSamples] = useState({                                                                         
                                           user_id: user_id,
                                           patient_id: patient_id,
@@ -132,14 +130,14 @@ const ModalSampleResult = (props) => {
             ...samples,
             ...fieldValue
         })
-
+        console.log(samples)
     }
     const saveSample = e => {
      
-      console.log(data)
+     
       toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
-      samples['lab_test_order_status'] = 1;
+
       samples['date_sample_collected'] = newDatenow;
       samples['user_id'] = user_id
       samples['description'] = description
@@ -151,94 +149,80 @@ const ModalSampleResult = (props) => {
       samples['lab_test_group_id'] = lab_test_group_id
       samples['lab_test_order_id'] = lab_test_order_id
       samples['date_result_reported'] = date_result_reported
+      samples['lab_test_order_status']=4
       data['data'] = samples;
-      data['encounterId'] = encounterId;
       console.log(data)
       e.preventDefault()
       props.createCollectedSample(data, lab_id)
     }
-    const textstyle = {
-        fontSize: '14px',
-        fontWeight: 'bolder'
-      };
-
+    //console.log(formdata)
   return (
       
       <div >
-       <ToastContainer autoClose={2000} hideProgressBar />
-      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
+       <ToastContainer autoClose={3000} hideProgressBar />
+      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className}>
         
       <Form onSubmit={saveSample}>
-        <ModalHeader toggle={props.togglestatus}>Reject Sample </ModalHeader>
+        <ModalHeader toggle={props.togglestatus}>Verify Sample</ModalHeader>
         <ModalBody>
-            <Row style={{ marginTop: '20px'}}>
-                <Col xs="4">
-                    Test 
-                    <br/>
-                    <p style={textstyle}>{description} </p>
-
-                
-                </Col>
-                <Col xs="4">
-                    Sample Test
-                    <br/>
-                      <p style={textstyle}>{sample_type}</p>
-                    
-                    </Col>
-                <Col xs="4">
-                    Date Of Result
-                    <br/>
-                    <p style={textstyle}>{date_result_reported}</p>      
-                    </Col>
-                
-            </Row >
-                <br/>
-                <Form>
-                <Row form>
-                    <Col md={4}>
-                    <FormGroup>
-                        <Label for="exampleEmail">Reason For Rejection</Label>
-                        <Input type="select" name="select" id="exampleSelect">
-                            <option>Not well collected</option>
-                            <option>Mistake on the sample</option>
-                            <option>Not needed</option>
-                            
-                            </Input>
-                    </FormGroup>
-                    </Col>
-                    <Col md={4}>
-                    <FormGroup>
-                        <Label for="exampleEmail">Date</Label>
-                        <DateTimePicker time={false} name="dateRegistration"  id="dateRegistration"  
-                    defaultValue={new Date()} max={new Date()}
-                    /> 
-                    </FormGroup>
-                    </Col>
-                      
-                    <Col md={12}>
-                    <FormGroup>
-                        <Label for="examplePassword">Note</Label>
-                        <Input
-                            type='textarea'
-                            name='comment'
-                            id='comment'
-                            onChange={handleInputChangeSample}
-                            value = {samples.comment}                                     
-                          >
-                        </Input>
-                    </FormGroup>
-                    </Col>
-                    
-                </Row>       
-                </Form>
-                <MatButton
+        <Row >
+        <Col md={12}>
+          
+          <FormGroup>
+            
+            <Label for='maritalStatus'>Date Verify</Label>
+            
+            <DateTimePicker
+                        time={false}
+                        name="date_sample_collected"
+                        id="date_sample_collected"
+                        value={samples.date_sample_collected}
+                        onChange={value1 =>
+                          setSamples({ ...samples, date_sample_collected: value1 })
+                        }
+                        defaultValue={new Date()}
+                        max={new Date()}
+                        required
+                      /> 
+          </FormGroup>
+          <FormGroup>
+          <FormGroup>
+            <Label for="exampleSelect">Confirm Sample</Label>
+            <Input type="select" name="lab_test_order_status" id="lab_test_order_status" 
+            value={samples.lab_test_order_status}
+            onChange={handleInputChangeSample}>
+              <option value=""></option>
+              <option value="3">Sample Valid </option>
+              <option value="4">Sample Rejected</option>
+            </Input>
+          </FormGroup>
+          <FormGroup>
+            
+            <Label for='maritalStatus'>Note</Label>
+            <Input
+              type='textarea'
+              name='comment'
+              id='comment'
+              onChange={handleInputChangeSample}
+               value = {samples.comment}
+                                                    
+            >
+                                     
+            </Input>
+          
+          </FormGroup>
+            
+         </FormGroup>
+        </Col>
+     </Row>
+     <MatButton
             type='submit'
             variant='contained'
             color='primary'
             className={classes.button}
             startIcon={<SaveIcon />}
           >
-            Save Sample
+            Ok
           </MatButton>
           <MatButton
             variant='contained'
@@ -249,7 +233,7 @@ const ModalSampleResult = (props) => {
           >
             Cancel
           </MatButton>
-            </ModalBody>
+        </ModalBody>
         
         </Form>
       </Modal>
@@ -257,4 +241,4 @@ const ModalSampleResult = (props) => {
   );
 }
 
-export default connect(null, { createCollectedSample })(ModalSampleResult);
+export default connect(null, { createCollectedSample, fetchFormById })(ModalSample);

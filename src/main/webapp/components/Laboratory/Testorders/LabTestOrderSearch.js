@@ -3,9 +3,9 @@ import React, {useEffect, useState} from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
-import { fetchAllLabTestOrder } from "actions/laboratory";
-import "./laboratory.css";
-import NoteAddIcon from '@material-ui/icons/NoteAdd';
+import { fetchAllLabTestOrder } from "./../../../actions/laboratory";
+import "./../laboratory.css";
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 
@@ -25,7 +25,7 @@ const PatientSearch = (props) => {
   return (
     <div>
       <MaterialTable
-        title="Laboratry Test Results"
+        title="Laboratry Test Orders"
         columns={[
           {
             title: "Patient Name",
@@ -39,7 +39,7 @@ const PatientSearch = (props) => {
             filtering: false
           },
           {
-            title: "Total Result",
+            title: "Sample Collected ",
             field: "samplecount",
             filtering: false
           },
@@ -57,18 +57,19 @@ const PatientSearch = (props) => {
           count: row.formDataObj.length,
           samplecount: 0,
           actions: <Link to ={{ 
-                                pathname: "/collect-result",  
-                                state: { getpatientlists:{row}}, 
-                                patientName: row.firstName + ' ' + row.lastName}}  
-                                style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>
-                                <Tooltip title="Enter Result">
-                                    <IconButton aria-label="ENTER RESULT" >
-                                      <NoteAddIcon color="primary"/>
-                                  </IconButton>
-                                  </Tooltip>
-                    </Link>
-          
-        }))}
+                        pathname: "/collect-sample",  
+                        state: { formdata:{row}}, 
+                        patientName: row.firstName + ' ' + row.lastName}} 
+                        style={{ cursor: "pointer", color: "blue", 
+                        fontStyle: "bold" }}>
+                          <Tooltip title="Collect Sample">
+                            <IconButton aria-label="Collect Sample" >
+                              <VisibilityIcon color="primary"/>
+                          </IconButton>
+                          </Tooltip>
+                        </Link>
+
+            }))}
         options={{
           filtering:false,
           headerStyle: {

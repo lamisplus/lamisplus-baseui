@@ -36,16 +36,9 @@ const ConsultationDashboardPage = React.lazy(() =>
 const LaboratoryPage = React.lazy(() =>
   import("components/Laboratory/LaboratoryPageDashboard")
 );
-const TestOrder = React.lazy(() => import("components/Laboratory/TestOrder"));
-const CollectSample = React.lazy(() =>import("components/Laboratory/CollectSample"));
-const LaboratorySampleResultPage = React.lazy(() =>import("components/Laboratory/CollectResult"));
-const PatientlabTestOrder = React.lazy(() =>import("components/Laboratory/PatientlabTestOrder"));
-const CollectedSample = React.lazy(() =>
-  import("components/Laboratory/CollectedSample")
-);
-const ViewResult = React.lazy(() => import("components/Laboratory/ViewResult"));
-const TestResult = React.lazy(() => import("components/Laboratory/TestResult"));
-const SampleVerification = React.lazy(() => import("components/Laboratory/SampleVerification"));
+const CollectSample = React.lazy(() =>import("components/Laboratory/Testorders/CollectSample"));
+const LaboratorySampleResultPage = React.lazy(() =>import("components/Laboratory/TestResult/CollectResult"));
+const SampleVerification = React.lazy(() => import("components/Laboratory/Sampleverifications/SampleVerification"));
 const PatientsPage = React.lazy(() =>
   import("components/patient/PatientsPage")
 );
@@ -108,18 +101,8 @@ class Routes extends Component {
               />
              <Route exact path="/collect-result" component={LaboratorySampleResultPage} />
               <Route exact path="/laboratory" component={LaboratoryPage} />
-              
-              <Route exact path="/view-result" component={ViewResult} />
-              <Route exact path="/test-order" component={TestOrder} />
               <Route exact path="/sample-verification" component={SampleVerification} />
-              <Route
-                exact
-                path="/collected-sample"
-                component={CollectedSample}
-              />
-              <Route exact path="/test-result" component={TestResult} />
               <Route exact path="/collect-sample" component={CollectSample} />
-              <Route exact path="/patient-lab-test/:id/:patientId" component={PatientlabTestOrder} />
               <Route exact path="/patients" component={PatientsPage} />
 
               {/* Pharmacy Links */}

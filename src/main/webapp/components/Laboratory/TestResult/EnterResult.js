@@ -14,10 +14,10 @@ import { DateTimePicker } from 'react-widgets';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
-import {url} from '../../api'
+import {url} from '../../../api'
 
 import { useSelector, useDispatch } from 'react-redux';
-import { createCollectedSample, fetchFormById } from '../../actions/laboratory';
+import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
 
 import MatButton from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
@@ -145,7 +145,7 @@ const ModalSampleResult = (props) => {
       console.log(data)
       toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
-      samples['lab_test_order_status'] = 1;
+      samples['lab_test_order_status'] = 5;
       samples['date_sample_collected'] = newDatenow;
       samples['user_id'] = user_id
       samples['description'] = description
@@ -222,7 +222,7 @@ const ModalSampleResult = (props) => {
                             <Col xs="4">
                               Sample collected
                               <br/>
-                              <p style={textstyle}>{sample_type}<small className="text-muted">By Evans</small></p>
+                              <p style={textstyle}>{"view Sample"}<small className="text-muted">By Evans</small></p>
                               </Col>
                           
                         </Row>
