@@ -1,7 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import { Modal, ModalHeader, ModalBody,Form,Row,Col,FormGroup,Label,Input
+import { Modal, ModalHeader, ModalBody, ModalFooter ,
+Form,
+Row,
+Col,
+FormGroup,
+Label,
+Input
 } from 'reactstrap';
 import { connect } from 'react-redux';
+import { ToastContainer, toast } from "react-toastify";
 import MatButton from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import SaveIcon from '@material-ui/icons/Save'
@@ -90,12 +97,12 @@ const ModalSampleTransfer = (props) => {
           //const [newcomment, setNewcomment] = useState('')
           const [samples, setSamples] = useState({ 
                                             comment: comment,
-                                                                                                                  
+                                            sample_type:sample_type,                                                                        
                                             user_id: user_id,
                                             patient_id: patient_id,
                                             description: description,
                                             lab_test_id: lab_test_id,
-                                            sample_type: sample_type,
+                                           
                                             test_result:test_result,
                                             lab_test_group: lab_test_group,
                                             unit_measurement:unit_measurement,
