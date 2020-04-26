@@ -60,11 +60,14 @@ export const create = (data, onSuccess, onError )=> dispatch => {
       });
     })
     .catch(error => {
+      if(onError){
+        onError(error.response);
+      }
       dispatch({
         type: ACTION_TYPES.ENCOUNTER_ERROR,
         payload: 'Something went wrong, please try again'
       })
-      // onError(error.response)
+      // 
     })
 }
 

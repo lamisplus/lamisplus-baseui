@@ -74,9 +74,13 @@ function AddVitalsPage (props) {
   })
   const [showLoading, setShowLoading] = useState(false)
   const SaveVitals = e => {
-    setShowErrorMsg(false)
     e.preventDefault()
 
+    if(showLoading){
+      return;
+    }
+    setShowErrorMsg(false)
+   
     console.log(formDataForVitals);
     //check to see if at least a field was filled
     if(!(formDataForVitals.pulse || formDataForVitals.respiratoryRate || formDataForVitals.temperature || formDataForVitals.diastolic
@@ -104,10 +108,11 @@ function AddVitalsPage (props) {
         toast.success('Patient Vitals Saved Successfully', { appearance: 'success' })
       }
       const onError = errstatus => {
+        setShowLoading(false);
         const msg = !(errstatus && errstatus.data && errstatus.data.apierror && errstatus.data.apierror.message) ? 'Something went wrong' : errstatus.data.apierror.message
-        setErrorMsg(msg)
-        setShowErrorMsg(true)
-        setShowLoading(false)
+        setErrorMsg(msg);
+        setShowErrorMsg(true);
+        
       }
       props.createVitalSigns(data, onSuccess, onError)
       

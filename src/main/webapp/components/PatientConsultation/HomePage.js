@@ -38,6 +38,7 @@ import {connect} from 'react-redux';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Popover from '@material-ui/core/Popover';
 import MatButton from '@material-ui/core/Button';
+import { url } from "api/index";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -188,8 +189,24 @@ function HomePage(props) {
   const [checkIn, setCheckIn] = useState(false);
   const [fetchingPatient, setFetchingPatient] = useState(false);
   const hospitalNumber = props.location.state.hospitalNumber || props.patient.hospitalNumber || '';
-  const [rPopoverOpen, setRelationshipPopoverOpen] = useState(false);
+  const [relationshipTypes, setRelationshipTypes] = useState(false);
+  /*# Get list of RELATIVE parameter from the endpoint #*/
+  React.useEffect(() => {
+    async function getCharacters() {
+      try {
+        const response = await fetch(`${url}/application-codesets/codesetGroup?codesetGroup=RELATIONSHIP`);
+        const body = await response.json();
+        setRelationshipTypes(body);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getCharacters();
+  }, []);
 
+  function getRelationshipName(id) {
+    return id ? relationshipTypes.find(x => x.id == id).display : "";
+  }
   // const toggleRelationshipPopOver = () => setRelationshipPopoverOpen(!rPopoverOpen);
   // const modifiers = {
   //   preventOverflow: {
@@ -316,7 +333,7 @@ function HomePage(props) {
                             key={index}
                             index={index}
                             relative={relative}
-                            relationshipTypeName={"Father"}
+                            relationshipTypeName={getRelationshipName(relative.relationshipTypeId)}
                           />
                         )) : 
                         <Typography className={classes.navItemText}>No Relationship </Typography>}
@@ -344,7 +361,7 @@ function HomePage(props) {
         <PatientAllergies height={cardHeight} addstatus={false} /> 
       </CardDeck>
       <br></br>
-    <PatientChart getpatientdetails={props.location.state} />
+    <PatientChart patientId={props.patient.patientId}  />
     <br></br>
     <Card>
                         <CardBody>

@@ -10,11 +10,11 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
-    Button,
     Alert
   } from 'reactstrap';
   import { ToastContainer, toast } from 'react-toastify'
   import 'react-toastify/dist/ReactToastify.css'
+  import MatButton from '@material-ui/core/Button'
 
 //Date Picker
 import 'react-widgets/dist/css/react-widgets.css';
@@ -26,7 +26,8 @@ import * as actions from "actions/patients";
 import { connect } from 'react-redux'
 import { initialfieldState_checkInPatient } from './initailFieldState'
 import Spinner from 'react-bootstrap/Spinner';
-
+import SaveIcon from '@material-ui/icons/Save'
+import CancelIcon from '@material-ui/icons/Cancel'
 //Dtate Picker package
 Moment.locale('en');
 momentLocalizer();
@@ -156,13 +157,34 @@ const CheckInModal = (props ) => {
           </Row>
         </ModalBody>
         <ModalFooter>
-          <Button color='primary' onClick={handleSubmit}>
+          <div class="float-left">
+        <MatButton
+            type='submit'
+            variant='contained'
+            color='primary'
+            startIcon={<SaveIcon />}
+            onClick={handleSubmit}
+          >
+            Check In { loading ? <Spinner animation="border" role="status">
+                                            </Spinner> : ""}
+          </MatButton>
+          &nbsp;
+          <MatButton
+            variant='contained'
+            color='default'
+            onClick={toggle}
+            startIcon={<CancelIcon />}
+          >
+            Cancel
+          </MatButton>
+          </div>
+          {/* <Button color='primary' onClick={handleSubmit}>
             CheckIn  { loading ? <Spinner animation="border" role="status">
                                             </Spinner> : ""}
           </Button>{' '}
           <Button color='secondary' onClick={toggle}>
             Cancel
-          </Button>
+          </Button> */}
         </ModalFooter>
       </Modal>
     );
