@@ -45,7 +45,7 @@ const PatientSearch = (props) => {
           actions: (
             <Link
               to={{
-                pathname: "/patientPrescriptions",
+                pathname: "/prescriptions",
                 forms: prescription.formDataObj,
                 patientName:
                   prescription.firstName + " " + prescription.lastName,

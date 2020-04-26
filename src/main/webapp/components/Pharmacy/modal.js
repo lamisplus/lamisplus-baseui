@@ -21,7 +21,6 @@ import { DateTimePicker } from 'react-widgets';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
-import {url} from '../../../api'
 import { Spinner } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Alert } from 'reactstrap';
@@ -68,34 +67,20 @@ const ModalSample = (props) => {
   const [newdata, setNewdata] = useState({formdata});
   const [loading, setLoading] = useState(false)
 /* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
+    console.log(props)
   const formdata = useSelector(state => state.laboratory.formdata);
   const dispatch = useDispatch();
-  const lab_id = props.datasample.id
-  console.log(props.datasample)
-  const labId = lab_id;
+
 
   useEffect(() => {
-    dispatch(fetchFormById(labId));
-    setNewdata({...newdata, formdata}) 
-  }, [labId]);
-        console.log(formdata.data) 
+  
 
-        const [data, setData] = useState({data:{}, encounterId:""})
+  }, []);
+
  
           
         const [optionsample, setOptionsample] = useState([]);
-        useEffect(() => {
-            async function getCharacters() {
-              try {
-                const response = await fetch(url+'application-codesets/codesetGroup?codesetGroup=SAMPLE_TYPE');
-                const body = await response.json();
-                setOptionsample(body.map(({ display, id }) => ({ title: display, value: id })));
-              } catch (error) {
-                console.log(error);
-              }
-            }
-            getCharacters();
-          }, []);
+        const [samples, setSamples] = useState({})
        const handleInputChangeSample = e => {
         const { name, value } = e.target
         const fieldValue = { [name]: value }
@@ -147,7 +132,7 @@ const ModalSample = (props) => {
                           <p style={{ marginTop: ".7rem" }}>
                             Drug Prescribed:{" "}
                             <span style={{ fontWeight: "bolder" }}>
-                              {Paracetamol}
+                              Paracetamol
                             </span>
                             &nbsp;&nbsp;&nbsp; Quantity Prescribed :
                             <span style={{ fontWeight: "bolder" }}>{20}</span>
@@ -259,4 +244,4 @@ const ModalSample = (props) => {
   );
 }
 
-export default connect(null, { createCollectedSample, fetchFormById })(ModalSample);
+export default ModalSample;

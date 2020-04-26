@@ -71,7 +71,7 @@ const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split("/").pop()}`;
 };
 
-const Prescript = React.lazy(() => import("components/Pharmacy/prescriptions"))
+const Prescript = React.lazy(() => import("components/Pharmacy/Prescriptions"))
 class Routes extends Component {
   render() {
     return (

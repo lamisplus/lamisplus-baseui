@@ -9,12 +9,11 @@ import {
 } from "../../actions/pharmacy";
 import { connect } from "react-redux";
 import { Divider } from "@material-ui/core";
- import Modal from "./Modal"
 
 import {
   Col,
   Row,
-  // Modal,
+  Modal,
   ModalHeader,
   ModalBody,
   ModalFooter,
@@ -228,6 +227,153 @@ const PatientPrescriptions = (props) => {
                     <TableCell align="right">
                       <VisibilityIcon onClick={toggle2} />
                     </TableCell>
+
+                    <Modal
+                      isOpen={modal2}
+                      toggle={toggle2}
+                      className={className}
+                      size="lg"
+                      key={index}
+                    >
+                      <ModalHeader toggle={toggle2}>
+                        Prescription Details
+                      </ModalHeader>
+                      <ModalBody>
+                        <Row style={{ marginTop: "20px" }}>
+                          <Col xs="12">
+                            Drug Name
+                            <br />
+                            <p style={textstyle}>{form.data.generic_name} </p>
+                          </Col>
+                          <Col xs="4">
+                            Dosage
+                            <br />
+                            <p style={textstyle}>{form.data.dosage}</p>
+                          </Col>
+                          <Col xs="4">
+                            Unit
+                            <br />
+                            <p style={textstyle}>{form.data.duration_unit}</p>
+                          </Col>
+                          <Col xs="4">
+                            Frequency
+                            <br />
+                            <p style={textstyle}>
+                              {form.data.dosage_frequency} time(s) daily
+                            </p>
+                          </Col>
+                        </Row>
+                        <Row style={{ marginTop: "20px" }}>
+                          <Col xs="4">
+                            Start Date
+                            <br />
+                            <p style={textstyle}>{form.data.start_date}</p>
+                          </Col>
+                          <Col xs="12">Additional Information</Col>
+                          <hr />
+                          <Col xs="4">
+                            Instruction
+                            <br />
+                            <p style={textstyle}>{form.data.comment}</p>
+                          </Col>
+                          <Col xs="4">
+                            Additional Instruction
+                            <br />
+                            <p style={textstyle}>
+                              {form.data.comment ? form.data.comment : "None"}
+                            </p>
+                          </Col>
+                        </Row>
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button color="secondary" onClick={toggle2}>
+                          Close
+                        </Button>
+                      </ModalFooter>
+                    </Modal>
+                    <Dialog
+                      open={open}
+                      onClose={handleClose}
+                      aria-labelledby="form-dialog-title"
+                    >
+                      <DialogTitle id="form-dialog-title">
+                        Dispense &nbsp;&nbsp;{form.data.generic_name}
+                      </DialogTitle>
+                      <div
+                        style={{
+                          background: "#9F9FA5",
+                          width: "100%",
+                          height: "3rem",
+                          padding: "1rem 0.5rem",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        Qty Presc: 10 Tablets Stock Bal: 500 Packs
+                      </div>
+                      <DialogContent>
+                        <DialogContentText></DialogContentText>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                          <KeyboardDatePicker
+                            margin="normal"
+                            id="date-picker-dialog"
+                            label="Enter date dispensed"
+                            format="MM/dd/yyyy"
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                            KeyboardButtonProps={{
+                              "aria-label": "change date",
+                            }}
+                          />
+
+                          <br />
+                        </MuiPickersUtilsProvider>
+                        <br />
+                        <TextField
+                          label="Quantity Dispensed"
+                          id="filled-start-adornment"
+                          className={clsx(classes.margin, classes.textField)}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                Tablets
+                              </InputAdornment>
+                            ),
+                          }}
+                          size="small"
+                        />
+                        <TextField
+                          margin="dense"
+                          id="name"
+                          label="Additional Comments"
+                          type="text"
+                          value={values.text}
+                          onChange={handleChange}
+                          fullWidth
+                        />
+                      </DialogContent>
+                      <DialogActions>
+                        <MatButton
+                          type="submit"
+                          variant="contained"
+                          color="primary"
+                          align="left"
+                          onClick={handleDispense}
+                          className={classes.button}
+                          startIcon={<SaveIcon />}
+                        >
+                          Ok
+                        </MatButton>
+                        <MatButton
+                          variant="contained"
+                          color="default"
+                          onClick={handleClose}
+                          className={classes.button}
+                          startIcon={<CancelIcon />}
+                        >
+                          Cancel
+                        </MatButton>
+                      </DialogActions>
+                    </Dialog>
                   </TableRow>
                 </TableBody>
               ))}
@@ -236,10 +382,8 @@ const PatientPrescriptions = (props) => {
         </Fragment>
       ) : (
         <h2 style={{ margin: "auto" }}>No Prescriptions</h2>
-        )}
-      <Modal />
+      )}
     </div>
-  
   );
 };
 
