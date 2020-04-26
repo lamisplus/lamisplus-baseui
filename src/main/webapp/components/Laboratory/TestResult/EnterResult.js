@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter ,
+import { Modal, ModalHeader, ModalBody,
 Form,
 Row,
 Col,
 FormGroup,
-Label,Input
+Label,Input,Card,CardBody
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { ToastContainer, toast } from "react-toastify";
@@ -181,6 +181,8 @@ const ModalSampleResult = (props) => {
       <Form onSubmit={saveSample}>
         <ModalHeader toggle={props.togglestatus}>Enter Sample Result</ModalHeader>
         <ModalBody>
+        <Card>
+          <CardBody>
                         <Row style={{ marginTop: '20px'}}>
                             <Col xs="4">
                               Test 
@@ -311,9 +313,12 @@ const ModalSampleResult = (props) => {
                           >
                             Cancel
                           </MatButton>
+                          </CardBody>
+                          </Card>
                     </ModalBody>
         
         </Form>
+
       </Modal>
     </div>
   );

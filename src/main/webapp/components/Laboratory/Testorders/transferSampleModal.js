@@ -5,7 +5,7 @@ Row,
 Col,
 FormGroup,
 Label,
-Input
+Input, Card,CardBody
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { ToastContainer, toast } from "react-toastify";
@@ -169,6 +169,8 @@ const ModalSampleTransfer = (props) => {
       <Form onSubmit={saveSample}>
         <ModalHeader toggle={props.togglestatus}>Transfer Sample</ModalHeader>
         <ModalBody>
+        <Card >
+        <CardBody>
         <Row >
         <Col md={12}>
           {/* <p>Sample Type {datasample.data.description}  </p> */}
@@ -234,6 +236,8 @@ const ModalSampleTransfer = (props) => {
           >
             Cancel
           </MatButton>
+        </CardBody>
+        </Card> 
         </ModalBody>
         
         </Form>

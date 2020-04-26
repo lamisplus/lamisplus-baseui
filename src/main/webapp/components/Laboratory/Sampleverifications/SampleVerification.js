@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, CardBody,CardHeader,Col,Row,Button,FormGroup,Label,Input} from 'reactstrap'
+import {Card, CardBody,CardHeader,Col,Row,FormGroup,Label,Input} from 'reactstrap'
 import { useState , useEffect} from 'react'
 import { TiArrowBack } from 'react-icons/ti' 
 import { FaRegEye } from 'react-icons/fa'
@@ -153,6 +153,7 @@ const sampleAction = (e) =>{
     <Page title=' Sample Verification'>
       <ToastContainer autoClose={2000} />
       <Row>
+        
         <Col>
           <div >
             {!loading ?

@@ -4,7 +4,7 @@ Form,
 Row,
 Col,
 FormGroup,
-Label,Input
+Label,Input,Card,CardBody
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import MatButton from '@material-ui/core/Button'
@@ -165,7 +165,10 @@ const ModalSample = (props) => {
       <Form onSubmit={saveSample}>
         <ModalHeader toggle={props.togglestatus}>Sample Verify </ModalHeader>
         <ModalBody>
+        <Card >
+        <CardBody>
         <Row >
+        
         <Col md={12}>
           
           <FormGroup>
@@ -233,6 +236,9 @@ const ModalSample = (props) => {
           >
             Cancel
           </MatButton>
+        
+        </CardBody>
+        </Card>
         </ModalBody>
         
         </Form>

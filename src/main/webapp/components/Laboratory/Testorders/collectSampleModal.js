@@ -169,6 +169,8 @@ const ModalSample = (props) => {
       <Form onSubmit={saveSample}>
         <ModalHeader toggle={props.togglestatus}>Collect Sample</ModalHeader>
         <ModalBody>
+        <Card >
+        <CardBody>
         <Row >
         <Col md={12}>
          
@@ -230,6 +232,8 @@ const ModalSample = (props) => {
           >
             Cancel
           </MatButton>
+          </CardBody>
+          </Card>
         </ModalBody>
        
         </Form>

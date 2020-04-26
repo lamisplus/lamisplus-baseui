@@ -19,6 +19,7 @@ const newdata = props.samptypelist;
                 
                     <ModalHeader toggle={props.togglestatus}>Sample Type</ModalHeader>
                     <ModalBody>
+                        
                         <Row >
                             <Col md={12}>
                            
