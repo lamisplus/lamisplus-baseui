@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 // import {GoChecklist} from 'react-icons/go';
 import 'react-widgets/dist/css/react-widgets.css'
 import {FaPlusSquare} from 'react-icons/fa';
-
+import {FaRegEye} from 'react-icons/fa';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Page from 'components/Page'
@@ -98,17 +98,17 @@ const samplestatus = e =>{
 const samples = e =>{
   console.log(e)
   if(e==="" || e===null){
-    return <p>---</p>
+    return <p>null</p>
   }else{
     return <p><Badge color="info" style={{ cursor:'pointer'}}
       onClick={() =>
       viewSampleTypes(e)}
-      >view samples</Badge></p>
+      >{e.length}</Badge></p>
   }
 }
 //This is function to check for the status of each collection to display on the tablist below 
-const sampleAction = (e,rowdata) =>{
-  if(e==1 || e===""){
+const sampleAction = (rowdata, e) =>{
+
   return (
           <div>
             <Tooltip title="Enter Result">
@@ -117,13 +117,19 @@ const sampleAction = (e,rowdata) =>{
                 <FaPlusSquare size="15" />
                 </IconButton>
             </Tooltip>
-            
+            {e.data.sample_type!==null ?
+            <Tooltip title="View Sample Type">
+                <IconButton aria-label="View Sample Type" onClick={() =>
+                  viewSampleTypes(e.data.sample_type)}>
+                <FaRegEye size="15" />
+                </IconButton>
+            </Tooltip>
+            :
+             ""   
+            }
             </div>
           )
-  
-  }else{
-    return  <p> { }</p>
-  }
+
 }
   return (
     <Page title=' Sample Result'>
@@ -142,7 +148,7 @@ const sampleAction = (e,rowdata) =>{
               <CardHeader>Test Order Details 
               <Link to="/laboratory">
                 <Button color="primary" className=" float-right mr-1" >
-                        <TiArrowBack/>Go Back
+                        <TiArrowBack/> Back
                 </Button>
               </Link>
             </CardHeader>
@@ -176,7 +182,7 @@ const sampleAction = (e,rowdata) =>{
                       </Row>
                    
                       <Table style={{ fontWeight: 'bolder', borderColor:"#000"}} striped>
-                        <thead style={{  backgroundColor:'#3E51B5', color:"#fff" }}>
+                        <thead style={{  backgroundColor:'#9F9FA5', color:"#000" }}>
                           <tr>
                             <th>Test</th>
                             <th>Sample Type</th>
@@ -191,7 +197,7 @@ const sampleAction = (e,rowdata) =>{
                           <tr key={row.id}>
                             <th scope="row">{row.data.description===""?"Null ":row.data.description}</th>
                             <td>{samples(row.data.sample_type)}</td>
-                            <td> {row.dateEncounter} </td>
+                            <td> {encounterresult.dateEncounter} </td>
                             <td>{samplestatus(row.data.lab_test_order_status)} </td>
                             <td>{sampleAction(row.data.lab_test_order_status, row)}</td>
                           </tr>

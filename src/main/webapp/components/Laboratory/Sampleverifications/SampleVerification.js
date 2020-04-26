@@ -1,7 +1,8 @@
 import React from 'react'
 import {Card, CardBody,CardHeader,Col,Row,Button,FormGroup,Label,Input} from 'reactstrap'
 import { useState , useEffect} from 'react'
-import { TiArrowBack } from 'react-icons/ti'
+import { TiArrowBack } from 'react-icons/ti' 
+import { FaRegEye } from 'react-icons/fa'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Link } from 'react-router-dom'
 //import Table from '@material-ui/core/Table'
@@ -9,7 +10,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import {GoChecklist} from 'react-icons/go';
 import 'react-widgets/dist/css/react-widgets.css'
-
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Page from 'components/Page'
@@ -89,12 +89,17 @@ const getGroup = e => {
 };
 //This is function to check for the status of each collection to display on the tablist below 
 const samplestatus = e =>{
+
   if(e===1){
     return <p><Badge  color="light">Sample Collected</Badge></p>
   }else if(e===2){
     return <p><Badge  color="light">Sample Transfered</Badge></p>
-  }else if(e===3){
+  }else if(e==="3"){
+    return <p><Badge  color="light">Sample Verified</Badge></p>
+  }else if(e==="4"){
     return <p><Badge  color="light">Sample Rejected</Badge></p>
+  }else if(e==="5"){
+    return <p><Badge  color="light">Result Available</Badge></p>
   }else{
     return <p>{"null"}</p>
   }
@@ -103,38 +108,37 @@ const samplestatus = e =>{
 const samples = e =>{
   console.log(e)
   if(e==="" || e===null){
-    return <p>---</p>
+    return <p>null</p>
   }else{
     return <p><Badge color="info" style={{ cursor:'pointer'}}
       onClick={() =>
       viewSampleTypes(e)}
-      >view samples</Badge></p>
+      >{e.length} Sample</Badge></p>
   }
 }
 //This is function to check for the status of each collection to display on the tablist below 
-const sampleAction = (e,rowdata) =>{
-  if(e==1 || e===""){
+const sampleAction = (e) =>{
   return (
           <div>
             <Tooltip title="Verify Sample">                                              
                 <IconButton aria-label="Verify Sample" onClick={() =>
-                  handlesample(rowdata)}
+                  handlesample(e)}
                   >
                 <GoChecklist size="15" />
                 </IconButton>
             </Tooltip>
-            {/* <Tooltip title="Rejected Result">
-                <IconButton aria-label="Rejected Result" onClick={() =>
-                  handlereject(rowdata)}>
-                <FaTimesCircle size="15" />
+            {e.data.sample_type!==null ?
+              <Tooltip title="View Sample Type">
+                <IconButton aria-label="View Sample Type" onClick={() =>
+                  viewSampleTypes(e.data.sample_type)}>
+                <FaRegEye size="15" />
                 </IconButton>
-            </Tooltip>  */}
+            </Tooltip>
+            :
+            ""
+           }
             </div>
           )
-  
-  }else{
-    return  <p> { }</p>
-  }
 }
   return (
     <Page title=' Sample Verification'>
@@ -153,7 +157,7 @@ const sampleAction = (e,rowdata) =>{
               <CardHeader>Test Order Details 
               <Link to="/laboratory">
                 <Button color="primary" className=" float-right mr-1" >
-                        <TiArrowBack/>Go Back
+                        <TiArrowBack/> Back
                 </Button>
               </Link>
             </CardHeader>
@@ -164,7 +168,7 @@ const sampleAction = (e,rowdata) =>{
                   <Card body>
                       <Row form>
                           <Col md={3}>
-                            {/* <FormGroup>
+                            <FormGroup>
                               <Label for="occupation">Lab Test Group </Label>
 
                               <Input
@@ -182,7 +186,7 @@ const sampleAction = (e,rowdata) =>{
                                       </option>
                                   )}
                               </Input>
-                            </FormGroup> */}
+                            </FormGroup>
                           </Col>
                       </Row>
                    
@@ -203,8 +207,8 @@ const sampleAction = (e,rowdata) =>{
                             <th scope="row">{row.data.description===""?"Null ":row.data.description}</th>
                             <td>{samples(row.data.sample_type)}</td>
                             <td> {userInfo.dateEncounter} </td>
-                            <td>{samplestatus(row.data.lab_test_order_status)} </td>
-                            <td>{sampleAction(row.data.lab_test_order_status, row)}</td>
+                        <td>{samplestatus(row.data.lab_test_order_status)} </td>
+                            <td>{sampleAction(row)}</td>
                           </tr>
                         ))
                         :<p> <Spinner color="primary" /> Loading Please Wait</p>

@@ -36,12 +36,12 @@ const PatientSearch = (props) => {
           {
             title: "Total Sample ",
             field: "count",
-            filtering: false
+            filtering: true
           },
           {
             title: "Total Result",
             field: "samplecount",
-            filtering: false
+            filtering: true
           },
           {
             title: "Action",
@@ -70,7 +70,7 @@ const PatientSearch = (props) => {
           
         }))}
         options={{
-          filtering:false,
+          // filtering:false,
           headerStyle: {
             backgroundColor: "#9F9FA5",
             color: "#000",
@@ -79,13 +79,10 @@ const PatientSearch = (props) => {
             width : '300%',
             margingLeft: '250px',
           },
-          
+          filtering: true,
           exportButton: true,
           searchFieldAlignment: 'left',
-          icon: 'refresh',
-           tooltip: 'Refresh Data',
-            isFreeAction: true,
-            onClick: () => this.tableRef.current && this.tableRef.current.onQueryChange(),
+          
         }}
         
       />

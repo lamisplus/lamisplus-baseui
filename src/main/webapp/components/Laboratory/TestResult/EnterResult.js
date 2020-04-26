@@ -220,9 +220,9 @@ const ModalSampleResult = (props) => {
                               
                               </Col>
                             <Col xs="4">
-                              Sample collected
+                              Total Sample Type 
                               <br/>
-                              <p style={textstyle}>{"view Sample"}<small className="text-muted">By Evans</small></p>
+                              <p style={textstyle}>{sample_type!==null?sample_type.length : "null "}<small className="text-muted">  By Evans</small></p>
                               </Col>
                           
                         </Row>

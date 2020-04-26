@@ -136,7 +136,7 @@ const ModalSample = (props) => {
 
     }
     const saveSample = e => {
-
+      console.log(lab_id)
       toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
       samples['lab_test_order_status'] = 1;
@@ -157,7 +157,7 @@ const ModalSample = (props) => {
       e.preventDefault()
       props.createCollectedSample(data, lab_id)
     }
-    //console.log(formdata)
+  console.log(formdata)
   return (
       
       <div >
