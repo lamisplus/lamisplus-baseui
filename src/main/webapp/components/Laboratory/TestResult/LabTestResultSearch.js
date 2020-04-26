@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
-import { fetchAllLabTestOrder } from "actions/laboratory";
+import { fetchAllLabTestOrder } from "./../../../actions/laboratory";
 import "./../laboratory.css";
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -25,23 +25,23 @@ const PatientSearch = (props) => {
   return (
     <div>
       <MaterialTable
-        title="Laboratry Test Results"
+        title="Laboratory Test Orders"
         columns={[
+          { title: "Patient ID", field: "Id" },
           {
             title: "Patient Name",
             field: "name",
           },
-          { title: "Patient ID", field: "Id" },
-          { title: "Test Order Date", field: "date", type: "date" },
+          { title: "Test Order Date", field: "date", type: "date" , filtering: false},          
           {
             title: "Total Sample ",
             field: "count",
-            filtering: true
+            filtering: false
           },
           {
-            title: "Total Result",
+            title: "Sample Collected ",
             field: "samplecount",
-            filtering: true
+            filtering: false
           },
           {
             title: "Action",
@@ -51,40 +51,44 @@ const PatientSearch = (props) => {
         ]}
         isLoading={loading}
         data={props.patientsTestOrderList.map((row) => ({
-          name: row.firstName +  ' ' + row.lastName,
           Id: row.patientId,
+          name: row.firstName +  ' ' + row.lastName,
+          
           date: row.dateEncounter,
           count: row.formDataObj.length,
           samplecount: 0,
           actions: <Link to ={{ 
-                                pathname: "/collect-result",  
-                                state: { getpatientlists:{row}}, 
-                                patientName: row.firstName + ' ' + row.lastName}}  
-                                style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>
-                                <Tooltip title="Enter Result">
-                                    <IconButton aria-label="ENTER RESULT" >
-                                      <NoteAddIcon color="primary"/>
-                                  </IconButton>
-                                  </Tooltip>
-                    </Link>
-          
-        }))}
+                        pathname: "/collect-result",  
+                        state: { getpatientlists:{row}}, 
+                        patientName: row.firstName + ' ' + row.lastName}} 
+                        style={{ cursor: "pointer", color: "blue", 
+                        fontStyle: "bold" }}>
+                          <Tooltip title="Enter Result">
+                            <IconButton aria-label="Enter Result" >
+                            <NoteAddIcon color="primary"/>
+                          </IconButton>
+                          </Tooltip>
+                        </Link>
+
+            }))}
         options={{
-          // filtering:false,
+        
           headerStyle: {
             backgroundColor: "#9F9FA5",
             color: "#000",
+            margin: "auto"
           },
+          filtering: true,
           searchFieldStyle: {
             width : '300%',
             margingLeft: '250px',
           },
-          filtering: true,
+          
           exportButton: true,
           searchFieldAlignment: 'left',
           
         }}
-        
+
       />
     </div>
   );

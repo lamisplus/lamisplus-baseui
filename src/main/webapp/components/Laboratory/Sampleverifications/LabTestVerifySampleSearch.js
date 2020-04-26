@@ -33,7 +33,7 @@ const PatientSearch = (props) => {
             field: "name",
           },
           
-          { title: "Date Order", field: "date", type: "date", filtering: false },
+          { title: "Test Order Date", field: "date", type: "date", filtering: false },
           {
             title: "Total Sample ",
             field: "count",

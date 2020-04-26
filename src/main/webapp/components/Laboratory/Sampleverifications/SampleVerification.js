@@ -5,7 +5,7 @@ import { TiArrowBack } from 'react-icons/ti'
 import { FaRegEye } from 'react-icons/fa'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Link } from 'react-router-dom'
-//import Table from '@material-ui/core/Table'
+import MatButton from '@material-ui/core/Button'
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import {GoChecklist} from 'react-icons/go';
@@ -24,10 +24,19 @@ import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import { Spinner } from 'reactstrap';
 import { Table } from 'reactstrap';
 import { Badge } from 'reactstrap';
+import { makeStyles } from '@material-ui/core/styles'
 
-
+const useStyles = makeStyles({
+  root: {
+    width: '100%'
+  },
+  container: {
+    maxHeight: 440
+  }
+})
 
  function CollectVerification  (props){
+  const classes = useStyles()
   const encounterresult = props.location.state.getpatientlists.row ;
   const testorder = useSelector(state => state.laboratory.testorder);
   const dispatch = useDispatch();
@@ -98,7 +107,7 @@ const samplestatus = e =>{
     return <p><Badge  color="light">Sample Verified</Badge></p>
   }else if(e==="4"){
     return <p><Badge  color="light">Sample Rejected</Badge></p>
-  }else if(e==="5"){
+  }else if(e===5){
     return <p><Badge  color="light">Result Available</Badge></p>
   }else{
     return <p>{"null"}</p>
@@ -156,9 +165,17 @@ const sampleAction = (e) =>{
             <Card className="mb-12">
               <CardHeader>Test Order Details 
               <Link to="/laboratory">
-                <Button color="primary" className=" float-right mr-1" >
-                        <TiArrowBack/> Back
-                </Button>
+              <MatButton
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  className={classes.button}
+                  
+                  className=" float-right mr-1"
+                >
+                  <TiArrowBack/>{" "} Back
+                </MatButton>
+                
               </Link>
             </CardHeader>
             <CardBody>
@@ -191,7 +208,7 @@ const sampleAction = (e) =>{
                       </Row>
                    
                       <Table style={{ fontWeight: 'bolder', borderColor:"#000"}} striped>
-                        <thead style={{  backgroundColor:'#3E51B5', color:"#fff" }}>
+                        <thead style={{   backgroundColor:'#9F9FA5', color:"#000"  }}>
                           <tr>
                             <th>Test</th>
                             <th>Sample Type</th>

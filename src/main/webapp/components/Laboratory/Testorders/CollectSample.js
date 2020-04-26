@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, CardBody,CardHeader,Col,Row,Button, Form,FormGroup,Label,Input} from 'reactstrap'
+import {Card, CardBody,CardHeader,Col,Row, Form,FormGroup,Label,Input} from 'reactstrap'
 import { useState , useEffect} from 'react'
 import { MdSave } from 'react-icons/md'
 import { TiArrowBack } from 'react-icons/ti'
@@ -149,6 +149,12 @@ const samplestatus = e =>{
     return <p><Badge  color="light">Sample Collected</Badge></p>
   }else if(e===2){
     return <p><Badge  color="light">Sample Transfered</Badge></p>
+  }else if(e==="3"){
+    return <p><Badge  color="light">Sample Verified</Badge></p>
+  }else if(e==="4"){
+    return <p><Badge  color="light">Sample Rejected</Badge></p>
+  }else if(e===5){
+    return <p><Badge  color="light">Result Available</Badge></p>
   }else{
     return <p>{"null"}</p>
   }
@@ -212,9 +218,17 @@ const sampleAction = ( e) =>{
             <Card className="mb-12">
               <CardHeader>Test Order Details {console.log( data[0] )}
               <Link to="/laboratory">
-                <Button color="primary" className=" float-right mr-1" >
-                        <TiArrowBack/> Back
-                </Button>
+              <MatButton
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  className={classes.button}
+                  
+                  className=" float-right mr-1"
+                >
+                  <TiArrowBack/>{" "} Back
+                </MatButton>
+                
               </Link>
             </CardHeader>
             <CardBody>
