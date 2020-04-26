@@ -66,6 +66,7 @@
     "react-toast-notifications": "^2.4.0",
     "react-toastify": "^5.5.0",
     "react-tooltip": "^3.11.4",
+    "react-validation": "^3.0.7",
     "react-widgets": "^4.4.11",
     "react-widgets-globalize": "^5.0.20",
     "react-widgets-moment": "^4.0.27",
@@ -80,6 +81,7 @@
     "use-http": "^1.0.4",
     "use-react-hooks": "^1.0.7",
     "uuid": "^7.0.3",
+    "validator": "^13.0.0",
     "victory": "^32.0.0"
   },
   "devDependencies": {
