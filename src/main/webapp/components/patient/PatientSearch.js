@@ -44,6 +44,7 @@ const PatientSearch = (props) => {
           },
           { title: "Patient ID", field: "id" },
           { title: "Age", field: "age", filtering: false },
+          { title: "Address", field: "address", filtering: false },
           {
             title: "Action",
             field: "actions",
@@ -60,6 +61,7 @@ const PatientSearch = (props) => {
           row.dob === "" )
             ? 0
             : calculate_age(row.dob),
+          address: row.street || '',
           actions: 
           <div>
           <IconButton

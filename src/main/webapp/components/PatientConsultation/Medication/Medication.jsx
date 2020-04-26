@@ -164,7 +164,11 @@ function MedicationPage(props) {
     const [showLoading, setShowLoading] = useState(false);  
     
     const saveDrugOrders = (e) => { 
-        e.preventDefault();  
+      e.preventDefault()
+      if(showLoading){
+        return;
+      }
+       
         setSuccessMsg("");
 
         const defaults = {
@@ -366,7 +370,7 @@ function NewDrugOrderForm({addDrugs, drugOrder, fetchingDrugs}){
            duration:"", dose:"",drug_order:"", generic_name:"", dose_frequency:""});
       };
 
-      const handleChange = (newValue: any, actionMeta: any) => {
+      const handleChange = (newValue, actionMeta) => {
        setmedi({...medi, drug_order: newValue.value});  
       };
 

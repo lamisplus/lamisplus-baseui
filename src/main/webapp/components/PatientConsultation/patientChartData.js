@@ -1,14 +1,14 @@
-import { getColor } from '../utils/colors';
-import { randomNum } from '../utils/demos';
+import { getColor } from '../../utils/colors';
+import { randomNum } from '../../utils/demos';
 
 const MONTHS = ['January', 'February', 'March', 'April'];
 
-export const ViralLoad = (moreData = {}, moreData2 = {}) => {
+export const ViralLoad = ( data = [], otherOptions = {}) => {
   return {
     labels: MONTHS,
     datasets: [
       {
-        label: 'Vira Load',
+        label: 'Viral Load',
         backgroundColor: getColor('primary'),
         borderColor: getColor('primary'),
         borderWidth: 1,
@@ -19,14 +19,13 @@ export const ViralLoad = (moreData = {}, moreData2 = {}) => {
           randomNum(),
 
         ],
-        ...moreData,
+        ...otherOptions,
       }
     ],
   };
   
 };
 
-console.log(ViralLoad);
 
 
 export const userProgressTableData = [
@@ -48,40 +47,44 @@ export const userProgressTableData = [
   
 ];
 
-export const Weight = (moreData = {}, moreData2 = {}) => {
+export const Weight = (labels = [], data = [], otherOptions = {}) => {
     return {
-      labels: MONTHS,
+      labels: labels,
       datasets: [
         {
           label: 'Weight',
           backgroundColor: getColor('primary'),
           borderColor: getColor('primary'),
           borderWidth: 1,
-          data: [
-            randomNum(),
-            randomNum(),
-            randomNum(),
-            randomNum(),
-  
-          ],
-          ...moreData,
-        }, {
-            label: 'Blood Presuire(BP)',
-            backgroundColor: getColor('secondary'),
-            borderColor: getColor('secondary'),
-            borderWidth: 1,
-            data: [
-              randomNum(),
-              randomNum(),
-              randomNum(),
-              randomNum(),
-            ],
-            ...moreData2,
-          },
+          data: data,
+          ...otherOptions,
+        }
       ],
     };
     
   };
 
   
-  
+  export const BloodPressure = (labels = [],systolic=[], diastolic=[], systolicOptions = {}, diastolicOptions = {}) => {
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Systolic(mmHg)',
+          backgroundColor: getColor('primary'),
+          borderColor: getColor('primary'),
+          borderWidth: 1,
+          data: systolic,
+          ...systolicOptions,
+        }, {
+            label: 'Diastolic(mmHg)',
+            backgroundColor: getColor('secondary'),
+            borderColor: getColor('secondary'),
+            borderWidth: 1,
+            data: diastolic,
+            ...diastolicOptions,
+          },
+      ],
+    };
+    
+  };
