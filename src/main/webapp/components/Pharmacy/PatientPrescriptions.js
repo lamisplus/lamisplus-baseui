@@ -35,8 +35,13 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import MatButton from '@material-ui/core/Button'
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
 import SaveIcon from '@material-ui/icons/Save'
 import CancelIcon from '@material-ui/icons/Cancel'
+import clsx from "clsx";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Input from "@material-ui/core/Input";
 
 import {
   MuiPickersUtilsProvider,
@@ -44,15 +49,29 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 
-const useStyles = makeStyles({
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  margin: {
+    margin: theme.spacing(1),
+  },
+  withoutLabel: {
+    marginTop: theme.spacing(3),
+  },
+  textField: {
+    width: "25ch",
+  },
   table: {
     minWidth: 650,
   },
   container: {
     marginTop: "5rem",
     width: "88%",
-  },
-});
+  }
+}));
 
 const color = "#1D4380";
 
@@ -93,35 +112,27 @@ const PatientPrescriptions = (props) => {
 
   const [modal2, setModal2] = useState(false);
   const toggle2 = () => setModal2(!modal2);
+  const [values, setValues] = useState({
+    weight: "",
+    text:""
+  });
+
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
 
   const { className } = props;
 
   const [selectedDate, setSelectedDate] = useState(
     new Date("2014-08-18T21:11:54")
   );
-  const [selectedTime, setSelectedTime] = useState(
-    new Date("2014-08-18T21:11:54")
-  );
-  const [selectedText, setSelectedText] = useState(" ");
-  const [quantityDispensed, setQuantityDispensed] = useState(0);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
 
-  const handleChange = (text) => {
-    setSelectedText(text);
-  };
-  const handleTimeChange = (time) => {
-    setSelectedTime(time);
-  };
 
-  const handleQuantityChange = () => {
-    setQuantityDispensed();
-  };
-  const handleTextChange = () => {
-    setQuantityDispensed();
-  };
 
   const [open, setOpen] = useState(false);
 
@@ -174,8 +185,9 @@ const PatientPrescriptions = (props) => {
                   <StyledTableCell align="right">View Details</StyledTableCell>
                 </TableRow>
               </TableHead>
-              {forms.map((form) => (
-                <TableBody>
+              {forms.map((form, index) => (
+                <TableBody key={index}>
+                  {console.log(form)}
                   <TableRow key={form.id}>
                     <TableCell>{form.data.generic_name}</TableCell>
                     <TableCell align="right">{form.data.dosage}</TableCell>
@@ -215,153 +227,149 @@ const PatientPrescriptions = (props) => {
                     <TableCell align="right">
                       <VisibilityIcon onClick={toggle2} />
                     </TableCell>
+
+                    <Modal
+                      isOpen={modal2}
+                      toggle={toggle2}
+                      className={className}
+                      size="lg"
+                      key={index}
+                    >
+                      <ModalHeader toggle={toggle2}>
+                        Prescription Details
+                      </ModalHeader>
+                      <ModalBody>
+                        <Row style={{ marginTop: "20px" }}>
+                          <Col xs="12">
+                            Drug Name
+                            <br />
+                            <p style={textstyle}>{form.data.generic_name} </p>
+                          </Col>
+                          <Col xs="4">
+                            Dosage
+                            <br />
+                            <p style={textstyle}>{form.data.dosage}</p>
+                          </Col>
+                          <Col xs="4">
+                            Unit
+                            <br />
+                            <p style={textstyle}>{form.data.duration_unit}</p>
+                          </Col>
+                          <Col xs="4">
+                            Frequency
+                            <br />
+                            <p style={textstyle}>
+                              {form.data.dosage_frequency} time(s) daily
+                            </p>
+                          </Col>
+                        </Row>
+                        <Row style={{ marginTop: "20px" }}>
+                          <Col xs="4">
+                            Start Date
+                            <br />
+                            <p style={textstyle}>{form.data.start_date}</p>
+                          </Col>
+                          <Col xs="12">Additional Information</Col>
+                          <hr />
+                          <Col xs="4">
+                            Instruction
+                            <br />
+                            <p style={textstyle}>{form.data.comment}</p>
+                          </Col>
+                          <Col xs="4">
+                            Additional Instruction
+                            <br />
+                            <p style={textstyle}>
+                              {form.data.comment ? form.data.comment : "None"}
+                            </p>
+                          </Col>
+                        </Row>
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button color="secondary" onClick={toggle2}>
+                          Close
+                        </Button>
+                      </ModalFooter>
+                    </Modal>
+                    <Dialog
+                      open={open}
+                      onClose={handleClose}
+                      aria-labelledby="form-dialog-title"
+                    >
+                      <DialogTitle id="form-dialog-title">
+                        Dispense Prescription
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText>
+                          Drug Prescribed : {form.data.generic_name}
+                          <br />
+                          <br />
+                          Qty Prescribed: 10 Tablets || Stock Balance: 500
+                          Tablets
+                        </DialogContentText>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                          <KeyboardDatePicker
+                            margin="normal"
+                            id="date-picker-dialog"
+                            label="Enter date dispensed"
+                            format="MM/dd/yyyy"
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                            KeyboardButtonProps={{
+                              "aria-label": "change date",
+                            }}
+                          />
+                
+                          <br />
+                        </MuiPickersUtilsProvider>
+                        <br />
+                        <TextField
+                          label="Quantity Dispensed"
+                          id="filled-start-adornment"
+                          className={clsx(classes.margin, classes.textField)}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                Tablets
+                              </InputAdornment>
+                            ),
+                          }}
+                          size="small"
+                        />
+                        <TextField
+                          margin="dense"
+                          id="name"
+                          label="Additional Comments"
+                          type="text"
+                          value={values.text}
+                          onChange={handleChange}
+                          fullWidth
+                        />
+                      </DialogContent>
+                      <DialogActions>
+                        <MatButton
+                          type="submit"
+                          variant="contained"
+                          color="primary"
+                          align="left"
+                          onClick={handleDispense}
+                          className={classes.button}
+                          startIcon={<SaveIcon />}
+                        >
+                          Ok
+                        </MatButton>
+                        <MatButton
+                          variant="contained"
+                          color="default"
+                          onClick={handleClose}
+                          className={classes.button}
+                          startIcon={<CancelIcon />}
+                        >
+                          Cancel
+                        </MatButton>
+                      </DialogActions>
+                    </Dialog>
                   </TableRow>
-                  <Modal
-                    isOpen={modal2}
-                    toggle={toggle2}
-                    className={className}
-                    size="lg"
-                  >
-                    <ModalHeader toggle={toggle2}>
-                      Prescription Details
-                    </ModalHeader>
-                    <ModalBody>
-                      <Row style={{ marginTop: "20px" }}>
-                        <Col xs="12">
-                          Drug Name
-                          <br />
-                          <p style={textstyle}>{form.data.generic_name} </p>
-                        </Col>
-                        <Col xs="4">
-                          Dosage
-                          <br />
-                          <p style={textstyle}>{form.data.dosage}</p>
-                        </Col>
-                        <Col xs="4">
-                          Unit
-                          <br />
-                          <p style={textstyle}>{form.data.duration_unit}</p>
-                        </Col>
-                        <Col xs="4">
-                          Frequency
-                          <br />
-                          <p style={textstyle}>
-                            {form.data.dosage_frequency} time(s) daily
-                          </p>
-                        </Col>
-                      </Row>
-                      <Row style={{ marginTop: "20px" }}>
-                        <Col xs="4">
-                          Start Date
-                          <br />
-                          <p style={textstyle}>{form.data.start_date}</p>
-                        </Col>
-                        <Col xs="12">Additional Information</Col>
-                        <hr />
-                        <Col xs="4">
-                          Instruction
-                          <br />
-                          <p style={textstyle}>{form.data.comment}</p>
-                        </Col>
-                        <Col xs="4">
-                          Additional Instruction
-                          <br />
-                          <p style={textstyle}>
-                            {form.data.comment ? form.data.comment : "None"}
-                          </p>
-                        </Col>
-                      </Row>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button color="secondary" onClick={toggle2}>
-                        Close
-                      </Button>
-                    </ModalFooter>
-                  </Modal>
-                  <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="form-dialog-title"
-                  >
-                    <DialogTitle id="form-dialog-title">
-                      Dispense Prescription
-                    </DialogTitle>
-                    <DialogContent>
-                      <DialogContentText>
-                        Please fill in the details below to dispense{" "}
-                        {form.data.generic_name} for {patientName} <br /> Qty
-                        Prescribed: 10
-                      </DialogContentText>
-                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
-                          margin="normal"
-                          id="date-picker-dialog"
-                          label="Enter date dispensed"
-                          format="MM/dd/yyyy"
-                          value={selectedDate}
-                          onChange={handleDateChange}
-                          KeyboardButtonProps={{
-                            "aria-label": "change date",
-                          }}
-                        />
-                        <br />
-                        <br />
-                        <KeyboardTimePicker
-                          margin="normal"
-                          id="time-picker"
-                          label="Enter time dispensed"
-                          value={selectedTime}
-                          onChange={handleTimeChange}
-                          KeyboardButtonProps={{
-                            "aria-label": "change time",
-                          }}
-                        />
-                      </MuiPickersUtilsProvider>
-                      <br />
-                      <br />
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Quantity Dispensed"
-                        type="number"
-                        value={quantityDispensed}
-                        onChange={handleChange}
-                      />
-                      <br />
-                      <br />
-                      <TextField
-                        margin="dense"
-                        id="name"
-                        label="Additional Comments"
-                        type="text"
-                        onChange={handleChange}
-                        fullWidth
-                      />
-                    </DialogContent>
-                    <DialogActions>
-                    <MatButton
-                      type='submit'
-                      variant='contained'
-                      color='primary'
-                      onClick={handleDispense}
-                      className={classes.button}
-                      startIcon={<SaveIcon />}
-                    >
-                      Ok 
-                    </MatButton>
-                    <MatButton
-                      variant='contained'
-                      color='default'
-                      onClick={handleClose}
-                      className={classes.button}
-                      startIcon={<CancelIcon />}
-                    >
-                      Cancel
-                    </MatButton>
-                     
-                    </DialogActions>
-                  </Dialog>
                 </TableBody>
               ))}
             </Table>
