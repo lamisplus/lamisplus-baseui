@@ -177,10 +177,12 @@ const ModalSample = (props) => {
         <Row >
         <Col md={12} >
 
-        <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder'}}>
-          <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}>{lab_test_group}</span> 
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : 
-          <span style={{ fontWeight: 'bolder'}}>{description}</span>
+        <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder', }}>
+          <p style={{marginTop: '.7rem' }}>Test Group : <span style={{ fontWeight: 'bolder'}}>{lab_test_group}</span> 
+              &nbsp;&nbsp;&nbsp;&nbsp;Test Ordered : 
+  <span style={{ fontWeight: 'bolder'}}>{" "}{description}</span>
+          &nbsp;&nbsp;&nbsp;&nbsp; Date Ordered :        
+  <span style={{ fontWeight: 'bolder'}}>{" "}{date_sample_collected}</span>
           </p>
           
         </Alert>

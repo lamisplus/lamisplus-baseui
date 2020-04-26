@@ -119,9 +119,7 @@ const samples = e =>{
   if(e==="" || e===null){
     return <p>null</p>
   }else{
-    return <p><Badge color="info" style={{ cursor:'pointer'}}
-      onClick={() =>
-      viewSampleTypes(e)}
+    return <p><Badge color="info" 
       >{e.length} Sample</Badge></p>
   }
 }
@@ -215,7 +213,7 @@ const sampleAction = (e) =>{
                             <th>Sample Type</th>
                             <th>Date Requested</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>

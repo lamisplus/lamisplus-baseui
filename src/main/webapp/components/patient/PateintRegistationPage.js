@@ -476,6 +476,7 @@ useEffect(() => {
                         onChange={handleInputChange}
                         required
                       >
+                        <option  value=""> </option>
                       {gender.map(({ label, value }) => (
                         <option key={value} value={value}>
                           {label}
@@ -494,6 +495,7 @@ useEffect(() => {
                         value={values.occupationId}
                         onChange={handleInputChange}
                       >
+                        <option  value=""> </option>
                         {occupation.map(({ label, value }) => (
                           <option key={value} value={value}>
                             {label}
@@ -511,6 +513,7 @@ useEffect(() => {
                         value={values.educationId}
                         onChange={handleInputChange}
                       >
+                        <option  value=""> </option>
                         {qualification.map(({ label, value }) => (
                             <option key={value} value={value}>
                               {label}
@@ -531,6 +534,7 @@ useEffect(() => {
                         value={values.maritalStatusId}
                         onChange={handleInputChange}
                       >
+                        <option  value=""> </option>
                         {maritalStatus.map(({ label, value }) => (
                             <option key={value} value={value}>
                               {label}
@@ -667,6 +671,7 @@ useEffect(() => {
                                 value={values.countryId}
                                 onChange={getStates}
                               >
+                                
                                 {countries.map(({ label, value }) => (
                                   <option key={value} value={value}>
                                     {label}
@@ -776,8 +781,12 @@ useEffect(() => {
                     className=" float-right mr-1"
                     startIcon={<FaPlusSquare />}
                     onClick={handleAddRelative}
+                    autoCapitalize = 'none'
                   >
-                    Add Relative
+                    
+                    <span style={{textTransform: 'capitalize'}}>Add </span>
+                    &nbsp;&nbsp;
+                    <span style={{textTransform: 'lowercase'}}>Relative </span>
                   </MatButton>
                 </Title>
                 <br />
@@ -792,6 +801,7 @@ useEffect(() => {
                         value={relative.relationshipTypeId}
                         onChange={onRelativeChange}
                       >
+                        <option  value=""> </option>
                         <option value="">
                           Select Relative Relationship Type
                         </option>
@@ -920,16 +930,18 @@ useEffect(() => {
                   startIcon={<SaveIcon />}
                   disabled={saving}
                 >
-                  {!saving ?'Save' : 'Saving'}
+                  {!saving ?
+                  <span style={{textTransform: 'capitalize'}}>Save</span>
+                   : <span style={{textTransform: 'capitalize'}}>Saving...</span>}
                   
                 </MatButton>
-
+               
                 <MatButton
                   variant="contained"
                   className={classes.button}
                   startIcon={<CancelIcon />}
                 >
-                  Cancel
+                  <span style={{textTransform: 'capitalize'}}>Cancel</span>
                 </MatButton>
               </CardContent>
             </Card>

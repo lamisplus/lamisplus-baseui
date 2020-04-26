@@ -48,7 +48,7 @@ const useStyles = makeStyles({
 
 
  function CollectSample  (props){
-   
+   console.log(props)
   const encounterresult = props.location.state.formdata.row ;
 
   const classes = useStyles()
@@ -165,9 +165,7 @@ const samples = e =>{
   if(e==="" || e===null){
     return <p>---</p>
   }else{
-    return <p><Badge color="info" style={{ cursor:'pointer'}}
-      onClick={() =>
-      viewSampleTypes(e)}
+    return <p><Badge color="info" 
       >{e.length} Sample</Badge></p>
   }
 }
