@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, CardBody,CardHeader,Col,Row,Button, Form,FormGroup,Label,Input} from 'reactstrap'
+import {Card, CardBody,CardHeader,Col,Row, Form,FormGroup,Label,Input} from 'reactstrap'
 import { useState , useEffect} from 'react'
 import { MdSave } from 'react-icons/md'
 import { TiArrowBack } from 'react-icons/ti'
@@ -7,7 +7,7 @@ import MatButton from '@material-ui/core/Button'
 import 'react-datepicker/dist/react-datepicker.css'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
-//import Table from '@material-ui/core/Table'
+import {FaRegEye} from 'react-icons/fa';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import {FaPlusSquare} from 'react-icons/fa';
@@ -149,6 +149,12 @@ const samplestatus = e =>{
     return <p><Badge  color="light">Sample Collected</Badge></p>
   }else if(e===2){
     return <p><Badge  color="light">Sample Transfered</Badge></p>
+  }else if(e==="3"){
+    return <p><Badge  color="light">Sample Verified</Badge></p>
+  }else if(e==="4"){
+    return <p><Badge  color="light">Sample Rejected</Badge></p>
+  }else if(e===5){
+    return <p><Badge  color="light">Result Available</Badge></p>
   }else{
     return <p>{"null"}</p>
   }
@@ -162,31 +168,39 @@ const samples = e =>{
     return <p><Badge color="info" style={{ cursor:'pointer'}}
       onClick={() =>
       viewSampleTypes(e)}
-      >view samples</Badge></p>
+      >{e.length} Sample</Badge></p>
   }
 }
 //This is function to check for the status of each collection to display on the tablist below 
-const sampleAction = (e,rowdata) =>{
-  if(e!=="" && e!==0){
-  return <p> { }</p>
-  }else{
+const sampleAction = ( e) =>{
+
     return (
             <div>
               <Tooltip title="Collect Sample">
                   <IconButton aria-label="Collect Sample" onClick={() =>
-                    handlesample(rowdata)}>
+                    handlesample(e)}>
                   <FaPlusSquare size="15" />
                   </IconButton>
               </Tooltip>
               <Tooltip title="Transfer Sample">
                   <IconButton aria-label="Transfer Sample" onClick={() =>
-                    transfersample(rowdata)}>
+                    transfersample(e)}>
                   <TiArrowForward size="15" />
                   </IconButton>
               </Tooltip>
+              {e.data.sample_type!==null ?
+              <Tooltip title="View Sample Type">
+                <IconButton aria-label="View Sample Type" onClick={() =>
+                  viewSampleTypes(e.data.sample_type)}>
+                <FaRegEye size="15" />
+                </IconButton>
+            </Tooltip>
+            :
+            ""
+           }
               </div>
         )
-  }
+
 }
   return (
     <Page title='Collect Sample'>
@@ -204,9 +218,17 @@ const sampleAction = (e,rowdata) =>{
             <Card className="mb-12">
               <CardHeader>Test Order Details {console.log( data[0] )}
               <Link to="/laboratory">
-                <Button color="primary" className=" float-right mr-1" >
-                        <TiArrowBack/>Go Back
-                </Button>
+              <MatButton
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  className={classes.button}
+                  
+                  className=" float-right mr-1"
+                >
+                  <TiArrowBack/>{" "} Back
+                </MatButton>
+                
               </Link>
             </CardHeader>
             <CardBody>
@@ -216,7 +238,7 @@ const sampleAction = (e,rowdata) =>{
                   <Card body>
                       <Row form>
                           <Col md={3}>
-                            {/* <FormGroup>
+                            <FormGroup>
                               <Label for="occupation">Lab Test Group </Label>
 
                               <Input
@@ -234,18 +256,18 @@ const sampleAction = (e,rowdata) =>{
                                       </option>
                                   )}
                               </Input>
-                            </FormGroup> */}
+                            </FormGroup>
                           </Col>
                       </Row>
                     <Form onSubmit={saveColllectSample}>
                       <Table style={{ fontWeight: 'bolder', borderColor:"#000"}} striped>
-                        <thead style={{  backgroundColor:'#3E51B5', color:"#fff" }}>
+                        <thead style={{  backgroundColor:'#9F9FA5', color:"#000" }}>
                           <tr>
                             <th>Test</th>
                             <th>Sample Type</th>
                             <th>Date Requested</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -256,7 +278,7 @@ const sampleAction = (e,rowdata) =>{
                             <td>{samples(row.data.sample_type)}</td>
                             <td> {encounterresult.dateEncounter===""?"null":encounterresult.dateEncounter} </td>
                             <td>{samplestatus(row.data.lab_test_order_status)} </td>
-                            <td>{sampleAction(row.data.lab_test_order_status, row)}</td>
+                            <td>{sampleAction( row)}</td>
                           </tr>
                         ))
                         :<p> <Spinner color="primary" /> Loading Please Wait</p>

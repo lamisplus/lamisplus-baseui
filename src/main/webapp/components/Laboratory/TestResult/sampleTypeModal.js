@@ -19,6 +19,9 @@ const newdata = props.samptypelist;
                 
                     <ModalHeader toggle={props.togglestatus}>Collect Sample</ModalHeader>
                     <ModalBody>
+                        <br/>
+                        <Card >
+                        <CardBody>
                         <Row >
                             <Col md={12}>
                            
@@ -32,6 +35,8 @@ const newdata = props.samptypelist;
                             </ListGroup>
                             </Col>
                         </Row>
+                        </CardBody>
+                        </Card>
                     </ModalBody>
                 </Modal>
         </CardBody>

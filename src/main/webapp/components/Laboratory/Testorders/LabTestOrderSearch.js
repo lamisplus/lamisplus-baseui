@@ -25,14 +25,14 @@ const PatientSearch = (props) => {
   return (
     <div>
       <MaterialTable
-        title="Laboratry Test Orders"
+        title="Laboratory Test Orders"
         columns={[
+          { title: "Patient ID", field: "Id" },
           {
             title: "Patient Name",
             field: "name",
           },
-          { title: "Patient ID", field: "Id" },
-          { title: "Test Order Date", field: "date", type: "date" },
+          { title: "Test Order Date", field: "date", type: "date" , filtering: false},          
           {
             title: "Total Sample ",
             field: "count",
@@ -51,8 +51,9 @@ const PatientSearch = (props) => {
         ]}
         isLoading={loading}
         data={props.patientsTestOrderList.map((row) => ({
-          name: row.firstName +  ' ' + row.lastName,
           Id: row.patientId,
+          name: row.firstName +  ' ' + row.lastName,
+          
           date: row.dateEncounter,
           count: row.formDataObj.length,
           samplecount: 0,
@@ -71,11 +72,13 @@ const PatientSearch = (props) => {
 
             }))}
         options={{
-          filtering:false,
+        
           headerStyle: {
             backgroundColor: "#9F9FA5",
             color: "#000",
+            margin: "auto"
           },
+          filtering: true,
           searchFieldStyle: {
             width : '300%',
             margingLeft: '250px',
@@ -83,12 +86,9 @@ const PatientSearch = (props) => {
           
           exportButton: true,
           searchFieldAlignment: 'left',
-          icon: 'refresh',
-           tooltip: 'Refresh Data',
-            isFreeAction: true,
-            onClick: () => this.tableRef.current && this.tableRef.current.onQueryChange(),
+          
         }}
-        
+
       />
     </div>
   );

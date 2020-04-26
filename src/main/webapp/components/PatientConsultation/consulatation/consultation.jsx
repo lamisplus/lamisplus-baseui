@@ -12,6 +12,7 @@ import PatientAllergies from 'components/PatientDashboard/PatientAllergies'
 import moment from 'moment';
 import {connect} from 'react-redux';
 import * as actions from "actions/consultation";
+import * as CODES from "api/codes";
 
 function ConsultationPage (props) {
   const [errorMsg, setErrorMsg] = React.useState('')
@@ -23,8 +24,8 @@ function ConsultationPage (props) {
   const initialConsultState = {
     present_consultation: '',
     consultation_notes: '',
-    formCode: 'CONSULTATION_FORM',
-    programCode: 'GENERAL_SERVICE'
+    formCode: CODES.CONSULTATION_FORM,
+    programCode: CODES.GENERAL_SERVICE
   };
   const [consult, setconsult] = useState(initialConsultState);
   const [newAllergy, setNewAllergy] = useState([])
@@ -32,6 +33,10 @@ function ConsultationPage (props) {
   
   const Saveconsult = e => {
     e.preventDefault()
+    if(showLoading){
+      return;
+    }
+   
     const formData = {
       allergies: newAllergy,
       presentConsultation: consult.present_consultation,
@@ -41,8 +46,8 @@ function ConsultationPage (props) {
       formData: formData,
       patientId: props.patientId,
       visitId: props.visitId,
-      formCode: 'CONSULTATION_FORM',
-      programCode: 'GENERAL_SERVICE',
+      formCode: CODES.CONSULTATION_FORM,
+      programCode: CODES.GENERAL_SERVICE,
       dateEncounter:  moment(new Date()).format('DD-MM-YYYY')
     }
     setShowSuccessMsg(false)

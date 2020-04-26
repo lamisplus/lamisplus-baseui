@@ -1,16 +1,16 @@
 import React from 'react'
-import {Card, CardBody,CardHeader,Col,Row,Button,FormGroup,Label,Input} from 'reactstrap'
+import {Card, CardBody,CardHeader,Col,Row,FormGroup,Label,Input} from 'reactstrap'
 import { useState , useEffect} from 'react'
 import { TiArrowBack } from 'react-icons/ti'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Link } from 'react-router-dom'
-//import Table from '@material-ui/core/Table'
+import MatButton from '@material-ui/core/Button'
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 // import {GoChecklist} from 'react-icons/go';
 import 'react-widgets/dist/css/react-widgets.css'
 import {FaPlusSquare} from 'react-icons/fa';
-
+import {FaRegEye} from 'react-icons/fa';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Page from 'components/Page'
@@ -23,10 +23,20 @@ import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import { Spinner } from 'reactstrap';
 import { Table } from 'reactstrap';
 import { Badge } from 'reactstrap';
+import { makeStyles } from '@material-ui/core/styles'
 
+const useStyles = makeStyles({
+  root: {
+    width: '100%'
+  },
+  container: {
+    maxHeight: 440
+  }
+})
 
 
  function CollectResult  (props){
+  const classes = useStyles()
   const encounterresult = props.location.state.getpatientlists.row ;
   const testorder = useSelector(state => state.laboratory.testorder);
   const dispatch = useDispatch();
@@ -86,10 +96,12 @@ const samplestatus = e =>{
     return <p><Badge  color="light">Sample Collected</Badge></p>
   }else if(e===2){
     return <p><Badge  color="light">Sample Transfered</Badge></p>
-  }else if(e===3){
-    return <p><Badge  color="light">Sample Rejected</Badge></p>
-  }else if(e===4){
+  }else if(e==="3"){
     return <p><Badge  color="light">Sample Verified</Badge></p>
+  }else if(e==="4"){
+    return <p><Badge  color="light">Sample Rejected</Badge></p>
+  }else if(e===5){
+    return <p><Badge  color="light">Result Available</Badge></p>
   }else{
     return <p>{"null"}</p>
   }
@@ -98,17 +110,17 @@ const samplestatus = e =>{
 const samples = e =>{
   console.log(e)
   if(e==="" || e===null){
-    return <p>---</p>
+    return <p>null</p>
   }else{
     return <p><Badge color="info" style={{ cursor:'pointer'}}
       onClick={() =>
       viewSampleTypes(e)}
-      >view samples</Badge></p>
+      >{e.length} Sample</Badge></p>
   }
 }
 //This is function to check for the status of each collection to display on the tablist below 
-const sampleAction = (e,rowdata) =>{
-  if(e==1 || e===""){
+const sampleAction = (rowdata) =>{
+
   return (
           <div>
             <Tooltip title="Enter Result">
@@ -117,13 +129,19 @@ const sampleAction = (e,rowdata) =>{
                 <FaPlusSquare size="15" />
                 </IconButton>
             </Tooltip>
-            
+            {rowdata.data.sample_type!==null ?
+            <Tooltip title="View Sample Type">
+                <IconButton aria-label="View Sample Type" onClick={() =>
+                  viewSampleTypes(rowdata.data.sample_type)}>
+                <FaRegEye size="15" />
+                </IconButton>
+            </Tooltip>
+            :
+             ""   
+            }
             </div>
           )
-  
-  }else{
-    return  <p> { }</p>
-  }
+
 }
   return (
     <Page title=' Sample Result'>
@@ -141,9 +159,16 @@ const sampleAction = (e,rowdata) =>{
             <Card className="mb-12">
               <CardHeader>Test Order Details 
               <Link to="/laboratory">
-                <Button color="primary" className=" float-right mr-1" >
-                        <TiArrowBack/>Go Back
-                </Button>
+              <MatButton
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  className={classes.button}
+                  
+                  className=" float-right mr-1"
+                >
+                  <TiArrowBack/>{" "} Back
+                </MatButton>
               </Link>
             </CardHeader>
             <CardBody>
@@ -153,7 +178,7 @@ const sampleAction = (e,rowdata) =>{
                   <Card body>
                       <Row form>
                           <Col md={3}>
-                            {/* <FormGroup>
+                           <FormGroup>
                               <Label for="occupation">Lab Test Group </Label>
 
                               <Input
@@ -171,12 +196,12 @@ const sampleAction = (e,rowdata) =>{
                                       </option>
                                   )}
                               </Input>
-                            </FormGroup> */}
+                            </FormGroup> 
                           </Col>
                       </Row>
                    
                       <Table style={{ fontWeight: 'bolder', borderColor:"#000"}} striped>
-                        <thead style={{  backgroundColor:'#3E51B5', color:"#fff" }}>
+                        <thead style={{  backgroundColor:'#9F9FA5', color:"#000" }}>
                           <tr>
                             <th>Test</th>
                             <th>Sample Type</th>
@@ -191,9 +216,9 @@ const sampleAction = (e,rowdata) =>{
                           <tr key={row.id}>
                             <th scope="row">{row.data.description===""?"Null ":row.data.description}</th>
                             <td>{samples(row.data.sample_type)}</td>
-                            <td> {row.dateEncounter} </td>
-                            <td>{samplestatus(row.data.lab_test_order_status)} </td>
-                            <td>{sampleAction(row.data.lab_test_order_status, row)}</td>
+                            <td> {encounterresult.dateEncounter} </td>
+                        <td>{samplestatus(row.data.lab_test_order_status)} </td>
+                            <td>{sampleAction(row)}</td>
                           </tr>
                         ))
                         :<p> <Spinner color="primary" /> Loading Please Wait</p>

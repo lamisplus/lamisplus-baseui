@@ -5,7 +5,7 @@ Row,
 Col,
 FormGroup,
 Label,
-Input
+Input, Card,CardBody
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { ToastContainer, toast } from "react-toastify";
@@ -20,10 +20,10 @@ import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
 import {url} from '../../../api'
-
+import { Alert } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
-
+import { Spinner } from 'reactstrap';
 
 Moment.locale('en');
 momentLocalizer();
@@ -67,6 +67,7 @@ const useStyles = makeStyles(theme => ({
 const ModalSampleTransfer = (props) => {
   const classes = useStyles()
   const [newdata, setNewdata] = useState({formdata});
+  const [loading, setLoading] = useState(false)
   /* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
     const formdata = useSelector(state => state.laboratory.formdata);
     const dispatch = useDispatch();
@@ -136,9 +137,9 @@ const ModalSampleTransfer = (props) => {
           })
       }
       const saveSample = e => {
-       
+        setLoading(true);
         console.log(data)
-        toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
+        toast.warn("Processing Sample ", { autoClose: 100, hideProgressBar:false });
         const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
         
         samples['lab_test_order_status'] = 2;
@@ -158,19 +159,37 @@ const ModalSampleTransfer = (props) => {
         data['data'] = samples;
         console.log(data)
         e.preventDefault()
-        props.createCollectedSample(data, lab_id)
+        const onSuccess = () => {
+          setLoading(false);        
+        }
+        const onError = () => {
+          setLoading(false);        
+        }
+        props.createCollectedSample(data, lab_id,onSuccess,onError)
       }
   return (
       
       <div >
     
-      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className}>
+      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
         
       <Form onSubmit={saveSample}>
         <ModalHeader toggle={props.togglestatus}>Transfer Sample</ModalHeader>
         <ModalBody>
+        <Card >
+        <CardBody>
         <Row >
-        <Col md={12}>
+        <Col md={12} >
+
+        <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder'}}>
+          <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}> {' '} {lab_test_group}</span> 
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : 
+          <span style={{ fontWeight: 'bolder'}}>{' '}  {description}</span>
+          </p>
+          
+        </Alert>
+        </Col>
+        <Col md={6}>
           {/* <p>Sample Type {datasample.data.description}  </p> */}
           <FormGroup>
             
@@ -189,6 +208,8 @@ const ModalSampleTransfer = (props) => {
                         required
                       /> 
           </FormGroup>
+          </Col>
+          <Col md={6}>
           <FormGroup>
             <Label for="exampleSelect">Lab Transfer To</Label>
             <Input type="select" name="lab_test_order_status" id="lab_test_order_status" 
@@ -198,6 +219,8 @@ const ModalSampleTransfer = (props) => {
              
             </Input>
           </FormGroup>
+          </Col>
+          <Col md={8}>
           <FormGroup>
             
             <Label for='maritalStatus'>Note</Label>
@@ -207,21 +230,21 @@ const ModalSampleTransfer = (props) => {
               id='comment'
               onChange={handleInputChangeSample}
                value = {samples.comment}                                     
-            >
-                                     
-            </Input>
-          
-          </FormGroup>
-          
+            >                        
+            </Input>          
+          </FormGroup>          
         </Col>
        </Row>
-
+       <br/>
+       {loading ? <Spinner /> : ""}
+       <br/>
           <MatButton
             type='submit'
             variant='contained'
             color='primary'
             className={classes.button}
             startIcon={<SaveIcon />}
+            disabled={loading}
           >
             Ok
           </MatButton>
@@ -234,6 +257,8 @@ const ModalSampleTransfer = (props) => {
           >
             Cancel
           </MatButton>
+        </CardBody>
+        </Card> 
         </ModalBody>
         
         </Form>
