@@ -13,7 +13,7 @@ const PatientSearch = (props) => {
   return (
     <div>
       <MaterialTable
-        title="Patients Prescriptions Table"
+        title="Drug Prescriptions"
         columns={[
           {
             title: "Patient Name",
@@ -53,8 +53,8 @@ const PatientSearch = (props) => {
               }}
               style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}
             >
-              <Tooltip title="Collect Sample">
-                <IconButton aria-label="Collect Sample">
+              <Tooltip title="View prescription">
+                <IconButton aria-label="View prescription">
                   <VisibilityIcon color="primary" />
                 </IconButton>
               </Tooltip>

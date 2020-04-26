@@ -2654,6 +2654,11 @@ binary-extensions@^1.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-1.13.1.tgz#598afe54755b2868a5330d2aff9d4ebb53209b65"
   integrity sha512-Un7MIEDdUC5gNpcGDV97op1Ywk748MpHcFTHoYs6qnj1Z3j7I53VG3nwZhKzoBZmbdRNnb6WRdFlwl7tSDuZGw==
 
+bind-decorator@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/bind-decorator/-/bind-decorator-1.0.11.tgz#e41bc06a1f65dd9cec476c91c5daf3978488252f"
+  integrity sha1-5BvAah9l3ZzsR2yRxdrzl4SIJS8=
+
 bindings@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
@@ -8364,6 +8369,15 @@ material-table@^1.57.2:
     react-beautiful-dnd "11.0.3"
     react-double-scrollbar "0.0.15"
 
+material-ui-number-input@^5.0.24:
+  version "5.0.24"
+  resolved "https://registry.yarnpkg.com/material-ui-number-input/-/material-ui-number-input-5.0.24.tgz#09125d1a82b6c219e9af8b3c2c68c9ec6c0dfbc4"
+  integrity sha1-CRJdGoK2whnpr4s8LGjJ7GwN+8Q=
+  dependencies:
+    bind-decorator "^1.0.11"
+    object-assign "^4.1.1"
+    prop-types "^15.5.10"
+
 material-ui-pickers@2.2.4, material-ui-pickers@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/material-ui-pickers/-/material-ui-pickers-2.2.4.tgz#8b33cfc55cbc5b2d520db45abf4b3dc94090dd3c"
@@ -11144,6 +11158,13 @@ react-notifications@^1.5.0-beta.0:
     classnames "^2.1.1"
     prop-types "^15.5.10"
     react-transition-group "^1.2.0"
+
+react-number-format@^4.4.1:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-4.4.1.tgz#d5614dd25edfc21ed48b97356213440081437a94"
+  integrity sha512-ZGFMXZ0U7DcmQ3bSZY3FULOA1mfqreT9NIMYZNoa/ouiSgiTQiYA95Uj2KN8ge6BRr+ghA5vraozqWqsHZQw3Q==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-numeric-input@2.2.3:
   version "2.2.3"
