@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {  Modal, ModalHeader, ModalBody,
 Form,
 Row,
-Col,
+Col,Input,
 FormGroup,
 Label,Card, CardBody
 } from 'reactstrap';
@@ -22,10 +22,10 @@ import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
 import {url} from '../../../api'
-
+import { Spinner } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
-
+import { Alert } from 'reactstrap';
 
 Moment.locale('en');
 momentLocalizer();
@@ -67,6 +67,7 @@ const useStyles = makeStyles(theme => ({
 const ModalSample = (props) => {
   const classes = useStyles()
   const [newdata, setNewdata] = useState({formdata});
+  const [loading, setLoading] = useState(false)
 /* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
   const formdata = useSelector(state => state.laboratory.formdata);
   const dispatch = useDispatch();
@@ -136,8 +137,9 @@ const ModalSample = (props) => {
 
     }
     const saveSample = e => {
+      setLoading(true);
       console.log(lab_id)
-      toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
+      toast.warn("Processing Sample ", { autoClose: 100, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
       samples['lab_test_order_status'] = 1;
       samples['comment'] = comment
@@ -155,7 +157,14 @@ const ModalSample = (props) => {
       data['data'] = samples;
       data['encounterId'] = encounterId;
       e.preventDefault()
-      props.createCollectedSample(data, lab_id)
+      const onSuccess = () => {
+        setLoading(false);
+        props.history.push("/collect-sample")        
+      }
+      const onError = () => {
+        setLoading(false);        
+      }
+      props.createCollectedSample(data, lab_id,onSuccess,onError)
     }
   console.log(formdata)
   return (
@@ -164,7 +173,7 @@ const ModalSample = (props) => {
         <Card >
         <CardBody>
        <ToastContainer autoClose={3000} hideProgressBar />
-      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className}>
+      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
         
       <Form onSubmit={saveSample}>
         <ModalHeader toggle={props.togglestatus}>Collect Sample</ModalHeader>
@@ -172,7 +181,17 @@ const ModalSample = (props) => {
         <Card >
         <CardBody>
         <Row >
-        <Col md={12}>
+        <Col md={12} >
+
+        <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder'}}>
+          <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}>{lab_test_group}</span> 
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : 
+          <span style={{ fontWeight: 'bolder'}}>{description}</span>
+          </p>
+          
+        </Alert>
+      </Col>
+        <Col md={6}>
          
           <FormGroup>
             
@@ -191,11 +210,14 @@ const ModalSample = (props) => {
                         required
                       /> 
           </FormGroup>
+          </Col>
+          <Col md={6}>
           <FormGroup>
           <Label for='maritalStatus'>Sample Type</Label>
               <Autocomplete
                 multiple
                 id="sample_type"
+                size="small"
                 options={optionsample}
                 getOptionLabel={(option) => option.title}
                 onChange={(e, i) => setSamples({ ...samples, sample_type: i })}
@@ -204,7 +226,7 @@ const ModalSample = (props) => {
                     <Chip label={option.title} {...getTagProps({ index })} disabled={index === 0} />
                   ))
                 }
-                style={{ width: 'auto' }}
+                style={{ width: 'auto', marginTop: '-1rem' }}s
                 renderInput={(params) => (
                   <TextField {...params} variant="outlined" margin="normal"  />
                 )}
@@ -213,16 +235,38 @@ const ModalSample = (props) => {
             {/* <FixedTags onChange={handleInputChangeSample} value={samples.sample_type} /> */}
          </FormGroup>
         </Col>
+
+        <Col md="12">
+        <FormGroup>
+            
+            <Label for='maritalStatus'>Note</Label>
+            <Input
+              type='textarea'
+              name='comment'
+              id='comment'
+              onChange={handleInputChangeSample}
+               value = {samples.comment}                                     
+            >
+                                     
+            </Input>
+          
+          </FormGroup>
+        </Col>
     </Row>
+    <br/>
+    {loading ? <Spinner /> : ""}
+    <br/>
        <MatButton
             type='submit'
             variant='contained'
             color='primary'
             className={classes.button}
             startIcon={<SaveIcon />}
-          >
+            disabled={loading}
+          >   
             Ok 
           </MatButton>
+          
           <MatButton
             variant='contained'
             color='default'

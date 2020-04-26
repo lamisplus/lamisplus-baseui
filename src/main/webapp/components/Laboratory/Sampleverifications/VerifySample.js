@@ -19,9 +19,10 @@ import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
 import {url} from '../../../api'
-
 import { useSelector, useDispatch } from 'react-redux';
 import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
+import { Alert } from 'reactstrap';
+
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -134,7 +135,7 @@ const ModalSample = (props) => {
     const saveSample = e => {
      
      
-      toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
+      toast.warn("Processing Sample ", { autoClose: 100, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
 
       samples['date_sample_collected'] = newDatenow;
@@ -153,14 +154,20 @@ const ModalSample = (props) => {
       data['data'] = samples;
       console.log(data)
       e.preventDefault()
-      props.createCollectedSample(data, lab_id)
+      const onSuccess = () => {
+        //setLoading(false);        
+      }
+      const onError = () => {
+        //setLoading(false);        
+      }
+      props.createCollectedSample(data, lab_id,onSuccess,onError)
     }
     //console.log(formdata)
   return (
       
       <div >
        <ToastContainer autoClose={3000} hideProgressBar />
-      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className}>
+      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
         
       <Form onSubmit={saveSample}>
         <ModalHeader toggle={props.togglestatus}>Sample Verify </ModalHeader>
@@ -168,8 +175,17 @@ const ModalSample = (props) => {
         <Card >
         <CardBody>
         <Row >
-        
-        <Col md={12}>
+        <Col md={12} >
+
+        <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder'}}>
+          <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}>{lab_test_group}</span> 
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : 
+          <span style={{ fontWeight: 'bolder'}}>{description}</span>
+          </p>
+          
+        </Alert>
+      </Col>
+      <Col md={6}>
           
           <FormGroup>
             
@@ -188,7 +204,9 @@ const ModalSample = (props) => {
                         required
                       /> 
           </FormGroup>
-          <FormGroup>
+        </Col>
+         
+          <Col md={6}>
           <FormGroup>
             <Label for="exampleSelect">Confirm Sample</Label>
             <Input type="select" name="lab_test_order_status" id="lab_test_order_status" 
@@ -199,6 +217,8 @@ const ModalSample = (props) => {
               <option value="4">Sample Rejected</option>
             </Input>
           </FormGroup>
+          </Col>
+          <Col md={8}>
           <FormGroup>
             
             <Label for='maritalStatus'>Note</Label>
@@ -214,9 +234,9 @@ const ModalSample = (props) => {
             </Input>
           
           </FormGroup>
-            
-         </FormGroup>
-        </Col>
+        </Col>  
+         
+      
      </Row>
      <MatButton
             type='submit'

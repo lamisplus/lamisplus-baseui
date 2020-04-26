@@ -82,7 +82,7 @@ export const fetchFormDataById = (id)=> dispatch => {
     );
     }
 };
-export const createCollectedSample = (data, lab_id) => dispatch => {
+export const createCollectedSample = (data, lab_id, onSuccess, onError ) => dispatch => {
 
   if(lab_id){
     
@@ -93,7 +93,7 @@ export const createCollectedSample = (data, lab_id) => dispatch => {
         type: ACTION_TYPES.CREATE_COLLECT_SAMPLE,
         payload: response.data
       });
-     
+      onSuccess()
       toast.success("Sample Collection was successful");
       //setInterval(window.location.reload(false), 80000);
     })
@@ -103,7 +103,7 @@ export const createCollectedSample = (data, lab_id) => dispatch => {
         type: ACTION_TYPES.ERROR_CREATE_COLLECT_SAMPLE,
         payload: error
       })
-      console.log(error)
+      onError()
       toast.error("Something went wrong, please try again");
       //setInterval(window.location.reload(false), 80000);
       //window.location.reload()
