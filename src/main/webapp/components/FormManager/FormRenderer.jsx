@@ -21,6 +21,7 @@ const FormRenderer = props => {
   const onDismiss = () => setShowErrorMsg(false)
 
   React.useEffect(() => {
+    
     const onSuccess = () => {
       setShowLoadingForm(false)
       }
@@ -45,6 +46,7 @@ const FormRenderer = props => {
 
   const submitForm = ( submission) => {
    // e.preventDefault()
+   
       const onSuccess = () => {
         setShowLoading(false)
         toast.success('Form saved successfully!', { appearance: 'success' })

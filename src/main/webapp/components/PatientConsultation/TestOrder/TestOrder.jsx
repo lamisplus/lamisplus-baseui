@@ -78,9 +78,12 @@ function getTestGroupNameById(id) {
 }
  
 
-const saveTestOrder = (e) => { 
- 
-  e.preventDefault(); 
+const saveTestOrder = (e) => {
+  e.preventDefault() 
+  if(showLoading){
+    return;
+  }
+
   if (!testOrders || testOrders.length < 1) {
       setErrorMessage("You must pick a test before you can submit");
       return;

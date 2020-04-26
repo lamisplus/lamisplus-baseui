@@ -307,9 +307,11 @@ return (
  <Select required isMulti={false} onChange={handleChange}  isLoading={showServiceFormLoading}
  options={filteredForms.map(x => ({...x, label:x.name, value:x.id}))}  />
  </FormGroup> </Col>
- <Button color="primary" className=" float-right mr-1" onClick={loadForm} >
+ <Col md={10}>
+ <Button color="primary" className=" mr-1" onClick={loadForm} >
                 Open Form
                 </Button>
+                </Col>
 
       </div>
 
