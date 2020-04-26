@@ -22,7 +22,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import SaveIcon from '@material-ui/icons/Save'
 import CancelIcon from '@material-ui/icons/Cancel'
 import { Alert } from 'reactstrap';
-
+import { Spinner } from 'reactstrap';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -65,6 +65,7 @@ momentLocalizer();
 const ModalSampleResult = (props) => {
   const classes = useStyles()
   const [newdata, setNewdata] = useState({formdata});
+  const [loading, setLoading] = useState(false)
 /* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
   const formdata = useSelector(state => state.laboratory.formdata);
   const dispatch = useDispatch();
@@ -142,7 +143,7 @@ const ModalSampleResult = (props) => {
   //     console.log(samplesType)
   // }
     const saveSample = e => {
-     
+      setLoading(true);
       console.log(data)
       toast.warn("Processing Sample ", { autoClose: 100, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
@@ -165,10 +166,10 @@ const ModalSampleResult = (props) => {
       console.log(data)
       e.preventDefault()
       const onSuccess = () => {
-        //setLoading(false);        
+        setLoading(false);        
       }
       const onError = () => {
-        //setLoading(false);        
+        setLoading(false);        
       }
       props.createCollectedSample(data, lab_id,onSuccess,onError)
     }
@@ -247,12 +248,15 @@ const ModalSampleResult = (props) => {
              
             </Row>
             <br/>
+            {loading ? <Spinner /> : ""}
+            <br/>
               <MatButton
                   type='submit'
                   variant='contained'
                   color='primary'
                   className={classes.button}
                   startIcon={<SaveIcon />}
+                  disabled={loading}
                 >
                   Save 
                 </MatButton>

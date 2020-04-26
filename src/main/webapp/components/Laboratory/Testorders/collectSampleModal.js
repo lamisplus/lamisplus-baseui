@@ -65,6 +65,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const ModalSample = (props) => {
+  console.log(props)
   const classes = useStyles()
   const [newdata, setNewdata] = useState({formdata});
   const [loading, setLoading] = useState(false)
@@ -159,7 +160,8 @@ const ModalSample = (props) => {
       e.preventDefault()
       const onSuccess = () => {
         setLoading(false);
-        props.history.push("/collect-sample")        
+        
+      //props.history.push("/collect-sample")        
       }
       const onError = () => {
         setLoading(false);        
