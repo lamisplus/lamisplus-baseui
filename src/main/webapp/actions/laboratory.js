@@ -83,6 +83,7 @@ export const fetchFormDataById = (id)=> dispatch => {
     }
 };
 export const createCollectedSample = (data, lab_id) => dispatch => {
+
   if(lab_id){
     
   axios
@@ -94,7 +95,7 @@ export const createCollectedSample = (data, lab_id) => dispatch => {
       });
      
       toast.success("Sample Collection was successful");
-      setInterval(window.location.reload(false), 80000);
+      //setInterval(window.location.reload(false), 80000);
     })
     .catch(error =>{
       
@@ -104,10 +105,12 @@ export const createCollectedSample = (data, lab_id) => dispatch => {
       })
       console.log(error)
       toast.error("Something went wrong, please try again");
-      setInterval(window.location.reload(false), 80000);
+      //setInterval(window.location.reload(false), 80000);
       //window.location.reload()
       
     });
+  }else{
+    toast.error("Something went wrong, please try again");
   }
 };
 

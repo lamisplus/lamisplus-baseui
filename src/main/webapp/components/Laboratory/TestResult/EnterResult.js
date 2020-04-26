@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter ,
+import { Modal, ModalHeader, ModalBody,
 Form,
 Row,
 Col,
 FormGroup,
-Label,Input
+Label,Input,Card,CardBody
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { ToastContainer, toast } from "react-toastify";
@@ -106,8 +106,9 @@ const ModalSampleResult = (props) => {
                                           lab_test_group_id:lab_test_group_id,
                                           lab_test_order_id: lab_test_order_id,
                                           date_result_reported: date_result_reported,
-                                          date_sample_collected: new Date(),
-                                          lab_test_order_status: lab_test_order_status 
+                                          date_sample_collected: date_sample_collected,
+                                          lab_test_order_status: lab_test_order_status,
+                                          date_result_reported:new Date()
                                     })
  
           
@@ -146,7 +147,7 @@ const ModalSampleResult = (props) => {
       toast.warn("Processing Sample ", { autoClose: 1000, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
       samples['lab_test_order_status'] = 5;
-      samples['date_sample_collected'] = newDatenow;
+      samples['date_sample_collected'] = date_sample_collected;
       samples['user_id'] = user_id
       samples['description'] = description
       samples['patient_id'] =patient_id
@@ -157,6 +158,8 @@ const ModalSampleResult = (props) => {
       samples['lab_test_group_id'] = lab_test_group_id
       samples['lab_test_order_id'] = lab_test_order_id
       samples['date_sample_collected']= date_sample_collected
+      samples['sample_type']= sample_type
+      samples['date_result_reported']= newDatenow
       data['data'] = samples;
       data['encounterId'] = encounterId;
       console.log(data)
@@ -178,6 +181,8 @@ const ModalSampleResult = (props) => {
       <Form onSubmit={saveSample}>
         <ModalHeader toggle={props.togglestatus}>Enter Sample Result</ModalHeader>
         <ModalBody>
+        <Card>
+          <CardBody>
                         <Row style={{ marginTop: '20px'}}>
                             <Col xs="4">
                               Test 
@@ -220,9 +225,9 @@ const ModalSampleResult = (props) => {
                               
                               </Col>
                             <Col xs="4">
-                              Sample collected
+                              Total Sample Type 
                               <br/>
-                              <p style={textstyle}>{"view Sample"}<small className="text-muted">By Evans</small></p>
+                              <p style={textstyle}>{sample_type!==null?sample_type.length +"Sample " : "null "}<small className="text-muted">  By Evans</small></p>
                               </Col>
                           
                         </Row>
@@ -232,7 +237,9 @@ const ModalSampleResult = (props) => {
                               <FormGroup>
                                   <Label for="exampleSelect">Result Type</Label>
                                   <Input type="select" name="lab_test_order_status" id="lab_test_order_status"                      
-                                    onChange={handleInputSampleType}>
+                                    onChange={handleInputSampleType}
+                                    
+                                    >
                                     <option value=""> </option>
                                     <option value="1">Basic Result</option>
                                     <option value="2">Other Result</option>
@@ -248,7 +255,7 @@ const ModalSampleResult = (props) => {
                                       name='comment'
                                       id='comment'
                                       onChange={handleInputChangeSample}
-                                      value = {samples.comment}                                     
+                                      value = {samples.test_result}                                     
                                     >
                                   </Input>
                                 </FormGroup>
@@ -258,11 +265,14 @@ const ModalSampleResult = (props) => {
                               <Col xs="8">
                                 <FormGroup>
                                     <Label for="exampleSelect">Select Result Type</Label>
-                                    <Input type="select" name="lab_test_order_status" id="lab_test_order_status"                      
-                                      >
+                                    <Input type="select" name="test_result" id="test_result"                      
+                                    onChange={handleInputChangeSample}
+                                    value = {samples.test_result} 
+                                    
+                                  >
                                       <option value=""></option>
-                                      <option value="1">Positive</option>
-                                      <option value="2">Negative</option>
+                                      <option value="Positive">Positive</option>
+                                      <option value="Negative">Negative</option>
                                     </Input>
                                 </FormGroup>
                               </Col>
@@ -303,9 +313,12 @@ const ModalSampleResult = (props) => {
                           >
                             Cancel
                           </MatButton>
+                          </CardBody>
+                          </Card>
                     </ModalBody>
         
         </Form>
+
       </Modal>
     </div>
   );

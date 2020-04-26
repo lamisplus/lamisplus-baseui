@@ -13,7 +13,7 @@ const PatientSearch = (props) => {
   return (
     <div>
       <MaterialTable
-        title="Patients Prescriptions Table"
+        title="Drug Prescriptions"
         columns={[
           {
             title: "Patient Name",
@@ -22,7 +22,12 @@ const PatientSearch = (props) => {
           { title: "Patient ID", field: "Id" },
           { title: "Prescription Date", field: "date", type: "date" },
           {
-            title: "Total Count",
+            title: "Total Prescribed",
+            field: "count",
+            filtering: false,
+          },
+          {
+            title: "Total Dispensed",
             field: "count",
             filtering: false,
           },
@@ -44,6 +49,7 @@ const PatientSearch = (props) => {
                 forms: prescription.formDataObj,
                 patientName:
                   prescription.firstName + " " + prescription.lastName,
+                encounterId: prescription.encounterId,
               }}
               style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}
             >

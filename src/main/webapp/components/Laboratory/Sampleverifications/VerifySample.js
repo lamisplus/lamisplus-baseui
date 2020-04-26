@@ -4,7 +4,7 @@ Form,
 Row,
 Col,
 FormGroup,
-Label,Input
+Label,Input,Card,CardBody
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import MatButton from '@material-ui/core/Button'
@@ -108,8 +108,7 @@ const ModalSample = (props) => {
                                           date_sample_collected: new Date(),
                                           lab_test_order_status: lab_test_order_status 
                                     })
- 
-          
+
         const [optionsample, setOptionsample] = useState([]);
         useEffect(() => {
             async function getCharacters() {
@@ -149,6 +148,7 @@ const ModalSample = (props) => {
       samples['lab_test_group_id'] = lab_test_group_id
       samples['lab_test_order_id'] = lab_test_order_id
       samples['date_result_reported'] = date_result_reported
+      samples['sample_type'] = sample_type
       //samples['lab_test_order_status']=4
       data['data'] = samples;
       console.log(data)
@@ -163,9 +163,12 @@ const ModalSample = (props) => {
       <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className}>
         
       <Form onSubmit={saveSample}>
-        <ModalHeader toggle={props.togglestatus}>Verify Sample</ModalHeader>
+        <ModalHeader toggle={props.togglestatus}>Sample Verify </ModalHeader>
         <ModalBody>
+        <Card >
+        <CardBody>
         <Row >
+        
         <Col md={12}>
           
           <FormGroup>
@@ -233,6 +236,9 @@ const ModalSample = (props) => {
           >
             Cancel
           </MatButton>
+        
+        </CardBody>
+        </Card>
         </ModalBody>
         
         </Form>
