@@ -299,14 +299,20 @@ const PatientPrescriptions = (props) => {
                       <DialogTitle id="form-dialog-title">
                         Dispense Prescription
                       </DialogTitle>
+                      <div
+                        style={{
+                          background: "#9F9FA5",
+                          width: "100%",
+                          height: "3rem",
+                          padding: "1rem 1rem",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        Drug Presc: {form.data.generic_name}
+                        Qty Presc: 10 Tablets Stock Bal: 500 Packs
+                      </div>
                       <DialogContent>
-                        <DialogContentText>
-                          Drug Prescribed : {form.data.generic_name}
-                          <br />
-                          <br />
-                          Qty Prescribed: 10 Tablets || Stock Balance: 500
-                          Tablets
-                        </DialogContentText>
+                        <DialogContentText></DialogContentText>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <KeyboardDatePicker
                             margin="normal"
@@ -319,7 +325,7 @@ const PatientPrescriptions = (props) => {
                               "aria-label": "change date",
                             }}
                           />
-                
+
                           <br />
                         </MuiPickersUtilsProvider>
                         <br />
