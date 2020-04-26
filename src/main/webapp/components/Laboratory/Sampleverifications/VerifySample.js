@@ -149,7 +149,7 @@ const ModalSample = (props) => {
       samples['lab_test_group_id'] = lab_test_group_id
       samples['lab_test_order_id'] = lab_test_order_id
       samples['date_result_reported'] = date_result_reported
-      samples['lab_test_order_status']=4
+      //samples['lab_test_order_status']=4
       data['data'] = samples;
       console.log(data)
       e.preventDefault()

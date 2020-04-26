@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 //import Table from '@material-ui/core/Table'
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-import {GoChecklist} from 'react-icons/go';
+// import {GoChecklist} from 'react-icons/go';
 import 'react-widgets/dist/css/react-widgets.css'
 import {FaPlusSquare} from 'react-icons/fa';
 
@@ -17,6 +17,7 @@ import Page from 'components/Page'
 import {  fetchById } from '../../../actions/patients'
 import {  fetchAllLabTestOrderOfPatient } from '../../../actions/laboratory'
 import ModalSampleResult from './EnterResult';
+import ModalSampleType from './sampleTypeModal'
 import { useSelector, useDispatch } from 'react-redux';
 import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import { Spinner } from 'reactstrap';
@@ -99,7 +100,7 @@ const samples = e =>{
   if(e==="" || e===null){
     return <p>---</p>
   }else{
-    return <p><Badge color="info" href="#"
+    return <p><Badge color="info" style={{ cursor:'pointer'}}
       onClick={() =>
       viewSampleTypes(e)}
       >view samples</Badge></p>
@@ -152,7 +153,7 @@ const sampleAction = (e,rowdata) =>{
                   <Card body>
                       <Row form>
                           <Col md={3}>
-                            <FormGroup>
+                            {/* <FormGroup>
                               <Label for="occupation">Lab Test Group </Label>
 
                               <Input
@@ -170,7 +171,7 @@ const sampleAction = (e,rowdata) =>{
                                       </option>
                                   )}
                               </Input>
-                            </FormGroup>
+                            </FormGroup> */}
                           </Col>
                       </Row>
                    
@@ -190,7 +191,7 @@ const sampleAction = (e,rowdata) =>{
                           <tr key={row.id}>
                             <th scope="row">{row.data.description===""?"Null ":row.data.description}</th>
                             <td>{samples(row.data.sample_type)}</td>
-                            <td> {userInfo.dateEncounter} </td>
+                            <td> {row.dateEncounter} </td>
                             <td>{samplestatus(row.data.lab_test_order_status)} </td>
                             <td>{sampleAction(row.data.lab_test_order_status, row)}</td>
                           </tr>
@@ -210,7 +211,7 @@ const sampleAction = (e,rowdata) =>{
         </Col>
       </Row>
       <ModalSampleResult modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal} />
-      
+      <ModalSampleType modalstatus={modal3} togglestatus={togglemodal3} samptypelist={samplelist} />
     </Page>
   )
 }

@@ -9,7 +9,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import {GoChecklist} from 'react-icons/go';
 import 'react-widgets/dist/css/react-widgets.css'
-import {FaTimesCircle} from 'react-icons/fa';
 
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -17,8 +16,9 @@ import Page from 'components/Page'
 import {  fetchById } from '../../../actions/patients'
 import {  fetchAllLabTestOrderOfPatient } from '../../../actions/laboratory'
 import ModalSampleVerify from './VerifySample';
-import ModalSampleResult from '../TestResult/EnterResult';
-import ModalSampleReject from './SampleRejection';
+// import ModalSampleResult from '../TestResult/EnterResult';
+// import ModalSampleReject from './SampleRejection';
+import ModalSampleType from './sampleTypeModal'
 import { useSelector, useDispatch } from 'react-redux';
 import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import { Spinner } from 'reactstrap';
@@ -116,19 +116,19 @@ const sampleAction = (e,rowdata) =>{
   if(e==1 || e===""){
   return (
           <div>
-            <Tooltip title="Verify Collected Sample">                                              
+            <Tooltip title="Verify Sample">                                              
                 <IconButton aria-label="Verify Sample" onClick={() =>
                   handlesample(rowdata)}
                   >
                 <GoChecklist size="15" />
                 </IconButton>
             </Tooltip>
-            <Tooltip title="Rejected Result">
+            {/* <Tooltip title="Rejected Result">
                 <IconButton aria-label="Rejected Result" onClick={() =>
                   handlereject(rowdata)}>
                 <FaTimesCircle size="15" />
                 </IconButton>
-            </Tooltip> 
+            </Tooltip>  */}
             </div>
           )
   
@@ -164,7 +164,7 @@ const sampleAction = (e,rowdata) =>{
                   <Card body>
                       <Row form>
                           <Col md={3}>
-                            <FormGroup>
+                            {/* <FormGroup>
                               <Label for="occupation">Lab Test Group </Label>
 
                               <Input
@@ -182,7 +182,7 @@ const sampleAction = (e,rowdata) =>{
                                       </option>
                                   )}
                               </Input>
-                            </FormGroup>
+                            </FormGroup> */}
                           </Col>
                       </Row>
                    
@@ -222,9 +222,9 @@ const sampleAction = (e,rowdata) =>{
         </Col>
       </Row>
       <ModalSampleVerify modalstatus={modal} togglestatus={togglemodal} datasample={collectmodal} />
-      <ModalSampleResult modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal} />
-      <ModalSampleReject modalstatus={modal3} togglestatus={togglemodal3} datasample={collectmodal} />
-      
+      {/* <ModalSampleResult modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal} /> */}
+      {/* <ModalSampleReject modalstatus={modal3} togglestatus={togglemodal3} datasample={collectmodal} /> */}
+      <ModalSampleType modalstatus={modal3} togglestatus={togglemodal3} samptypelist={samplelist} />
     </Page>
   )
 }

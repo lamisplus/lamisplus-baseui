@@ -216,7 +216,7 @@ const sampleAction = (e,rowdata) =>{
                   <Card body>
                       <Row form>
                           <Col md={3}>
-                            <FormGroup>
+                            {/* <FormGroup>
                               <Label for="occupation">Lab Test Group </Label>
 
                               <Input
@@ -234,7 +234,7 @@ const sampleAction = (e,rowdata) =>{
                                       </option>
                                   )}
                               </Input>
-                            </FormGroup>
+                            </FormGroup> */}
                           </Col>
                       </Row>
                     <Form onSubmit={saveColllectSample}>
@@ -254,7 +254,7 @@ const sampleAction = (e,rowdata) =>{
                           <tr key={row.id}>
                             <th scope="row">{row.data.description===""?"Null ":row.data.description}</th>
                             <td>{samples(row.data.sample_type)}</td>
-                            <td> {!row.dateEncounter?null:row.dateEncounter} </td>
+                            <td> {encounterresult.dateEncounter===""?"null":encounterresult.dateEncounter} </td>
                             <td>{samplestatus(row.data.lab_test_order_status)} </td>
                             <td>{sampleAction(row.data.lab_test_order_status, row)}</td>
                           </tr>

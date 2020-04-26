@@ -232,23 +232,23 @@ const ModalSampleResult = (props) => {
                 </Row>       
                 </Form>
                 <MatButton
-            type='submit'
-            variant='contained'
-            color='primary'
-            className={classes.button}
-            startIcon={<SaveIcon />}
-          >
-            Save Sample
-          </MatButton>
-          <MatButton
-            variant='contained'
-            color='default'
-            onClick={props.togglestatus}
-            className={classes.button}
-            startIcon={<CancelIcon />}
-          >
-            Cancel
-          </MatButton>
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  className={classes.button}
+                  startIcon={<SaveIcon />}
+                >
+                  Save Sample
+                </MatButton>
+                <MatButton
+                  variant='contained'
+                  color='default'
+                  onClick={props.togglestatus}
+                  className={classes.button}
+                  startIcon={<CancelIcon />}
+                >
+                  Cancel
+                </MatButton>
             </ModalBody>
         
         </Form>
