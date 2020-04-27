@@ -15,11 +15,11 @@ const PatientSearch = (props) => {
       <MaterialTable
         title="Drug Prescriptions"
         columns={[
+          { title: "Patient ID", field: "Id" },
           {
             title: "Patient Name",
             field: "name",
           },
-          { title: "Patient ID", field: "Id" },
           { title: "Prescription Date", field: "date", type: "date" },
           {
             title: "Total Prescribed",
@@ -46,7 +46,7 @@ const PatientSearch = (props) => {
             <Link
               to={{
                 pathname: "/prescriptions",
-                forms: prescription.formDataObj,
+                form: prescription,
                 patientName:
                   prescription.firstName + " " + prescription.lastName,
                 encounterId: prescription.encounterId,
