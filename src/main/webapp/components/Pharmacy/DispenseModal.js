@@ -135,7 +135,7 @@ const DispenseModal = (props) => {
                     <b>2 packs</b>
                   </span>
                   &nbsp;&nbsp; Stock Balance:{" "}
-                  <span style={{ color: "#0aad77" }}>
+                  <span style={{ color: "#19FF32" }}>
                     <b>400 packs</b>
                   </span>
                 </div>
