@@ -285,7 +285,7 @@ function HomePage(props) {
           aria-label="scrollable force tabs example"
         >
           <Tab className={classes.title} label="Dashboard" icon={<MdDashboard />} {...a11yProps(0)} />  
-          <Tab className={classes.title} label="Vital Signs" icon={<MdContacts />} {...a11yProps(5)} />       
+          {/* <Tab className={classes.title} label="Vital Signs" icon={<MdContacts />} {...a11yProps(5)} />        */}
           <Tab className={classes.title} label="Consultation" icon={<MdContacts />} {...a11yProps(1)} />
           <Tab className={classes.title} label="Service Form" icon={<GiFiles />} {...a11yProps(2)} />
           <Tab className={classes.title} label="Test Order" icon={<GiTestTubes />} {...a11yProps(3)} />
@@ -371,28 +371,28 @@ function HomePage(props) {
 </TabPanel>
     {/* End of dashboard */}
 {/* Begining of vital signs  */}
-<TabPanel value={value} index={1}>
+{/* <TabPanel value={value} index={1}>
 <ViewVitalsSearch  patientId={props.patient.patientId}   />  
     
-</TabPanel>
+</TabPanel> */}
 {/* End of vital signs */} 
 {/* Begining of Service Form */}
-<TabPanel value={value} index={2}>
+<TabPanel value={value} index={1}>
  
             <Consultation patientId={props.patient.patientId } visitId={props.patient.visitId} />
 
 </TabPanel>    
  
  {/* Begining of consultation  */}
- <TabPanel value={value} index={3}>    
+ <TabPanel value={value} index={2}>    
     <ServiceForm patientId={props.patient.patientId } visitId={props.patient.visitId}/>            
 </TabPanel>
 
-      <TabPanel value={value} index={4}>
+      <TabPanel value={value} index={3}>
         <TestOrder patientId={props.patient.patientId } visitId={props.patient.visitId}/>
       </TabPanel>
     {/* End of consultation */}
-    <TabPanel value={value} index={5}>
+    <TabPanel value={value} index={4}>
         {/* Card stats */}
         <Medication patientId={props.patient.patientId } visitId={props.patient.visitId}  />
 
