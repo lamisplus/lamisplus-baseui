@@ -23,7 +23,7 @@ import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
 import { Spinner } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { Alert } from 'reactstrap';
+import './modal.css';
 
 Moment.locale('en');
 momentLocalizer();
@@ -69,6 +69,7 @@ const ModalSample = (props) => {
     const closeBtn = props.close
     const classes = useStyles();
     console.log(props);
+    const formData = props.formData ? props.formData : {}
     const drugUnits = {
 
     }
@@ -77,9 +78,15 @@ const ModalSample = (props) => {
       <Card>
         <CardBody>
           <ToastContainer autoClose={3000} hideProgressBar />
-          <Modal isOpen={modal} toggle={toggle} className={className} size="lg">
+          <Modal
+            isOpen={modal}
+            toggle={toggle}
+            className={className}
+            size="lg"
+            // contentClassName="custom-modal-style"
+          >
             <ModalHeader toggle={toggle} close={closeBtn}>
-              Drug Dispensing
+              Dispense  <b>{formData.data.generic_name}</b>
             </ModalHeader>
             <ModalBody>
               {/* <Card >
@@ -94,10 +101,10 @@ const ModalSample = (props) => {
                     marginBottom: "1rem",
                   }}
                 >
-                  &nbsp;&nbsp; Drug Prescribed:{" "}
+                  {/* &nbsp;&nbsp; Drug Prescribed:{" "}
                   <span>
-                    <b>Paracetamol</b>
-                  </span>
+                    <b>{formData.data.generic_name}</b>
+                  </span> */}
                   &nbsp;&nbsp; Quantity Prescribed:{" "}
                   <span>
                     <b>2 packs</b>
@@ -107,6 +114,24 @@ const ModalSample = (props) => {
                     <b>400 packs</b>
                   </span>
                 </div>
+              </Row>
+              <Row>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label for="maritalStatus">Date Collected</Label>
+
+                    <DateTimePicker
+                      time={false}
+                      name="date_sample_collected"
+                      id="date_sample_collected"
+                      defaultValue={new Date()}
+                      max={new Date()}
+                      required
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
                 <Col md={6}>
                   <FormGroup>
                     <Label for="exampleNumber">Drug Name (Brand name)</Label>
@@ -128,7 +153,7 @@ const ModalSample = (props) => {
                   <FormGroup>
                     <Label for="exampleSelect">Unit</Label>
                     <Input type="select" name="select" id="exampleSelect">
-                      <option>Pack(s)</option>
+                      <option>Packs</option>
                       <option>Tablets</option>
                       <option>ml</option>
                     </Input>
@@ -137,11 +162,7 @@ const ModalSample = (props) => {
                 <Col md="12">
                   <FormGroup>
                     <Label for="maritalStatus">Note</Label>
-                    <Input
-                      type="textarea"
-                      name="comment"
-                      id="comment"
-                    ></Input>
+                    <Input type="textarea" name="comment" id="comment"></Input>
                   </FormGroup>
                 </Col>
               </Row>
