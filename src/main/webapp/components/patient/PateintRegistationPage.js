@@ -303,6 +303,7 @@ useEffect(() => {
     const allRelatives = [...relatives];
     allRelatives.splice(index, 1);
     setRelatives(allRelatives);
+    
   };
 
   const handleAddRelative = e => {
@@ -337,7 +338,8 @@ useEffect(() => {
     setSaving(true);
     const onSuccess = () => {
       setSaving(false);
-      resetForm()   
+      resetForm() 
+      removeRelative()
     }
     const onError = () => {
       setSaving(false);        

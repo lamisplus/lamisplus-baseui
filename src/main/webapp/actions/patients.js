@@ -82,7 +82,7 @@ export const create = (data,onSuccess, onError) => dispatch => {
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
-        payload: error.response.data.apierror.message
+        payload: "Something went wrong"
       });
       onError()
       if(error.response.data.apierror.message===null || error.response.data.apierror.message===""){
