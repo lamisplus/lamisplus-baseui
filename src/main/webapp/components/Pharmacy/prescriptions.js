@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment} from "react";
 import Page from "components/Page";
 import { MdSave } from "react-icons/md";
 import { TiArrowBack } from "react-icons/ti";
@@ -48,10 +48,10 @@ const Prescriptions = (props) => {
 
   console.log(props.location.form)
 
-  console.log(props.location.form.formDataObj)
+  // console.log(props.location.form.formDataObj)
 
 
- const formData = props.location.form.formDataObj
+  const formData = props.location.form ? props.location.form.formDataObj : null 
   const saveColllectSample = (e) => {
     e.preventDefault();
   };
@@ -73,74 +73,90 @@ const Prescriptions = (props) => {
       <Row>
         <Col>
           <div>
-            {props.location.form ? (
-              <PatientDetailCard getpatientdetails={props.location.form} />
+            {formData ? (
+              <Fragment>
+                <PatientDetailCard getpatientdetails={props.location.form} />
+
+                <br />
+
+                <Card className="mb-12">
+                  <CardHeader>
+                    DRUG ORDER DETAILS
+                    <Link to="/pharmacy">
+                      <MatButton
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        className=" float-right mr-1"
+                      >
+                        <TiArrowBack /> Back
+                      </MatButton>
+                    </Link>
+                  </CardHeader>
+                  <CardBody>
+                    <br />
+                    <Row>
+                      <Col>
+                        <Card body>
+                          <Form onSubmit={saveColllectSample}>
+                            <Table
+                              style={{
+                                fontWeight: "bolder",
+                                borderColor: "#000",
+                              }}
+                              striped
+                            >
+                              <thead
+                                style={{
+                                  backgroundColor: "#9F9FA5",
+                                  color: "#000",
+                                }}
+                              >
+                                <tr>
+                                  <th>Name</th>
+                                  <th>Dosage</th>
+                                  <th>Date Prescribed</th>
+                                  <th>Date Dispensed</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              {formData.map((form) => (
+                                <tbody>
+                                  <tr>
+                                    <th>{form.data.generic_name}</th>
+                                    <th>{form.data.dosage}</th>
+                                    <th>{form.data.date_prescribed}</th>
+                                    <th>{form.data.dispensed}</th>
+                                    <th>
+                                      <i
+                                        class="fa fa-medkit"
+                                        aria-hidden="true"
+                                      ></i>
+                                      &nbsp;&nbsp;
+                                      <VisibilityIcon />
+                                    </th>
+                                  </tr>
+                                </tbody>
+                              ))}
+                            </Table>
+
+                            <br />
+                          </Form>
+                        </Card>
+                      </Col>
+                    </Row>
+                  </CardBody>
+                </Card>
+              </Fragment>
             ) : (
               <p>
                 {" "}
-                <Spinner color="primary" /> Loading Please Wait..
+                  {/* <Spinner color="primary" /> Loading Please Wait.. */}
+                  <h3>No Prescription details</h3>
               </p>
             )}
           </div>
-          <br />
-          <Card className="mb-12">
-            <CardHeader>
-              DRUG ORDER DETAILS
-              <Link to="/pharmacy">
-                <MatButton
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  className={classes.button}
-                  className=" float-right mr-1"
-                >
-                  <TiArrowBack /> Back
-                </MatButton>
-              </Link>
-            </CardHeader>
-            <CardBody>
-              <br />
-              <Row>
-                <Col>
-                  <Card body>
-                    <Form onSubmit={saveColllectSample}>
-                      <Table
-                        style={{ fontWeight: "bolder", borderColor: "#000" }}
-                        striped
-                      >
-                        <thead
-                          style={{ backgroundColor: "#9F9FA5", color: "#000" }}
-                        >
-                          <tr>
-                            <th>Name</th>
-                            <th>Dosage</th>
-                            <th>Date Prescribed</th>
-                            <th>Date Dispensed</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        {formData.map((form) => (
-                          <tbody>
-                            <tr>
-                              <th>{form.data.generic_name}</th>
-                              <th>{form.data.dosage}</th>
-                              <th>{form.data.date_prescribed}</th>
-                              <th>{form.data.dispensed}</th>
-                              <th>
-                                <i class="fa fa-medkit" aria-hidden="true"></i>&nbsp;&nbsp;<VisibilityIcon />
-                              </th>
-                            </tr>
-                          </tbody>
-                        ))}
-                      </Table>
-
-                      <br />
-                    </Form>
-                  </Card>
-                </Col>
-              </Row>
-            </CardBody>
-          </Card>
         </Col>
       </Row>
     </Page>
