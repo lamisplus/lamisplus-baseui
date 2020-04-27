@@ -172,7 +172,7 @@ const Prescriptions = (props) => {
                                 <th>Dosage</th>
                                 <th>Date Prescribed</th>
                                 <th>Date Dispensed</th>
-                                <th></th>
+                                <th>Actions</th>
                               </tr>
                             </thead>
                             {formData.map((form) => (
