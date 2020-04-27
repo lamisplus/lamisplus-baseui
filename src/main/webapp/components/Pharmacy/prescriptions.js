@@ -76,9 +76,7 @@ const Prescriptions = (props) => {
             {formData ? (
               <Fragment>
                 <PatientDetailCard getpatientdetails={props.location.form} />
-
                 <br />
-
                 <Card className="mb-12">
                   <CardHeader>
                     DRUG ORDER DETAILS
