@@ -193,10 +193,9 @@ const Prescriptions = (props) => {
                                     color="primary"
                                       isOpen={dropdownOpen}
                                       toggle={toggleAction}
-                                     
                                     >
                                       <DropdownToggle caret>
-                                        Actions
+                                        Actions 
                                       </DropdownToggle>
                                       <DropdownMenu>
                                         <DropdownItem
