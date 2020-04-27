@@ -177,7 +177,7 @@ const Prescriptions = (props) => {
                                     <th>{form.data.generic_name}</th>
                                     <th>{form.data.dosage}</th>
                                     <th>{form.data.date_prescribed}</th>
-                                    <th>{form.data.dispensed}</th>
+                                    <th>{form.data.date_dispensed}</th>
                                     <th>
                                       <i
                                         class="fa fa-medkit"

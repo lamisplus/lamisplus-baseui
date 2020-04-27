@@ -6,6 +6,9 @@ Col,Input,
 FormGroup,
 Label,Card, CardBody
 } from 'reactstrap';
+import {
+  updatePrescriptionStatus,
+} from "../../actions/pharmacy";
 import MatButton from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import SaveIcon from '@material-ui/icons/Save'
@@ -70,9 +73,31 @@ const ModalSample = (props) => {
     const classes = useStyles();
     console.log(props);
     const formData = props.formData ? props.formData : {}
-    const drugUnits = {
+    const [formValues, setFormValues] = useState({})
 
+    const handleInputChange = (e) => {
+        setFormValues ({ ...formValues, [e.target.name]: e.target.value });
+
+        console.log(formValues)
     }
+
+    const handleDispense = (e) => {
+        e.preventDefault()
+        const date_dispensed = moment(formValues.dateDispensed).format(
+          "DD-MM-YYYY"
+        );
+        formData.data.brand_name_dispensed = formValues.brandName
+        formData.data.quantity_dispensed = formValues.qtyDispensed
+        formData.data.prescription_status = 1
+        formData.data.date_dispensed = date_dispensed
+        const data = { ...formData };
+        props.updatePrescriptionStatus(formData.id, data);
+    
+        toggle()
+      };
+    
+
+
   return (
     <div>
       <Card>
@@ -86,7 +111,7 @@ const ModalSample = (props) => {
             // contentClassName="custom-modal-style"
           >
             <ModalHeader toggle={toggle} close={closeBtn}>
-              Dispense  <b>{formData.data.generic_name}</b>
+              Dispense <b>{formData.data.generic_name}</b>
             </ModalHeader>
             <ModalBody>
               {/* <Card >
@@ -115,80 +140,102 @@ const ModalSample = (props) => {
                   </span>
                 </div>
               </Row>
-              <Row>
-                <Col md={6}>
-                  <FormGroup>
-                    <Label for="maritalStatus">Date Collected</Label>
+              <Form onSubmit={handleDispense}>
+                <Row>
+                  <Col md={6}>
+                    <FormGroup>
+                      <Label for="maritalStatus">Date Collected</Label>
 
-                    <DateTimePicker
-                      time={false}
-                      name="date_sample_collected"
-                      id="date_sample_collected"
-                      defaultValue={new Date()}
-                      max={new Date()}
-                      required
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col md={6}>
-                  <FormGroup>
-                    <Label for="exampleNumber">Drug Name (Brand name)</Label>
-                    <Input
-                      type="text"
-                      name="dispensed"
-                      id="drugDispensed"
-                      placeholder="brand name"
-                    />
-                  </FormGroup>
-                </Col>
-                <Col md={2}>
-                  <FormGroup>
-                    <Label for="exampleNumber">Quantity</Label>
-                    <Input type="number" name="number" id="exampleNumber" />
-                  </FormGroup>
-                </Col>
-                <Col md={4}>
-                  <FormGroup>
-                    <Label for="exampleSelect">Unit</Label>
-                    <Input type="select" name="select" id="exampleSelect">
-                      <option>Packs</option>
-                      <option>Tablets</option>
-                      <option>ml</option>
-                    </Input>
-                  </FormGroup>
-                </Col>
-                <Col md="12">
-                  <FormGroup>
-                    <Label for="maritalStatus">Note</Label>
-                    <Input type="textarea" name="comment" id="comment"></Input>
-                  </FormGroup>
-                </Col>
-              </Row>
-              <MatButton
-                type="submit"
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                startIcon={<SaveIcon />}
-                // disabled={loading}
-              >
-                Ok
-              </MatButton>
+                      <DateTimePicker
+                        time={false}
+                        name="dateDispensed"
+                        value={formValues.dateDispensed}
+                        onChange={dateValue => setFormValues({...formValues, dateDispensed: dateValue})}
+                        id="date_sample_collected"
+                        defaultValue={new Date()}
+                        max={new Date()}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={6}>
+                    <FormGroup>
+                      <Label for="exampleNumber">Drug Name (Brand name)</Label>
+                      <Input
+                        type="text"
+                        name="brandName"
+                        value={formValues.brandName}
+                        id="drugDispensed"
+                        placeholder="brand name"
+                        onChange={handleInputChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={2}>
+                    <FormGroup>
+                      <Label for="exampleNumber">Quantity</Label>
+                      <Input
+                        type="number"
+                        name="qtyDispensed"
+                        id="exampleNumber"
+                        onChange={handleInputChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={4}>
+                    <FormGroup>
+                      <Label for="exampleSelect">Unit</Label>
+                      <Input
+                        type="select"
+                        name="unitDispensed"
+                        id="exampleSelect"
+                        onChange={handleInputChange}
+                      >
+                        <option value="Packs">Packs</option>
+                        <option value="Tablets">Tablets</option>
+                        <option value="ml">ml</option>
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md="12">
+                    <FormGroup>
+                      <Label for="comment">Note</Label>
+                      <Input
+                        type="textarea"
+                        name="comment"
+                        id="comment"
+                        onChange={handleInputChange}
+                      ></Input>
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <MatButton
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  startIcon={<SaveIcon />}
+                  // disabled={loading}
+                >
+                  Ok
+                </MatButton>
 
-              <MatButton
-                variant="contained"
-                color="default"
-                onClick={toggle}
-                className={classes.button}
-                startIcon={<CancelIcon />}
-              >
-                Cancel
-              </MatButton>
-              {/* </CardBody>
+                <MatButton
+                  variant="contained"
+                  color="default"
+                  onClick={toggle}
+                  className={classes.button}
+                  startIcon={<CancelIcon />}
+                >
+                  Cancel
+                </MatButton>
+                {/* </CardBody>
           </Card> */}
+              </Form>
             </ModalBody>
+
             {/* <ModalFooter></ModalFooter> */}
           </Modal>
         </CardBody>
@@ -197,4 +244,5 @@ const ModalSample = (props) => {
   );
 }
 
-export default ModalSample;
+
+export default connect(null, {updatePrescriptionStatus})(ModalSample);
