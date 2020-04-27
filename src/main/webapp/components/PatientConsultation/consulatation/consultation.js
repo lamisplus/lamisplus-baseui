@@ -32,13 +32,25 @@ function ConsultationPage(props) {
 
   const Saveconsult = e => {
     e.preventDefault()
+<<<<<<< HEAD:src/main/webapp/components/PatientConsultation/consulatation/consultation.jsx
     const data2 = [{
+=======
+    if(showLoading){
+      return;
+    }
+   
+    const formData = [{
+>>>>>>> 36bbb6fefd711dfa5e1f81f737b196d4b6a31daa:src/main/webapp/components/PatientConsultation/consulatation/consultation.js
       allergies: newAllergy,
       presentConsultation: consult.present_consultation,
       consultationNotes: consult.consultation_notes
     }]
     const data = {
+<<<<<<< HEAD:src/main/webapp/components/PatientConsultation/consulatation/consultation.jsx
       data: data2,
+=======
+      data: formData,
+>>>>>>> 36bbb6fefd711dfa5e1f81f737b196d4b6a31daa:src/main/webapp/components/PatientConsultation/consulatation/consultation.js
       patientId: props.patientId,
       visitId: props.visitId,
       formCode: 'd157d4e2-4031-499d-b32b-7562208a10cf',
@@ -54,12 +66,14 @@ function ConsultationPage(props) {
       setShowLoading(false)
       setShowSuccessMsg(true)
       setSuccessMsg("Consultation saved successfully!")
+      window.scrollTo(0, 0);
     }
     const onError = errstatus => {
       const msg = !(errstatus && errstatus.data && errstatus.data.apierror && errstatus.data.apierror.message) ? 'Something went wrong' : errstatus.data.apierror.message
       setErrorMsg(msg)
       setShowErrorMsg(true)
       setShowLoading(false)
+      window.scrollTo(0, 0);
     }
     props.createConsultation(data, onSuccess, onError)
 

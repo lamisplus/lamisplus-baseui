@@ -109,7 +109,8 @@ const ModalSampleResult = (props) => {
                                           date_result_reported: date_result_reported,
                                           date_sample_collected: date_sample_collected,
                                           lab_test_order_status: lab_test_order_status,
-                                          date_result_reported:new Date()
+                                          date_result_reported:new Date(),
+                                          date_asseyed:new Date()
                                     })
  
           
@@ -148,7 +149,7 @@ const ModalSampleResult = (props) => {
       toast.warn("Processing Sample ", { autoClose: 100, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
       samples['lab_test_order_status'] = 5;
-      samples['date_sample_collected'] = date_sample_collected;
+  
       samples['user_id'] = user_id
       samples['description'] = description
       samples['patient_id'] =patient_id
@@ -186,7 +187,7 @@ const ModalSampleResult = (props) => {
       <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
         
       <Form onSubmit={saveSample}>
-        <ModalHeader toggle={props.togglestatus}>Enter Sample Result</ModalHeader>
+        <ModalHeader toggle={props.togglestatus}>Result Reporting</ModalHeader>
         <ModalBody>
         <Card>
           <CardBody>
@@ -202,25 +203,17 @@ const ModalSampleResult = (props) => {
                   </Col>
                  
                   <Col xs="4">
-                    Date Asseyed
+                    Date Assayed
                     <br/>
-                    <p style={textstyle}>{date_sample_collected}<small className="text-muted">By Evans</small></p> 
-                    
+                    <DateTimePicker time={false} name="date_asseyed"  id="date_asseyed"  
+                      defaultValue={new Date()} max={new Date()}
+                      value={samples.date_asseyed}
+                      onChange={value1 =>
+                        setSamples({ ...samples, date_asseyed: value1 })
+                      }
+                    /> 
                     </Col>
-                  
-                  <Col xs="4">
-                    Unit
-                    <br/>
-                    <p style={textstyle}>{unit_measurement}</p>
-                    
-                    </Col>
-                  <Col xs="4">
-                    Total Sample Type 
-                    <br/>
-                    <p style={textstyle}>{sample_type!==null?sample_type.length +"Sample " : "null "}<small className="text-muted">  By Evans</small></p>
-                  </Col>
-                  <br/>
-                  <Col xs="4">
+                    <Col xs="4">
                     Date Of Result
                     <br/>
                     <DateTimePicker time={false} name="date_result_reported"  id="date_result_reported"  
@@ -231,8 +224,15 @@ const ModalSampleResult = (props) => {
                       }
                     />            
                     </Col>
-                    <Col xs="8">
+                  
+                  <Col xs="4">
+                    </Col>
+                  
+                    
+                    <Col xs="4">
+                    
                     <FormGroup>
+                    <br/>
                           <Label for="examplePassword">Enter Result  </Label>
                           <Input
                             type='text'
@@ -245,6 +245,14 @@ const ModalSampleResult = (props) => {
                         </Input>
                       </FormGroup>
                       </Col>
+                    <Col xs="4">
+                    <br/>
+                    <FormGroup>
+                      Unit
+                      
+                      <p style={textstyle}>{unit_measurement}</p>   
+                      </FormGroup>                 
+                    </Col>
              
             </Row>
             <br/>
