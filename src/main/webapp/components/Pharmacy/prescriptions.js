@@ -191,7 +191,6 @@ const Prescriptions = (props) => {
                                 </tbody>
                               ))}
                             </Table>
-
                             <br />
                           </Form>
                         </Card>
