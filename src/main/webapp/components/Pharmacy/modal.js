@@ -1,11 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import {  Modal, ModalHeader, ModalBody,
+import {  Modal, ModalHeader, ModalBody, ModalFooter, Button,
 Form,
 Row,
 Col,Input,
 FormGroup,
 Label,Card, CardBody
 } from 'reactstrap';
+import {
+  updatePrescriptionStatus,
+} from "../../actions/pharmacy";
 import MatButton from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import SaveIcon from '@material-ui/icons/Save'
@@ -23,7 +26,7 @@ import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
 import { Spinner } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { Alert } from 'reactstrap';
+import './modal.css';
 
 Moment.locale('en');
 momentLocalizer();
@@ -63,180 +66,177 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const ModalSample = (props) => {
-  const classes = useStyles()
-  const [newdata, setNewdata] = useState({formdata});
-  const [loading, setLoading] = useState(false)
-/* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
-    console.log(props)
-  const formdata = useSelector(state => state.laboratory.formdata);
-  const dispatch = useDispatch();
+    const { buttonLabel, className } = props;
+    const toggle = props.toggle
+    const modal = props.isOpen
+    const closeBtn = props.close
+    const classes = useStyles();
+    console.log(props);
+    const formData = props.formData ? props.formData : {}
+    const [formValues, setFormValues] = useState({})
 
+    const handleInputChange = (e) => {
+        setFormValues ({ ...formValues, [e.target.name]: e.target.value });
 
-  useEffect(() => {
-  
-
-  }, []);
-
- 
-          
-        const [optionsample, setOptionsample] = useState([]);
-        const [samples, setSamples] = useState({})
-       const handleInputChangeSample = e => {
-        const { name, value } = e.target
-        const fieldValue = { [name]: value }
-        setSamples({
-            ...samples,
-            ...fieldValue
-        })
-
+        console.log(formValues)
     }
-    const saveSample = e => {
-      e.preventDefault()
-      const onSuccess = () => {
-        setLoading(false);
-        // props.history.push("/collect-sample")        
-      }
-      const onError = () => {
-        setLoading(false);        
-      }
 
-    }
+    const handleDispense = (e) => {
+        e.preventDefault()
+        const date_dispensed = moment(formValues.dateDispensed).format(
+          "DD-MM-YYYY"
+        );
+        formData.data.brand_name_dispensed = formValues.brandName
+        formData.data.quantity_dispensed = formValues.qtyDispensed
+        formData.data.prescription_status = 1
+        formData.data.date_dispensed = date_dispensed
+        const data = { ...formData };
+        props.updatePrescriptionStatus(formData.id, data);
+    
+        toggle()
+      };
+    
+
+
   return (
     <div>
       <Card>
         <CardBody>
           <ToastContainer autoClose={3000} hideProgressBar />
           <Modal
-            isOpen={props.modalstatus}
-            toggle={props.togglestatus}
-            className={props.className}
+            isOpen={modal}
+            toggle={toggle}
+            className={className}
             size="lg"
+            // contentClassName="custom-modal-style"
           >
-            <Form onSubmit={saveSample}>
-              <ModalHeader toggle={props.togglestatus}>
-                Dispense Drugs
-              </ModalHeader>
-              <ModalBody>
-                <Card>
-                  <CardBody>
-                    <Row>
-                      <Col md={12}>
-                        <Alert
-                          color="dark"
-                          style={{
-                            backgroundColor: "#9F9FA5",
-                            color: "#000",
-                            fontWeight: "bolder",
-                          }}
-                        >
-                          <p style={{ marginTop: ".7rem" }}>
-                            Drug Prescribed:{" "}
-                            <span style={{ fontWeight: "bolder" }}>
-                              Paracetamol
-                            </span>
-                            &nbsp;&nbsp;&nbsp; Quantity Prescribed :
-                            <span style={{ fontWeight: "bolder" }}>{20}</span>
-                            &nbsp;&nbsp;&nbsp; Stock Balance :
-                            <span style={{ fontWeight: "bolder" }}>{500}</span>
-                          </p>
-                        </Alert>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup>
-                          <Label for="maritalStatus">Date Collected</Label>
+            <ModalHeader toggle={toggle} close={closeBtn}>
+              Dispense <b>{formData.data.generic_name}</b>
+            </ModalHeader>
+            <ModalBody>
+              {/* <Card >
+        <CardBody> */}
 
-                          <DateTimePicker
-                            time={false}
-                            name="date_sample_collected"
-                            id="date_sample_collected"
-                            value={samples.date_sample_collected}
-                            onChange={(value1) =>
-                              setSamples({
-                                ...samples,
-                                date_sample_collected: value1,
-                              })
-                            }
-                            defaultValue={new Date()}
-                            max={new Date()}
-                            required
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup>
-                          <Label for="maritalStatus">Sample Type</Label>
-                          <Autocomplete
-                            multiple
-                            id="sample_type"
-                            size="small"
-                            options={optionsample}
-                            getOptionLabel={(option) => option.title}
-                            onChange={(e, i) =>
-                              setSamples({ ...samples, sample_type: i })
-                            }
-                            renderTags={(value, getTagProps) =>
-                              value.map((option, index) => (
-                                <Chip
-                                  label={option.title}
-                                  {...getTagProps({ index })}
-                                  disabled={index === 0}
-                                />
-                              ))
-                            }
-                            style={{ width: "auto", marginTop: "-1rem" }}
-                            s
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                variant="outlined"
-                                margin="normal"
-                              />
-                            )}
-                          />
-                          {/* <FixedTags onChange={handleInputChangeSample} value={samples.sample_type} /> */}
-                        </FormGroup>
-                      </Col>
+              <Row>
+                <div
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#9F9FA5",
+                    padding: "1rem 1rem",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  {/* &nbsp;&nbsp; Drug Prescribed:{" "}
+                  <span>
+                    <b>{formData.data.generic_name}</b>
+                  </span> */}
+                  &nbsp;&nbsp; Quantity Prescribed:{" "}
+                  <span>
+                    <b>2 packs</b>
+                  </span>
+                  &nbsp;&nbsp; Stock Balance:{" "}
+                  <span style={{ color: "#0aad77" }}>
+                    <b>400 packs</b>
+                  </span>
+                </div>
+              </Row>
+              <Form onSubmit={handleDispense}>
+                <Row>
+                  <Col md={6}>
+                    <FormGroup>
+                      <Label for="maritalStatus">Date Collected</Label>
 
-                      <Col md="12">
-                        <FormGroup>
-                          <Label for="maritalStatus">Note</Label>
-                          <Input
-                            type="textarea"
-                            name="comment"
-                            id="comment"
-                            onChange={handleInputChangeSample}
-                            value={samples.comment}
-                          ></Input>
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <br />
-                    {loading ? <Spinner /> : ""}
-                    <br />
-                    <MatButton
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                      startIcon={<SaveIcon />}
-                      disabled={loading}
-                    >
-                      Ok
-                    </MatButton>
+                      <DateTimePicker
+                        time={false}
+                        name="dateDispensed"
+                        value={formValues.dateDispensed}
+                        onChange={dateValue => setFormValues({...formValues, dateDispensed: dateValue})}
+                        id="date_sample_collected"
+                        defaultValue={new Date()}
+                        max={new Date()}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={6}>
+                    <FormGroup>
+                      <Label for="exampleNumber">Drug Name (Brand name)</Label>
+                      <Input
+                        type="text"
+                        name="brandName"
+                        value={formValues.brandName}
+                        id="drugDispensed"
+                        placeholder="brand name"
+                        onChange={handleInputChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={2}>
+                    <FormGroup>
+                      <Label for="exampleNumber">Quantity</Label>
+                      <Input
+                        type="number"
+                        name="qtyDispensed"
+                        id="exampleNumber"
+                        onChange={handleInputChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={4}>
+                    <FormGroup>
+                      <Label for="exampleSelect">Unit</Label>
+                      <Input
+                        type="select"
+                        name="unitDispensed"
+                        id="exampleSelect"
+                        onChange={handleInputChange}
+                      >
+                        <option value="Packs">Packs</option>
+                        <option value="Tablets">Tablets</option>
+                        <option value="ml">ml</option>
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md="12">
+                    <FormGroup>
+                      <Label for="comment">Note</Label>
+                      <Input
+                        type="textarea"
+                        name="comment"
+                        id="comment"
+                        onChange={handleInputChange}
+                      ></Input>
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <MatButton
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  startIcon={<SaveIcon />}
+                  // disabled={loading}
+                >
+                  Ok
+                </MatButton>
 
-                    <MatButton
-                      variant="contained"
-                      color="default"
-                      onClick={props.togglestatus}
-                      className={classes.button}
-                      startIcon={<CancelIcon />}
-                    >
-                      Cancel
-                    </MatButton>
-                  </CardBody>
-                </Card>
-              </ModalBody>
-            </Form>
+                <MatButton
+                  variant="contained"
+                  color="default"
+                  onClick={toggle}
+                  className={classes.button}
+                  startIcon={<CancelIcon />}
+                >
+                  Cancel
+                </MatButton>
+                {/* </CardBody>
+          </Card> */}
+              </Form>
+            </ModalBody>
+
+            {/* <ModalFooter></ModalFooter> */}
           </Modal>
         </CardBody>
       </Card>
@@ -244,4 +244,5 @@ const ModalSample = (props) => {
   );
 }
 
-export default ModalSample;
+
+export default connect(null, {updatePrescriptionStatus})(ModalSample);

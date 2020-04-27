@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 const PatientSearch = (props) => {
   const prescriptions = useSelector(state => state.pharmacy.allPrescriptions)
+  console.log(prescriptions)
  
   return (
     <div>
