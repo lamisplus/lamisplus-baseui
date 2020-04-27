@@ -152,12 +152,10 @@ const ViewModal = (props) => {
                   </p>
                 </Col>
               </Row>
-            </ModalBody>
-            <ModalFooter>
               <Button color="secondary" onClick={toggle}>
                 Close
               </Button>
-            </ModalFooter>
+            </ModalBody>
           </Modal>
           ;
         </CardBody>

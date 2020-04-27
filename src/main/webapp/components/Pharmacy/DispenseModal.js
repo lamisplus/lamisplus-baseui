@@ -145,7 +145,6 @@ const DispenseModal = (props) => {
                   <Col md={6}>
                     <FormGroup>
                       <Label for="maritalStatus">Date Dispensed</Label>
-
                       <DateTimePicker
                         time={false}
                         name="dateDispensed"
