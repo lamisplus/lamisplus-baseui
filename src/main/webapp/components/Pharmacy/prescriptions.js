@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Fragment} from "react";
 import Page from "components/Page";
-import { MdSave } from "react-icons/md";
 import { TiArrowBack } from "react-icons/ti";
 import MatButton from '@material-ui/core/Button';
 import { Table } from 'reactstrap'
@@ -8,16 +7,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ToastContainer } from "react-toastify";
 import momentLocalizer from "react-widgets-moment";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import { FaPlusSquare } from "react-icons/fa";
 import { TiArrowForward } from "react-icons/ti";
 import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
 import Moment from "moment";
-import { Spinner } from "reactstrap";
 import PatientDetailCard from "./PatientDetailCard";
 import { Link } from "react-router-dom";
-import { Badge } from "reactstrap";
-import { DateTimePicker } from "react-widgets";
 import DispenseModal from './DispenseModal'
 import ViewModal from './ViewModal'
 
@@ -189,7 +183,7 @@ const Prescriptions = (props) => {
                                   <th>{form.data.date_prescribed}</th>
                                   <th>{form.data.date_dispensed}</th>
                                   <th>
-                                    <Dropdown
+                                    {/* <Dropdown
                                     color="primary"
                                       isOpen={dropdownOpen}
                                       toggle={toggleAction}
@@ -216,8 +210,8 @@ const Prescriptions = (props) => {
                                           &nbsp; View
                                         </DropdownItem>
                                       </DropdownMenu>
-                                    </Dropdown>
-                                    {/* {form.data.prescription_status == 0 ? (
+                                    </Dropdown> */}
+                                    {form.data.prescription_status == 0 ? (
                                       <Fragment>
                                         <i
                                           class="fa fa-medkit"
@@ -236,7 +230,7 @@ const Prescriptions = (props) => {
                                         onClick={() => toggle1(form)}
                                         style={{ cursor: "pointer" }}
                                       />
-                                    )} */}
+                                    )}
                                   </th>
                                 </tr>
                               </tbody>
