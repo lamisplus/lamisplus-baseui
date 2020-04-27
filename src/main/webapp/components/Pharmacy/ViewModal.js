@@ -152,12 +152,16 @@ const ViewModal = (props) => {
                   </p>
                 </Col>
               </Row>
+              <MatButton
+                variant="contained"
+                color="default"
+                onClick={toggle}
+                className={classes.button}
+                startIcon={<CancelIcon />}
+              >
+                Cancel
+                </MatButton>
             </ModalBody>
-            <ModalFooter>
-              <Button color="secondary" onClick={toggle}>
-                Close
-              </Button>
-            </ModalFooter>
           </Modal>
           ;
         </CardBody>
