@@ -1,7 +1,7 @@
 
 export const Age = (date)=>{
   if(!date){
-    return '';
+    return ;
   }
     var today = new Date();
     var dateParts = date.split("-");

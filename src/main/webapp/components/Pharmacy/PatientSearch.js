@@ -9,17 +9,18 @@ import IconButton from '@material-ui/core/IconButton';
 
 const PatientSearch = (props) => {
   const prescriptions = useSelector(state => state.pharmacy.allPrescriptions)
+  console.log(prescriptions)
  
   return (
     <div>
       <MaterialTable
         title="Drug Prescriptions"
         columns={[
+          { title: "Patient ID", field: "Id" },
           {
             title: "Patient Name",
             field: "name",
           },
-          { title: "Patient ID", field: "Id" },
           { title: "Prescription Date", field: "date", type: "date" },
           {
             title: "Total Prescribed",
@@ -38,15 +39,15 @@ const PatientSearch = (props) => {
           },
         ]}
         data={prescriptions.map((prescription) => ({
-          name: prescription.firstName,
           Id: prescription.patientId,
+          name: prescription.firstName,
           date: prescription.dateEncounter,
           count: prescription.formDataObj.length,
           actions: (
             <Link
               to={{
-                pathname: "/patientPrescriptions",
-                forms: prescription.formDataObj,
+                pathname: "/prescriptions",
+                form: prescription,
                 patientName:
                   prescription.firstName + " " + prescription.lastName,
                 encounterId: prescription.encounterId,
@@ -54,10 +55,10 @@ const PatientSearch = (props) => {
               style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}
             >
               <Tooltip title="View Prescription">
-                    <IconButton aria-label="View Prescription" >
-                      <VisibilityIcon color="primary"/>
-                  </IconButton>
-                  </Tooltip>
+                <IconButton aria-label="View Prescription">
+                  <VisibilityIcon color="primary" />
+                </IconButton>
+              </Tooltip>
             </Link>
           ),
         }))}
@@ -66,18 +67,17 @@ const PatientSearch = (props) => {
           headerStyle: {
             backgroundColor: "#9F9FA5",
             color: "#000",
-            margin: "auto"
+            margin: "auto",
           },
           filtering: true,
-         
+
           searchFieldStyle: {
-            width : '300%',
-            margingLeft: '250px',
+            width: "300%",
+            margingLeft: "250px",
           },
-      
+
           exportButton: true,
-          searchFieldAlignment: 'left',
-          
+          searchFieldAlignment: "left",
         }}
       />
     </div>

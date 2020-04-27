@@ -72,7 +72,7 @@ class Sidebar extends React.Component {
                 alt=""
               />
               <span className="text-white">
-                LamisPlus 
+                LAMISPlus 
               </span>
             </SourceLink>
           </Navbar>

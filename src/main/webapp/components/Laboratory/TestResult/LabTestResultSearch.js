@@ -25,7 +25,7 @@ const PatientSearch = (props) => {
   return (
     <div>
       <MaterialTable
-        title="Laboratory Test Orders"
+        title="Laboratory Test Results"
         columns={[
           { title: "Patient ID", field: "Id" },
           {
@@ -39,7 +39,7 @@ const PatientSearch = (props) => {
             filtering: false
           },
           {
-            title: "Sample Collected ",
+            title: "Total Result ",
             field: "samplecount",
             filtering: false
           },
