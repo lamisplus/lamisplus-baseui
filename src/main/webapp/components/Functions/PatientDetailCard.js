@@ -9,32 +9,35 @@ import { Col, Row, } from 'reactstrap'
 
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-      },
-      
-}));
+   
+root2: {
 
+   width: '100%',
+   backgroundColor: theme.palette.background.paper,
+   fontSize: 13,
+   spacing: value => value ** 1
+   },
+   }));
 
 
  function PatientDetailCard (props){
     const classes = useStyles();
    
 return (
-    <div className={classes.root}>
+    <div className={classes.root2}>
         <ExpansionPanel >
                 <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1c-content"
                 id="panel1c-header"
                 >
-               <  Row className={classes.root}>
+               <  Row style={{marging:"0px" }}>
                   <Col md={4}>
-                     <span> Patient ID : <b>{props.patient.hospitalNumber}</b></span>
+                     <span style={{marging:"0px" }}> Patient ID : <b>{props.patient.hospitalNumber}</b></span>
                   </Col>
                   
                   <Col md={4}>
-                     <span>Date Of Birth : <b>{props.patient.dob}</b></span>
+                     <span style={{marging:"0px" }}>Date Of Birth : <b>{props.patient.dob}</b></span>
                   </Col>
                   <Col md={4}>
                      <span> Age : <b>{Age(props.patient.dob)}</b></span>

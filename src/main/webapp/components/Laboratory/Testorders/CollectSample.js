@@ -8,8 +8,6 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import {FaRegEye} from 'react-icons/fa';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
 import {FaPlusSquare} from 'react-icons/fa';
 import {TiArrowForward} from 'react-icons/ti'
 import 'react-widgets/dist/css/react-widgets.css'
@@ -32,6 +30,7 @@ import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import { Spinner } from 'reactstrap';
 import { Table } from 'reactstrap';
 import { Badge } from 'reactstrap';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 
 Moment.locale('en')
@@ -50,7 +49,8 @@ const useStyles = makeStyles({
  function CollectSample  (props){
    console.log(props)
   const encounterresult = props.location.state.formdata.row ;
-
+  const [dropdownOpen, setOpen] = useState(false);
+  const toggle = () => setOpen(!dropdownOpen);
   const classes = useStyles()
   const testorder = useSelector(state => state.laboratory.testorder);
   const dispatch = useDispatch();
@@ -146,15 +146,15 @@ const getGroup = e => {
 //This is function to check for the status of each collection to display on the tablist below 
 const samplestatus = e =>{
   if(e===1){
-    return <p><Badge  color="light">Sample Collected</Badge></p>
+    return <p><Badge  color="primary">Sample Collected</Badge></p>
   }else if(e===2){
-    return <p><Badge  color="light">Sample Transfered</Badge></p>
+    return <p><Badge  color="primary">Sample Transfered</Badge></p>
   }else if(e==="3"){
-    return <p><Badge  color="light">Sample Verified</Badge></p>
+    return <p><Badge  color="primary">Sample Verified</Badge></p>
   }else if(e==="4"){
-    return <p><Badge  color="light">Sample Rejected</Badge></p>
+    return <p><Badge  color="primary">Sample Rejected</Badge></p>
   }else if(e===5){
-    return <p><Badge  color="light">Result Available</Badge></p>
+    return <p><Badge  color="primary">Result Available</Badge></p>
   }else{
     return <p>{"null"}</p>
   }
@@ -165,7 +165,7 @@ const samples = e =>{
   if(e==="" || e===null){
     return <p>---</p>
   }else{
-    return <p><Badge color="info" 
+    return <p><Badge color="primary" 
       >{e.length} Sample</Badge></p>
   }
 }
@@ -174,7 +174,7 @@ const sampleAction = ( e) =>{
 
     return (
             <div>
-              <Tooltip title="Collect Sample">
+              {/* <Tooltip title="Collect Sample">
                   <IconButton aria-label="Collect Sample" onClick={() =>
                     handlesample(e)}>
                   <FaPlusSquare size="15" />
@@ -195,8 +195,30 @@ const sampleAction = ( e) =>{
             </Tooltip>
             :
             ""
-           }
-              </div>
+           } */}
+           <ButtonDropdown isOpen={dropdownOpen} toggle={toggle}>
+            <DropdownToggle caret size="sm" color="info" >
+              Action
+            </DropdownToggle>
+            <DropdownMenu>
+
+              <DropdownItem onClick={() =>
+                    handlesample(e)}>                     
+                      <FaPlusSquare size="15" style={{color: '#3F51B5'}}/>{" "}Collect Sample
+              </DropdownItem>
+            
+              <DropdownItem onClick={() =>
+                    handlesample(e)}>
+                      <TiArrowForward size="15" style={{color: '#3F51B5'}}/>{" "}Transfer Sample
+              </DropdownItem>
+             
+              <DropdownItem onClick={() =>
+                  viewSampleTypes(e.data.sample_type)}>
+                      <FaRegEye size="15" style={{color: '#3F51B5'}}/>{" "}View Sample Type
+              </DropdownItem>
+            </DropdownMenu>
+          </ButtonDropdown>
+        </div>
         )
 
 }
@@ -265,7 +287,7 @@ const sampleAction = ( e) =>{
                             <th>Sample Type</th>
                             <th>Date Requested</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th></th>
                           </tr>
                         </thead>
                         <tbody>

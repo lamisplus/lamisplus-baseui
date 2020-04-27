@@ -158,7 +158,7 @@ const ModalSample = (props) => {
       data['data'] = samples;
       data['encounterId'] = encounterId;
       e.preventDefault()
-      const onSuccess = () => {
+     const onSuccess = () => {
         setLoading(false);
         
       //props.history.push("/collect-sample")        
@@ -168,7 +168,6 @@ const ModalSample = (props) => {
       }
       props.createCollectedSample(data, lab_id,onSuccess,onError)
     }
-  console.log(formdata)
   return (
       
       <div >
@@ -217,12 +216,13 @@ const ModalSample = (props) => {
           <FormGroup>
           <Label for='maritalStatus'>Sample Type</Label>
               <Autocomplete
-                multiple
+                multiple="true"
                 id="sample_type"
                 size="small"
                 options={optionsample}
                 getOptionLabel={(option) => option.title}
-                onChange={(e, i) => setSamples({ ...samples, sample_type: i })}
+                onChange={(e, i) =>{ 
+                  setSamples({ ...samples, sample_type: i })}}
                 renderTags={(value, getTagProps) =>
                   value.map((option, index) => (
                     <Chip label={option.title} {...getTagProps({ index })} disabled={index === 0} />
