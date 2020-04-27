@@ -274,10 +274,10 @@ function ServiceFormPage (props) {
     )
   }, [efilterText, eresetPaginationToggle])
 
-  const handleProgramChange = (newValue: any, actionMeta: any) => {
+  const handleProgramChange = (newValue, actionMeta) => {
       setFilteredForms(serviceForms.filter(x => x.programCode === newValue.value))
    };
-   const handleChange = (newValue: any, actionMeta: any) => {
+   const handleChange = (newValue, actionMeta) => {
     setCurrentForm({...newValue, type:'NEW'});
    };
 

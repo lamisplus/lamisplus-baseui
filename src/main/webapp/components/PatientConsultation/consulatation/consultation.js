@@ -37,13 +37,13 @@ function ConsultationPage (props) {
       return;
     }
    
-    const formData = {
+    const formData = [{
       allergies: newAllergy,
       presentConsultation: consult.present_consultation,
       consultationNotes: consult.consultation_notes
-    }
+    }]
     const data = {
-      formData: formData,
+      data: formData,
       patientId: props.patientId,
       visitId: props.visitId,
       formCode: CODES.CONSULTATION_FORM,
@@ -59,12 +59,14 @@ function ConsultationPage (props) {
       setShowLoading(false)
       setShowSuccessMsg(true)
       setSuccessMsg("Consultation saved successfully!")
+      window.scrollTo(0, 0);
     }
     const onError = errstatus => {
       const msg = !(errstatus && errstatus.data && errstatus.data.apierror && errstatus.data.apierror.message) ? 'Something went wrong' : errstatus.data.apierror.message
       setErrorMsg(msg)
       setShowErrorMsg(true)
       setShowLoading(false)
+      window.scrollTo(0, 0);
     }
     props.createConsultation(data, onSuccess, onError)
 
