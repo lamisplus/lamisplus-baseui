@@ -6,35 +6,38 @@ import { makeStyles } from '@material-ui/core/styles';
 import   { Age } from 'components/Functions/GetAge';
 import {connect} from 'react-redux';
 import { Col, Row, } from 'reactstrap'
-
+import { spacing } from '@material-ui/system';
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-      },
-      
-}));
+   
+root2: {
 
+   width: '100%',
+   backgroundColor: theme.palette.background.paper,
+   fontSize: 13,
+   spacing: value => value ** 1
+   },
+   }));
 
 
  function PatientDetailCard (props){
     const classes = useStyles();
    
 return (
-    <div className={classes.root}>
+    <div className={classes.root2}>
         <ExpansionPanel >
                 <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1c-content"
                 id="panel1c-header"
                 >
-               <  Row className={classes.root}>
+               <  Row my={1} py={1}>
                   <Col md={4}>
-                     <span> Patient ID : <b>{props.patient.hospitalNumber}</b></span>
+                     <span > Patient ID : <b>{props.patient.hospitalNumber}</b></span>
                   </Col>
                   
                   <Col md={4}>
-                     <span>Date Of Birth : <b>{props.patient.dob}</b></span>
+                     <span >Date Of Birth : <b>{props.patient.dob}</b></span>
                   </Col>
                   <Col md={4}>
                      <span> Age : <b>{Age(props.patient.dob)}</b></span>

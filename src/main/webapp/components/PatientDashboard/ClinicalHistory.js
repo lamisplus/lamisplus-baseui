@@ -10,7 +10,7 @@ import { Table } from 'reactstrap';
 import {FaPencilAlt, FaTrashAlt} from 'react-icons/fa';
 import PreviousTestOrder from '../PatientConsultation/TestOrder/TestOrderHistory'
 import PreviousMedication from '../PatientConsultation/Medication/PreviousMedication'
-
+import ViewVitalsSearch from 'components/Vitals/ViewVitalsSearch'
 import {connect} from 'react-redux';
 
 function TabPanel(props) {
@@ -71,12 +71,13 @@ function ClinicalHistory(props) {
             wrapped
             {...a11yProps('one')}
           />
+           {/* <Tab value="four" label="Vital Signs" {...a11yProps('four')} /> */}
           <Tab value="two" label="Pharmacy" {...a11yProps('two')} />
           <Tab value="three" label="Laboratory" {...a11yProps('three')} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index="one">
-            <Table striped>
+            {/* <Table striped>
             <thead>
                 <tr>
                 <th>#</th>
@@ -119,12 +120,16 @@ function ClinicalHistory(props) {
             </tbody>
             </Table>
       </TabPanel>
+      <TabPanel value={value} index="four"> */}
+      <ViewVitalsSearch  patientId={props.patient.patientId}   />  
+      </TabPanel>
       <TabPanel value={value} index="two">
       <PreviousMedication  patientId={props.patient.patientId}   />  
       </TabPanel>
       <TabPanel value={value} index="three">
       <PreviousTestOrder  patientId={props.patient.patientId}   />  
       </TabPanel>
+    
     </div>
   );
 }

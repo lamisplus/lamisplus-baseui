@@ -34,7 +34,10 @@ const PatientPage = props => {
                 className=" float-right mr-1"
                 startIcon={<FaUserPlus />}
               >
-                Add Patient
+                <span style={{textTransform: 'capitalize'}}>Add </span>
+                &nbsp;&nbsp;
+                <span style={{textTransform: 'lowercase'}}>Patient </span>
+                
               </Button>
             </Link>
             <br />

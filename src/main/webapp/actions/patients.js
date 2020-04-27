@@ -66,7 +66,7 @@ export const fetchById = (id, onSuccess, onError) => dispatch => {
 };
 
 
-export const create = data => dispatch => {
+export const create = (data,onSuccess, onError) => dispatch => {
   console.log(data);
   axios
     .post(`${baseUrl}patients/`, data)
@@ -76,14 +76,15 @@ export const create = data => dispatch => {
         type: ACTION_TYPES.PATIENTS_CREATE,
         payload: response.data
       });
-      console.log(response);
+      onSuccess()
       toast.success("Patient Register Save Successfully!");
     })
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
-        payload: error.response.data.apierror.message
+        payload: "Something went wrong"
       });
+      onError()
       if(error.response.data.apierror.message===null || error.response.data.apierror.message===""){
         toast.error("Something went wrong");
       }else{

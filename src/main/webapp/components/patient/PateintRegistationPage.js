@@ -3,7 +3,7 @@ import Page from "components/Page";
 import React, { useState, useEffect } from "react";
 import MatButton from "@material-ui/core/Button";
 import "./PatientRegistrationPage.css";
-import { Col, Form, FormGroup, Input, Label, Row, Alert, FormFeedback } from "reactstrap";
+import { Col, Form, FormGroup, Input, Label, Row, Alert, FormFeedback, FormText } from "reactstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -34,6 +34,7 @@ import { url } from "../../api";
 import { create } from "../../actions/patients";
 import { initialfieldState_patientRegistration } from "./InitialFieldState";
 import useForm from "../Functions/UseForm";
+import { Spinner } from 'reactstrap';
 
 //Dtate Picker package
 Moment.locale("en");
@@ -81,7 +82,7 @@ const PatientRegistration = props => {
   const apicountries = url + "countries";
   const apistate = url + "countries/";
 
-  const { values, setValues, handleInputChange } = useForm(
+  const { values, setValues, handleInputChange, resetForm } = useForm(
     initialfieldState_patientRegistration
   );
   /**
@@ -199,12 +200,6 @@ useEffect(() => {
     return m;
   };
 
-  // const handleDateChange = e => {
-  //   const age = findAge(e.target.value);
-  //   setValues({ ...values, dob: e.target.values });
-  //   console.log(age);
-  // };
-
   /**
    * Estimates the dob of an individual given
    */
@@ -308,6 +303,7 @@ useEffect(() => {
     const allRelatives = [...relatives];
     allRelatives.splice(index, 1);
     setRelatives(allRelatives);
+    
   };
 
   const handleAddRelative = e => {
@@ -330,19 +326,6 @@ useEffect(() => {
     setRelative({ ...relative, [e.target.name]: e.target.value });
   };
 
-  // const calculateAge = e => {
-  //   // ccnst calAge = moment().subtract(e.target.value, 'years');
-  //   const calculatedAge = moment()
-  //     .set({ month: 6, day: 15 })
-  //     .subtract(e.target.value, "year")
-  //     .format("DD/MM/YYYY");
-  //   console.log(calculatedAge);
-  //   setValues({ ...values, dateOfBirth: new Date(calculatedAge) });
-  // };
-  //
-
-  // setValues({...values, dateRegistration: newDatenow});
-  //The Submit Button Implemenatation
   const handleSubmit = e => {
     e.preventDefault();
    
@@ -352,9 +335,16 @@ useEffect(() => {
     values["dateRegistration"] = newDatenow;
     values["personRelativesDTO"] = relatives;
     values["dob"] = dateOfBirth;
-    //console.log(values);
     setSaving(true);
-    props.create(values);
+    const onSuccess = () => {
+      setSaving(false);
+      resetForm() 
+      removeRelative()
+    }
+    const onError = () => {
+      setSaving(false);        
+    }
+    props.create(values, onSuccess, onError);
     //toast.success("Registration Successful")
   
   };
@@ -365,9 +355,6 @@ useEffect(() => {
       <Alert color="primary">
         All Information with Asterisks(*) are compulsory
       </Alert>
-      {props.status === 201 &&
-          toast.success("Registration Successful")
-      }
       
       <Form onSubmit={handleSubmit}>
         {/* First  row form entry  for Demographics*/}
@@ -476,6 +463,7 @@ useEffect(() => {
                         onChange={handleInputChange}
                         required
                       >
+                        <option  value=""> </option>
                       {gender.map(({ label, value }) => (
                         <option key={value} value={value}>
                           {label}
@@ -494,6 +482,7 @@ useEffect(() => {
                         value={values.occupationId}
                         onChange={handleInputChange}
                       >
+                        <option  value=""> </option>
                         {occupation.map(({ label, value }) => (
                           <option key={value} value={value}>
                             {label}
@@ -511,6 +500,7 @@ useEffect(() => {
                         value={values.educationId}
                         onChange={handleInputChange}
                       >
+                        <option  value=""> </option>
                         {qualification.map(({ label, value }) => (
                             <option key={value} value={value}>
                               {label}
@@ -531,6 +521,7 @@ useEffect(() => {
                         value={values.maritalStatusId}
                         onChange={handleInputChange}
                       >
+                        <option  value=""> </option>
                         {maritalStatus.map(({ label, value }) => (
                             <option key={value} value={value}>
                               {label}
@@ -560,7 +551,9 @@ useEffect(() => {
                       <FormGroup>
                         <Label>Date OF Birth</Label>
                         <Input type="text" id="dob" disabled />
+                        <FormText ><span style={{color:"blue", fontWeight:"bolder"}}>Estimated Date of Birth </span></FormText>
                       </FormGroup>
+
                     )}
                   </Col>
                   <Col md={4}>
@@ -667,6 +660,7 @@ useEffect(() => {
                                 value={values.countryId}
                                 onChange={getStates}
                               >
+                                
                                 {countries.map(({ label, value }) => (
                                   <option key={value} value={value}>
                                     {label}
@@ -776,8 +770,12 @@ useEffect(() => {
                     className=" float-right mr-1"
                     startIcon={<FaPlusSquare />}
                     onClick={handleAddRelative}
+                    autoCapitalize = 'none'
                   >
-                    Add Relative
+                    
+                    <span style={{textTransform: 'capitalize'}}>Add </span>
+                    &nbsp;&nbsp;
+                    <span style={{textTransform: 'lowercase'}}>Relative </span>
                   </MatButton>
                 </Title>
                 <br />
@@ -792,6 +790,7 @@ useEffect(() => {
                         value={relative.relationshipTypeId}
                         onChange={onRelativeChange}
                       >
+                        <option  value=""> </option>
                         <option value="">
                           Select Relative Relationship Type
                         </option>
@@ -912,6 +911,8 @@ useEffect(() => {
                 <Row>
                   <Col md={12}></Col>
                 </Row>
+                {saving ? <Spinner /> : ""}
+                <br/>
                 <MatButton
                   type="submit"
                   variant="contained"
@@ -920,16 +921,20 @@ useEffect(() => {
                   startIcon={<SaveIcon />}
                   disabled={saving}
                 >
-                  {!saving ?'Save' : 'Saving'}
+
+                  {!saving ?
+                  <span style={{textTransform: 'capitalize'}}>Save</span>
+                   : <span style={{textTransform: 'capitalize'}}>Saving...</span>}
                   
                 </MatButton>
-
+               
                 <MatButton
                   variant="contained"
                   className={classes.button}
                   startIcon={<CancelIcon />}
+                  onClick={resetForm}
                 >
-                  Cancel
+                  <span style={{textTransform: 'capitalize'}}>Cancel</span>
                 </MatButton>
               </CardContent>
             </Card>

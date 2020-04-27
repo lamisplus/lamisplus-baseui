@@ -23,7 +23,8 @@ import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import { Spinner } from 'reactstrap';
 import { Table } from 'reactstrap';
 import { Badge } from 'reactstrap';
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 const useStyles = makeStyles({
   root: {
@@ -37,6 +38,8 @@ const useStyles = makeStyles({
 
  function CollectResult  (props){
   const classes = useStyles()
+  const [dropdownOpen, setOpen] = useState(false);
+  const toggle = () => setOpen(!dropdownOpen);
   const encounterresult = props.location.state.getpatientlists.row ;
   const testorder = useSelector(state => state.laboratory.testorder);
   const dispatch = useDispatch();
@@ -112,9 +115,7 @@ const samples = e =>{
   if(e==="" || e===null){
     return <p>null</p>
   }else{
-    return <p><Badge color="info" style={{ cursor:'pointer'}}
-      onClick={() =>
-      viewSampleTypes(e)}
+    return <p><Badge color="info" 
       >{e.length} Sample</Badge></p>
   }
 }
@@ -123,7 +124,7 @@ const sampleAction = (rowdata) =>{
 
   return (
           <div>
-            <Tooltip title="Enter Result">
+            {/* <Tooltip title="Enter Result">
                 <IconButton aria-label="Enter Result" onClick={() =>
                   handleresult(rowdata)}>
                 <FaPlusSquare size="15" />
@@ -138,7 +139,23 @@ const sampleAction = (rowdata) =>{
             </Tooltip>
             :
              ""   
-            }
+            } */}
+            <ButtonDropdown isOpen={dropdownOpen} toggle={toggle}>
+                  <DropdownToggle caret size="sm" color="info" >
+                    Action
+                  </DropdownToggle>
+                  <DropdownMenu>
+
+                    <DropdownItem onClick={() =>
+                        handleresult(rowdata)}>                     
+                            <FaPlusSquare size="15" style={{color: '#3F51B5'}}/>{" "}Enter Result
+                    </DropdownItem>
+                    <DropdownItem onClick={() =>
+                        viewSampleTypes(rowdata.data.sample_type)}>
+                            <FaRegEye size="15" style={{color: '#3F51B5'}}/>{" "}View Sample Type
+                    </DropdownItem>
+                  </DropdownMenu>
+            </ButtonDropdown>
             </div>
           )
 
@@ -207,7 +224,7 @@ const sampleAction = (rowdata) =>{
                             <th>Sample Type</th>
                             <th>Date Requested</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th></th>
                           </tr>
                         </thead>
                         <tbody>
@@ -217,7 +234,7 @@ const sampleAction = (rowdata) =>{
                             <th scope="row">{row.data.description===""?"Null ":row.data.description}</th>
                             <td>{samples(row.data.sample_type)}</td>
                             <td> {encounterresult.dateEncounter} </td>
-                        <td>{samplestatus(row.data.lab_test_order_status)} </td>
+                            <td>{samplestatus(row.data.lab_test_order_status)} </td>
                             <td>{sampleAction(row)}</td>
                           </tr>
                         ))

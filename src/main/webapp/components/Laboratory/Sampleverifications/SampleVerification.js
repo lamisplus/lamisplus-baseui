@@ -25,6 +25,7 @@ import { Spinner } from 'reactstrap';
 import { Table } from 'reactstrap';
 import { Badge } from 'reactstrap';
 import { makeStyles } from '@material-ui/core/styles'
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 const useStyles = makeStyles({
   root: {
@@ -37,8 +38,11 @@ const useStyles = makeStyles({
 
  function CollectVerification  (props){
   const classes = useStyles()
+  const [dropdownOpen, setOpen] = useState(false);
+  const toggle = () => setOpen(!dropdownOpen);
   const encounterresult = props.location.state.getpatientlists.row ;
   const testorder = useSelector(state => state.laboratory.testorder);
+
   const dispatch = useDispatch();
   const [loading, setLoading] = useState('')
   useEffect(() => {
@@ -119,9 +123,7 @@ const samples = e =>{
   if(e==="" || e===null){
     return <p>null</p>
   }else{
-    return <p><Badge color="info" style={{ cursor:'pointer'}}
-      onClick={() =>
-      viewSampleTypes(e)}
+    return <p><Badge color="info" 
       >{e.length} Sample</Badge></p>
   }
 }
@@ -129,7 +131,7 @@ const samples = e =>{
 const sampleAction = (e) =>{
   return (
           <div>
-            <Tooltip title="Verify Sample">                                              
+            {/* <Tooltip title="Verify Sample">                                              
                 <IconButton aria-label="Verify Sample" onClick={() =>
                   handlesample(e)}
                   >
@@ -145,7 +147,22 @@ const sampleAction = (e) =>{
             </Tooltip>
             :
             ""
-           }
+           } */}
+            <ButtonDropdown isOpen={dropdownOpen} toggle={toggle}>
+            <DropdownToggle caret size="sm" color="info" >
+              Action
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem onClick={() =>
+                  handlesample(e)}>                     
+                      <GoChecklist size="15" style={{color: '#3F51B5'}}/>{" "}Verify Sample
+              </DropdownItem>            
+              <DropdownItem onClick={() =>
+                  viewSampleTypes(e.data.sample_type)}>
+                      <FaRegEye size="15" style={{color: '#3F51B5'}}/>{" "}View Sample Type
+              </DropdownItem>
+            </DropdownMenu>
+          </ButtonDropdown>
             </div>
           )
 }
@@ -215,7 +232,7 @@ const sampleAction = (e) =>{
                             <th>Sample Type</th>
                             <th>Date Requested</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th></th>
                           </tr>
                         </thead>
                         <tbody>
