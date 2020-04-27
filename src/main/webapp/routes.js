@@ -68,7 +68,7 @@ const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split("/").pop()}`;
 };
 
-const Prescript = React.lazy(() => import("components/Pharmacy/Prescriptions"))
+const Prescription = React.lazy(() => import("components/Pharmacy/Prescriptions"))
 class Routes extends Component {
   render() {
     return (
@@ -105,7 +105,7 @@ class Routes extends Component {
               {/* Pharmacy Links */}
               <Route exact path="/pharmacy" component={PharmacyDashboard} />
               
-              <Route exact path="/prescriptions" component={Prescript}/>
+              <Route exact path="/prescriptions" component={Prescription}/>
               <Route exact path="/appointment" component={AppointmentPage} />
               <Route
                 exact
