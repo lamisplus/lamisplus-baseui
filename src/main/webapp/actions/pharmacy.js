@@ -1,6 +1,7 @@
 import axios from "axios";
 import { url } from "../api";
 import * as ACTION_TYPES from "./types";
+import {toast} from "react-toastify"
 
 /**
  * ===============================================================================
@@ -83,6 +84,7 @@ export const updatePrescriptionStatus = (formId, data) => (dispatch) => {
                type: ACTION_TYPES.UPDATE_PRESCRIPTION_STATUS,
                payload: response.data,
              });
+             toast.success("Drug was successful dispensed");
            })
            .catch((error) => {
              console.log("Pharmacy Error: ", error);
@@ -90,5 +92,6 @@ export const updatePrescriptionStatus = (formId, data) => (dispatch) => {
                type: ACTION_TYPES.PHARMACY_ERROR,
                payload: "Something went wrong",
              });
+             toast.success("Failed to dispense drug, please try again");
            });
        };
