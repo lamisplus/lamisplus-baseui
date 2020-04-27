@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import   { Age } from 'components/Functions/GetAge';
 import {connect} from 'react-redux';
 import { Col, Row, } from 'reactstrap'
-
+import { spacing } from '@material-ui/system';
 
 const useStyles = makeStyles(theme => ({
    
@@ -31,13 +31,13 @@ return (
                 aria-controls="panel1c-content"
                 id="panel1c-header"
                 >
-               <  Row style={{marging:"0px" }}>
+               <  Row my={1} py={1}>
                   <Col md={4}>
-                     <span style={{marging:"0px" }}> Patient ID : <b>{props.patient.hospitalNumber}</b></span>
+                     <span > Patient ID : <b>{props.patient.hospitalNumber}</b></span>
                   </Col>
                   
                   <Col md={4}>
-                     <span style={{marging:"0px" }}>Date Of Birth : <b>{props.patient.dob}</b></span>
+                     <span >Date Of Birth : <b>{props.patient.dob}</b></span>
                   </Col>
                   <Col md={4}>
                      <span> Age : <b>{Age(props.patient.dob)}</b></span>
