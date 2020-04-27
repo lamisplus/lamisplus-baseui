@@ -36,6 +36,10 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from "reactstrap";
 
 Moment.locale("en");
@@ -90,6 +94,9 @@ const Prescriptions = (props) => {
   const [modal, setModal] = useState(false);
   const [modal1, setModal1] = useState(false);
   const [drugDetails, setDrugDetails] = useState({})
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleAction = () => setDropdownOpen((prevState) => !prevState);
 
   const toggle = (form) => {
     setDrugDetails({ ...drugDetails, ...form });
@@ -152,55 +159,92 @@ const Prescriptions = (props) => {
                     <br />
                     <Row>
                       <Col>
-                          <Form onSubmit={saveColllectSample}>
-                            <Table
+                        <Form onSubmit={saveColllectSample}>
+                          <Table
+                            style={{
+                              fontWeight: "bolder",
+                              borderColor: "#000",
+                            }}
+                            striped
+                          >
+                            <thead
                               style={{
-                                fontWeight: "bolder",
-                                borderColor: "#000",
+                                backgroundColor: "#9F9FA5",
+                                color: "#000",
                               }}
-                              striped
                             >
-                              <thead
-                                style={{
-                                  backgroundColor: "#9F9FA5",
-                                  color: "#000",
-                                }}
-                              >
+                              <tr>
+                                <th>Name</th>
+                                <th>Dosage</th>
+                                <th>Date Prescribed</th>
+                                <th>Date Dispensed</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            {formData.map((form) => (
+                              <tbody>
                                 <tr>
-                                  <th>Name</th>
-                                  <th>Dosage</th>
-                                  <th>Date Prescribed</th>
-                                  <th>Date Dispensed</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              {formData.map((form) => (
-                                <tbody>
-                                  <tr>
-                                    <th>{form.data.generic_name}</th>
-                                    <th>{form.data.dosage}</th>
-                                    <th>{form.data.date_prescribed}</th>
-                                    <th>{form.data.date_dispensed}</th>
-                                    <th>
-                                      <i
-                                        class="fa fa-medkit"
-                                        aria-hidden="true"
-                                        onClick={() => toggle(form)}
-                                        style={{ cursor: "pointer" }}
-                                      ></i>
-                                      &nbsp;&nbsp;
+                                  <th>{form.data.generic_name}</th>
+                                  <th>{form.data.dosage}</th>
+                                  <th>{form.data.date_prescribed}</th>
+                                  <th>{form.data.date_dispensed}</th>
+                                  <th>
+                                    <Dropdown
+                                    color="primary"
+                                      isOpen={dropdownOpen}
+                                      toggle={toggleAction}
+                                     
+                                    >
+                                      <DropdownToggle caret>
+                                        Actions
+                                      </DropdownToggle>
+                                      <DropdownMenu>
+                                        <DropdownItem
+                                          onClick={() => toggle(form)}
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          <i
+                                            class="fa fa-medkit"
+                                            aria-hidden="true"
+                                          ></i>
+                                          &nbsp; Dispense
+                                        </DropdownItem>
+                                        <DropdownItem
+                                          onClick={() => toggle1(form)}
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          <VisibilityIcon />
+                                          &nbsp; View
+                                        </DropdownItem>
+                                      </DropdownMenu>
+                                    </Dropdown>
+                                    {/* {form.data.prescription_status == 0 ? (
+                                      <Fragment>
+                                        <i
+                                          class="fa fa-medkit"
+                                          aria-hidden="true"
+                                          onClick={() => toggle(form)}
+                                          style={{ cursor: "pointer" }}
+                                        ></i>
+                                        &nbsp; &nbsp;
+                                        <VisibilityIcon
+                                          onClick={() => toggle1(form)}
+                                          style={{ cursor: "pointer" }}
+                                        />
+                                      </Fragment>
+                                    ) : (
                                       <VisibilityIcon
                                         onClick={() => toggle1(form)}
                                         style={{ cursor: "pointer" }}
                                       />
-                                    </th>
-                                  </tr>
-                                </tbody>
-                              ))}
-                            </Table>
-                            <br />
-                          </Form>
-             
+                                    )} */}
+                                  </th>
+                                </tr>
+                              </tbody>
+                            ))}
+                          </Table>
+                          <br />
+                        </Form>
                       </Col>
                     </Row>
                   </CardBody>
