@@ -18,7 +18,8 @@ import PatientDetailCard from "./PatientDetailCard";
 import { Link } from "react-router-dom";
 import { Badge } from "reactstrap";
 import { DateTimePicker } from "react-widgets";
-import Modal from './Modal'
+import DispenseModal from './DispenseModal'
+import ViewModal from './ViewModal'
 
 import {
   Alert,
@@ -91,10 +92,13 @@ const Prescriptions = (props) => {
   const [drugDetails, setDrugDetails] = useState({})
 
   const toggle = (form) => {
-    setDrugDetails({...drugDetails,  ...form})
+    setDrugDetails({ ...drugDetails, ...form });
     setModal(!modal);
   } 
-  const toggle1 = () => setModal1(!modal1)
+  const toggle1 = (form) => {
+    setDrugDetails({ ...drugDetails, ...form });
+    setModal1(!modal1)
+  }
 
   const closeBtn = (
     <button className="close" onClick={toggle}>
@@ -183,9 +187,13 @@ const Prescriptions = (props) => {
                                         class="fa fa-medkit"
                                         aria-hidden="true"
                                         onClick={() => toggle(form)}
+                                        style={{ cursor: "pointer" }}
                                       ></i>
                                       &nbsp;&nbsp;
-                                      <VisibilityIcon onClick={toggle1} />
+                                      <VisibilityIcon
+                                        onClick={() => toggle1(form)}
+                                        style={{ cursor: "pointer" }}
+                                      />
                                     </th>
                                   </tr>
                                 </tbody>
@@ -210,22 +218,26 @@ const Prescriptions = (props) => {
         </Col>
       </Row>
       {modal ? (
-        <Modal isOpen={modal} toggle={toggle} close={closeBtn} formData={drugDetails}></Modal>
-      ) : (<div></div>)}
-      {/* <Modal isOpen={modal1} toggle={toggle1} className={className}>
-        <ModalHeader toggle={toggle1} close={closeBtn1}>
-          Modal title
-        </ModalHeader>
-        <ModalBody>Undisputed Champion of Notre Dame</ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={toggle1}>
-            Do Something
-          </Button>{" "}
-          <Button color="secondary" onClick={toggle1}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal> */}
+        <DispenseModal
+          isOpen={modal}
+          toggle={toggle}
+          close={closeBtn}
+          formData={drugDetails}
+        ></DispenseModal>
+      ) : (
+        <div></div>
+      )}
+
+      {modal1 ? (
+        <ViewModal
+          isOpen={modal1}
+          toggle={toggle1}
+          close={closeBtn1}
+          formData={drugDetails}
+        ></ViewModal>
+      ) : (
+        <div></div>
+      )}
     </Page>
   );
 }
