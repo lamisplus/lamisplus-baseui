@@ -128,19 +128,23 @@ const ModalSample = (props) => {
                   <FormGroup>
                     <Label for="exampleSelect">Unit</Label>
                     <Input type="select" name="select" id="exampleSelect">
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
+                      <option>Pack(s)</option>
+                      <option>Tablets</option>
+                      <option>ml</option>
                     </Input>
                   </FormGroup>
                 </Col>
+                <Col md="12">
+                  <FormGroup>
+                    <Label for="maritalStatus">Note</Label>
+                    <Input
+                      type="textarea"
+                      name="comment"
+                      id="comment"
+                    ></Input>
+                  </FormGroup>
+                </Col>
               </Row>
-              {/* </CardBody>
-          </Card> */}
-            </ModalBody>
-            <ModalFooter>
               <MatButton
                 type="submit"
                 variant="contained"
@@ -161,7 +165,10 @@ const ModalSample = (props) => {
               >
                 Cancel
               </MatButton>
-            </ModalFooter>
+              {/* </CardBody>
+          </Card> */}
+            </ModalBody>
+            {/* <ModalFooter></ModalFooter> */}
           </Modal>
         </CardBody>
       </Card>
