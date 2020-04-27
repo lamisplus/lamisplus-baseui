@@ -22,9 +22,6 @@ const CheckInPage = React.lazy(() => import("components/CheckIn/CheckInPage"));
 const VitalSignsPage = React.lazy(() =>
   import("components/Vitals/VitalSignsPage")
 );
-const PatientPrescriptions = React.lazy(() =>
-  import("./components/Pharmacy/PatientPrescriptions")
-);
 
 /* Consultation page loading */
 const ConsultationPage = React.lazy(() => import("pages/ConsultationPage"));
@@ -107,11 +104,7 @@ class Routes extends Component {
 
               {/* Pharmacy Links */}
               <Route exact path="/pharmacy" component={PharmacyDashboard} />
-              <Route
-                exact
-                path="/patientPrescriptions"
-                component={PatientPrescriptions}
-              />
+              
               <Route exact path="/prescriptions" component={Prescript}/>
               <Route exact path="/appointment" component={AppointmentPage} />
               <Route
