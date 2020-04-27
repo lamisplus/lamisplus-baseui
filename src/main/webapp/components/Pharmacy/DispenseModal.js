@@ -65,7 +65,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const ModalSample = (props) => {
+const DispenseModal = (props) => {
     const { buttonLabel, className } = props;
     const toggle = props.toggle
     const modal = props.isOpen
@@ -245,4 +245,4 @@ const ModalSample = (props) => {
 }
 
 
-export default connect(null, {updatePrescriptionStatus})(ModalSample);
+export default connect(null, {updatePrescriptionStatus})(DispenseModal);
