@@ -144,7 +144,7 @@ const Prescriptions = (props) => {
                         className={classes.button}
                         className=" float-right mr-1"
                       >
-                        <TiArrowBack /> Back
+                        <TiArrowBack /> &nbsp; back
                       </MatButton>
                     </Link>
                   </CardHeader>
@@ -152,7 +152,6 @@ const Prescriptions = (props) => {
                     <br />
                     <Row>
                       <Col>
-                        <Card body>
                           <Form onSubmit={saveColllectSample}>
                             <Table
                               style={{
@@ -201,7 +200,7 @@ const Prescriptions = (props) => {
                             </Table>
                             <br />
                           </Form>
-                        </Card>
+             
                       </Col>
                     </Row>
                   </CardBody>
