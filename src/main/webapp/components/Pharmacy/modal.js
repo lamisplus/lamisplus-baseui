@@ -139,7 +139,7 @@ const ModalSample = (props) => {
                       type="text"
                       name="dispensed"
                       id="drugDispensed"
-                      placeholder="Enter name of drug dispensed"
+                      placeholder="brand name"
                     />
                   </FormGroup>
                 </Col>
