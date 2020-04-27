@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {  Modal, ModalHeader, ModalBody,
+import {  Modal, ModalHeader, ModalBody, ModalFooter, Button,
 Form,
 Row,
 Col,Input,
@@ -63,42 +63,13 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const ModalSample = (props) => {
-  const classes = useStyles()
-  const [newdata, setNewdata] = useState({formdata});
-  const [loading, setLoading] = useState(false)
-/* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
-    console.log(props)
-  const formdata = useSelector(state => state.laboratory.formdata);
-  const dispatch = useDispatch();
-
-
-  useEffect(() => {
-  
-
-  }, []);
-
- 
-          
-        const [optionsample, setOptionsample] = useState([]);
-        const [samples, setSamples] = useState({})
-       const handleInputChangeSample = e => {
-        const { name, value } = e.target
-        const fieldValue = { [name]: value }
-        setSamples({
-            ...samples,
-            ...fieldValue
-        })
-
-    }
-    const saveSample = e => {
-      e.preventDefault()
-      const onSuccess = () => {
-        setLoading(false);
-        // props.history.push("/collect-sample")        
-      }
-      const onError = () => {
-        setLoading(false);        
-      }
+    const { buttonLabel, className } = props;
+    const toggle = props.toggle
+    const modal = props.isOpen
+    const closeBtn = props.close
+    const classes = useStyles();
+    console.log(props);
+    const drugUnits = {
 
     }
   return (
@@ -106,137 +77,91 @@ const ModalSample = (props) => {
       <Card>
         <CardBody>
           <ToastContainer autoClose={3000} hideProgressBar />
-          <Modal
-            isOpen={props.modalstatus}
-            toggle={props.togglestatus}
-            className={props.className}
-            size="lg"
-          >
-            <Form onSubmit={saveSample}>
-              <ModalHeader toggle={props.togglestatus}>
-                Dispense Drugs
-              </ModalHeader>
-              <ModalBody>
-                <Card>
-                  <CardBody>
-                    <Row>
-                      <Col md={12}>
-                        <Alert
-                          color="dark"
-                          style={{
-                            backgroundColor: "#9F9FA5",
-                            color: "#000",
-                            fontWeight: "bolder",
-                          }}
-                        >
-                          <p style={{ marginTop: ".7rem" }}>
-                            Drug Prescribed:{" "}
-                            <span style={{ fontWeight: "bolder" }}>
-                              Paracetamol
-                            </span>
-                            &nbsp;&nbsp;&nbsp; Quantity Prescribed :
-                            <span style={{ fontWeight: "bolder" }}>{20}</span>
-                            &nbsp;&nbsp;&nbsp; Stock Balance :
-                            <span style={{ fontWeight: "bolder" }}>{500}</span>
-                          </p>
-                        </Alert>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup>
-                          <Label for="maritalStatus">Date Collected</Label>
+          <Modal isOpen={modal} toggle={toggle} className={className} size="lg">
+            <ModalHeader toggle={toggle} close={closeBtn}>
+              Drug Dispensing
+            </ModalHeader>
+            <ModalBody>
+              {/* <Card >
+        <CardBody> */}
 
-                          <DateTimePicker
-                            time={false}
-                            name="date_sample_collected"
-                            id="date_sample_collected"
-                            value={samples.date_sample_collected}
-                            onChange={(value1) =>
-                              setSamples({
-                                ...samples,
-                                date_sample_collected: value1,
-                              })
-                            }
-                            defaultValue={new Date()}
-                            max={new Date()}
-                            required
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup>
-                          <Label for="maritalStatus">Sample Type</Label>
-                          <Autocomplete
-                            multiple
-                            id="sample_type"
-                            size="small"
-                            options={optionsample}
-                            getOptionLabel={(option) => option.title}
-                            onChange={(e, i) =>
-                              setSamples({ ...samples, sample_type: i })
-                            }
-                            renderTags={(value, getTagProps) =>
-                              value.map((option, index) => (
-                                <Chip
-                                  label={option.title}
-                                  {...getTagProps({ index })}
-                                  disabled={index === 0}
-                                />
-                              ))
-                            }
-                            style={{ width: "auto", marginTop: "-1rem" }}
-                            s
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                variant="outlined"
-                                margin="normal"
-                              />
-                            )}
-                          />
-                          {/* <FixedTags onChange={handleInputChangeSample} value={samples.sample_type} /> */}
-                        </FormGroup>
-                      </Col>
+              <Row>
+                <div
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#9F9FA5",
+                    padding: "1rem 1rem",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  &nbsp;&nbsp; Drug Prescribed:{" "}
+                  <span>
+                    <b>Paracetamol</b>
+                  </span>
+                  &nbsp;&nbsp; Quantity Prescribed:{" "}
+                  <span>
+                    <b>2 packs</b>
+                  </span>
+                  &nbsp;&nbsp; Stock Balance:{" "}
+                  <span style={{ color: "#0aad77" }}>
+                    <b>400 packs</b>
+                  </span>
+                </div>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label for="exampleNumber">Drug Name (Brand name)</Label>
+                    <Input
+                      type="text"
+                      name="dispensed"
+                      id="drugDispensed"
+                      placeholder="Enter name of drug dispensed"
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={2}>
+                  <FormGroup>
+                    <Label for="exampleNumber">Quantity</Label>
+                    <Input type="number" name="number" id="exampleNumber" />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="exampleSelect">Unit</Label>
+                    <Input type="select" name="select" id="exampleSelect">
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </Input>
+                  </FormGroup>
+                </Col>
+              </Row>
+              {/* </CardBody>
+          </Card> */}
+            </ModalBody>
+            <ModalFooter>
+              <MatButton
+                type="submit"
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                startIcon={<SaveIcon />}
+                // disabled={loading}
+              >
+                Ok
+              </MatButton>
 
-                      <Col md="12">
-                        <FormGroup>
-                          <Label for="maritalStatus">Note</Label>
-                          <Input
-                            type="textarea"
-                            name="comment"
-                            id="comment"
-                            onChange={handleInputChangeSample}
-                            value={samples.comment}
-                          ></Input>
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <br />
-                    {loading ? <Spinner /> : ""}
-                    <br />
-                    <MatButton
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                      startIcon={<SaveIcon />}
-                      disabled={loading}
-                    >
-                      Ok
-                    </MatButton>
-
-                    <MatButton
-                      variant="contained"
-                      color="default"
-                      onClick={props.togglestatus}
-                      className={classes.button}
-                      startIcon={<CancelIcon />}
-                    >
-                      Cancel
-                    </MatButton>
-                  </CardBody>
-                </Card>
-              </ModalBody>
-            </Form>
+              <MatButton
+                variant="contained"
+                color="default"
+                onClick={toggle}
+                className={classes.button}
+                startIcon={<CancelIcon />}
+              >
+                Cancel
+              </MatButton>
+            </ModalFooter>
           </Modal>
         </CardBody>
       </Card>
