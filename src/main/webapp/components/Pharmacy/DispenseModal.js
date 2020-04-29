@@ -130,12 +130,12 @@ const DispenseModal = (props) => {
                   <span>
                     <b>{formData.data.generic_name}</b>
                   </span> */}
-                  &nbsp;&nbsp; Quantity Prescribed:{" "}
+                  &nbsp;&nbsp; Quantity Prescribed:&nbsp;
                   <span>
                     <b>2 packs</b>
                   </span>
-                  &nbsp;&nbsp; Stock Balance:{" "}
-                  <span style={{ color: "#0aad77" }}>
+                  &nbsp;&nbsp; Stock Balance: &nbsp;
+                  <span style={{ color: "#19FF32" }}>
                     <b>400 packs</b>
                   </span>
                 </div>
@@ -144,8 +144,7 @@ const DispenseModal = (props) => {
                 <Row>
                   <Col md={6}>
                     <FormGroup>
-                      <Label for="maritalStatus">Date Collected</Label>
-
+                      <Label for="maritalStatus">Date Dispensed</Label>
                       <DateTimePicker
                         time={false}
                         name="dateDispensed"

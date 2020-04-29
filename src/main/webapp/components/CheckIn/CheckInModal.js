@@ -42,6 +42,14 @@ const CheckInModal = (props ) => {
     const toggle = () => {
    return props.setShowModal(!props.showModal)
 }
+
+const {
+  values,
+  setValues,
+  errors,
+  setErrors,
+  handleInputChange      } = useForm(initialfieldState_checkInPatient, validate)
+  
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
         if ('dateVisitStart' in fieldValues)
@@ -59,12 +67,7 @@ const CheckInModal = (props ) => {
         if (fieldValues === values) return Object.values(temp).every(x => x === '')
       }
 
-    const {
-        values,
-        setValues,
-        errors,
-        setErrors,
-        handleInputChange } = useForm(initialfieldState_checkInPatient, validate)
+    
 
     const handleSubmit = e => {
         setShowErrorMsg(false)

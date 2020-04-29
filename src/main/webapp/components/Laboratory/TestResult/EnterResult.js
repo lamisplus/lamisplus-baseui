@@ -109,7 +109,8 @@ const ModalSampleResult = (props) => {
                                           date_result_reported: date_result_reported,
                                           date_sample_collected: date_sample_collected,
                                           lab_test_order_status: lab_test_order_status,
-                                          date_result_reported:new Date()
+                                          date_result_reported:new Date(),
+                                          date_asseyed:new Date()
                                     })
  
           
@@ -148,7 +149,7 @@ const ModalSampleResult = (props) => {
       toast.warn("Processing Sample ", { autoClose: 100, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
       samples['lab_test_order_status'] = 5;
-      samples['date_sample_collected'] = date_sample_collected;
+  
       samples['user_id'] = user_id
       samples['description'] = description
       samples['patient_id'] =patient_id
