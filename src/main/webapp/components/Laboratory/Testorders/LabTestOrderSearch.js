@@ -21,7 +21,19 @@ const PatientSearch = (props) => {
     }
         props.fetchAllLabTestOrderToday(onSuccess, onError);
       }, []); //componentDidMount
- 
+    function totalSampleConllected (test){
+      const  maxVal = []
+     
+      for(var i=0; i<test.length; i++){
+        for (var key in test[i]) {
+          if (test[i][key].lab_test_order_status=== 1)
+            maxVal.push(test[i][key])
+        }
+       
+      }
+      return maxVal.length;
+    }
+     
   return (
     <div>
       <MaterialTable
@@ -32,7 +44,7 @@ const PatientSearch = (props) => {
             title: "Patient Name",
             field: "name",
           },
-          { title: "Test Order Date", field: "date", type: "date" , filtering: false},          
+          { title: "Date Order", field: "date", type: "date" , filtering: false},          
           {
             title: "Total Sample ",
             field: "count",
@@ -56,7 +68,7 @@ const PatientSearch = (props) => {
           
           date: row.dateEncounter,
           count: row.formDataObj.length,
-          samplecount: 0,
+          samplecount: totalSampleConllected(row.formDataObj),
           actions: <Link to ={{ 
                         pathname: "/collect-sample",  
                         state: { formdata:{row}}, 

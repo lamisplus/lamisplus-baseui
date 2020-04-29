@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {  Modal, ModalHeader, ModalBody,
 Form,
-Row,
+Row,Alert,
 Col,Input,
 FormGroup,
 Label,Card, CardBody
@@ -25,7 +25,6 @@ import {url} from '../../../api'
 import { Spinner } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
-import { Alert } from 'reactstrap';
 
 Moment.locale('en');
 momentLocalizer();
@@ -65,10 +64,11 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const ModalSample = (props) => {
-  console.log(props)
   const classes = useStyles()
   const [newdata, setNewdata] = useState({formdata});
   const [loading, setLoading] = useState(false)
+  const [visible, setVisible] = useState(true);
+  const onDismiss = () => setVisible(false);
 /* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
   const formdata = useSelector(state => state.laboratory.formdata);
   const dispatch = useDispatch();
@@ -155,12 +155,26 @@ const ModalSample = (props) => {
       samples['lab_test_group_id'] = lab_test_group_id
       samples['lab_test_order_id'] = lab_test_order_id
       samples['date_result_reported'] = date_result_reported
+      /* processing the sample type to a string   */
+      if(samples['sample_type'].length>0){
+
+      const arr = [];
+      samples['sample_type'].forEach(function(value, index, array) {
+        arr.push(value['title']);
+      });
+      const sampletostring= arr.toString()
+      samples['sample_type']=sampletostring
+      //console.log(sampletostring)    
+      }else{
+        samples['sample_type']=sample_type
+      }
+       /* end of the process */
       data['data'] = samples;
       data['encounterId'] = encounterId;
       e.preventDefault()
-     const onSuccess = () => {
+      const onSuccess = () => {
         setLoading(false);
-        
+        //props.togglestatus()
       //props.history.push("/collect-sample")        
       }
       const onError = () => {
@@ -168,29 +182,46 @@ const ModalSample = (props) => {
       }
       props.createCollectedSample(data, lab_id,onSuccess,onError)
     }
+  
+  function checklanumber (lab_num){
+      if(lab_num===""){
+        
+       return ( 
+                
+                <Alert color="danger" isOpen={visible} toggle={onDismiss}>
+                  Please make sure you enter a lab number
+                </Alert>
+       )
+      }
+  }
   return (
       
       <div >
+       
         <Card >
         <CardBody>
-       <ToastContainer autoClose={3000} hideProgressBar />
-      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
-        
-      <Form onSubmit={saveSample}>
-        <ModalHeader toggle={props.togglestatus}>Collect Sample</ModalHeader>
-        <ModalBody>
-        <Card >
-        <CardBody>
-        <Row >
-        <Col md={12} >
+        <ToastContainer autoClose={3000} hideProgressBar />
+          <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
+            
+          <Form onSubmit={saveSample}>
+          <ModalHeader toggle={props.togglestatus}>Collect Sample </ModalHeader>
+            <ModalBody>
+            {checklanumber(props.labnumber['lab_number'])}
+            <Card >
+            <CardBody>
+            <Row >
+            <Col md={12} >
 
-        <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder'}}>
-          <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}>{lab_test_group}</span> 
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : 
-          <span style={{ fontWeight: 'bolder'}}>{description}</span>
-          </p>
-          
-        </Alert>
+            <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder', fontSize:'14px'}}>
+              <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}>{lab_test_group}</span> 
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : &nbsp;&nbsp;
+              <span style={{ fontWeight: 'bolder'}}>{description}</span>              
+               &nbsp;&nbsp;&nbsp; Lab Number : &nbsp;&nbsp;
+              <span style={{ fontWeight: 'bolder'}}>{props.labnumber['lab_number']===""?" ---":props.labnumber['lab_number']}</span>
+            
+              </p>
+              
+            </Alert>
       </Col>
         <Col md={6}>
          
@@ -258,7 +289,8 @@ const ModalSample = (props) => {
     <br/>
     {loading ? <Spinner /> : ""}
     <br/>
-       <MatButton
+      {props.labnumber['lab_number']!==""?
+          <MatButton
             type='submit'
             variant='contained'
             color='primary'
@@ -266,9 +298,20 @@ const ModalSample = (props) => {
             startIcon={<SaveIcon />}
             disabled={loading}
           >   
-            Ok
+            Save
           </MatButton>
-          
+          :
+          <MatButton
+            type='submit'
+            variant='contained'
+            color='primary'
+            className={classes.button}
+            startIcon={<SaveIcon />}
+            disabled='true'
+          >   
+            Save
+          </MatButton>
+          }
           <MatButton
             variant='contained'
             color='default'

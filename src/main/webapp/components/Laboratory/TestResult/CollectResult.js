@@ -5,8 +5,7 @@ import { TiArrowBack } from 'react-icons/ti'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Link } from 'react-router-dom'
 import MatButton from '@material-ui/core/Button'
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
+
 // import {GoChecklist} from 'react-icons/go';
 import 'react-widgets/dist/css/react-widgets.css'
 import {FaPlusSquare} from 'react-icons/fa';
@@ -82,10 +81,6 @@ const handleresult = (sampleval) => {
    setModal2(!modal2) 
 }
 
-const viewSampleTypes = (values) => {
-  setModal3(!modal3)
-  setSamplelist(values);
-}
 const getGroup = e => {
   const getvalue =e.target.value;
   const testing = newsample.length>0?newsample:null
@@ -106,40 +101,16 @@ const samplestatus = e =>{
   }else if(e===5){
     return <p><Badge  color="light">Result Available</Badge></p>
   }else{
-    return <p>{"null"}</p>
+    return <p>{"---"}</p>
   }
 }
-//Check if sample type is not empty 
-const samples = e =>{
-  console.log(e)
-  if(e==="" || e===null){
-    return <p>null</p>
-  }else{
-    return <p><Badge color="info" 
-      >{e.length} Sample</Badge></p>
-  }
-}
+
 //This is function to check for the status of each collection to display on the tablist below 
 const sampleAction = (rowdata) =>{
 
   return (
           <div>
-            {/* <Tooltip title="Enter Result">
-                <IconButton aria-label="Enter Result" onClick={() =>
-                  handleresult(rowdata)}>
-                <FaPlusSquare size="15" />
-                </IconButton>
-            </Tooltip>
-            {rowdata.data.sample_type!==null ?
-            <Tooltip title="View Sample Type">
-                <IconButton aria-label="View Sample Type" onClick={() =>
-                  viewSampleTypes(rowdata.data.sample_type)}>
-                <FaRegEye size="15" />
-                </IconButton>
-            </Tooltip>
-            :
-             ""   
-            } */}
+            
             <ButtonDropdown isOpen={dropdownOpen} toggle={toggle}>
                   <DropdownToggle caret size="sm" color="info" >
                     Action
@@ -150,10 +121,7 @@ const sampleAction = (rowdata) =>{
                         handleresult(rowdata)}>                     
                             <FaPlusSquare size="15" style={{color: '#3F51B5'}}/>{" "}Enter Result
                     </DropdownItem>
-                    <DropdownItem onClick={() =>
-                        viewSampleTypes(rowdata.data.sample_type)}>
-                            <FaRegEye size="15" style={{color: '#3F51B5'}}/>{" "}View Sample Type
-                    </DropdownItem>
+                    
                   </DropdownMenu>
             </ButtonDropdown>
             </div>
@@ -231,8 +199,8 @@ const sampleAction = (rowdata) =>{
                         {!loading ? newsample.map((row) => (
                           
                           <tr key={row.id}>
-                            <th scope="row">{row.data.description===""?"Null ":row.data.description}</th>
-                            <td>{samples(row.data.sample_type)}</td>
+                            <th scope="row">{row.data.description===""?"---":row.data.description}</th>
+                            <td>{row.data.sample_type===""?"---":row.data.sample_type}</td>
                             <td> {encounterresult.dateEncounter} </td>
                             <td>{samplestatus(row.data.lab_test_order_status)} </td>
                             <td>{sampleAction(row)}</td>

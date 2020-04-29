@@ -170,7 +170,7 @@ const ModalSample = (props) => {
       <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
         
       <Form onSubmit={saveSample}>
-        <ModalHeader toggle={props.togglestatus}>Sample Verify </ModalHeader>
+        <ModalHeader toggle={props.togglestatus}>Sample Verification </ModalHeader>
         <ModalBody>
         <Card >
         <CardBody>
@@ -191,7 +191,7 @@ const ModalSample = (props) => {
           
           <FormGroup>
             
-            <Label for='maritalStatus'>Date Verify</Label>
+            <Label for='maritalStatus'>Date Verified</Label>
             
             <DateTimePicker
                         time={false}

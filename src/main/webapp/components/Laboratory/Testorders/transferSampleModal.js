@@ -68,6 +68,8 @@ const ModalSampleTransfer = (props) => {
   const classes = useStyles()
   const [newdata, setNewdata] = useState({formdata});
   const [loading, setLoading] = useState(false)
+  const [visible, setVisible] = useState(true);
+  const onDismiss = () => setVisible(false);
   /* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
     const formdata = useSelector(state => state.laboratory.formdata);
     const dispatch = useDispatch();
@@ -167,6 +169,18 @@ const ModalSampleTransfer = (props) => {
         }
         props.createCollectedSample(data, lab_id,onSuccess,onError)
       }
+
+      function checklanumber (lab_num){
+        if(lab_num===""){
+          
+         return ( 
+                  
+                  <Alert color="danger" isOpen={visible} toggle={onDismiss}>
+                    Please make sure you enter a lab number
+                  </Alert>
+         )
+        }
+    }
   return (
       
       <div >
@@ -176,15 +190,19 @@ const ModalSampleTransfer = (props) => {
       <Form onSubmit={saveSample}>
         <ModalHeader toggle={props.togglestatus}>Transfer Sample</ModalHeader>
         <ModalBody>
+        {checklanumber(props.labnumber['lab_number'])}
         <Card >
         <CardBody>
         <Row >
         <Col md={12} >
 
-        <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder'}}>
+        <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder', fontSize:'14px'}}>
           <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}> {' '} {lab_test_group}</span> 
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : 
           <span style={{ fontWeight: 'bolder'}}>{' '}  {description}</span>
+          &nbsp;&nbsp;&nbsp; Lab Number : &nbsp;&nbsp;
+              <span style={{ fontWeight: 'bolder'}}>{props.labnumber['lab_number']===""?" ---":props.labnumber['lab_number']}</span>
+
           </p>
           
         </Alert>
@@ -238,6 +256,7 @@ const ModalSampleTransfer = (props) => {
        <br/>
        {loading ? <Spinner /> : ""}
        <br/>
+       {props.labnumber['lab_number']!==""?
           <MatButton
             type='submit'
             variant='contained'
@@ -245,9 +264,21 @@ const ModalSampleTransfer = (props) => {
             className={classes.button}
             startIcon={<SaveIcon />}
             disabled={loading}
-          >
-            Ok
+          >   
+            Save
           </MatButton>
+          :
+          <MatButton
+            type='submit'
+            variant='contained'
+            color='primary'
+            className={classes.button}
+            startIcon={<SaveIcon />}
+            disabled='true'
+          >   
+            Save
+          </MatButton>
+          }
           <MatButton
             variant='contained'
             color='default'

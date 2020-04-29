@@ -186,7 +186,7 @@ const ModalSampleResult = (props) => {
       <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
         
       <Form onSubmit={saveSample}>
-        <ModalHeader toggle={props.togglestatus}>Enter Sample Result</ModalHeader>
+        <ModalHeader toggle={props.togglestatus}>Result Reporting</ModalHeader>
         <ModalBody>
         <Card>
           <CardBody>
@@ -202,37 +202,36 @@ const ModalSampleResult = (props) => {
                   </Col>
                  
                   <Col xs="4">
-                    Date Asseyed
+                    Date Assayed
                     <br/>
-                    <p style={textstyle}>{date_sample_collected}<small className="text-muted">By Evans</small></p> 
-                    
+                    <DateTimePicker time={false} name="date_asseyed"  id="date_asseyed"  
+                      
+                      value={samples.date_asseyed}
+                      onChange={value1 =>
+                        setSamples({ ...samples, date_asseyed: value1 })
+                      }
+                    /> 
                     </Col>
-                  
-                  <Col xs="4">
-                    Unit
-                    <br/>
-                    <p style={textstyle}>{unit_measurement}</p>
-                    
-                    </Col>
-                  <Col xs="4">
-                    Total Sample Type 
-                    <br/>
-                    <p style={textstyle}>{sample_type!==null?sample_type.length +"Sample " : "null "}<small className="text-muted">  By Evans</small></p>
-                  </Col>
-                  <br/>
-                  <Col xs="4">
-                    Date Of Result
+                    <Col xs="4">
+                    Date Of Reported
                     <br/>
                     <DateTimePicker time={false} name="date_result_reported"  id="date_result_reported"  
-                      defaultValue={new Date()} max={new Date()}
+                      
                       value={samples.date_result_reported}
                       onChange={value1 =>
                         setSamples({ ...samples, date_result_reported: value1 })
                       }
                     />            
                     </Col>
-                    <Col xs="8">
+                  
+                  <Col xs="4">
+                    </Col>
+                  
+                    
+                    <Col xs="4">
+                    
                     <FormGroup>
+                    <br/>
                           <Label for="examplePassword">Enter Result  </Label>
                           <Input
                             type='text'
@@ -245,6 +244,13 @@ const ModalSampleResult = (props) => {
                         </Input>
                       </FormGroup>
                       </Col>
+                    <Col xs="4">
+                    <br/>
+                    <FormGroup>
+                     
+                      <p style={{marginTop: '2rem' }} >{unit_measurement}</p>   
+                      </FormGroup>                 
+                    </Col>
              
             </Row>
             <br/>

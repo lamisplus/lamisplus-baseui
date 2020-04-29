@@ -25,7 +25,14 @@ import { Spinner } from 'reactstrap';
 import { Table } from 'reactstrap';
 import { Badge } from 'reactstrap';
 import { makeStyles } from '@material-ui/core/styles'
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItem,
+} from "@reach/menu-button";
+import "@reach/menu-button/styles.css";
+
 
 const useStyles = makeStyles({
   root: {
@@ -84,15 +91,8 @@ const handlesample = (sampleval) => {
    setcollectmodal(sampleval);
    setModal(!modal) 
 }
-const handlereject = (sampleval) => {
-  setcollectmodal(sampleval);
-  setModal3(!modal3)
- 
-}
-const viewSampleTypes = (values) => {
-  setModal3(!modal3)
-  setSamplelist(values);
-}
+
+
 const getGroup = e => {
   const getvalue =e.target.value;
   const testing = newsample.length>0?newsample:null
@@ -114,56 +114,24 @@ const samplestatus = e =>{
   }else if(e===5){
     return <p><Badge  color="light">Result Available</Badge></p>
   }else{
-    return <p>{"null"}</p>
+    return <p>{"---"}</p>
   }
 }
 //Check if sample type is not empty 
-const samples = e =>{
-  console.log(e)
-  if(e==="" || e===null){
-    return <p>null</p>
-  }else{
-    return <p><Badge color="info" 
-      >{e.length} Sample</Badge></p>
-  }
-}
+
 //This is function to check for the status of each collection to display on the tablist below 
 const sampleAction = (e) =>{
   return (
-          <div>
-            {/* <Tooltip title="Verify Sample">                                              
-                <IconButton aria-label="Verify Sample" onClick={() =>
-                  handlesample(e)}
-                  >
-                <GoChecklist size="15" />
-                </IconButton>
-            </Tooltip>
-            {e.data.sample_type!==null ?
-              <Tooltip title="View Sample Type">
-                <IconButton aria-label="View Sample Type" onClick={() =>
-                  viewSampleTypes(e.data.sample_type)}>
-                <FaRegEye size="15" />
-                </IconButton>
-            </Tooltip>
-            :
-            ""
-           } */}
-            <ButtonDropdown isOpen={dropdownOpen} toggle={toggle}>
-            <DropdownToggle caret size="sm" color="info" >
-              Action
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem onClick={() =>
-                  handlesample(e)}>                     
-                      <GoChecklist size="15" style={{color: '#3F51B5'}}/>{" "}Verify Sample
-              </DropdownItem>            
-              <DropdownItem onClick={() =>
-                  viewSampleTypes(e.data.sample_type)}>
-                      <FaRegEye size="15" style={{color: '#3F51B5'}}/>{" "}View Sample Type
-              </DropdownItem>
-            </DropdownMenu>
-          </ButtonDropdown>
-            </div>
+
+            <Menu>
+                <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
+                  Action <span aria-hidden>▾</span>
+                </MenuButton>
+                <MenuList style={{hover:"#eee"}}>
+                  <MenuItem onSelect={() => handlesample(e)}><GoChecklist size="15" style={{color: '#3F51B5'}}/>{" "}Verify Sample</MenuItem>
+                                
+                </MenuList>
+            </Menu>
           )
 }
   return (
@@ -239,8 +207,8 @@ const sampleAction = (e) =>{
                         {!loading ? newsample.map((row) => (
                           
                           <tr key={row.id}>
-                            <th scope="row">{row.data.description===""?"Null ":row.data.description}</th>
-                            <td>{samples(row.data.sample_type)}</td>
+                            <th scope="row">{row.data.description===""?"--- ":row.data.description}</th>
+                            <td>{row.data.sample_type===""?"--- ":row.data.sample_type}</td>
                             <td> {userInfo.dateEncounter} </td>
                         <td>{samplestatus(row.data.lab_test_order_status)} </td>
                             <td>{sampleAction(row)}</td>
@@ -261,10 +229,7 @@ const sampleAction = (e) =>{
         </Col>
       </Row>
       <ModalSampleVerify modalstatus={modal} togglestatus={togglemodal} datasample={collectmodal} />
-      {/* <ModalSampleResult modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal} /> */}
-      {/* <ModalSampleReject modalstatus={modal3} togglestatus={togglemodal3} datasample={collectmodal} /> */}
-      <ModalSampleType modalstatus={modal3} togglestatus={togglemodal3} samptypelist={samplelist} />
-    </Page>
+      </Page>
   )
 }
 
