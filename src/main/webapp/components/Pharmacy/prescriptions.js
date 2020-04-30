@@ -213,8 +213,9 @@ const Prescriptions = (props) => {
                                     </Dropdown> */}
                                     {form.data.prescription_status == 0 ? (
                                       <Fragment>
+                                      
                                         <i
-                                          class="fa fa-medkit"
+                                          class="fa fa-pencil"
                                           aria-hidden="true"
                                           onClick={() => toggle(form)}
                                           style={{ cursor: "pointer" }}
