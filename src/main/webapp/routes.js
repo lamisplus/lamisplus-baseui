@@ -64,6 +64,8 @@ const EnrolledPatientsDashboard = React.lazy(() =>
 /* Sample table i design */
 const TestPage = React.lazy(() => import("pages/TestPage"));
 const FormRendererPage = React.lazy(() => import("components/FormManager/FormRendererPage"));
+//Reporting components
+const ReportPage = React.lazy(() => import("components/Reports/ReportingPage"));
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split("/").pop()}`;
 };
@@ -129,6 +131,9 @@ class Routes extends Component {
               {/* The rout to that DataTabel */}
               <Route exact path="/testpage" component={TestPage} />
               <Route exact path="/form-renderer" component={FormRendererPage} />
+              {/* The rout to Report*/}
+              <Route exact path="/report" component={ReportPage} />
+              
             </React.Suspense>
           </MainLayout>
           <Redirect to="/" />

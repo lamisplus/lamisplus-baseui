@@ -15,7 +15,8 @@ root2: {
    width: '100%',
    backgroundColor: theme.palette.background.paper,
    fontSize: 13,
-   spacing: value => value ** 1
+   margin: '0px -2px', 
+   padding: '0px -2px'
    },
    }));
 
@@ -31,27 +32,27 @@ return (
                 aria-controls="panel1c-content"
                 id="panel1c-header"
                 >
-               <  Row my={1} py={1}>
-                  <Col md={4}>
+               <  Row >
+                  <Col md={4} className={classes.root2}>
                      <span > Patient ID : <b>{props.patient.hospitalNumber}</b></span>
                   </Col>
                   
-                  <Col md={4}>
+                  <Col md={4} className={classes.root2}>
                      <span >Date Of Birth : <b>{props.patient.dob}</b></span>
                   </Col>
-                  <Col md={4}>
+                  <Col md={4} className={classes.root2}>
                      <span> Age : <b>{Age(props.patient.dob)}</b></span>
                   </Col>
-                  <Col md={4}>
+                  <Col md={4} className={classes.root2}>
                      <span> Name : <b>{props.patient.firstName} {' '} {props.patient.lastName} </b></span>
                   </Col>
                   <Col md={4}>
                      <span>  Gender : <b>{props.patient.genderId ===1 ? 'Female' : 'Male'}</b></span>
                   </Col>
-                  <Col md={4}>
+                  <Col md={4} className={classes.root2}>
                      <span> Phone Number : <b>{props.patient.mobilePhoneNumber || 'N/A'}</b></span>
                   </Col>
-                  <Col md={4}>
+                  <Col md={4} className={classes.root2}>
                      <span>  Email Address : <b>{props.patient.email || 'N/A'}</b></span>
                   </Col>
                </Row>

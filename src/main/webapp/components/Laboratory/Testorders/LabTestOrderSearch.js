@@ -72,7 +72,7 @@ const PatientSearch = (props) => {
           actions: <Link to ={{ 
                         pathname: "/collect-sample",  
                         state: { formdata:{row}}, 
-                        patientName: row.firstName + ' ' + row.lastName}} 
+                        activetab: props.activetab}} 
                         style={{ cursor: "pointer", color: "blue", 
                         fontStyle: "bold" }}>
                           <Tooltip title="Collect Sample">
@@ -118,5 +118,3 @@ const mapStateToProps = state => {
   };
   
 export default connect(mapStateToProps, mapActionToProps)(PatientSearch);
-
-

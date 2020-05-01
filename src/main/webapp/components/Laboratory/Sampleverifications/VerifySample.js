@@ -65,104 +65,39 @@ momentLocalizer();
 
 const ModalSample = (props) => {
   const classes = useStyles()
-  const [newdata, setNewdata] = useState({formdata});
+
+  const datasample = props.datasample ? props.datasample : {};
+  const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
+  const description = datasample.data ? datasample.data.description : null ;
+  const date_sample_collected = datasample.data ? datasample.data.date_sample_collected : null ;
+  console.log(lab_test_group)
+  const labId = datasample.id
   const [loading, setLoading] = useState(false)
-/* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
-  const formdata = useSelector(state => state.laboratory.formdata);
-  const dispatch = useDispatch();
-  const lab_id = props.datasample.id
-  console.log(props.datasample)
-  const labId = lab_id;
+  const [samples, setSamples] = useState({}) 
 
-  useEffect(() => {
-    dispatch(fetchFormById(labId));
-    setNewdata({...newdata, formdata}) 
-  }, [labId]);
-        console.log(formdata.data) 
-        const comment =  formdata.data ? formdata.data.comment : null
-        const description = formdata.data ? formdata.data.description : null
-        const patient_id = formdata.data ? formdata.data.patient_id : null
-        const user_id = formdata.data ? formdata.data.user_id : null
-        const lab_test_id = formdata.data ? formdata.data.lab_test_id : null
-        const sample_type = formdata.data ? formdata.data.sample_type : null
-        const test_result = formdata.data ? formdata.data.test_result : null
-        const lab_test_group = formdata.data ? formdata.data.lab_test_group : null
-        const unit_measurement = formdata.data ? formdata.data.unit_measurement : null
-        const lab_test_group_id = formdata.data ? formdata.data.lab_test_group_id : null
-        const lab_test_order_id = formdata.data ? formdata.data.lab_test_order_id : null
-        const date_result_reported = formdata.data ? formdata.data.date_result_reported : null
-        const date_sample_collected = formdata.data ? formdata.data.date_sample_collected : null
-        const lab_test_order_status = formdata.data ? formdata.data.lab_test_order_status : null
-       
-        const [data, setData] = useState({data:{}})
-        const [samples, setSamples] = useState({                                                                         
-                                          user_id: user_id,
-                                          patient_id: patient_id,
-                                          description: description,
-                                          lab_test_id: lab_test_id,
-                                          sample_type: sample_type,
-                                          test_result:test_result,
-                                          lab_test_group: lab_test_group,
-                                          unit_measurement:unit_measurement,
-                                          lab_test_group_id:lab_test_group_id,
-                                          lab_test_order_id: lab_test_order_id,
-                                          date_result_reported: date_result_reported,
-                                          date_sample_collected: new Date(),
-                                          lab_test_order_status: lab_test_order_status 
-                                    })
-
-        const [optionsample, setOptionsample] = useState([]);
-        useEffect(() => {
-            async function getCharacters() {
-              try {
-                const response = await fetch(url+'application-codesets/codesetGroup?codesetGroup=SAMPLE_TYPE');
-                const body = await response.json();
-                setOptionsample(body.map(({ display, id }) => ({ title: display, value: id })));
-              } catch (error) {
-                console.log(error);
-              }
-            }
-            getCharacters();
-          }, []);
-       const handleInputChangeSample = e => {
-        const { name, value } = e.target
-        const fieldValue = { [name]: value }
-        setSamples({
-            ...samples,
-            ...fieldValue
-        })
-        console.log(samples)
+    const handleInputChangeSample = e => {
+      setSamples ({ ...samples, [e.target.name]: e.target.value });
+      console.log(samples)
     }
     const saveSample = e => {
+      e.preventDefault()
       setLoading(true);
       toast.warn("Processing Sample ", { autoClose: 100, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
-
-      samples['date_sample_collected'] = newDatenow;
-      samples['user_id'] = user_id
-      samples['description'] = description
-      samples['patient_id'] =patient_id
-      samples['description'] = description
-      samples['lab_test_id'] = lab_test_id
-      samples['lab_test_group'] = lab_test_group
-      samples['unit_measurement'] = unit_measurement
-      samples['lab_test_group_id'] = lab_test_group_id
-      samples['lab_test_order_id'] = lab_test_order_id
-      samples['date_result_reported'] = date_result_reported
-      samples['sample_type'] = sample_type
-      //samples['lab_test_order_status']=4
-      data['data'] = samples;
-      console.log(data)
-      e.preventDefault()
+      datasample.data.lab_test_order_status = 2;
+      datasample.data.date_sample_collected = newDatenow
+      datasample.data.comment = samples.comment
+      
       const onSuccess = () => {
-        setLoading(false);        
+        setLoading(false);
+        props.togglestatus()       
       }
       const onError = () => {
-        setLoading(false);        
+        setLoading(false); 
+        props.togglestatus()       
       }
-      props.createCollectedSample(data, lab_id,onSuccess,onError)
+      props.createCollectedSample(datasample, labId,onSuccess,onError)
     }
-    //console.log(formdata)
   return (
       
       <div >
@@ -180,9 +115,9 @@ const ModalSample = (props) => {
         <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder', }}>
           <p style={{marginTop: '.7rem' }}>Test Group : <span style={{ fontWeight: 'bolder'}}>{lab_test_group}</span> 
               &nbsp;&nbsp;&nbsp;&nbsp;Test Ordered : 
-  <span style={{ fontWeight: 'bolder'}}>{" "}{description}</span>
-          &nbsp;&nbsp;&nbsp;&nbsp; Date Ordered :        
-  <span style={{ fontWeight: 'bolder'}}>{" "}{date_sample_collected}</span>
+              <span style={{ fontWeight: 'bolder'}}>{" "}{description}</span>
+                      &nbsp;&nbsp;&nbsp;&nbsp; Date Ordered :        
+              <span style={{ fontWeight: 'bolder'}}>{" "}{date_sample_collected}</span>
           </p>
           
         </Alert>

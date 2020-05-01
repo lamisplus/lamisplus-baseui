@@ -2,7 +2,6 @@ import * as ACTION_TYPES from '../actions/types'
 
 const initialState = {
   list: [],
-  status: 0,
   patient: {},
   tests: [],
   testGroup: [],
@@ -13,10 +12,10 @@ const initialState = {
 const laboratoryReducer = (state = initialState, action) => {
   switch (action.type) {
     case ACTION_TYPES.LABORATORY_TESTORDER:
-      return { ...state, list: action.payload }
+      return { ...state, list: [...action.payload] }
 
     case ACTION_TYPES.LABORATORY_TESTORDER_FOR_PATIENT:
-      return { ...state, testorder: action.payload }
+      return { ...state, testorder: [...action.payload] }
 
     case ACTION_TYPES.CREATE_COLLECT_SAMPLE:
       return { ...state, status: action.payload }

@@ -42,11 +42,9 @@ const useStyles = makeStyles({
 
 
  function CollectSample  (props){
-   console.log(props)
   const encounterresult = props.location.state.formdata.row ;
-  const [dropdownOpen, setOpen] = useState(false);
-  const toggle = () => setOpen(!dropdownOpen);
   const classes = useStyles()
+ 
   const testorder = useSelector(state => state.laboratory.testorder);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState('')
@@ -65,18 +63,13 @@ const useStyles = makeStyles({
   }, [fetchAllLabTestOrderOfPatient,fetchById]); //componentDidMount  
   const data = [testorder]
   const newsample =  data[0] ? data[0] : null 
-  const [useData, setUsedata] = useState(data)
-  ///const formdata=newsample
-   console.log(newsample)
   //Get list of test type
   const labTestType = []
-
         newsample.forEach(function(value, index, array) {
         labTestType.push(value['data'].lab_test_group);
     });
   //Make the list contain unique list of Data 
   const uniqueValues = [...new Set(labTestType)];
-  const userInfo = encounterresult
   const [modal, setModal] = useState(false) //Modal to collect sample 
   const togglemodal = () => setModal(!modal)
   const [modal2, setModal2] = useState(false)//modal to transfer sample
@@ -90,9 +83,9 @@ const useStyles = makeStyles({
     //  e.preventDefault();   
     setlabNum({ ...labNum, [e.target.name]: e.target.value })
   }
-const handlesample = (sampleval) => { 
+const handlesample = (row) => { 
 
-   setcollectmodal(sampleval);
+   setcollectmodal({...collectmodal, ...row});
    setModal(!modal) 
 }
 const transfersample = (val) => {
@@ -142,75 +135,6 @@ const sampleAction = (e) =>{
 
 }
 
-const test = [
-  {
-      "title": "Sputum",
-      "value": 1
-  },
-  {
-      "title": "DBD",
-      "value": 1
-  },
-  {
-      "title": "Serum",
-      "value": 132
-  },
-  {
-      "title": "Urine",
-      "value": 130
-  }
-]
-//console.log(Object.keys(test===1).length);
-// const count= [];
-//     test.forEach(function(value, index, array) {
-    
-//         if(value['value']){
-//           count.push(value['value']);
-//         }
-//         return console.log(count)
-//       });
-
-      
-// const datass = [
-//         {
-//            "one":4306,
-//            "two":2465,
-//            "three":2299,
-//            "four":988,
-//            "five":554,
-//            "six":1841,
-//            "date":"2015-05-31"
-//         },
-//         {
-//            "one":4378,
-//            "two":2457,
-//            "three":2348,
-//            "four":1021,
-//            "five":498,
-//            "six":1921,
-//            "date":"2015-06-30"
-//         },
-//         {
-//            "one":3404,
-//            "two":2348,
-//            "three":1655,
-//            "four":809,
-//            "five":473,
-//            "six":1056,
-//            "date":"2015-07-31"
-//         },
-//      ]
-     
-    const  maxVal = []
-     
-     for(var i=0; i<test.length; i++){
-       for (var key in test[i]) {
-         if (test[i][key]=== 1)
-           maxVal.push(test[i][key])
-       }
-     }
-     
-     console.log(maxVal);
 
   return (
     <Page title='Collect Sample'>
@@ -227,7 +151,12 @@ const test = [
             <br/>
             <Card className="mb-12">
               <CardHeader>Test Order Details 
-              <Link to="/laboratory">
+              <Link 
+              to ={{ 
+                pathname: "/laboratory",  
+                activetab: 1
+              }} >
+              
               <MatButton
                   type='submit'
                   variant='contained'
@@ -277,7 +206,6 @@ const test = [
                               <Label for="occupation">Lab Number </Label>
                           <Input
                             type='text'
-                            placeholder='Lab. Number '
                             className='cr-search-form__input '
                             name='lab_number'
                             id='lab_number'
@@ -285,16 +213,12 @@ const test = [
                             onChange={handlelabNumber}
                           />
                           </FormGroup>
-                         {/* :
-                                 <p style={{marginTop: '.7rem' }}>Lab Num : <span style={{ fontWeight: 'bolder'}}>{labNum['lab_number']}</span>  </p>
-                          
-                          }
-                        */}
+                         
                         </Col>
                       </Row>
                     <Form >
-                      <Table style={{ fontWeight: 'bolder', borderColor:"#000"}} striped>
-                        <thead style={{  backgroundColor:'#9F9FA5', color:"#000" }}>
+                      <Table  striped responsive>
+                        <thead style={{  backgroundColor:'#9F9FA5' }}>
                           <tr>
                             <th>Test</th>
                             <th>Sample Type</th>
@@ -306,7 +230,7 @@ const test = [
                         <tbody>
                         {!loading ? newsample.map((row) => (
                           
-                          <tr key={row.id}>
+                          <tr key={row.id} style={{ borderBottomColor: '#fff' }}>
                             <th scope="row">{row.data.description===""?"---":row.data.description}</th>
                             <td>{row.data.sample_type===""?"---":row.data.sample_type}</td>
                             <td> {encounterresult.dateEncounter===""?"---":encounterresult.dateEncounter} </td>
