@@ -221,69 +221,11 @@ const Prescriptions = (props) => {
                                 }}
                               >
                                 <tr>
-<<<<<<< HEAD
-                                  <th>{form.data.generic_name}</th>
-                                  <th>{form.data.dosage}</th>
-                                  <th>{form.data.date_prescribed}</th>
-                                  <th>{form.data.date_dispensed}</th>
-                                  <th>
-                                    {/* <Dropdown
-                                    color="primary"
-                                      isOpen={dropdownOpen}
-                                      toggle={toggleAction}
-                                    >
-                                      <DropdownToggle caret>
-                                        Actions 
-                                      </DropdownToggle>
-                                      <DropdownMenu>
-                                        <DropdownItem
-                                          onClick={() => toggle(form)}
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          <i
-                                            class="fa fa-medkit"
-                                            aria-hidden="true"
-                                          ></i>
-                                          &nbsp; Dispense
-                                        </DropdownItem>
-                                        <DropdownItem
-                                          onClick={() => toggle1(form)}
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          <VisibilityIcon />
-                                          &nbsp; View
-                                        </DropdownItem>
-                                      </DropdownMenu>
-                                    </Dropdown> */}
-                                    {form.data.prescription_status == 0 ? (
-                                      <Fragment>
-                                      
-                                        <i
-                                          class="fa fa-pencil"
-                                          aria-hidden="true"
-                                          onClick={() => toggle(form)}
-                                          style={{ cursor: "pointer" }}
-                                        ></i>
-                                        &nbsp; &nbsp;
-                                        <VisibilityIcon
-                                          onClick={() => toggle1(form)}
-                                          style={{ cursor: "pointer" }}
-                                        />
-                                      </Fragment>
-                                    ) : (
-                                      <VisibilityIcon
-                                        onClick={() => toggle1(form)}
-                                        style={{ cursor: "pointer" }}
-                                      />
-                                    )}
-                                  </th>
-=======
                                   <th>Name</th>
                                   <th>Dosage</th>
                                   <th>Date Prescribed</th>
                                   <th>Date Dispensed</th>
                                   <th></th>
->>>>>>> 78e4ba5cdf593ba5a9b8e9dd17b2f1eeafd6482a
                                 </tr>
                               </thead>
 
