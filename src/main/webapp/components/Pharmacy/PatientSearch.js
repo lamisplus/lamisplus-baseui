@@ -9,7 +9,19 @@ import IconButton from '@material-ui/core/IconButton';
 
 const PatientSearch = (props) => {
   const prescriptions = useSelector(state => state.pharmacy.allPrescriptions)
-  console.log(prescriptions)
+
+  const totalDrugsPrescribed = (drugsArray) => {
+    const dispensed = []
+
+    drugsArray.map(drugs => {
+      for (let drug in drugs) {
+        if (drugs[drug].prescription_status === 1)
+          dispensed.push(drugs[drug])
+      }
+    })
+    
+    return dispensed.length
+  }
  
   return (
     <div>
@@ -24,12 +36,12 @@ const PatientSearch = (props) => {
           { title: "Prescription Date", field: "date", type: "date" },
           {
             title: "Total Prescribed",
-            field: "count",
+            field: "prescribedCount",
             filtering: false,
           },
           {
             title: "Total Dispensed",
-            field: "count",
+            field: "dispensedCount",
             filtering: false,
           },
           {
@@ -42,7 +54,8 @@ const PatientSearch = (props) => {
           Id: prescription.patientId,
           name: prescription.firstName,
           date: prescription.dateEncounter,
-          count: prescription.formDataObj.length,
+          prescribedCount: prescription.formDataObj.length,
+          dispensedCount: totalDrugsPrescribed(prescription.formDataObj),
           actions: (
             <Link
               to={{
