@@ -64,122 +64,44 @@ momentLocalizer();
 
 const ModalSampleResult = (props) => {
   const classes = useStyles()
-  const [newdata, setNewdata] = useState({formdata});
+  const datasample = props.datasample ? props.datasample : {};
+  const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
+  const description = datasample.data ? datasample.data.description : null ;
+  const unit_measurement = datasample.data ? datasample.data.unit_measurement : null ;
+  console.log(lab_test_group)
+  const labId = datasample.id
   const [loading, setLoading] = useState(false)
-/* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
-  const formdata = useSelector(state => state.laboratory.formdata);
-  const dispatch = useDispatch();
-  const lab_id = props.datasample.id
-  console.log(props.datasample)
-  const labId = lab_id;
+  const [samples, setSamples] = useState({}) 
 
-  useEffect(() => {
-    dispatch(fetchFormById(labId));
-    setNewdata({...newdata, formdata}) 
-  }, [labId]);
-        console.log(formdata.data) 
-        const comment =  formdata.data ? formdata.data.comment : null
-        const description = formdata.data ? formdata.data.description : null
-        const patient_id = formdata.data ? formdata.data.patient_id : null
-        const user_id = formdata.data ? formdata.data.user_id : null
-        const lab_test_id = formdata.data ? formdata.data.lab_test_id : null
-        const sample_type = formdata.data ? formdata.data.sample_type : null
-        const test_result = formdata.data ? formdata.data.test_result : null
-        const lab_test_group = formdata.data ? formdata.data.lab_test_group : null
-        const unit_measurement = formdata.data ? formdata.data.unit_measurement : null
-        const lab_test_group_id = formdata.data ? formdata.data.lab_test_group_id : null
-        const lab_test_order_id = formdata.data ? formdata.data.lab_test_order_id : null
-        const date_result_reported = formdata.data ? formdata.data.date_result_reported : null
-        const date_sample_collected = formdata.data ? formdata.data.date_sample_collected : null
-        const lab_test_order_status = formdata.data ? formdata.data.lab_test_order_status : null
-        const encounterId = formdata.encounterId ? formdata.encounterId : null
-        const [samplesType, setSamplesType] = useState(0)
-        const [data, setData] = useState({data:{}, encounterId:""})
-        const [samples, setSamples] = useState({                                                                         
-                                          user_id: user_id,
-                                          patient_id: patient_id,
-                                          description: description,
-                                          lab_test_id: lab_test_id,
-                                          sample_type: sample_type,
-                                          test_result:test_result,
-                                          lab_test_group: lab_test_group,
-                                          unit_measurement:unit_measurement,
-                                          lab_test_group_id:lab_test_group_id,
-                                          lab_test_order_id: lab_test_order_id,
-                                          date_result_reported: date_result_reported,
-                                          date_sample_collected: date_sample_collected,
-                                          lab_test_order_status: lab_test_order_status,
-                                          date_result_reported:new Date(),
-                                          date_asseyed:new Date()
-                                    })
- 
-          
-        const [optionsample, setOptionsample] = useState([]);
-        useEffect(() => {
-            async function getCharacters() {
-              try {
-                const response = await fetch(url+'application-codesets/codesetGroup?codesetGroup=SAMPLE_TYPE');
-                const body = await response.json();
-                setOptionsample(body.map(({ display, id }) => ({ title: display, value: id })));
-              } catch (error) {
-                console.log(error);
-              }
-            }
-            getCharacters();
-          }, []);
-       const handleInputChangeSample = e => {
-        const { name, value } = e.target
-        const fieldValue = { [name]: value }
-        setSamples({
-            ...samples,
-            ...fieldValue
-        })
-
+    const handleInputChangeSample = e => {
+      setSamples ({ ...samples, [e.target.name]: e.target.value });
+      console.log(samples)
     }
-
-  //   const handleInputSampleType = e => {
-  //     const fieldValue = e.target.value      
-  //     setSamplesType(fieldValue)
-  //     console.log(fieldValue)
-  //     console.log(samplesType)
-  // }
     const saveSample = e => {
-      setLoading(true);
-      console.log(data)
-      toast.warn("Processing Sample ", { autoClose: 100, hideProgressBar:false });
-      const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
-      samples['lab_test_order_status'] = 5;
-  
-      samples['user_id'] = user_id
-      samples['description'] = description
-      samples['patient_id'] =patient_id
-      samples['description'] = description
-      samples['lab_test_id'] = lab_test_id
-      samples['lab_test_group'] = lab_test_group
-      samples['unit_measurement'] = unit_measurement
-      samples['lab_test_group_id'] = lab_test_group_id
-      samples['lab_test_order_id'] = lab_test_order_id
-      samples['date_sample_collected']= date_sample_collected
-      samples['sample_type']= sample_type
-      samples['date_result_reported']= newDatenow
-      data['data'] = samples;
-      data['encounterId'] = encounterId;
-      console.log(data)
       e.preventDefault()
+      setLoading(true);
+      toast.warn("Processing Sample ", { autoClose: 100, hideProgressBar:false });
+      const newDatenow = moment(samples.date_result_reported).format("DD-MM-YYYY");
+      datasample.data.date_result_reported = newDatenow
+      datasample.data.lab_test_order_status = 5;
+
+      
       const onSuccess = () => {
-        setLoading(false);        
+        setLoading(false);
+        props.togglestatus()       
       }
       const onError = () => {
-        setLoading(false);        
+        setLoading(false); 
+        props.togglestatus()       
       }
-      props.createCollectedSample(data, lab_id,onSuccess,onError)
+      props.createCollectedSample(datasample, labId,onSuccess,onError)
     }
     //console.log(formdata)
     const textstyle = {
         fontSize: '14px',
         fontWeight: 'bolder'
       };
-
+      
   return (
       
       <div >
@@ -206,7 +128,7 @@ const ModalSampleResult = (props) => {
                     Date Assayed
                     <br/>
                     <DateTimePicker time={false} name="date_asseyed"  id="date_asseyed"  
-                      defaultValue={new Date()} max={new Date()}
+                      
                       value={samples.date_asseyed}
                       onChange={value1 =>
                         setSamples({ ...samples, date_asseyed: value1 })
@@ -214,10 +136,10 @@ const ModalSampleResult = (props) => {
                     /> 
                     </Col>
                     <Col xs="4">
-                    Date Of Result
+                    Date Of Reported
                     <br/>
                     <DateTimePicker time={false} name="date_result_reported"  id="date_result_reported"  
-                      defaultValue={new Date()} max={new Date()}
+                      
                       value={samples.date_result_reported}
                       onChange={value1 =>
                         setSamples({ ...samples, date_result_reported: value1 })
@@ -248,9 +170,8 @@ const ModalSampleResult = (props) => {
                     <Col xs="4">
                     <br/>
                     <FormGroup>
-                      Unit
-                      
-                      <p style={textstyle}>{unit_measurement}</p>   
+                     
+                      <p style={{marginTop: '2rem' }} >{unit_measurement}</p>   
                       </FormGroup>                 
                     </Col>
              

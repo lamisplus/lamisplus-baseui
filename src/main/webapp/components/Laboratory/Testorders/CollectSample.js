@@ -1,21 +1,15 @@
 import React from 'react'
-import {Card, CardBody,CardHeader,Col,Row, Form,FormGroup,Label,Input} from 'reactstrap'
+import {Card, CardBody,CardHeader,Col,Row,Alert, Form,FormGroup,Label,Input} from 'reactstrap'
 import { useState , useEffect} from 'react'
-import { MdSave } from 'react-icons/md'
 import { TiArrowBack } from 'react-icons/ti'
 import MatButton from '@material-ui/core/Button'
 import 'react-datepicker/dist/react-datepicker.css'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
-import {FaRegEye} from 'react-icons/fa';
 import {FaPlusSquare} from 'react-icons/fa';
 import {TiArrowForward} from 'react-icons/ti'
 import 'react-widgets/dist/css/react-widgets.css'
 //Date Picker
-import { DateTimePicker } from 'react-widgets'
-import Moment from 'moment'
-import momentLocalizer from 'react-widgets-moment'
-import moment from 'moment'
 import { toast } from 'react-toastify'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -24,17 +18,18 @@ import {  fetchById } from '../../../actions/patients'
 import {  fetchAllLabTestOrderOfPatient } from '../../../actions/laboratory'
 import ModalSample from './collectSampleModal';
 import ModalSampleTransfer from './transferSampleModal';
-import ModalSampleType from './sampleTypeModal'
 import { useSelector, useDispatch } from 'react-redux';
 import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import { Spinner } from 'reactstrap';
 import { Table } from 'reactstrap';
 import { Badge } from 'reactstrap';
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-
-
-Moment.locale('en')
-momentLocalizer()
+import {
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItem,
+} from "@reach/menu-button";
+import "@reach/menu-button/styles.css";
 
 const useStyles = makeStyles({
   root: {
@@ -47,11 +42,9 @@ const useStyles = makeStyles({
 
 
  function CollectSample  (props){
-   console.log(props)
   const encounterresult = props.location.state.formdata.row ;
-  const [dropdownOpen, setOpen] = useState(false);
-  const toggle = () => setOpen(!dropdownOpen);
   const classes = useStyles()
+ 
   const testorder = useSelector(state => state.laboratory.testorder);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState('')
@@ -70,72 +63,36 @@ const useStyles = makeStyles({
   }, [fetchAllLabTestOrderOfPatient,fetchById]); //componentDidMount  
   const data = [testorder]
   const newsample =  data[0] ? data[0] : null 
-  const [useData, setUsedata] = useState(data)
-  ///const formdata=newsample
-   console.log(newsample)
   //Get list of test type
-  const [labTestType, setLabTestType] = useState([])
-
+  const labTestType = []
         newsample.forEach(function(value, index, array) {
         labTestType.push(value['data'].lab_test_group);
     });
   //Make the list contain unique list of Data 
   const uniqueValues = [...new Set(labTestType)];
-  const userInfo = encounterresult
   const [modal, setModal] = useState(false) //Modal to collect sample 
   const togglemodal = () => setModal(!modal)
   const [modal2, setModal2] = useState(false)//modal to transfer sample
   const togglemodal2 = () => setModal2(!modal2)
-  const [modal3, setModal3] = useState(false)//modal to Sample Types 
-  const togglemodal3 = () => setModal3(!modal3)
   const [collectmodal, setcollectmodal] = useState([])//to collect array of datas into the modal and pass it as props
-  const [samplelist, setSamplelist] = useState([])
+
   // const [encounterid, setencounterid] = useState('');
-  // const [labNum, setlabNum] = useState({lab_number:''})
-  //const [patientrow, setpatientValue] = useState({date_sample_collected:new Date(), sample_collected:''});
-  const TodayDate = moment(new Date()).format('DD-MM-YYYY')
-  const [patientrow, setpatientValue] = useState({
-        date_sample_collected: TodayDate,
-        lab_number: '',
-  })
-  const [collectsample, setCollectsample] = useState({
-        dateEncounter: "",
-        formData: {},
-        formName: "LAB_ORDER_FORM",
-        patientId: 0,
-        serviceName: "GENERAL_SERVICE",
-        visitId: 0
-  })
-  console.log(setCollectsample)
-  //const newDate = moment(patientrow.date_sample_collected).format('DD-MM-YYYY');
-  const saveColllectSample = e => {
+  const [labNum, setlabNum] = useState({lab_number:""})
 
-    useData['formData'] = useData
-    setUsedata({...useData, formData:{"labtest":useData }})
-    //console.log(useData)
-    toast.warn("Processing Sample ");
-    e.preventDefault()
-   props.createCollectedSample(collectsample)
- 
-  }
   const handlelabNumber = e => {
-    //  e.preventDefault();
-    
-    setpatientValue({ ...patientrow, [e.target.name]: e.target.value })
+    //  e.preventDefault();   
+    setlabNum({ ...labNum, [e.target.name]: e.target.value })
   }
+const handlesample = (row) => { 
 
-const handlesample = (sampleval) => {  
-   setcollectmodal(sampleval);
+   setcollectmodal({...collectmodal, ...row});
    setModal(!modal) 
 }
 const transfersample = (val) => {
   setModal2(!modal2)
   setcollectmodal(val);
 }
-const viewSampleTypes = (values) => {
-  setModal3(!modal3)
-  setSamplelist(values);
-}
+
 const getGroup = e => {
   const getvalue =e.target.value;
   const testing = newsample.length>0?newsample:null
@@ -156,72 +113,29 @@ const samplestatus = e =>{
   }else if(e===5){
     return <p><Badge  color="primary">Result Available</Badge></p>
   }else{
-    return <p>{"null"}</p>
+    return <p>{"---"}</p>
   }
 }
-//Check if sample type is not empty 
-const samples = e =>{
-  console.log(e)
-  if(e==="" || e===null){
-    return <p>---</p>
-  }else{
-    return <p><Badge color="primary" 
-      >{e.length} Sample</Badge></p>
-  }
-}
+
 //This is function to check for the status of each collection to display on the tablist below 
-const sampleAction = ( e) =>{
+const sampleAction = (e) =>{
 
     return (
-            <div>
-              {/* <Tooltip title="Collect Sample">
-                  <IconButton aria-label="Collect Sample" onClick={() =>
-                    handlesample(e)}>
-                  <FaPlusSquare size="15" />
-                  </IconButton>
-              </Tooltip>
-              <Tooltip title="Transfer Sample">
-                  <IconButton aria-label="Transfer Sample" onClick={() =>
-                    transfersample(e)}>
-                  <TiArrowForward size="15" />
-                  </IconButton>
-              </Tooltip>
-              {e.data.sample_type!==null ?
-              <Tooltip title="View Sample Type">
-                <IconButton aria-label="View Sample Type" onClick={() =>
-                  viewSampleTypes(e.data.sample_type)}>
-                <FaRegEye size="15" />
-                </IconButton>
-            </Tooltip>
-            :
-            ""
-           } */}
-           <ButtonDropdown isOpen={dropdownOpen} toggle={toggle}>
-            <DropdownToggle caret size="sm" color="info" >
-              Action
-            </DropdownToggle>
-            <DropdownMenu>
 
-              <DropdownItem onClick={() =>
-                    handlesample(e)}>                     
-                      <FaPlusSquare size="15" style={{color: '#3F51B5'}}/>{" "}Collect Sample
-              </DropdownItem>
-            
-              <DropdownItem onClick={() =>
-                    handlesample(e)}>
-                      <TiArrowForward size="15" style={{color: '#3F51B5'}}/>{" "}Transfer Sample
-              </DropdownItem>
-             
-              <DropdownItem onClick={() =>
-                  viewSampleTypes(e.data.sample_type)}>
-                      <FaRegEye size="15" style={{color: '#3F51B5'}}/>{" "}View Sample Type
-              </DropdownItem>
-            </DropdownMenu>
-          </ButtonDropdown>
-        </div>
+        <Menu>
+            <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
+              Action <span aria-hidden>▾</span>
+            </MenuButton>
+            <MenuList style={{hover:"#eee"}}>
+              <MenuItem onSelect={() => handlesample(e)}><FaPlusSquare size="15" style={{color: '#000'}}/>{" "}Collect Sample</MenuItem>
+              <MenuItem onSelect={() => transfersample(e)}><TiArrowForward size="15" style={{color: '#000'}}/>{" "} Transfer Sample</MenuItem>             
+            </MenuList>
+        </Menu>
         )
 
 }
+
+
   return (
     <Page title='Collect Sample'>
       <ToastContainer autoClose={2000} />
@@ -236,8 +150,13 @@ const sampleAction = ( e) =>{
             </div>
             <br/>
             <Card className="mb-12">
-              <CardHeader>Test Order Details {console.log( data[0] )}
-              <Link to="/laboratory">
+              <CardHeader>Test Order Details 
+              <Link 
+              to ={{ 
+                pathname: "/laboratory",  
+                activetab: 1
+              }} >
+              
               <MatButton
                   type='submit'
                   variant='contained'
@@ -252,6 +171,9 @@ const sampleAction = ( e) =>{
               </Link>
             </CardHeader>
             <CardBody>
+            <Alert color="primary">
+              Please make sure you enter Lab number before collecting sample
+            </Alert>
               <br />
               <Row>
                 <Col>
@@ -278,10 +200,25 @@ const sampleAction = ( e) =>{
                               </Input>
                             </FormGroup>
                           </Col>
+                          <Col md={3} className='float-right mr-1'>
+                          {/* {labNum['lab_number']==="" ? */}
+                          <FormGroup>
+                              <Label for="occupation">Lab Number </Label>
+                          <Input
+                            type='text'
+                            className='cr-search-form__input '
+                            name='lab_number'
+                            id='lab_number'
+                            value={labNum.lab_number}
+                            onChange={handlelabNumber}
+                          />
+                          </FormGroup>
+                         
+                        </Col>
                       </Row>
-                    <Form onSubmit={saveColllectSample}>
-                      <Table style={{ fontWeight: 'bolder', borderColor:"#000"}} striped>
-                        <thead style={{  backgroundColor:'#9F9FA5', color:"#000" }}>
+                    <Form >
+                      <Table  striped responsive>
+                        <thead style={{  backgroundColor:'#9F9FA5' }}>
                           <tr>
                             <th>Test</th>
                             <th>Sample Type</th>
@@ -293,12 +230,12 @@ const sampleAction = ( e) =>{
                         <tbody>
                         {!loading ? newsample.map((row) => (
                           
-                          <tr key={row.id}>
-                            <th scope="row">{row.data.description===""?"Null ":row.data.description}</th>
-                            <td>{samples(row.data.sample_type)}</td>
-                            <td> {encounterresult.dateEncounter===""?"null":encounterresult.dateEncounter} </td>
+                          <tr key={row.id} style={{ borderBottomColor: '#fff' }}>
+                            <th scope="row">{row.data.description===""?"---":row.data.description}</th>
+                            <td>{row.data.sample_type===""?"---":row.data.sample_type}</td>
+                            <td> {encounterresult.dateEncounter===""?"---":encounterresult.dateEncounter} </td>
                             <td>{samplestatus(row.data.lab_test_order_status)} </td>
-                            <td>{sampleAction( row)}</td>
+                            <td>{sampleAction(row)}</td>
                           </tr>
                         ))
                         :<p> <Spinner color="primary" /> Loading Please Wait</p>
@@ -307,49 +244,7 @@ const sampleAction = ( e) =>{
                       </Table>
                     
                     <br />
-                    
-                      <Row form>
-                        <Col md={3} style={{ marginTop: '20px' }}>
-                          <Input
-                            type='text'
-                            placeholder='Lab. Number '
-                            className='cr-search-form__input '
-                            name='lab_number'
-                            id='lab_number'
-                            value={patientrow.lab_number}
-                            onChange={handlelabNumber}
-                          />
-                        </Col>
-                        <Col md={2}>
-                          <p style={{ paddingLeft: '30px', marginTop: '30px' }}>
-                            {' '}
-                            OR Generate{' '}
-                          </p>
-                        </Col>
-                        <Col md={2} style={{ marginTop: '20px' }}>
-                          <DateTimePicker
-                            time={false}
-                            name='date_sample_collected'
-                            id='date_sample_collected'
-                            defaultValue={new Date()}
-                            max={new Date()}
-                          />
-                        </Col>
-
-                        <Col md={2} style={{ marginTop: '20px' }}>
-                          <FormGroup>
-                            <MatButton
-                              type='submit'
-                              variant='contained'
-                              color='primary'
-                              className={classes.button}
-                              startIcon={<MdSave />}
-                            >
-                              Save
-                            </MatButton>
-                          </FormGroup>
-                        </Col>
-                      </Row>
+                   
                     </Form>
                   </Card>
                 </Col>
@@ -358,9 +253,8 @@ const sampleAction = ( e) =>{
           </Card>
         </Col>
       </Row>
-      <ModalSample modalstatus={modal} togglestatus={togglemodal} datasample={collectmodal} testorder={data}  userInfo={userInfo} useData={useData}/>
-      <ModalSampleTransfer modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal} testorder={data}  userInfo={userInfo} useData={useData}/>
-      <ModalSampleType modalstatus={modal3} togglestatus={togglemodal3} samptypelist={samplelist} />
+      <ModalSample modalstatus={modal} togglestatus={togglemodal} datasample={collectmodal}  labnumber={labNum}/>
+      <ModalSampleTransfer modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal} labnumber={labNum}/>
     </Page>
   )
 }

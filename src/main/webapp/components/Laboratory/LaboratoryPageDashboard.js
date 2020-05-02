@@ -28,7 +28,7 @@ import LabTestVerifySampleSearch from './Sampleverifications/LabTestVerifySample
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
+  
   return (
     <Typography
       component="div"
@@ -247,12 +247,17 @@ const userProgressTableData = [
 ];
 
 export default function ScrollableTabsButtonForce(props) {
+  //console.log(props)
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    console.log(value)
   };
- 
+  // const activetab = props.location ? props.location.activetab : null ;
+  // if(activetab){
+  //   setValue(1)
+  // }
   return (
     <div className={classes.root}>
         <div className={classes.inforoot} >
@@ -334,10 +339,10 @@ export default function ScrollableTabsButtonForce(props) {
 </TabPanel>
     {/* End of dashboard */}
 
-{/* Begining of Service Form */}
-<TabPanel value={value} index={1}>
+{/* Begining of Service Form  */}
+<TabPanel value={value} index={1} >
     <LabTestOrderSearch />
-    {/* <TestOrderList /> */}
+
 </TabPanel>     
  {/* Begining of consultation  */}
  <TabPanel value={value} index={2}>

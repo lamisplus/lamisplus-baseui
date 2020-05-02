@@ -3,10 +3,10 @@ import sidebarBgImage from 'assets/img/sidebar/sidebar-4.jpg';
 import SourceLink from 'components/SourceLink';
 import React from 'react';
 import {
-  MdDashboard,
+  MdDashboard,MdGraphicEq
 } from 'react-icons/md';
-// import { GiTreeBeehive} from 'react-icons/gi';
-import { FaUserPlus, FaXRay} from 'react-icons/fa';
+import { GiTestTubes, GiMedicines} from 'react-icons/gi';
+import { FaUserPlus,  FaListUl, FaUserCog} from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import {
   Nav,
@@ -29,15 +29,14 @@ const sidebarBackground = {
 const navItems = [
   { to: '/dashboard', name: 'Dashboard', exact: true, Icon: MdDashboard },
   { to: '/patients', name: 'Find Patient', exact: false, Icon: FaUserPlus },
-  { to: '/laboratory', name: 'Laboratory', exact: false, Icon: FaXRay },
-  { to: '/pharmacy', name: 'Pharmacy', exact: false, Icon: FaXRay },
-  { to: '/form-dashboard', name: 'Admin', exact: false, Icon: FaXRay },
-  { to: '/visual', name: 'Visual', exact: false, Icon: FaXRay },
-  { to: '/Report', name: 'Report', exact: false, Icon: FaXRay },
+  { to: '/laboratory', name: 'Laboratory', exact: false, Icon: GiTestTubes },
+  { to: '/pharmacy', name: 'Pharmacy', exact: false, Icon: GiMedicines },
+  { to: '/form-dashboard', name: 'Administration', exact: false, Icon: FaUserCog },
+  { to: '/report', name: 'Report', exact: false, Icon: FaListUl },
+  { to: '/visual', name: 'Visualization', exact: false, Icon: MdGraphicEq },
+ 
 ];
 
-//Make it a main menu { to: '/hts-list', name: 'HTS', exact: false, Icon: GiTreeBeehive },
-// { to: '/index-Search', name: 'Index Contract Tracking', exact: false, Icon: GiTreeBeehive },
 const bem = bn.create('sidebar');
 
 class Sidebar extends React.Component {

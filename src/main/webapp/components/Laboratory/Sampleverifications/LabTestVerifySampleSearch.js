@@ -22,6 +22,21 @@ const PatientSearch = (props) => {
         props.fetchAllLabTestOrderToday(onSuccess, onError);
       }, []); //componentDidMount
  
+      function totalSampleVerified (test){
+        const  maxVal = []
+       
+        for(var i=0; i<test.length; i++){
+          for (var key in test[i]) {
+            if (test[i][key].lab_test_order_status=== 2)
+              maxVal.push(test[i][key])
+          }
+         
+        }
+        return maxVal.length;
+      }
+
+
+
   return (
     <div>
       <MaterialTable
@@ -33,7 +48,7 @@ const PatientSearch = (props) => {
             field: "name",
           },
           
-          { title: "Test Order Date", field: "date", type: "date", filtering: false },
+          { title: "Date Order", field: "date", type: "date", filtering: false },
           {
             title: "Total Sample ",
             field: "count",
@@ -57,7 +72,7 @@ const PatientSearch = (props) => {
           
           date: row.dateEncounter,
           count: row.formDataObj.length,
-          samplecount: 0,
+          samplecount: totalSampleVerified(row.formDataObj),
           actions: <Link to ={{ 
                               pathname: "/sample-verification",  
                               state: { getpatientlists:{row}}, 

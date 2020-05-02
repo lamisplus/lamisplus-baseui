@@ -21,6 +21,19 @@ const PatientSearch = (props) => {
     }
         props.fetchAllLabTestOrderToday(onSuccess, onError);
       }, []); //componentDidMount
+      
+      function totalResultCollected (test){
+        const  maxVal = []
+       
+        for(var i=0; i<test.length; i++){
+          for (var key in test[i]) {
+            if (test[i][key].lab_test_order_status=== 5)
+              maxVal.push(test[i][key])
+          }
+         
+        }
+        return maxVal.length;
+      }
  
   return (
     <div>
@@ -32,7 +45,7 @@ const PatientSearch = (props) => {
             title: "Patient Name",
             field: "name",
           },
-          { title: "Test Order Date", field: "date", type: "date" , filtering: false},          
+          { title: "Date Order", field: "date", type: "date" , filtering: false},          
           {
             title: "Total Sample ",
             field: "count",
@@ -56,7 +69,7 @@ const PatientSearch = (props) => {
           
           date: row.dateEncounter,
           count: row.formDataObj.length,
-          samplecount: 0,
+          samplecount: totalResultCollected(row.formDataObj),
           actions: <Link to ={{ 
                         pathname: "/collect-result",  
                         state: { getpatientlists:{row}}, 

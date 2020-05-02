@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {  Modal, ModalHeader, ModalBody,
 Form,
-Row,
+Row,Alert,
 Col,Input,
 FormGroup,
 Label,Card, CardBody
@@ -23,9 +23,7 @@ import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
 import {url} from '../../../api'
 import { Spinner } from 'reactstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
-import { Alert } from 'reactstrap';
 
 Moment.locale('en');
 momentLocalizer();
@@ -65,132 +63,104 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const ModalSample = (props) => {
-  console.log(props)
   const classes = useStyles()
-  const [newdata, setNewdata] = useState({formdata});
+  const datasample = props.datasample ? props.datasample : {};
+  const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
+  const description = datasample.data ? datasample.data.description : null ;
+  console.log(lab_test_group)
+  const labId = datasample.id
   const [loading, setLoading] = useState(false)
-/* Fetch from from the store after clicking the collect sample when the modal triger it will fetch from the store */
-  const formdata = useSelector(state => state.laboratory.formdata);
-  const dispatch = useDispatch();
-  const lab_id = props.datasample.id
-  console.log(props.datasample)
-  const labId = lab_id;
+  const [visible, setVisible] = useState(true);
+  const onDismiss = () => setVisible(false);
+  const [samples, setSamples] = useState({}) 
 
+  const [optionsample, setOptionsample] = useState([]);
+  //This is to get SAMPLE TYPE from application Codeset
   useEffect(() => {
-    dispatch(fetchFormById(labId));
-    setNewdata({...newdata, formdata}) 
-  }, [labId]);
-        console.log(formdata.data) 
-        const comment =  formdata.data ? formdata.data.comment : null
-        const description = formdata.data ? formdata.data.description : null
-        const patient_id = formdata.data ? formdata.data.patient_id : null
-        const user_id = formdata.data ? formdata.data.user_id : null
-        const lab_test_id = formdata.data ? formdata.data.lab_test_id : null
-        const sample_type = formdata.data ? formdata.data.sample_type : null
-        const test_result = formdata.data ? formdata.data.test_result : null
-        const lab_test_group = formdata.data ? formdata.data.lab_test_group : null
-        const unit_measurement = formdata.data ? formdata.data.unit_measurement : null
-        const lab_test_group_id = formdata.data ? formdata.data.lab_test_group_id : null
-        const lab_test_order_id = formdata.data ? formdata.data.lab_test_order_id : null
-        const date_result_reported = formdata.data ? formdata.data.date_result_reported : null
-        const date_sample_collected = formdata.data ? formdata.data.date_sample_collected : null
-        const lab_test_order_status = formdata.data ? formdata.data.lab_test_order_status : null
-        const encounterId = formdata.encounterId ? formdata.encounterId : null
-
-        const [data, setData] = useState({data:{}, encounterId:""})
-        const [samples, setSamples] = useState({                                                                         
-                                          user_id: user_id,
-                                          patient_id: patient_id,
-                                          description: description,
-                                          lab_test_id: lab_test_id,
-                                          sample_type: sample_type,
-                                          test_result:test_result,
-                                          lab_test_group: lab_test_group,
-                                          unit_measurement:unit_measurement,
-                                          lab_test_group_id:lab_test_group_id,
-                                          lab_test_order_id: lab_test_order_id,
-                                          date_result_reported: date_result_reported,
-                                          date_sample_collected: new Date(),
-                                          lab_test_order_status: lab_test_order_status 
-                                    })
- 
-          
-        const [optionsample, setOptionsample] = useState([]);
-        useEffect(() => {
-            async function getCharacters() {
-              try {
-                const response = await fetch(url+'application-codesets/codesetGroup?codesetGroup=SAMPLE_TYPE');
-                const body = await response.json();
-                setOptionsample(body.map(({ display, id }) => ({ title: display, value: id })));
-              } catch (error) {
-                console.log(error);
-              }
-            }
-            getCharacters();
-          }, []);
-       const handleInputChangeSample = e => {
-        const { name, value } = e.target
-        const fieldValue = { [name]: value }
-        setSamples({
-            ...samples,
-            ...fieldValue
-        })
-
+      async function getCharacters() {
+        try {
+          const response = await fetch(url+'application-codesets/codesetGroup?codesetGroup=SAMPLE_TYPE');
+          const body = await response.json();
+          setOptionsample(body.map(({ display, id }) => ({ title: display, value: id })));
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      getCharacters();
+    }, []);
+      
+    const handleInputChangeSample = e => {
+      setSamples ({ ...samples, [e.target.name]: e.target.value });
+      console.log(samples)
     }
     const saveSample = e => {
+      e.preventDefault()
       setLoading(true);
-      console.log(lab_id)
       toast.warn("Processing Sample ", { autoClose: 100, hideProgressBar:false });
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
-      samples['lab_test_order_status'] = 1;
-      samples['comment'] = comment
-      samples['date_sample_collected'] = newDatenow;
-      samples['user_id'] = user_id
-      samples['description'] = description
-      samples['patient_id'] =patient_id
-      samples['description'] = description
-      samples['lab_test_id'] = lab_test_id
-      samples['lab_test_group'] = lab_test_group
-      samples['unit_measurement'] = unit_measurement
-      samples['lab_test_group_id'] = lab_test_group_id
-      samples['lab_test_order_id'] = lab_test_order_id
-      samples['date_result_reported'] = date_result_reported
-      data['data'] = samples;
-      data['encounterId'] = encounterId;
-      e.preventDefault()
-     const onSuccess = () => {
+      datasample.data.lab_test_order_status = 1;
+      datasample.data.date_sample_collected = newDatenow
+      datasample.data.comment = samples.comment
+      /* processing the sample type to a string   */
+      if(samples.sample_type.length>0){
+      const arr = [];
+      samples.sample_type.forEach(function(value, index, array) {
+        arr.push(value['title']);
+      });
+      const sampletostring= arr.toString()
+      datasample.data.sample_type = sampletostring  
+      }else{
+        datasample.data.sample_type=datasample.data.sample_type
+      }
+      /* end of the process */
+      const onSuccess = () => {
         setLoading(false);
-        
-      //props.history.push("/collect-sample")        
+        props.togglestatus()       
       }
       const onError = () => {
-        setLoading(false);        
+        setLoading(false); 
+        props.togglestatus()       
       }
-      props.createCollectedSample(data, lab_id,onSuccess,onError)
+      props.createCollectedSample(datasample, labId,onSuccess,onError)
     }
+  
+  function checklanumber (lab_num){
+      if(lab_num===""){       
+       return (                 
+          <Alert color="danger" isOpen={visible} toggle={onDismiss}>
+            Please make sure you enter a lab number
+          </Alert>
+       )
+      }
+  }
   return (
       
       <div >
+       
         <Card >
         <CardBody>
-       <ToastContainer autoClose={3000} hideProgressBar />
-      <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
-        
-      <Form onSubmit={saveSample}>
-        <ModalHeader toggle={props.togglestatus}>Collect Sample</ModalHeader>
-        <ModalBody>
-        <Card >
-        <CardBody>
-        <Row >
-        <Col md={12} >
+        <ToastContainer autoClose={3000} hideProgressBar />
+          <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
+            
+          <Form onSubmit={saveSample}>
+          <ModalHeader toggle={props.togglestatus}>Collect Sample </ModalHeader>
+            <ModalBody>
+            {checklanumber(props.labnumber['lab_number'])}
+            <Card >
+            <CardBody>
+            <Row >
+            <Col md={12} >
 
-        <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder'}}>
-          <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}>{lab_test_group}</span> 
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : 
-          <span style={{ fontWeight: 'bolder'}}>{description}</span>
-          </p>
-          
-        </Alert>
+            <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder', fontSize:'14px'}}>
+              <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}>{lab_test_group }</span> 
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : &nbsp;&nbsp;
+              <span style={{ fontWeight: 'bolder'}}>{description}</span>              
+               &nbsp;&nbsp;&nbsp; Lab Number : &nbsp;&nbsp;
+              <span style={{ fontWeight: 'bolder'}}>{props.labnumber['lab_number']===""?" ---":props.labnumber['lab_number']}</span>
+            
+              </p>
+              
+            </Alert>
       </Col>
         <Col md={6}>
          
@@ -232,7 +202,7 @@ const ModalSample = (props) => {
                 renderInput={(params) => (
                   <TextField {...params} variant="outlined" margin="normal"  />
                 )}
-                
+                required
               />
             {/* <FixedTags onChange={handleInputChangeSample} value={samples.sample_type} /> */}
          </FormGroup>
@@ -258,7 +228,8 @@ const ModalSample = (props) => {
     <br/>
     {loading ? <Spinner /> : ""}
     <br/>
-       <MatButton
+      {props.labnumber['lab_number']!==""?
+          <MatButton
             type='submit'
             variant='contained'
             color='primary'
@@ -266,9 +237,20 @@ const ModalSample = (props) => {
             startIcon={<SaveIcon />}
             disabled={loading}
           >   
-            Ok
+            Save
           </MatButton>
-          
+          :
+          <MatButton
+            type='submit'
+            variant='contained'
+            color='primary'
+            className={classes.button}
+            startIcon={<SaveIcon />}
+            disabled='true'
+          >   
+            Save
+          </MatButton>
+          }
           <MatButton
             variant='contained'
             color='default'

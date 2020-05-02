@@ -2,12 +2,10 @@ import React from 'react'
 import {Card, CardBody,CardHeader,Col,Row,FormGroup,Label,Input} from 'reactstrap'
 import { useState , useEffect} from 'react'
 import { TiArrowBack } from 'react-icons/ti' 
-import { FaRegEye } from 'react-icons/fa'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Link } from 'react-router-dom'
 import MatButton from '@material-ui/core/Button'
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
+
 import {GoChecklist} from 'react-icons/go';
 import 'react-widgets/dist/css/react-widgets.css'
 import { ToastContainer } from 'react-toastify'
@@ -16,16 +14,20 @@ import Page from 'components/Page'
 import {  fetchById } from '../../../actions/patients'
 import {  fetchAllLabTestOrderOfPatient } from '../../../actions/laboratory'
 import ModalSampleVerify from './VerifySample';
-// import ModalSampleResult from '../TestResult/EnterResult';
-// import ModalSampleReject from './SampleRejection';
-import ModalSampleType from './sampleTypeModal'
 import { useSelector, useDispatch } from 'react-redux';
 import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import { Spinner } from 'reactstrap';
 import { Table } from 'reactstrap';
 import { Badge } from 'reactstrap';
 import { makeStyles } from '@material-ui/core/styles'
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItem,
+} from "@reach/menu-button";
+import "@reach/menu-button/styles.css";
+
 
 const useStyles = makeStyles({
   root: {
@@ -38,11 +40,8 @@ const useStyles = makeStyles({
 
  function CollectVerification  (props){
   const classes = useStyles()
-  const [dropdownOpen, setOpen] = useState(false);
-  const toggle = () => setOpen(!dropdownOpen);
   const encounterresult = props.location.state.getpatientlists.row ;
   const testorder = useSelector(state => state.laboratory.testorder);
-
   const dispatch = useDispatch();
   const [loading, setLoading] = useState('')
   useEffect(() => {
@@ -59,12 +58,16 @@ const useStyles = makeStyles({
     dispatch(fetchById(personId,onSuccess,onError));
   }, [fetchAllLabTestOrderOfPatient,fetchById]); //componentDidMount  
   const data = [testorder]
-  const newsample =  data[0] ? data[0] : null 
-  const formdata=newsample
-  console.log(formdata)
+  const sampleslist =  data[0] ? data[0] : {} 
+ 
+  //Filter only sample that is collected in the array 
+  const newsample =  sampleslist.filter(function(sample) {
+    return (sample.data.lab_test_order_status ===1 || sample.data.lab_test_order_status ===3 || sample.data.lab_test_order_status === 4);
+  });
+  console.log(newsample)
+
   //Get list of test type
   const [labTestType, setLabTestType] = useState([])
-  console.log(setLabTestType)
         newsample.forEach(function(value, index, array) {
         labTestType.push(value['data'].lab_test_group);
     });
@@ -73,32 +76,19 @@ const useStyles = makeStyles({
   const userInfo = encounterresult
   const [modal, setModal] = useState(false) //Modal to collect sample 
   const togglemodal = () => setModal(!modal)
-  const [modal2, setModal2] = useState(false)//modal to transfer sample
-  const togglemodal2 = () => setModal2(!modal2)
-  const [modal3, setModal3] = useState(false)//modal to Sample Types 
-  const togglemodal3 = () => setModal3(!modal3)
   const [collectmodal, setcollectmodal] = useState([])//to collect array of datas into the modal and pass it as props
-  const [samplelist, setSamplelist] = useState([])
 
-const handlesample = (sampleval) => {  
-   setcollectmodal(sampleval);
+const handlesample = (row) => {  
+   setcollectmodal({...collectmodal, ...row});
    setModal(!modal) 
 }
-const handlereject = (sampleval) => {
-  setcollectmodal(sampleval);
-  setModal3(!modal3)
- 
-}
-const viewSampleTypes = (values) => {
-  setModal3(!modal3)
-  setSamplelist(values);
-}
+
 const getGroup = e => {
   const getvalue =e.target.value;
   const testing = newsample.length>0?newsample:null
   console.log(testing.data)
   const getnew = data[0].find(x => x.lab_test_group === getvalue)
-  console.log(getnew) 
+  //console.log(getnew) 
 };
 //This is function to check for the status of each collection to display on the tablist below 
 const samplestatus = e =>{
@@ -114,56 +104,23 @@ const samplestatus = e =>{
   }else if(e===5){
     return <p><Badge  color="light">Result Available</Badge></p>
   }else{
-    return <p>{"null"}</p>
+    return <p>{"---"}</p>
   }
 }
-//Check if sample type is not empty 
-const samples = e =>{
-  console.log(e)
-  if(e==="" || e===null){
-    return <p>null</p>
-  }else{
-    return <p><Badge color="info" 
-      >{e.length} Sample</Badge></p>
-  }
-}
+
 //This is function to check for the status of each collection to display on the tablist below 
 const sampleAction = (e) =>{
   return (
-          <div>
-            {/* <Tooltip title="Verify Sample">                                              
-                <IconButton aria-label="Verify Sample" onClick={() =>
-                  handlesample(e)}
-                  >
-                <GoChecklist size="15" />
-                </IconButton>
-            </Tooltip>
-            {e.data.sample_type!==null ?
-              <Tooltip title="View Sample Type">
-                <IconButton aria-label="View Sample Type" onClick={() =>
-                  viewSampleTypes(e.data.sample_type)}>
-                <FaRegEye size="15" />
-                </IconButton>
-            </Tooltip>
-            :
-            ""
-           } */}
-            <ButtonDropdown isOpen={dropdownOpen} toggle={toggle}>
-            <DropdownToggle caret size="sm" color="info" >
-              Action
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem onClick={() =>
-                  handlesample(e)}>                     
-                      <GoChecklist size="15" style={{color: '#3F51B5'}}/>{" "}Verify Sample
-              </DropdownItem>            
-              <DropdownItem onClick={() =>
-                  viewSampleTypes(e.data.sample_type)}>
-                      <FaRegEye size="15" style={{color: '#3F51B5'}}/>{" "}View Sample Type
-              </DropdownItem>
-            </DropdownMenu>
-          </ButtonDropdown>
-            </div>
+
+            <Menu>
+                <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
+                  Action <span aria-hidden>▾</span>
+                </MenuButton>
+                <MenuList style={{hover:"#eee"}}>
+                  <MenuItem onSelect={() => handlesample(e)}><GoChecklist size="15" style={{color: '#3F51B5'}}/>{" "}Verify Sample</MenuItem>
+                                
+                </MenuList>
+            </Menu>
           )
 }
   return (
@@ -223,9 +180,23 @@ const sampleAction = (e) =>{
                               </Input>
                             </FormGroup>
                           </Col>
+                          <Col md={3} className='float-right mr-1'>
+                          <FormGroup>
+                              <Label for="occupation">Lab Number </Label>
+                          <Input
+                            type='text'
+                            className='cr-search-form__input '
+                            name='lab_number'
+                            id='lab_number'
+                            value=""
+                            disabled
+                          />
+                          </FormGroup>
+                         
+                        </Col>
                       </Row>
                    
-                      <Table style={{ fontWeight: 'bolder', borderColor:"#000"}} striped>
+                      <Table style={{ fontWeight: 'bolder', borderColor:"#000"}}  responsive>
                         <thead style={{   backgroundColor:'#9F9FA5', color:"#000"  }}>
                           <tr>
                             <th>Test</th>
@@ -238,9 +209,9 @@ const sampleAction = (e) =>{
                         <tbody>
                         {!loading ? newsample.map((row) => (
                           
-                          <tr key={row.id}>
-                            <th scope="row">{row.data.description===""?"Null ":row.data.description}</th>
-                            <td>{samples(row.data.sample_type)}</td>
+                          <tr key={row.id} style={{ borderBottomColor: 'none' }}>
+                            <th scope="row">{row.data.description===""?"--- ":row.data.description}</th>
+                            <td>{row.data.sample_type===""?"--- ":row.data.sample_type}</td>
                             <td> {userInfo.dateEncounter} </td>
                         <td>{samplestatus(row.data.lab_test_order_status)} </td>
                             <td>{sampleAction(row)}</td>
@@ -261,10 +232,7 @@ const sampleAction = (e) =>{
         </Col>
       </Row>
       <ModalSampleVerify modalstatus={modal} togglestatus={togglemodal} datasample={collectmodal} />
-      {/* <ModalSampleResult modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal} /> */}
-      {/* <ModalSampleReject modalstatus={modal3} togglestatus={togglemodal3} datasample={collectmodal} /> */}
-      <ModalSampleType modalstatus={modal3} togglestatus={togglemodal3} samptypelist={samplelist} />
-    </Page>
+      </Page>
   )
 }
 
