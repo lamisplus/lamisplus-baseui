@@ -84,7 +84,7 @@ export const updatePrescriptionStatus = (formId, data) => (dispatch) => {
                type: ACTION_TYPES.UPDATE_PRESCRIPTION_STATUS,
                payload: response.data,
              });
-             toast.success("Drug was successful dispensed");
+             toast.success("Dispense successful");
            })
            .catch((error) => {
              console.log("Pharmacy Error: ", error);
@@ -92,6 +92,6 @@ export const updatePrescriptionStatus = (formId, data) => (dispatch) => {
                type: ACTION_TYPES.PHARMACY_ERROR,
                payload: "Something went wrong",
              });
-             toast.error("Failed to dispense drug, please try again");
+      
            });
        };

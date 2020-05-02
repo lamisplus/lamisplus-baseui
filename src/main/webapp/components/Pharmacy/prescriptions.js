@@ -14,6 +14,8 @@ import PatientDetailCard from "./PatientDetailCard";
 import { Link } from "react-router-dom";
 import DispenseModal from './DispenseModal'
 import ViewModal from './ViewModal'
+import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
+import "@reach/menu-button/styles.css";
 
 import {
   Alert,
@@ -115,13 +117,64 @@ const Prescriptions = (props) => {
 
 
   const formData = props.location.form ? props.location.form.formDataObj : null 
-  const saveColllectSample = (e) => {
-    e.preventDefault();
-  };
 
-  const handleLabNumber = (e) => {
-    e.preventDefault();
-  };
+ const Actions = (form) => {
+   return (
+     <Menu>
+       <MenuButton
+         style={{
+           backgroundColor: "#3F51B5",
+           color: "#fff",
+           border: "2px solid #3F51B5",
+           borderRadius: "4px",
+         }}
+       >
+         Action <span aria-hidden>▾</span>
+       </MenuButton>
+       <MenuList style={{ hover: "#eee" }}>
+         {form.data.prescription_status === 0 ? (
+           <MenuItem onSelect={() => toggle(form)}>
+             <i
+               className="fa fa-pencil"
+               aria-hidden="true"
+               size="15"
+               style={{ cursor: "pointer", color: "#000" }}
+             >
+               &nbsp; {""} Dispense drugs
+             </i>
+           </MenuItem>
+         ) : (
+           <MenuItem onSelect={() => toggle(form)}>
+             <i
+               className="fa fa-pencil"
+               aria-hidden="true"
+               size="15"
+               style={{ cursor: "pointer", color: "#000" }}
+             >
+               &nbsp; {""} Update details
+             </i>
+           </MenuItem>
+         )}
+         <MenuItem onSelect={() => toggle1(form)}>
+           {/* <VisibilityIcon
+             size="10"
+             style={{ color: "#000", cursor: "pointer" }}
+           />{" "} */}
+           <i
+             className="fa fa-eye"
+             aria-hidden="true"
+             size="15"
+             style={{ cursor: "pointer", color: "#000" }}
+           >
+             &nbsp; {""}View details
+           </i>
+         </MenuItem>
+       </MenuList>
+     </Menu>
+   );
+ };
+
+
 
 
   return (
@@ -153,31 +206,22 @@ const Prescriptions = (props) => {
                     <br />
                     <Row>
                       <Col>
-                        <Form onSubmit={saveColllectSample}>
-                          <Table
-                            style={{
-                              fontWeight: "bolder",
-                              borderColor: "#000",
-                            }}
-                            striped
-                          >
-                            <thead
+                        <Card body>
+                            <Table
                               style={{
-                                backgroundColor: "#9F9FA5",
-                                color: "#000",
+                                fontWeight: "bolder",
+                                borderColor: "#000",
                               }}
+                              responsive
                             >
-                              <tr>
-                                <th>Name</th>
-                                <th>Dosage</th>
-                                <th>Date Prescribed</th>
-                                <th>Date Dispensed</th>
-                                <th>Actions</th>
-                              </tr>
-                            </thead>
-                            {formData.map((form) => (
-                              <tbody>
+                              <thead
+                                style={{
+                                  backgroundColor: "#9F9FA5",
+                                  color: "#000",
+                                }}
+                              >
                                 <tr>
+<<<<<<< HEAD
                                   <th>{form.data.generic_name}</th>
                                   <th>{form.data.dosage}</th>
                                   <th>{form.data.date_prescribed}</th>
@@ -233,12 +277,32 @@ const Prescriptions = (props) => {
                                       />
                                     )}
                                   </th>
+=======
+                                  <th>Name</th>
+                                  <th>Dosage</th>
+                                  <th>Date Prescribed</th>
+                                  <th>Date Dispensed</th>
+                                  <th></th>
+>>>>>>> 78e4ba5cdf593ba5a9b8e9dd17b2f1eeafd6482a
                                 </tr>
-                              </tbody>
-                            ))}
-                          </Table>
-                          <br />
-                        </Form>
+                              </thead>
+
+                              {formData.map((form) => (
+                                <tbody key={form.id}>
+                                  <tr>
+                                    <td>
+                                      <b>{form.data.generic_name}</b>
+                                    </td>
+                                    <td>{form.data.dosage}</td>
+                                    <td>{form.data.date_prescribed}</td>
+                                    <td>{form.data.date_dispensed}</td>
+                                    <td>{Actions(form)}</td>
+                                  </tr>
+                                </tbody>
+                              ))}
+                            </Table>
+                            <br />
+                        </Card>
                       </Col>
                     </Row>
                   </CardBody>

@@ -93,63 +93,57 @@ const ViewModal = (props) => {
   };
 
 
-
   return (
     <div>
       <Card>
         <CardBody>
           <ToastContainer autoClose={3000} hideProgressBar />
-          <Modal
-            isOpen={modal}
-            toggle={toggle}
-            className={className}
-            size="lg"
-          >
+          <Modal isOpen={modal} toggle={toggle} className={className} size="lg">
             <ModalHeader toggle={toggle}>Prescription Details</ModalHeader>
             <ModalBody>
               <Row style={{ marginTop: "20px" }}>
                 <Col xs="12">
-                  Drug Name
+                  <span style={textstyle}>Drug Name</span>
                   <br />
-                  <p style={textstyle}>{form.data.generic_name} </p>
+                  <p>{form.data.generic_name} </p>
                 </Col>
                 <Col xs="4">
-                  Dosage
+                  <span style={textstyle}>Dosage</span>
                   <br />
-                  <p style={textstyle}>{form.data.dosage}</p>
+                  <p>{form.data.dosage}</p>
                 </Col>
                 <Col xs="4">
-                  Unit
+                  <span style={textstyle}>Unit</span>
                   <br />
-                  <p style={textstyle}>{form.data.duration_unit}</p>
+                  <p>{form.data.duration_unit}</p>
                 </Col>
                 <Col xs="4">
-                  Frequency
+                  <span style={textstyle}>Frequency</span>
                   <br />
-                  <p style={textstyle}>
-                    {form.data.dosage_frequency} time(s) daily
-                  </p>
+                  <p>{form.data.dosage_frequency} time(s) daily</p>
                 </Col>
               </Row>
               <Row style={{ marginTop: "20px" }}>
                 <Col xs="4">
-                  Start Date
+                  <span style={textstyle}>Start Date</span>
                   <br />
-                  <p style={textstyle}>{form.data.start_date}</p>
-                </Col>
-                <Col xs="12">Additional Information</Col>
-                <hr />
-                <Col xs="4">
-                  Instruction
-                  <br />
-                  <p style={textstyle}>{form.data.comment}</p>
+                  <p>{form.data.start_date}</p>
                 </Col>
                 <Col xs="4">
-                  Additional Instruction
+                  <span style={textstyle}>Quantity Dispensed</span>
                   <br />
-                  <p style={textstyle}>
-                    {form.data.comment ? form.data.comment : "None"}
-                  </p>
+                  <p>{form.data.quantity_dispensed || 0}</p>
+                </Col>
+                <Col xs="12">ADDITIONAL INFORMATION</Col>
+                <Col xs="4">
+                  <span style={textstyle}>Instruction</span>
+                  <br />
+                  <p>{form.data.comment || "use as prescribed"}</p>
+                </Col>
+                <Col xs="4">
+                  <span style={textstyle}>Additional Instruction</span>
+                  <br />
+                  <p>{form.data.comment ? form.data.comment : "None"}</p>
                 </Col>
               </Row>
               <MatButton
@@ -160,7 +154,7 @@ const ViewModal = (props) => {
                 startIcon={<CancelIcon />}
               >
                 Cancel
-                </MatButton>
+              </MatButton>
             </ModalBody>
           </Modal>
           ;

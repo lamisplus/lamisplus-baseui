@@ -46,7 +46,7 @@ const useStyles = makeStyles({
   const [loading, setLoading] = useState('')
   useEffect(() => {
     const personId = encounterresult.hospitalNumber;
-    const ecounterId = encounterresult.encounterId;
+    const encounterId = encounterresult.encounterId;
     setLoading(true);
     const onSuccess = () => {
       setLoading(false)
@@ -54,7 +54,7 @@ const useStyles = makeStyles({
     const onError = () => {
       setLoading(false)     
     }
-    dispatch(fetchAllLabTestOrderOfPatient(ecounterId,onSuccess,onError ));
+    dispatch(fetchAllLabTestOrderOfPatient(encounterId,onSuccess,onError ));
     dispatch(fetchById(personId,onSuccess,onError));
   }, [fetchAllLabTestOrderOfPatient,fetchById]); //componentDidMount  
   const data = [testorder]
@@ -67,7 +67,7 @@ const useStyles = makeStyles({
   console.log(newsample)
 
   //Get list of test type
-  const [labTestType, setLabTestType] = useState([])
+  const [labTestType, setLabTestType] = useState([]) 
         newsample.forEach(function(value, index, array) {
         labTestType.push(value['data'].lab_test_group);
     });
