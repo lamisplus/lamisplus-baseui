@@ -12,6 +12,7 @@ import PatientAllergies from 'components/PatientDashboard/PatientAllergies'
 import moment from 'moment';
 import { connect } from 'react-redux';
 import * as actions from "actions/consultation";
+import * as CODES from "api/codes";
 
 function ConsultationPage(props) {
   const [errorMsg, setErrorMsg] = React.useState('')
@@ -22,9 +23,7 @@ function ConsultationPage(props) {
   const onDismissSuccess = () => setShowSuccessMsg(false)
   const initialConsultState = {
     present_consultation: '',
-    consultation_notes: '',
-    formCode: 'd157d4e2-4031-499d-b32b-7562208a10cf',
-    programCode: '25216afc-d158-4696-ada6-00df609b9a4c'
+    consultation_notes: ''
   };
   const [consult, setconsult] = useState(initialConsultState);
   const [newAllergy, setNewAllergy] = useState([])
@@ -32,17 +31,17 @@ function ConsultationPage(props) {
 
   const Saveconsult = e => {
     e.preventDefault()
-    const data2 = [{
+    const formData = [{
       allergies: newAllergy,
       presentConsultation: consult.present_consultation,
       consultationNotes: consult.consultation_notes
     }]
     const data = {
-      data: data2,
+      data: formData,
       patientId: props.patientId,
       visitId: props.visitId,
-      formCode: 'd157d4e2-4031-499d-b32b-7562208a10cf',
-      programCode: '25216afc-d158-4696-ada6-00df609b9a4c',
+      formCode: CODES.CONSULTATION_FORM,
+      programCode: CODES.GENERAL_SERVICE,
       dateEncounter: moment(new Date()).format('DD-MM-YYYY')
     }
     setShowSuccessMsg(false)
@@ -125,12 +124,7 @@ function ConsultationPage(props) {
       </CardDeck>
       <br />
 
-      {showLoading &&
-
-        <Spinner animation="border" role="status">
-          <span className="sr-only">Loading...</span>
-        </Spinner>
-      }
+      {props.visitId ? 
 
       <MatButton
         type="submit"
@@ -138,8 +132,16 @@ function ConsultationPage(props) {
         color="primary"
         startIcon={<SaveIcon />}
       >
-        Save
+        Save  {showLoading &&
+
+<Spinner animation="border" role="status">
+  <span className="sr-only">Loading...</span>
+</Spinner>
+}
         </MatButton>
+     :
+     <Alert color='danger'> This patient does not have a current visit. You have to check in to proceed</Alert>
+}
     </form>
   )
 }
