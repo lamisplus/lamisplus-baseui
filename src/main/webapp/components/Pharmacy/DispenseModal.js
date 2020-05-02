@@ -111,7 +111,8 @@ const DispenseModal = (props) => {
             // contentClassName="custom-modal-style"
           >
             <ModalHeader toggle={toggle} close={closeBtn}>
-              Dispense <b>{formData.data.generic_name}</b>
+              {/* Dispense <b>{formData.data.generic_name}</b> */}
+              Dispensing
             </ModalHeader>
             <ModalBody>
               {/* <Card >
@@ -126,10 +127,10 @@ const DispenseModal = (props) => {
                     marginBottom: "1rem",
                   }}
                 >
-                  {/* &nbsp;&nbsp; Drug Prescribed:{" "}
+                  Drug Prescribed:{" "}
                   <span>
                     <b>{formData.data.generic_name}</b>
-                  </span> */}
+                  </span>
                   &nbsp;&nbsp; Quantity Prescribed:&nbsp;
                   <span>
                     <b>2 packs</b>
