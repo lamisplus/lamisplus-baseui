@@ -9,14 +9,12 @@ import MatButton from '@material-ui/core/Button'
 // import {GoChecklist} from 'react-icons/go';
 import 'react-widgets/dist/css/react-widgets.css'
 import {FaPlusSquare} from 'react-icons/fa';
-import {FaRegEye} from 'react-icons/fa';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Page from 'components/Page'
 import {  fetchById } from '../../../actions/patients'
 import {  fetchAllLabTestOrderOfPatient } from '../../../actions/laboratory'
 import ModalSampleResult from './EnterResult';
-import ModalSampleType from './sampleTypeModal'
 import { useSelector, useDispatch } from 'react-redux';
 import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import { Spinner } from 'reactstrap';
