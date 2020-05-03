@@ -42,7 +42,7 @@ const useStyles = makeStyles({
 
 
  function CollectSample  (props){
-  const encounterresult = props.location.state.formdata.row ;
+  const encounterresult = props.location.state.formdata.row ? props.location.state.formdata.row : null;
   const classes = useStyles()
  
   const testorder = useSelector(state => state.laboratory.testorder);

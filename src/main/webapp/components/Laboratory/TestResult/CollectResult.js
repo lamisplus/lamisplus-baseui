@@ -41,7 +41,7 @@ const useStyles = makeStyles({
 
  function CollectResult  (props){
   const classes = useStyles()
-  const encounterresult = props.location.state.getpatientlists.row ;
+  const encounterresult = props.location.state.getpatientlists.row ? props.location.state.getpatientlists.row  : null;
   const testorder = useSelector(state => state.laboratory.testorder);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState('')
@@ -62,7 +62,7 @@ const useStyles = makeStyles({
   const sampleslist =  data[0] ? data[0] : null 
   //Filter only sample that is collected in the array 
   const newsample =  sampleslist.filter(function(sample) {
-    return (sample.data.lab_test_order_status ===3 || sample.data.lab_test_order_status === 5);
+    return (sample.data.lab_test_order_status !==0);
   });
   //Get list of test type
   const [labTestType, setLabTestType] = useState([])
@@ -124,9 +124,11 @@ const sampleAction = (e) =>{
   return (
     <Page title=' Sample Result'>
       <ToastContainer autoClose={2000} />
+      
       <Row>
         <Col>
           <div >
+          
             {!loading ?
              <PatientDetailCard getpatientdetails={ props.location.state }/>  
              :
@@ -225,6 +227,7 @@ const sampleAction = (e) =>{
               </Row>
             </CardBody>
           </Card>
+           
         </Col>
       </Row>
       <ModalSampleResult modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal} />
