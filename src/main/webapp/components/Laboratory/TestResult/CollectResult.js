@@ -36,7 +36,8 @@ const useStyles = makeStyles({
   },
   container: {
     maxHeight: 440
-  }
+  },
+  td: {borderBottom :'#fff'}
 })
 
 
@@ -217,11 +218,11 @@ const sampleAction = (e) =>{
                         {!loading ? newsample.map((row) => (
                           
                           <tr key={row.id}>
-                            <th scope="row">{row.data.description===""?"---":row.data.description}</th>
-                            <td>{row.data.sample_type===""?"---":row.data.sample_type}</td>
-                            <td> {encounterresult.dateEncounter} </td>
-                            <td>{samplestatus(row.data.lab_test_order_status)} </td>
-                            <td>{sampleAction(row)}</td>
+                            <th className={classes.td}>{row.data.description===""?"---":row.data.description}</th>
+                            <td className={classes.td}>{row.data.sample_type===""?"---":row.data.sample_type}</td>
+                            <td className={classes.td}> {encounterresult.dateEncounter} </td>
+                            <td className={classes.td}>{samplestatus(row.data.lab_test_order_status)} </td>
+                            <td className={classes.td}>{sampleAction(row)}</td>
                           </tr>
                         ))
                         :<p> <Spinner color="primary" /> Loading Please Wait</p>
