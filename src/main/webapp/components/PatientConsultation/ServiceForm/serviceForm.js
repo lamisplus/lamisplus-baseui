@@ -308,13 +308,9 @@ return (
  options={filteredForms.map(x => ({...x, label:x.name, value:x.id}))}  />
  </FormGroup> </Col>
  <Col md={10}>
-   { props.visitId ?
  <Button color="primary" className=" mr-1" onClick={loadForm} >
                 Open Form
                 </Button>
-                :
-          <Alert color='danger'> This patient does not have a current visit. You have to check in to proceed</Alert>
-  }
                 </Col>
 
       </div>

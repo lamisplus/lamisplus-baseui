@@ -91,8 +91,6 @@ function AddVitalsPage (props) {
       }
     setShowLoading(true)
     const newDatenow = Moment(vitals.dateEncounter).format('DD-MM-YYYY')
-    const encounterDateTime = Moment(vitals.dateEncounter).format('DD-MM-YYYY hh:mm a')
-    formDataForVitals['dateEncounter'] = encounterDateTime;
     const data = {
       formCode: CODES.VITAL_SIGNS_FORM,
       patientId: props.patientId,
@@ -132,7 +130,6 @@ function AddVitalsPage (props) {
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
             {errorMsg}
           </Alert>
-          
       <Card >
         <CardBody>
           <Row form>
@@ -255,21 +252,24 @@ function AddVitalsPage (props) {
               </FormGroup>
             </Col>
           </Row>
+          <Row>
+            <Col md={12}>
+              {showLoading && (
+                <Spinner animation='border' role='status'>
+                  <span className='sr-only'>Loading...</span>
+                </Spinner>
+              )}
+            </Col>
+          </Row>
           <br />
-          {props.patient.visitId ? 
-          <div>
-             <MatButton
+          <MatButton
             type='submit'
             variant='contained'
             color='primary'
             className={classes.button}
             startIcon={<SaveIcon />}
           >
-            Save {showLoading && (
-                <Spinner animation='border' role='status'>
-                  <span className='sr-only'>Loading...</span>
-                </Spinner>
-              )}
+            Save
           </MatButton>
           <MatButton
             variant='contained'
@@ -280,15 +280,6 @@ function AddVitalsPage (props) {
           >
             Cancel
           </MatButton>
-          </div> 
-          
-          
-          :
-          <Alert color='danger'> This patient does not have a current visit. You have to check in to proceed</Alert>
-  }
-          
-         
-         
         </CardBody>
       </Card>
     </Form>

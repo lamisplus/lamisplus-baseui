@@ -184,21 +184,14 @@ return (
                                     </FormGroup>
                                     </Col>
 
-                                    
-{ props.visitId ? 
-  <Col md={4}>
+                                    <Col md={4}>
 <Button class="btn btn-primary " type="button" onClick={saveTestOrder} >Save
 &nbsp;
                                         { showLoading ? <Spinner animation="border" role="status">
                     <span className="sr-only">Loading...</span>
                     </Spinner> : ""}
-</Button></Col>
-:
-<Col md={12}>
-          <Alert color='danger'> This patient does not have a current visit. You have to check in to proceed</Alert>
-          </Col>
-  }
-                                      
+</Button>
+                                      </Col>
                         </Row>
                         </form>    
                     </CardBody>                      

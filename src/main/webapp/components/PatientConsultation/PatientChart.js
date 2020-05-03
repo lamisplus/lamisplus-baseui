@@ -27,11 +27,9 @@ function PatientChart(props ) {
   }, [props.patientId]);
 
   React.useEffect(() => {
-    console.log(data);
-    console.log(props.vitalSigns)
-    setData(props.vitalSigns ? props.vitalSigns : []);
-    
-  }, [props.vitalSigns]);
+    setData(props.vitalSignsList ? props.vitalSignsList : []);
+
+  }, [props.vitalSignsList]);
 
   const BloodPressure = (labels = [],systolic=[], diastolic=[], systolicOptions = {}, diastolicOptions = {}) => {
     return {
@@ -57,9 +55,7 @@ function PatientChart(props ) {
     
   };
 
-  const Weight = (labels, data, otherOptions) => {
-    console.log(labels);
-    console.log(data)
+  const Weight = (labels = [], data = [], otherOptions = {}) => {
     return {
       labels: labels,
       datasets: [
@@ -96,13 +92,13 @@ function PatientChart(props ) {
 <Card >
                         <CardHeader> Blood Pressure</CardHeader>
                             <CardBody>
-                            <Line data={BloodPressure(data.filter((x) => x.systolic !== "").map((x) => x.dateEncounter), data.filter((x) => x.systolic !== "").map((x) => x.systolic), data.filter((x) => x.diastolic !== "").map((x) => x.diastolic), { fill: false }, { fill: false })} height={100} />                      
+                            <Line data={BloodPressure(data.map((x) => x.dateEncounter), data.map((x) => x.systolic), data.map((x) => x.diastolic), { fill: false }, { fill: false })} height={100} />                      
                             </CardBody>                      
                     </Card>
                     <Card >
                     <CardHeader> Weight</CardHeader>
                         <CardBody>
-                        <Line data={Weight(data.filter((x) => x.bodyWeight !== "").map((x) => x.dateEncounter), data.filter((x) => x.bodyWeight !== "").map((x) => x.bodyWeight), { fill: false })} height={100} />                      
+                        <Line data={Weight(data.map((x) => x.dateEncounter), data.map((x) => x.weight), { fill: false })} height={100} />                      
                         </CardBody>                      
                 </Card>
                 {/* <Card >
@@ -116,7 +112,7 @@ function PatientChart(props ) {
 
 const mapStateToProps = state => {
   return {
-    vitalSigns: state.patients.vitalSignsList,
+    vitalSigns: state.patients.vitalSigns,
     patient: state.patients.patient
   }
 }

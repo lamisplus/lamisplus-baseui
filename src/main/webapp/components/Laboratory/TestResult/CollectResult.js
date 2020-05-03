@@ -62,7 +62,7 @@ const useStyles = makeStyles({
   const sampleslist =  data[0] ? data[0] : null 
   //Filter only sample that is collected in the array 
   const newsample =  sampleslist.filter(function(sample) {
-    return (sample.data.lab_test_order_status ===3 || sample.data.lab_test_order_status === 5);
+    return (sample.data.lab_test_order_status !==0);
   });
   //Get list of test type
   const [labTestType, setLabTestType] = useState([])
@@ -145,7 +145,7 @@ const sampleAction = (e) =>{
                   
                   className=" float-right mr-1"
                 >
-                  <TiArrowBack/>{" "} Back
+                  <TiArrowBack/>  Back
                 </MatButton>
               </Link>
             </CardHeader>
@@ -192,7 +192,7 @@ const sampleAction = (e) =>{
                         </Col>
                       </Row>
                    
-                      <Table style={{ fontWeight: 'bolder', borderColor:"#000"}} striped responsive>
+                      <Table style={{ fontWeight: 'bolder', borderColor:"#000"}}  responsive>
                         <thead style={{  backgroundColor:'#9F9FA5', color:"#000" }}>
                           <tr>
                             <th>Test</th>

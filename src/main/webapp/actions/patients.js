@@ -51,9 +51,7 @@ export const fetchById = (id, onSuccess, onError) => dispatch => {
         type: ACTION_TYPES.PATIENTS_FETCH_BY_ID,
         payload: response.data
       });
-      if(onSuccess){
       onSuccess()
-      }
     })
     .catch(error =>
       {
@@ -61,9 +59,7 @@ export const fetchById = (id, onSuccess, onError) => dispatch => {
         type: ACTION_TYPES.PATIENTS_ERROR,
         payload: error
       })
-      if(onError){
-        onError();
-      }
+      onError()
     } 
     );
     } 
