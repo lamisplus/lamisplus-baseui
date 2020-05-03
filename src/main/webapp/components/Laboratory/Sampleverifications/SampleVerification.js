@@ -62,7 +62,7 @@ const useStyles = makeStyles({
  
   //Filter only sample that is collected in the array 
   const newsample =  sampleslist.filter(function(sample) {
-    return (sample.data.lab_test_order_status !==1 );
+    return (sample.data.lab_test_order_status !==0 );
   });
   console.log(newsample)
 
