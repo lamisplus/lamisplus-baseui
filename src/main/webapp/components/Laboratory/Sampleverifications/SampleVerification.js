@@ -40,7 +40,7 @@ const useStyles = makeStyles({
 
  function CollectVerification  (props){
   const classes = useStyles()
-  const encounterresult = props.location.state.getpatientlists.row ;
+  const encounterresult = props.location.state.getpatientlists.row ? props.location.state.getpatientlists.row : null;
   const testorder = useSelector(state => state.laboratory.testorder);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState('')

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, CardBody,CardHeader,Col,Row,Alert, Form,FormGroup,Label,Input} from 'reactstrap'
+import {Card, CardBody,CardHeader,Col,Row,Alert,Table, Form,FormGroup,Label,Input} from 'reactstrap'
 import { useState , useEffect} from 'react'
 import { TiArrowBack } from 'react-icons/ti'
 import MatButton from '@material-ui/core/Button'
@@ -20,7 +20,6 @@ import ModalSampleTransfer from './transferSampleModal';
 import { useSelector, useDispatch } from 'react-redux';
 import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import { Spinner } from 'reactstrap';
-import { Table } from 'reactstrap';
 import { Badge } from 'reactstrap';
 import {
   Menu,
@@ -41,7 +40,8 @@ const useStyles = makeStyles({
 
 
  function CollectSample  (props){
-  const encounterresult = props.location.state.formdata.row ;
+  const encounterresult = props.location.state.formdata.row ? props.location.state.formdata.row  : null ;
+
   const classes = useStyles()
  
   const testorder = useSelector(state => state.laboratory.testorder);
@@ -215,7 +215,7 @@ const sampleAction = (e) =>{
                          
                         </Col>
                       </Row>
-                    <Form >
+                   
                     <Table
                         style={{
                           fontWeight: "bolder",
@@ -238,6 +238,7 @@ const sampleAction = (e) =>{
                           </tr>
                         </thead>
                         <tbody>
+
                         {!loading ? newsample.map((row) => (
                           
                           <tr key={row.id} style={{ borderBottomColor: '#fff' }}>
@@ -253,9 +254,7 @@ const sampleAction = (e) =>{
                         </tbody>
                       </Table>
                     
-                    <br />
-                   
-                    </Form>
+                    
                   </Card>
                 </Col>
               </Row>
