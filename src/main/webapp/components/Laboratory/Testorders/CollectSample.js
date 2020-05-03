@@ -112,7 +112,7 @@ const samplestatus = e =>{
   }else if(e===5){
     return <p><Badge  color="primary">Result Available</Badge></p>
   }else{
-    return <p>{"---"}</p>
+    return <p>{" "}</p>
   }
 }
 
@@ -240,10 +240,10 @@ const sampleAction = (e) =>{
                         <tbody>
                         {!loading ? newsample.map((row) => (
                           
-                          <tr key={row.id} >
-                            <th scope="row">{row.data.description===""?"---":row.data.description}</th>
-                            <td>{row.data.sample_type===""?"---":row.data.sample_type}</td>
-                            <td> {encounterresult.dateEncounter===""?"---":encounterresult.dateEncounter} </td>
+                          <tr key={row.id} style={{ borderBottomColor: '#fff' }}>
+                            <th scope="row">{row.data.description===""?" ":row.data.description}</th>
+                            <td>{row.data.sample_type==="" ? " ":row.data.sample_type}</td>
+                            <td> {encounterresult.dateEncounter==="" ? " ":encounterresult.dateEncounter} </td>
                             <td>{samplestatus(row.data.lab_test_order_status)} </td>
                             <td>{sampleAction(row)}</td>
                           </tr>
