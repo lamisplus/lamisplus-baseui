@@ -86,7 +86,7 @@ const handlesample = (row) => {
 const getGroup = e => {
   const getvalue =e.target.value;
   const testing = newsample.length>0?newsample:null
-  console.log(testing.data)
+  //console.log(testing.data)
   const getnew = data[0].find(x => x.lab_test_group === getvalue)
   //console.log(getnew) 
 };
@@ -233,7 +233,7 @@ const sampleAction = (e) =>{
         </Col>
       </Row>
       <ModalSampleVerify modalstatus={modal} togglestatus={togglemodal} datasample={collectmodal} />
-
+        
       </Page>
   )
 }

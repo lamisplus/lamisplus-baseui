@@ -6,7 +6,7 @@ import MatButton from '@material-ui/core/Button'
 import 'react-datepicker/dist/react-datepicker.css'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
-import {FaPlusSquare} from 'react-icons/fa';
+import {FaPlusSquare, FaRegEye} from 'react-icons/fa';
 import {TiArrowForward} from 'react-icons/ti'
 import 'react-widgets/dist/css/react-widgets.css'
 //Date Picker
@@ -30,6 +30,7 @@ import {
   MenuItem,
 } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
+import ModalViewResult from './../TestResult/ViewResult';
 
 const useStyles = makeStyles({
   root: {
@@ -74,6 +75,8 @@ const useStyles = makeStyles({
   const togglemodal = () => setModal(!modal)
   const [modal2, setModal2] = useState(false)//modal to transfer sample
   const togglemodal2 = () => setModal2(!modal2)
+  const [modal3, setModal3] = useState(false)//modal to View Result
+  const togglemodal3 = () => setModal3(!modal3)
   const [collectmodal, setcollectmodal] = useState([])//to collect array of datas into the modal and pass it as props
 
   // const [encounterid, setencounterid] = useState('');
@@ -92,7 +95,10 @@ const transfersample = (val) => {
   setModal2(!modal2)
   setcollectmodal(val);
 }
-
+const viewresult = (row) => {  
+  setcollectmodal({...collectmodal, ...row});
+  setModal3(!modal3) 
+}
 const getGroup = e => {
   const getvalue =e.target.value;
   const testing = newsample.length>0?newsample:null
@@ -129,6 +135,9 @@ const sampleAction = (e) =>{
             <MenuList style={{hover:"#eee"}}>
               <MenuItem onSelect={() => handlesample(e)}><FaPlusSquare size="15" style={{color: '#000'}}/>{" "}Collect Sample</MenuItem>
               <MenuItem onSelect={() => transfersample(e)}><TiArrowForward size="15" style={{color: '#000'}}/>{" "} Transfer Sample</MenuItem>             
+              {e.data.lab_test_order_status===5 ?
+                 <MenuItem onSelect={() => viewresult(e)}><FaRegEye size="15" style={{color: '#3F51B5'}}/>{" "}View Result</MenuItem>
+                 :""}  
             </MenuList>
         </Menu>
         )
@@ -255,6 +264,8 @@ const sampleAction = (e) =>{
       </Row>
       <ModalSample modalstatus={modal} togglestatus={togglemodal} datasample={collectmodal}  labnumber={labNum}/>
       <ModalSampleTransfer modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal} labnumber={labNum}/>
+      <ModalViewResult modalstatus={modal3} togglestatus={togglemodal3} datasample={collectmodal} />
+
     </Page>
   )
 }

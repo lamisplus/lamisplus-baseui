@@ -8,7 +8,7 @@ import MatButton from '@material-ui/core/Button'
 
 // import {GoChecklist} from 'react-icons/go';
 import 'react-widgets/dist/css/react-widgets.css'
-import {FaPlusSquare} from 'react-icons/fa';
+import {FaPlusSquare, FaRegEye} from 'react-icons/fa';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Page from 'components/Page'
@@ -28,6 +28,7 @@ import {
   MenuItem,
 } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
+import ModalViewResult from './ViewResult'
 
 const useStyles = makeStyles({
   root: {
@@ -60,6 +61,7 @@ const useStyles = makeStyles({
   }, [fetchAllLabTestOrderOfPatient,fetchById]); //componentDidMount  
   const data = [testorder]
   const sampleslist =  data[0] ? data[0] : null 
+  console.log(sampleslist)
   //Filter only sample that is collected in the array 
   const newsample =  sampleslist.filter(function(sample) {
     return (sample.data.lab_test_order_status !==0);
@@ -72,15 +74,20 @@ const useStyles = makeStyles({
     });
   //Make the list contain unique list of Data 
   const uniqueValues = [...new Set(labTestType)];
-  const [modal2, setModal2] = useState(false)//modal to transfer sample
+  const [modal2, setModal2] = useState(false)//modal to Enter Result
   const togglemodal2 = () => setModal2(!modal2)
+  const [modal3, setModal3] = useState(false)//modal to View Result
+  const togglemodal3 = () => setModal3(!modal3)
 
   const [collectmodal, setcollectmodal] = useState([])//to collect array of datas into the modal and pass it as props
   const handleresult = (row) => {  
     setcollectmodal({...collectmodal, ...row});
     setModal2(!modal2) 
   }
-
+  const viewresult = (row) => {  
+    setcollectmodal({...collectmodal, ...row});
+    setModal3(!modal3) 
+  }
   const getGroup = e => {
     const getvalue =e.target.value;
     const testing = newsample.length>0?newsample:null
@@ -115,7 +122,9 @@ const sampleAction = (e) =>{
               </MenuButton>
               <MenuList style={{hover:"#eee"}}>
                 <MenuItem onSelect={() => handleresult(e)}><FaPlusSquare size="15" style={{color: '#3F51B5'}}/>{" "}Enter Result</MenuItem>
-                              
+                 {e.data.lab_test_order_status===5 ?
+                 <MenuItem onSelect={() => viewresult(e)}><FaRegEye size="15" style={{color: '#3F51B5'}}/>{" "}View Result</MenuItem>
+                 :""}             
               </MenuList>
           </Menu>
           )
@@ -231,7 +240,8 @@ const sampleAction = (e) =>{
         </Col>
       </Row>
       <ModalSampleResult modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal} />
-      
+      <ModalViewResult modalstatus={modal3} togglestatus={togglemodal3} datasample={collectmodal} />
+
     </Page>
   )
 }

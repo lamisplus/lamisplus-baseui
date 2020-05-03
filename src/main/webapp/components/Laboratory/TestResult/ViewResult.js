@@ -62,42 +62,23 @@ Moment.locale('en');
 momentLocalizer();
 
 
-const ModalSampleResult = (props) => {
+const ModalViewResult = (props) => {
   const classes = useStyles()
   const datasample = props.datasample ? props.datasample : {};
   const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
   const description = datasample.data ? datasample.data.description : null ;
   const unit_measurement = datasample.data ? datasample.data.unit_measurement : null ;
-  console.log(lab_test_group)
-  const labId = datasample.id
-  const [loading, setLoading] = useState(false)
+  const date_result_reported = datasample.data ? datasample.data.date_result_reported : null ;
+  const test_result = datasample.data ? datasample.data.test_result : null ;
+  console.log(datasample)
+  
   const [samples, setSamples] = useState({}) 
 
     const handleInputChangeSample = e => {
       setSamples ({ ...samples, [e.target.name]: e.target.value });
       console.log(samples)
     }
-    const saveSample = e => {
-      e.preventDefault()
-      setLoading(true);
-      toast.warn("Processing Sample ", { autoClose: 100, hideProgressBar:false });
-      const newDatenow = moment(samples.date_result_reported).format("DD-MM-YYYY");
-      datasample.data.date_result_reported = newDatenow
-      datasample.data.lab_test_order_status = 5;
-      datasample.data.test_result = samples.test_result
 
-      
-      const onSuccess = () => {
-        setLoading(false);
-        props.togglestatus()       
-      }
-      const onError = () => {
-        setLoading(false); 
-        props.togglestatus()       
-      }
-      props.createCollectedSample(datasample, labId,onSuccess,onError)
-    }
-    //console.log(formdata)
     const textstyle = {
         fontSize: '14px',
         fontWeight: 'bolder'
@@ -108,8 +89,7 @@ const ModalSampleResult = (props) => {
       <div >
        <ToastContainer autoClose={2000} hideProgressBar />
       <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
-        
-      <Form onSubmit={saveSample}>
+
         <ModalHeader toggle={props.togglestatus}>Result Reporting</ModalHeader>
         <ModalBody>
         <Card>
@@ -120,76 +100,38 @@ const ModalSampleResult = (props) => {
                       <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}> {' '} {lab_test_group}</span> 
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : 
                       <span style={{ fontWeight: 'bolder'}}>{' '}  {description}</span>
+                      &nbsp;&nbsp;&nbsp;&nbsp; Unit: 
+                      <span style={{ fontWeight: 'bolder'}}>{' '}  {unit_measurement}</span>
                       </p>
                       
                     </Alert>
                   </Col>
                  
-                  <Col xs="4">
-                    Date Assayed
+                  <Col xs="6">
+                    Date Assayed : {date_result_reported}
                     <br/>
-                    <DateTimePicker time={false} name="date_asseyed"  id="date_asseyed"  
-                      
-                      value={samples.date_asseyed}
-                      onChange={value1 =>
-                        setSamples({ ...samples, date_asseyed: value1 })
-                      }
-                    /> 
+                   
                     </Col>
-                    <Col xs="4">
-                    Date Of Reported
+                    <Col xs="6">
+                    Date Of Reported : {date_result_reported}
                     <br/>
-                    <DateTimePicker time={false} name="date_result_reported"  id="date_result_reported"  
-                      
-                      value={samples.date_result_reported}
-                      onChange={value1 =>
-                        setSamples({ ...samples, date_result_reported: value1 })
-                      }
-                    />            
+                              
                     </Col>
                   
-                  <Col xs="4">
-                    </Col>
-                  
-                    
+                
                     <Col xs="4">
                     
                     <FormGroup>
                     <br/>
-                          <Label for="examplePassword">Enter Result  </Label>
-                          <Input
-                            type='text'
-                            name='test_result'
-                            id='test_result'
-                            onChange={handleInputChangeSample}
-                            value = {samples.test_result}
-                            style={{marginTop: '0rem' }}                                    
-                          >
-                        </Input>
+                          <Label for="examplePassword">Enter Result : {test_result} </Label>
+                       
                       </FormGroup>
                       </Col>
-                    <Col xs="4">
-                    <br/>
-                    <FormGroup>
-                     
-                      <p style={{marginTop: '2rem' }} >{unit_measurement}</p>   
-                      </FormGroup>                 
-                    </Col>
-             
+                    
             </Row>
-            <br/>
-            {loading ? <Spinner /> : ""}
-            <br/>
-              <MatButton
-                  type='submit'
-                  variant='contained'
-                  color='primary'
-                  className={classes.button}
-                  startIcon={<SaveIcon />}
-                  disabled={loading}
-                >
-                  Save 
-                </MatButton>
+            
+             <br/>
+              
                 <MatButton
                   variant='contained'
                   color='default'
@@ -202,12 +144,9 @@ const ModalSampleResult = (props) => {
                 </CardBody>
                 </Card>
           </ModalBody>
-        
-        </Form>
-
       </Modal>
     </div>
   );
 }
 
-export default connect(null, { createCollectedSample })(ModalSampleResult);
+export default connect(null, { createCollectedSample })(ModalViewResult);
