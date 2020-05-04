@@ -7,6 +7,7 @@ import './main/webapp/styles/reactDataTable.css';
 import './main/webapp/styles/formio.css';
 import "../node_modules/react-grid-layout/css/styles.css";
 import "../node_modules/react-resizable/css/styles.css";
+import 'semantic-ui-css/semantic.min.css'
 
 ReactDOM.render(
    

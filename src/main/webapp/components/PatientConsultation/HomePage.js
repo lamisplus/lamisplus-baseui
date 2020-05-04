@@ -22,6 +22,7 @@ import { FaBriefcaseMedical} from "react-icons/fa";
 //{/*  Check box list */}
 
 import PatientChart from 'components/PatientConsultation/PatientChart';
+import PatientDashboardSubMenu from 'components/PatientConsultation/PatientDashboardSubMenu'
 import PatientAllergies from 'components/PatientDashboard/PatientAllergies';
 import PatientVitals from 'components/PatientDashboard/PatientVitals';
 import ClinicalHistory from 'components/PatientDashboard/ClinicalHistory';
@@ -30,15 +31,11 @@ import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import TestOrder from './TestOrder/TestOrder';
 import Medication from './Medication/Medication';
 import ServiceForm from './ServiceForm/serviceForm';
-import { Nav, NavItem, NavLink, Badge, Card, CardBody, CardDeck } from 'reactstrap';
-import CheckInModal from 'components/CheckIn/CheckInModal';
-import ViewVitalsSearch from 'components/Vitals/ViewVitalsSearch'
+import {  Card, CardBody, CardDeck} from 'reactstrap';
 import * as actions from "actions/patients";
 import {connect} from 'react-redux';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Popover from '@material-ui/core/Popover';
-import MatButton from '@material-ui/core/Button';
-import { url } from "api/index";
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -168,8 +165,8 @@ const useStyles = makeStyles(theme => ({
         },
     },
     inforoot: {
-        width: '95%',
-        margin: 20,
+        width: '100%',
+        margin: 0,
         backgroundColor: '#eee',
     },
     navItemText: {
@@ -185,49 +182,10 @@ const useStyles = makeStyles(theme => ({
 
 function HomePage(props) {
   const classes = useStyles();
-  const [value, setValue] = useState(0);
-  const [checkIn, setCheckIn] = useState(false);
+  const [value, setValue] = useState(0);  
   const [fetchingPatient, setFetchingPatient] = useState(false);
   const hospitalNumber = props.location.state.hospitalNumber || props.patient.hospitalNumber || '';
-  const [relationshipTypes, setRelationshipTypes] = useState(false);
-  /*# Get list of RELATIVE parameter from the endpoint #*/
-  React.useEffect(() => {
-    async function getCharacters() {
-      try {
-        const response = await fetch(`${url}/application-codesets/codesetGroup?codesetGroup=RELATIONSHIP`);
-        const body = await response.json();
-        setRelationshipTypes(body);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getCharacters();
-  }, []);
 
-  function getRelationshipName(id) {
-    return id ? relationshipTypes.find(x => x.id == id).display : "";
-  }
-  // const toggleRelationshipPopOver = () => setRelationshipPopoverOpen(!rPopoverOpen);
-  // const modifiers = {
-  //   preventOverflow: {
-  //     enabled: false,
-  //   },
-  //   flip: {
-  //     enabled: false,
-  //   },
-  // };
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
 
   const isEmpty = (value) => {
     if(JSON.stringify(value) === "{}"){
@@ -250,10 +208,6 @@ function HomePage(props) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
- const checkInPatient = () => {
-   setCheckIn(true);
- }
 
  switch (isEmpty(props.patient)) {
 
@@ -285,14 +239,10 @@ function HomePage(props) {
           aria-label="scrollable force tabs example"
         >
           <Tab className={classes.title} label="Dashboard" icon={<MdDashboard />} {...a11yProps(0)} />  
-          {/* <Tab className={classes.title} label="Vital Signs" icon={<MdContacts />} {...a11yProps(5)} />        */}
           <Tab className={classes.title} label="Consultation" icon={<MdContacts />} {...a11yProps(1)} />
           <Tab className={classes.title} label="Service Form" icon={<GiFiles />} {...a11yProps(2)} />
           <Tab className={classes.title} label="Test Order" icon={<GiTestTubes />} {...a11yProps(3)} />
-          <Tab className={classes.title} label="Medication" icon={<FaBriefcaseMedical />} {...a11yProps(4)} />
-          {/* <Tab className={classes.title} label="Others" icon={<FaChartLine />} {...a11yProps(5)}  onClick={handleClick}/> */}
-          
-          
+          <Tab className={classes.title} label="Medication" icon={<FaBriefcaseMedical />} {...a11yProps(4)} />          ,l
         </Tabs>
         <div>
      
@@ -304,60 +254,12 @@ function HomePage(props) {
 <LinearProgress color="primary" thickness={5}/>
 : <div>
 
-
-      <Nav pills style={{backgroundColor:'silver'}} light >
-        <NavItem>
-          <NavLink  title="Alerts"><i className="fa fa-bell"></i>&nbsp;  <Badge href="#" color="dark">0</Badge> </NavLink>
-        </NavItem>
-        <NavItem>
-        <MatButton aria-describedby={id} onClick={handleClick}>
-      &nbsp; Relationships &nbsp; <Badge color="dark">{props.patient.personRelativeDTOs ? props.patient.personRelativeDTOs.length : 0}</Badge>
-      </MatButton>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-      >
-       <List>
-         {(props.patient.personRelativeDTOs && props.patient.personRelativeDTOs.length > 0 ) ? props.patient.personRelativeDTOs.map((relative, index) => (
-                          <RelativeList
-                            key={index}
-                            index={index}
-                            relative={relative}
-                            relationshipTypeName={getRelationshipName(relative.relationshipTypeId)}
-                          />
-                        )) : 
-                        <Typography className={classes.navItemText}>No Relationship </Typography>}
-                      </List>
-      </Popover>
-        </NavItem>
-        { (props.patient && props.patient.dateVisitStart ) ? 
-        <NavItem className="ml-auto">
-          <NavLink>  <span>Current Visit: <b>{props.patient.dateVisitStart} {props.patient.timeVisitStart}</b></span> &nbsp;  </NavLink>
-        </NavItem>
-: 
-<NavItem className="ml-auto" >
-<div>  
-  <span style={{color:'red'}}><b>Patient not checked in</b></span> &nbsp; 
-| &nbsp;<MatButton type="button" outline color="default" onClick={checkInPatient}> Check In &nbsp; <i class="fa fa-sign-in"></i> </MatButton></div>
-</NavItem>
-}
-
-        </Nav>
-      {/* The DashBoad Tab  */}
+ <PatientDashboardSubMenu />
+    
+      {/* The DashBoard Tab  */}
       <TabPanel value={value} index={0}>
       <CardDeck>
          <PatientVitals patientId={props.patient.patientId}  /> 
-        {/* <PatientAllergies height={cardHeight} addstatus={false} />  */}
         <PatientAllergies height={cardHeight} addstatus={false} /> 
       </CardDeck>
       <br></br>
@@ -370,130 +272,43 @@ function HomePage(props) {
                     </Card>
 </TabPanel>
     {/* End of dashboard */}
-{/* Begining of vital signs  */}
-{/* <TabPanel value={value} index={1}>
-<ViewVitalsSearch  patientId={props.patient.patientId}   />  
-    
-</TabPanel> */}
-{/* End of vital signs */} 
-{/* Begining of Service Form */}
-<TabPanel value={value} index={1}>
- 
-            <Consultation patientId={props.patient.patientId } visitId={props.patient.visitId} />
 
+{/* Begining of consultation  */}
+<TabPanel value={value} index={1}>
+            <Consultation patientId={props.patient.patientId } visitId={props.patient.visitId} />
 </TabPanel>    
+ {/* End of consultation */}
  
- {/* Begining of consultation  */}
+ {/* service forms */}
  <TabPanel value={value} index={2}>    
     <ServiceForm patientId={props.patient.patientId } visitId={props.patient.visitId}/>            
 </TabPanel>
+{/* service forms */}
 
+{/* test orders */}
       <TabPanel value={value} index={3}>
         <TestOrder patientId={props.patient.patientId } visitId={props.patient.visitId}/>
       </TabPanel>
-    {/* End of consultation */}
-    <TabPanel value={value} index={4}>
-        {/* Card stats */}
-        <Medication patientId={props.patient.patientId } visitId={props.patient.visitId}  />
+    {/* test orders */}
 
+ {/* medication */}
+    <TabPanel value={value} index={4}>
+        <Medication patientId={props.patient.patientId } visitId={props.patient.visitId}  />
       </TabPanel>
+       {/* medication */}
+
       <TabPanel value={value} index={6}>
-      <Grid container spacing={7} > 
-                <Grid item xs='7'>                    
-                    <Card >
-                        <CardBody>
-                            <Typography className={classes.title} color="primary" gutterBottom>
-                            
-                            </Typography>
-                                <Grid >
-                                    <Grid item xs='6'>
-                                        <Typography className={classes.pos} color="textSecondary" >
-                                                Pulse : <span style={{fontSize: 'bold'}}>56pm</span>
-                                               
-                                        </Typography>
-                                    </Grid>
-                                    
-                                </Grid>                               
-                        </CardBody>                      
-                        </Card>                     
-                </Grid>
-                
-                <Grid item xs='5'>                    
-                    <Card >
-                        <CardBody>
-                            <Typography className={classes.title} color="primary" gutterBottom>
-                            Drug Order 
-                            </Typography>
-                                <Grid container >
-                                    <Grid item >
-                                        <Typography className={classes.pos} color="textSecondary" >
-                                                Pulse : <span style={{fontSize: 'bold'}}>56pm</span>
-                                               
-                                        </Typography>
-                                    </Grid>
-                                    
-                                </Grid>                               
-                        </CardBody>                      
-                        </Card>                     
-                </Grid>
-                <br/>
-                <Grid item xs='7'>                    
-                    <Card >
-                        <CardBody>
-                            <Typography className={classes.title} color="primary" gutterBottom>
-                            Drug Order 
-                            </Typography>
-                                <Grid container >
-                                    <Grid item >
-                                        <Typography className={classes.pos} color="textSecondary" >
-                                                Pulse : <span style={{fontSize: 'bold'}}>56pm</span>
-                                               
-                                        </Typography>
-                                    </Grid>
-                                    
-                                </Grid>                               
-                        </CardBody>                      
-                        </Card>                     
-                </Grid>
-             
-            
-            </Grid>
+      
       </TabPanel>
       </div>
     }
-      <CheckInModal patientId={props.patient.patientId} showModal={checkIn} setShowModal={setCheckIn}/>
-  
+      
       </div>
 }
    </div>  
   );
 }
 
-function RelativeList({
-  relative,
-  relationshipTypeName
-}) {
-  return (
-    <ListItem>
-      <ListItemText
-        primary={
-          <React.Fragment>
-            {relationshipTypeName}, {relative.firstName} {relative.otherNames}{" "}
-            {relative.lastName}
-          </React.Fragment>
-        }
-        secondary={
-          <React.Fragment>
-            <Typography component="span" variant="body2" color="textPrimary">
-              {relative.mobilePhoneNumber} {relative.email} <br></br>
-            </Typography>
-            {relative.address}
-          </React.Fragment>
-        }
-      />
-    </ListItem>
-  );
-}
 const mapStateToProps = state => {
   return {
   patient: state.patients.patient

@@ -72,7 +72,7 @@ const FormRenderer = props => {
   }
 
   return (
-    <Page title="" >
+    <React.Fragment>
       { (showLoadingForm) ? 
    <span className="text-center"><Spinner style={{ width: '3rem', height: '3rem' }} type="grow" /> Loading form...</span>
 :  
@@ -102,7 +102,7 @@ const FormRenderer = props => {
     </CardBody>
     </Card>
        }
-    </Page>
+    </React.Fragment>
   );
 }
 
