@@ -186,7 +186,7 @@ const ModalSample = (props) => {
             startIcon={<SaveIcon />}
             disabled={loading}
           >
-            Ok
+            Save
           </MatButton>
           <MatButton
             variant='contained'
