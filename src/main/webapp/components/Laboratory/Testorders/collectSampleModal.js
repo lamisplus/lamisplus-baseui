@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const ModalSample = (props) => {
-  const classes = useStyles()
+  const classes = useStyles() 
   const datasample = props.datasample ? props.datasample : {};
   const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
   const description = datasample.data ? datasample.data.description : null ;
@@ -73,7 +73,6 @@ const ModalSample = (props) => {
   const [visible, setVisible] = useState(true);
   const onDismiss = () => setVisible(false);
   const [samples, setSamples] = useState({}) 
-
   const [optionsample, setOptionsample] = useState([]);
   //This is to get SAMPLE TYPE from application Codeset
   useEffect(() => {

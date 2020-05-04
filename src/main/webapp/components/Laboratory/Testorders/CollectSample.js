@@ -65,6 +65,12 @@ const useStyles = makeStyles({
   }, [fetchAllLabTestOrderOfPatient,fetchById]); //componentDidMount  
   const data = [testorder]
   const newsample =  data[0] ? data[0] : null 
+  // const [newsample] = useState(formDatasample)
+  // const checklabnum = newsample.includes('lab_number'); 
+  // if(checklabnum===false){
+  //   newsample.lab_number=''
+  // }
+  // console.log(newsample)
   //Get list of test type
   const labTestType = []
         newsample.forEach(function(value, index, array) {
