@@ -82,7 +82,7 @@ const ModalSample = (props) => {
     const saveSample = e => {
       e.preventDefault()
       setLoading(true);
-      toast.warn("Processing Sample ", { autoClose: 100, hideProgressBar:false });
+      
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
       datasample.data.lab_test_order_status = samples.lab_test_order_status;
       datasample.data.date_sample_collected = newDatenow
