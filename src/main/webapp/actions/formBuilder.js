@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import {url} from '../api'
+import {url as baseUrl, url} from '../api'
 
 import * as FORMTYPES from './types'
 
@@ -79,76 +79,47 @@ export const updateForm = (id, data) => dispatch => {
         })
 }
 
-export const fetchById = (id, programCode, onSuccess) => dispatch => {
+export const fetchById = (id, onSuccess, onError) => dispatch => {
+    dispatch({
+        type:FORMTYPES.FORMTYPES_FETCH_BY_ID,
+        payload: {}
+    })
+
     axios
-        .get(`${url}forms/${id}/${programCode}`)
+        .get(`${baseUrl}forms/${id}/formCode`)
         .then(response => {
             dispatch({
-                type: FORMTYPES.FORMTYPES_FETCH_BY_ID,
+                type:FORMTYPES.FORMTYPES_FETCH_BY_ID,
                 payload: response.data
             })
             onSuccess()
         })
         .catch(error => {
+            //onError()
             dispatch({
-                type:  FORMTYPES.FORMTYPES_ERROR,
+                type: FORMTYPES.FORMTYPES_ERROR,
                 payload: 'Error loading form, something went wrong. Please try again'
             })
+    //onError(error.response)
         })
 }
 
-export const fetchPrograms = () => dispatch => {
-    axios.get(`${url}programs`)
+export const fetchAll = (onSuccess, onError) => dispatch => {
+    axios
+        .get(`${baseUrl}forms`)
         .then(response => {
-            console.log(response.data)
             dispatch({
                 type: FORMTYPES.FORMTYPES_FETCH_ALL,
                 payload: response.data
             })
+            onSuccess()
         })
         .catch(error => {
-            console.log(error)
+            onError()
             dispatch({
-                type: FORMTYPES.FORMTYPES_ERROR,
-                payload: 'Something went wrong'
-
+                type:  FORMTYPES.FORMTYPES_ERROR,
+                payload: 'Something went wrong, please try again'
             })
+
         })
 }
-
-export const fetchForms = (programCode) => dispatch => {
-    axios.get(`${url}programs?programCode=${programCode}`)
-        .then(response => {
-            console.log(response)
-            dispatch({
-                type: FORMTYPES.FORMTYPES_FETCH_SERVICES,
-                payload: response.data
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            dispatch({
-                type: FORMTYPES.FORMTYPES_ERROR,
-                payload: 'Something went wrong'
-
-            })
-        })
-}
-
-
-// export const fetchAll = (programCode) => dispatch => {
-//   axios
-//     .get(`${url}forms/${programCode}}`)
-//     .then(response => {
-//       dispatch({
-//         type: FORMTYPES.FORMTYPES_FETCH_ALL,
-//         payload: response.data
-//       })
-//     })
-//     .catch(error =>
-//       dispatch({
-//         type: FORMTYPES.FORMTYPES_ERROR,
-//         payload: 'Something went wrong, please try again'
-//       })
-//     )
-// }

@@ -3,7 +3,7 @@ import Page from 'components/Page';
 import { connect } from 'react-redux';
 import { Errors, FormBuilder } from 'react-formio';
 import {Card,CardContent,} from '@material-ui/core';
-import {fetchModules, fetchService, createForm} from '../../actions/formBuilder'
+import {fetchService, createForm} from '../../actions/formBuilder'
 
 import {
   FormGroup,
@@ -13,6 +13,7 @@ import {
   Row,
   Form
 } from 'reactstrap';
+import {toast} from 'react-toastify';
 const Create = props => {
   const datanew = {
     resourceObject: "",
@@ -26,6 +27,9 @@ const Create = props => {
   const [name, setname] = React.useState();
   const [usageCode, setusageCode] = React.useState("");
   const [version, setversion] = React.useState();
+    const [errorMsg, setErrorMsg] = React.useState('')
+    const [showErrorMsg, setShowErrorMsg] = React.useState(false)
+    const [showLoading, setShowLoading] = React.useState(false)
 
   useEffect (() => {
     props.fetchService()
@@ -49,7 +53,15 @@ const handleSubmit = e => {
   props.createForm(newdata2);
 } 
   const textAreaRef = useRef(null);
-
+    const onSuccess = () => {
+        setShowLoading(false)
+        toast.success('Form saved successfully!', { appearance: 'success' })
+    }
+    const onError = errstatus => {
+        setErrorMsg('Something went wrong, request failed! Please contact admin.')
+        setShowErrorMsg(true)
+        setShowLoading(false)
+    }
   return (
     <Page title="Form Builder" >
    <Card >
@@ -59,42 +71,46 @@ const handleSubmit = e => {
       <Errors errors={props.errors} />
       <Form onSubmit={handleSubmit}>
         <Row>
-      <Col md={2}> <FormGroup>
-      <Label class="sr-only">Display Type</Label>
-      <Input type="select"  id="displayType" value={displayType} onChange={e => setDisplayType(e.target.value)}>
-      <option value="form">Form</option>
-      <option value="wizard">Wizard</option></Input>
-       </FormGroup></Col> 
-       
-      <Col md={3}> <FormGroup>
-      <Label class="sr-only">Form Name</Label>
-      <Input type="text" class="form-control" id="name" name="name" value={name}   onChange={e => setname(e.target.value)} required/>
-       </FormGroup> </Col>  
+            <Col md={4}> <FormGroup>
+                <Label class="sr-only">Display Type</Label>
+                <Input type="select"  id="displayType" value={displayType} onChange={e => setDisplayType(e.target.value)}>
+                    <option value="form">Form</option>
+                    <option value="wizard">Wizard</option></Input>
+            </FormGroup></Col>
 
-       <Col md={3}> <FormGroup>
-      <Label class="sr-only">Version</Label>
-      <Input type="text" class="form-control" id="version" name="version" value={version}   onChange={e => setversion(e.target.value)} required/>
-       </FormGroup> </Col>
+            <Col md={4}> <FormGroup>
+                <Label class="sr-only">Program Area</Label>
+                {props.services.length && props.services.length > 0 ?
+                    <Input type="select" class="form-control" id="programCode" required value={programCode} onChange={e => setprogramCode(e.target.value)}>
+                        {props.services.map(service => (<option key={service.name} value={service.code}>{service.name}</option>))}
+                    </Input>:  <Input type="select" class="form-control" id="programCode" required value={programCode} onChange={e => setprogramCode(e.target.value)}>
+                        <option>No Services</option>
+                    </Input>}
+            </FormGroup></Col>
 
-       <Col md={3}> <FormGroup>
-      <Label class="sr-only">Usage Code</Label>
-      <Input type="text" class="form-control" id="usageCode" name="usageCode" value={usageCode}   onChange={e => setusageCode(e.target.value)} required/>
-       </FormGroup> </Col>  
+            <Col md={4}> <FormGroup>
+                <Label class="sr-only">Form Name</Label>
+                <Input type="text" class="form-control" id="name" name="name" value={name}   onChange={e => setname(e.target.value)} required/>
+            </FormGroup> </Col>
+        </Row>
+          <Row>
+              <Col md={4}> <FormGroup>
+                  <Label class="sr-only">Version</Label>
+                  <Input type="text" class="form-control" id="version" name="version" value={version}   onChange={e => setversion(e.target.value)} required/>
+              </FormGroup> </Col>
 
-      <Col md={2}> <FormGroup>
-      <Label class="sr-only">Service Name</Label>
-      {props.services.length && props.services.length > 0 ? 
-      <Input type="select" class="form-control" id="programCode" required value={programCode} onChange={e => setprogramCode(e.target.value)}>
-      {props.services.map(service => (<option key={service.name} value={service.code}>{service.name}</option>))}
-      </Input>:  <Input type="select" class="form-control" id="programCode" required value={programCode} onChange={e => setprogramCode(e.target.value)}>
-      <option>No Services</option>
-      </Input>}
-      </FormGroup></Col> 
+              <Col md={4}> <FormGroup>
+                  <Label class="sr-only">Freguency of Usage</Label>
+                  <Input type="select"  id="usageCode" value={usageCode} onChange={e => setusageCode(e.target.value)}>
+                      <option></option>
+                      <option value="0">Once per Patient</option>
+                      <option value="1">Periodically</option></Input>
+              </FormGroup></Col>
 
-      <Col md={2}> <FormGroup>
-      <label class="sr-only"></label>
-      <button type="submit"  class="form-control btn btn-primary mt-4">Save Form</button>
-      </FormGroup></Col>
+              <Col md={2}> <FormGroup>
+                  <label class="sr-only"></label>
+                  <button type="submit"  class="form-control btn btn-primary mt-4">Save Form</button>
+              </FormGroup></Col>
       </Row>
       </Form>
       {/* <button type="button" class="btn btn-primary form-control">Save Form</button> */}
@@ -114,28 +130,6 @@ const handleSubmit = e => {
     </Page>
   );
 
-// const mapStateToProps = (state) => {
-//   return {
-//     form: {display: 'form'},
-//     saveText: 'Create Form',
-//     // errors: selectError('form', state),
-//     response: 'res'
-//   }
-// }
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     saveForm: (form) => {
-//       const newForm = {
-//         ...form,
-//         tags: ['common'],
-//       };
-//       dispatch(saveForm('form', newForm, (err, form) => {
-//       }))
-//     }
-//   }
-// }
-      
 }
 
 const mapStateToProps = (state) => {
@@ -146,7 +140,7 @@ const mapStateToProps = (state) => {
 }}
 
 const mapActionsToProps = ({
-   fetchModules: fetchModules,
+   // fetchModules: fetchModules,
    fetchService: fetchService,
    createForm: createForm
  })

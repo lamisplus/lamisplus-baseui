@@ -95,7 +95,6 @@ const FormRenderer = props => {
               if(props.onSubmit){
                   return props.onSubmit(submission);
               }
-
             return submitForm (submission);
             }}
         />

@@ -1,10 +1,9 @@
 import * as FORMTYPES from '../actions/types'
 
-
-const formReducer = (state = { modules: [], services:  [], form:{}}, action) => {
+const formReducer = (state = {modules: [], services:  [], form:{}}, action) => {
     switch(action.type){
-        case FORMTYPES.FORMTYPES_FETCH_ALL:
-            return {...state, modules: action.payload}
+        // case FORMTYPES.FORMTYPES_FETCH_ALL:
+        //     return {...state, modules: action.payload}
 
         case FORMTYPES.FORMTYPES_FETCH_SERVICES:
             return {...state, services: action.payload}
