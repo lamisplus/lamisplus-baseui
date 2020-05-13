@@ -45,7 +45,7 @@ const FormRenderer = props => {
       }
       setForm(props.form);
   },[props.form]);
-  const submission = props.submission;
+  const submission = { ...props.submission, ...{data : {patient: props.patient}} };
 
   const submitForm = ( submission) => {
    // e.preventDefault()
@@ -82,6 +82,7 @@ const FormRenderer = props => {
    <Card >
       <CardBody>
       <h4 class="text-capitalize">{'New: '}{props.title || props.form.name}</h4>
+      
       <hr />
       {/* <Errors errors={props.errors} /> */}
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
@@ -110,6 +111,7 @@ const FormRenderer = props => {
 
 const mapStateToProps = (state = { form:{}}) => {
   return {
+    patient: state.patients.patient,
     form: state.formManager.form,
     formEncounter: state.formManager.formEncounter,
     errors: state.formManager.errors

@@ -27,10 +27,15 @@ function PatientDashboardSubMenu (props){
   const [checkIn, setCheckIn] = useState(false);
   const formInfo = [
       {
-          formCode:CODES.ADMIT_PATIENT_FORM,
+          code:CODES.ADMIT_PATIENT_FORM,
           programCode:CODES.GENERAL_SERVICE,
           formName:"ADMIT_PATIENT"
-      }
+      },
+      {
+        code:CODES.DISCHARGE_PATIENT_FORM,
+        programCode:CODES.GENERAL_SERVICE,
+        formName:"DISCHARGE_PATIENT"
+    },
   ]
   const checkInPatient = () => {
     setCheckIn(true);
@@ -50,6 +55,12 @@ function PatientDashboardSubMenu (props){
     });
       setShowFormModal(true);
   }
+  const displayFormByFormName = (formName) => {
+    const formI = formInfo.find(x => x.formName === formName);
+    console.log(formI);
+    setCurrentForm(formI);
+    setShowFormModal(true);
+}
   const [relationshipTypes, setRelationshipTypes] = useState(false);
  /*# Get list of RELATIVE parameter from the endpoint #*/
  React.useEffect(() => {
@@ -128,9 +139,9 @@ function PatientDashboardSubMenu (props){
          <Dropdown item text='Visit Actions'>
             <Dropdown.Menu>
             <Dropdown.Item onClick={admitPatient}>Admit Patient</Dropdown.Item>
-            <Dropdown.Item>Transfer Patient to Ward / Service</Dropdown.Item>
+            <Dropdown.Item >Transfer Patient to Ward / Service</Dropdown.Item>
             <Dropdown.Item>Transfer Out</Dropdown.Item>
-            <Dropdown.Item>Discharge Patient</Dropdown.Item>
+            <Dropdown.Item onClick={() => displayFormByFormName('DISCHARGE_PATIENT')}>Discharge Patient</Dropdown.Item>
         
             </Dropdown.Menu>
           </Dropdown>
