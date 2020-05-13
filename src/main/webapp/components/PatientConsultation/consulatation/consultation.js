@@ -89,14 +89,12 @@ function ConsultationPage(props) {
           <CardHeader> Presenting Complaints </CardHeader>
           <CardBody>
             <FormGroup>
-
               <Input type="textarea" name="consultation_notes" id="consultation_notes" style={{ height: '150px' }} value={consult.consultation_notes}
                 onChange={onChange} />
             </FormGroup>
 
           </CardBody>
         </Card>
-
         <Card >
           <CardHeader> Consultation Notes</CardHeader>
           <CardBody>

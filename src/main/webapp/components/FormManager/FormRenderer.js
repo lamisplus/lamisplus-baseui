@@ -78,8 +78,7 @@ const FormRenderer = props => {
     <React.Fragment>
       { (showLoadingForm) ? 
    <span className="text-center"><Spinner style={{ width: '3rem', height: '3rem' }} type="grow" /> Loading form...</span>
-:  
- 
+:
    <Card >
       <CardBody>
       <h4 class="text-capitalize">{'New: '}{props.title || props.form.name}</h4>
@@ -88,7 +87,7 @@ const FormRenderer = props => {
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
             {errorMsg}
           </Alert>
-          
+
       <Form
           form={props.form.resourceObject}
           submission={submission}
@@ -99,7 +98,6 @@ const FormRenderer = props => {
               if(props.onSubmit){
                   return props.onSubmit(submission);
               }
-
             return submitForm (submission);
             }}
         />
