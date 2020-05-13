@@ -55,7 +55,7 @@ function PatientDashboardSubMenu (props){
  React.useEffect(() => {
     async function getCharacters() {
       try {
-        const response = await fetch(`${url}/application-codesets/codesetGroup?codesetGroup=RELATIONSHIP`);
+        const response = await fetch(`${url}application-codesets/codesetGroup?codesetGroup=RELATIONSHIP`);
         const body = await response.json();
         setRelationshipTypes(body);
       } catch (error) {

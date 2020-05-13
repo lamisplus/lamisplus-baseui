@@ -1,6 +1,6 @@
 import React from 'react';
 import Page from 'components/Page';
-import { Errors, Form } from 'react-formio';
+import { SubmissionGrid, Form } from 'react-formio';
 import * as actions from "actions/formManager";
 import {connect} from 'react-redux';
 import Moment from 'moment'
@@ -19,7 +19,10 @@ const FormRenderer = props => {
   const [showLoading, setShowLoading] = React.useState(false)
   const [showLoadingForm, setShowLoadingForm] = React.useState(true)
   const onDismiss = () => setShowErrorMsg(false)
+  const options = {
+    noAlerts: true,
 
+  }
   React.useEffect(() => {
     
     const onSuccess = () => {
@@ -79,7 +82,7 @@ const FormRenderer = props => {
  
    <Card >
       <CardBody>
-      <h4 class="text-capitalize">{'NEW '}{props.title || props.form.name}</h4>
+      <h4 class="text-capitalize">{'New: '}{props.title || props.form.name}</h4>
       <hr />
       {/* <Errors errors={props.errors} /> */}
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
@@ -90,6 +93,7 @@ const FormRenderer = props => {
           form={props.form.resourceObject}
           submission={submission}
           hideComponents={props.hideComponents}
+          options={options}
           //onSubmit={props.onSubmit}
           onSubmit={(submission) => {
               if(props.onSubmit){

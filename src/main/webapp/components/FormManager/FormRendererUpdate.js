@@ -89,7 +89,7 @@ const FormRenderer = props => {
         props.onError ? props.onError : onError);
   }
   return (
-    <Page title="" >
+    <React.Fragment>
       { (showLoadingForm) ? 
    <span className="text-center"><Spinner style={{ width: '3rem', height: '3rem' }} type="grow" /> Loading form...</span>
 :  
@@ -100,7 +100,7 @@ const FormRenderer = props => {
  
    <Card >
       <CardBody>
-  <h4 class="text-capitalize">{'EDIT '}{props.title || props.form.name}</h4>
+  <h4 class="text-capitalize">{'Edit: '}{props.title || props.form.name}</h4>
       <hr />
       {/* <Errors errors={props.errors} /> */}
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
@@ -125,7 +125,7 @@ const FormRenderer = props => {
     </CardBody>
     </Card>
       } </div>  }
-    </Page>
+    </React.Fragment>
   );
 }
 
