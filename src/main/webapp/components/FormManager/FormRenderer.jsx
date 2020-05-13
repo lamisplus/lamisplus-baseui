@@ -75,8 +75,7 @@ const FormRenderer = props => {
     <Page title="" >
       { (showLoadingForm) ? 
    <span className="text-center"><Spinner style={{ width: '3rem', height: '3rem' }} type="grow" /> Loading form...</span>
-:  
- 
+:
    <Card >
       <CardBody>
       <h4 class="text-capitalize">{'NEW '}{props.title || props.form.name}</h4>
@@ -85,7 +84,7 @@ const FormRenderer = props => {
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
             {errorMsg}
           </Alert>
-          
+
       <Form
           form={props.form.resourceObject}
           submission={submission}

@@ -4,26 +4,6 @@ import {url as baseUrl, url} from '../api'
 
 import * as FORMTYPES from './types'
 
-
-export const fetchModules = () => dispatch => {
-    axios.get(`${url}modules`)
-        .then(response => {
-            console.log(response.data)
-            dispatch({
-                type: FORMTYPES.FORMTYPES_FETCH_ALL,
-                payload: response.data
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            dispatch({
-                type: FORMTYPES.FORMTYPES_ERROR,
-                payload: 'Something went wrong'
-
-            })
-        })
-}
-
 export const fetchService = () => dispatch => {
     axios.get(`${url}programs`)
         .then(response => {
@@ -54,11 +34,14 @@ export const createForm = (data) => dispatch => {
             })
             console.log(response)
         })
+        //onSuccess()
         .catch(error => {
+            //onError()
             dispatch({
                 type: FORMTYPES.FORMTYPES_ERROR,
                 payload: 'please try again'
             })
+            //onError(error.response)
         })
 }
 
@@ -86,7 +69,7 @@ export const fetchById = (id, onSuccess, onError) => dispatch => {
     })
 
     axios
-        .get(`${baseUrl}forms/${id}/formCode`)
+        .get(`${url}forms/${id}/formCode`)
         .then(response => {
             dispatch({
                 type:FORMTYPES.FORMTYPES_FETCH_BY_ID,
@@ -100,13 +83,13 @@ export const fetchById = (id, onSuccess, onError) => dispatch => {
                 type: FORMTYPES.FORMTYPES_ERROR,
                 payload: 'Error loading form, something went wrong. Please try again'
             })
-    //onError(error.response)
+   // onError(error.response)
         })
 }
 
 export const fetchAll = (onSuccess, onError) => dispatch => {
     axios
-        .get(`${baseUrl}forms`)
+        .get(`${url}forms`)
         .then(response => {
             dispatch({
                 type: FORMTYPES.FORMTYPES_FETCH_ALL,
@@ -115,7 +98,7 @@ export const fetchAll = (onSuccess, onError) => dispatch => {
             onSuccess()
         })
         .catch(error => {
-            onError()
+            //onError()
             dispatch({
                 type:  FORMTYPES.FORMTYPES_ERROR,
                 payload: 'Something went wrong, please try again'

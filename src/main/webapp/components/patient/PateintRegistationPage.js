@@ -238,9 +238,6 @@ useEffect(() => {
     }
   };
 
-
-
-
   useEffect(() => {
      getCharacters();
    }, []); 
@@ -658,9 +655,7 @@ useEffect(() => {
                                 name="countryId"
                                 id="countryId"
                                 value={values.countryId}
-                                onChange={getStates}
-                              >
-                                
+                                onChange={getStates}>
                                 {countries.map(({ label, value }) => (
                                   <option key={value} value={value}>
                                     {label}

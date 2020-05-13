@@ -6,8 +6,7 @@ import {Card,CardContent,} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import {url} from '../../api'
-import {fetchService, fetchById, updateForm} from '../../actions/formBuilder'
-
+import {fetchService, fetchAll, updateForm} from '../../actions/formBuilder'
 
 import {
     FormGroup,
@@ -15,9 +14,9 @@ import {
     Label,
     Col,
     Row,
-    Alert,
     Button
 } from 'reactstrap';
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -41,37 +40,32 @@ const Update = props => {
     const [res, setRes] = React.useState("");
     const [displayType, setDisplayType] = React.useState("");
     const [programCode, setprogramCode] = React.useState("");
-    const [formId, setformId] = React.useState();
+    const [formCode, setformCode] = React.useState();
     const [showLoading, setShowLoading] = useState(false)
     const [message, setMessage] = useState('')
     const classes = useStyles();
+    const [currentForm, setCurrentForm] = useState();
     let myform;
     const submission = {data: {patientId:566233, firstName:"Deborah", lastName:"Obanisola"}};
-
+    const textAreaRef = useRef(null);
 
     useEffect (() => {
         props.fetchService()
-        props.fetchById()
     }, [])
 
-    const handleSetModule = (e) => {
-        props.fetchById(e.target.value)
+    const handleProgramChange = (e) => {
+        setprogramCode(e.target.value)
+        props.fetchAll(e.target.value)
     }
+
+
     const handleSubmit = e => {
-
-        alert(programCode)
-        alert(formId)
-
         newdata2['programCode']=programCode;
         newdata2['resourceObject']=res;
-        newdata2['formId']=formId;
-
-
+        newdata2['formCode']=formCode;
         e.preventDefault()
         props.updateForm(newdata2);
     }
-    const textAreaRef = useRef(null);
-
 
     return (
         <Page title="Form Renderer" >
@@ -125,13 +119,12 @@ const Update = props => {
                                     <option>No Services found</option>
                                 </Input>}
                         </FormGroup></Col>
-
                         <Col md={4}> <FormGroup>
                             <Label class="sr-only">Form Name</Label>
                             {props.form.length && props.form.length > 0 ?
-                                <Input type="select" class="form-control" id="formId" required value={formId} onChange={e => setformId(e.target.value)}>
-                                    {props.form.map(form => (<option key={form.name} value={form.Id}>{form.name}</option>))}
-                                </Input>:  <Input type="select" class="form-control" id="formId" required value={formId} onChange={e => setformId(e.target.value)}>
+                                <Input type="select" class="form-control" id="formCode" required value={formCode}  onChange={e => setformCode(e.target.value)}>
+                                    {props.form.map(form => (<option key={form.name} value={form.code}>{form.name}</option>))}
+                                </Input>:  <Input type="select" class="form-control" id="formCode" required value={formCode} onChange={e => setformCode(e.target.value)}>
                                     <option>No forms found</option>
                                 </Input>}
                         </FormGroup></Col>
@@ -195,7 +188,7 @@ const Update = props => {
 //
 // export default Create
 
-const mapStateToProps = (state) => {
+const mapStateToProps =  (state = { form:{}}) => {
     console.log(state.forms)
     return {
         services: state.formReducers.services,
@@ -204,7 +197,7 @@ const mapStateToProps = (state) => {
 
 const mapActionsToProps = ({
     fetchService: fetchService,
-    fetchById: fetchById,
+    fetchAll: fetchAll,
     updateForm: updateForm
 })
 

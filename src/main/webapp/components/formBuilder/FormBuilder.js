@@ -14,11 +14,11 @@ import {
   Form
 } from 'reactstrap';
 import {toast} from 'react-toastify';
+
 const Create = props => {
   const datanew = {
     resourceObject: "",
     programCode: "",
-    
   }
   const [newdata2] = React.useState(datanew);
   const [res, setRes] = React.useState("");
@@ -27,9 +27,7 @@ const Create = props => {
   const [name, setname] = React.useState();
   const [usageCode, setusageCode] = React.useState("");
   const [version, setversion] = React.useState();
-    const [errorMsg, setErrorMsg] = React.useState('')
-    const [showErrorMsg, setShowErrorMsg] = React.useState(false)
-    const [showLoading, setShowLoading] = React.useState(false)
+    const textAreaRef = useRef(null);
 
   useEffect (() => {
     props.fetchService()
@@ -40,9 +38,6 @@ const handleSetModule = (e) => {
 }
 
 const handleSubmit = e => {
-  
-  alert(programCode)
-  
   newdata2['programCode']=programCode;
   newdata2['resourceObject']=res;
   newdata2['name']=name;
@@ -51,17 +46,7 @@ const handleSubmit = e => {
 
   e.preventDefault()
   props.createForm(newdata2);
-} 
-  const textAreaRef = useRef(null);
-    const onSuccess = () => {
-        setShowLoading(false)
-        toast.success('Form saved successfully!', { appearance: 'success' })
-    }
-    const onError = errstatus => {
-        setErrorMsg('Something went wrong, request failed! Please contact admin.')
-        setShowErrorMsg(true)
-        setShowLoading(false)
-    }
+}
   return (
     <Page title="Form Builder" >
    <Card >
@@ -109,7 +94,7 @@ const handleSubmit = e => {
 
               <Col md={2}> <FormGroup>
                   <label class="sr-only"></label>
-                  <button type="submit"  class="form-control btn btn-primary mt-4">Save Form</button>
+                  <button type="submit"  class="form-control btn btn-primary mt-4" >Save Form</button>
               </FormGroup></Col>
       </Row>
       </Form>
