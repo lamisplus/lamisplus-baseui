@@ -92,7 +92,6 @@ const FormRenderer = props => {
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
             {errorMsg}
           </Alert>
-          
       <Form
           form={props.form.resourceObject}
           submission={submission}

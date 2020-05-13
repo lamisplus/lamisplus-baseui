@@ -111,7 +111,6 @@ const FormRenderer = props => {
           form={props.form.resourceObject}
           submission={submission}
           options={options}
-          
           hideComponents={props.hideComponents}
           //onSubmit={props.onSubmit}
           onSubmit={(submission) => {

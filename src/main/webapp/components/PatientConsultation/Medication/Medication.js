@@ -150,7 +150,6 @@ const useStyles = makeStyles(theme => ({
         marginBottom: 10,
     };
 
-
 function MedicationPage(props) {
     const [drugOrder, setDrugOrder] = React.useState([]);
     const [successMsg, setSuccessMsg] = React.useState("");
