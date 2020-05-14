@@ -15,8 +15,6 @@ import Typography from "@material-ui/core/Typography";
 import { Card, CardContent } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
-// import { IoMdFingerPrint } from "react-icons/io";
-// import { FaFileImport } from "react-icons/fa";
 import { FaPlusSquare } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -82,7 +80,7 @@ const PatientRegistration = props => {
   const apicountries = url + "countries";
   const apistate = url + "countries/";
 
-  const { values, setValues, handleInputChange, resetForm } = useForm(
+  const { values, setValues, handleInputChange, resetForm,setErrors, errors } = useForm(
     initialfieldState_patientRegistration
   );
   /**
@@ -96,7 +94,13 @@ const PatientRegistration = props => {
   const [maritalStatus, setMaterialStatus] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [relatives, setRelatives] = useState([]);
-  const [relative, setRelative] = useState([{}]);
+  const [relative, setRelative] = useState([{email: "",
+                                          firstName: "",
+                                          lastName: "",
+                                          otherNames: "",
+                                          relationshipTypeId: "",
+                                          mobilePhoneNumber: "",
+                                          address: ""}]);
   const relationshipTypes = [
     { id: "1", name: "Father" },
     { id: "2", name: "Mother" },
@@ -105,7 +109,6 @@ const PatientRegistration = props => {
   ];
   const [saving, setSaving] = useState(false);
   const [display, setDisplay] = useState(false);
-  const [estimated, setEstimated] = useState(false);
     //Get countries
     useEffect(() => {
       async function getCharacters() {
@@ -180,25 +183,6 @@ useEffect(() => {
   }
   getCharacters();
 }, []);
-/* ##### End of gender parameter from the endpoint ##########*/
-
-  const findAge = date => {
-    var dob = new Date(date);
-    var today = new Date();
-    var dateParts = dob.split("-");
-    var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-    var birthDate = new Date(dateObject);
-    var age_now = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age_now--;
-    }
-
-    if (age_now === 0) {
-      return m + " month(s)";
-    }
-    return m;
-  };
 
   /**
    * Estimates the dob of an individual given
@@ -235,11 +219,12 @@ useEffect(() => {
       const actualAge = document.getElementById("age").value;
       const dateOfBirth = moment(estimatedob(actualAge)).format("MM/DD/YYYY");
       document.getElementById("dob").value = dateOfBirth;
+      //convert to the date format and setDob
+      const newdobdate = moment(dateOfBirth).format("MM-DD-YYYY");
+      setValues({ ...values, dob: newdobdate });
+      console.log(values)
     }
   };
-
-
-
 
   useEffect(() => {
      getCharacters();
@@ -308,33 +293,57 @@ useEffect(() => {
 
   const handleAddRelative = e => {
     e.preventDefault();
-    if (!relative) return;
+    //if (!relative) return;
+    if(validate()){
     addRelative(relative);
-    setRelative({
-      email: "",
-      firstName: "",
-      lastName: "",
-      otherNames: "",
-      relationshipTypeId: "",
-      mobilePhoneNumber: "",
-      address: ""
-    });
+    setRelative({ ...relative});
+    }else{
+      console.log(Object.keys(errors))
+      toast.error("Please fill all compulsory fields");
+    }
   };
 
   const onRelativeChange = e => {
     //  e.preventDefault();
     setRelative({ ...relative, [e.target.name]: e.target.value });
   };
+/****
+ *  Validation 
+ */
+const validate = () => {
+  console.log(values)
+  let temp = { ...errors }
+  temp.firstName = values.firstName ? "" : "First Name is required"
+  temp.hospitalNumber = values.hospitalNumber ? "" : "Patient Id is required."
+  temp.mobilePhoneNumber = values.mobilePhoneNumber ? "" : "Mobile numner is required."
+  //temp.dob = values.dob ? "" : "Date of birth is required."
+  //temp.dateRegistration = values.regDate ? "" : "Date of Registration required."
+  
+  temp.lastName = values.lastName ? "" : "Last Name  is required."
+  temp.genderId = values.genderId ? "" : "Gender is required." 
+  temp.relativefirstName = relative.firstName ? "" : "First Name is required" 
+  temp.relativelastName = relative.lastName ? "" : "First Name is required" 
+  temp.relativemobilePhoneNumber = relative.mobilePhoneNumber ? "" : "mobile number is required"
+  temp.relationshipTypeId = relative.relationshipTypeId ? "" : "Relationship type  is required."
+  setErrors({
+      ...temp
+  })
+  console.log(temp.dateRegistration)
+  return Object.values(temp).every(x => x == "")
+}
 
+/***
+ * Submit Button Processing 
+ */
   const handleSubmit = e => {
     e.preventDefault();
-   
-    const newDatenow = moment(values.regDate).format("DD-MM-YYYY");
-    const dateOfBirth = moment(values.dateOfBirth).format("DD-MM-YYYY");
+   if(validate()){
+    const newDatenow = moment(values.dateRegistration).format("DD-MM-YYYY");
+    const newDateOfBirth = moment(values.dob).format("DD-MM-YYYY");
     //setValues({ dateRegistration: newDatenow});
     values["dateRegistration"] = newDatenow;
     values["personRelativesDTO"] = relatives;
-    values["dob"] = dateOfBirth;
+    values["dob"] = newDateOfBirth;
     setSaving(true);
     const onSuccess = () => {
       setSaving(false);
@@ -346,16 +355,24 @@ useEffect(() => {
     }
     props.create(values, onSuccess, onError);
     //toast.success("Registration Successful")
-  
+   }else{
+    console.log(Object.keys(errors))
+    toast.error("Please fill all compulsory fields");
+   }
   };
 
   return (
     <Page title="Patient Registration">
       <ToastContainer autoClose={3000} hideProgressBar />
-      <Alert color="primary">
-        All Information with Asterisks(*) are compulsory
-      </Alert>
-      
+      {errors ?
+        (<Alert color="primary">
+          All Information with Asterisks(*) are compulsory
+        </Alert>)
+        :
+        (<Alert color="danger">
+          All Fields are requires
+        </Alert>)
+      }
       <Form onSubmit={handleSubmit}>
         {/* First  row form entry  for Demographics*/}
         <Row>
@@ -364,12 +381,7 @@ useEffect(() => {
               <CardContent>
                 <Title>
                   Basic Information <br />
-                  {/* <MatButton
-                    variant="contained"
-                    color="primary"
-                    className=" float-right mr-1" >
-                    </MatButton> */}
-
+                  
                 </Title>
                 <br />
                 <Row form>
@@ -383,27 +395,31 @@ useEffect(() => {
                       
                         value={values.hospitalNumber}
                         onChange={handleInputChange}
-
+                        {...(errors.hospitalNumber && { invalid: true})}
                       />
+                      <FormFeedback>{errors.hospitalNumber}</FormFeedback>
                     </FormGroup>
                   </Col>
 
                   <Col md={4}>
                     <FormGroup>
-                      <Label for="middleName">Date Of Registration *</Label>
+                    <Label for="middleName">Date Of Registration * </Label>
 
                       <DateTimePicker
                         time={false}
-                        name="regDate"
-                        id="regDate"
+                        name="dateRegistration"
+                        id="dateRegistration"
                         value={values.regDate}
                         onChange={value1 =>
-                          setValues({ ...values, regDate: value1 })
+                          setValues({ ...values, dateRegistration: moment(value1).format("DD-MM-YYYY") })
                         }
-                        defaultValue={new Date()}
+                        
+                        //defaultValue={new Date()}
                         max={new Date()}
-                        required
+                        {...(errors.dateRegistration && { invalid: true})}
                       />
+                      <FormFeedback>{errors.dateRegistration}</FormFeedback>
+                       
                     </FormGroup>
                   </Col>
                 </Row>
@@ -418,9 +434,10 @@ useEffect(() => {
                         
                         value={values.firstName}
                         onChange={handleInputChange}
+                        {...(errors.firstName && { invalid: true})}
                         
                       />
-                      <FormFeedback>Oh noes! that name is already taken</FormFeedback>
+                      <FormFeedback>{errors.firstName}</FormFeedback>
                     </FormGroup>
                   </Col>
                   <Col md={4}>
@@ -446,8 +463,10 @@ useEffect(() => {
                         
                         onChange={handleInputChange}
                         value={values.lastName}
-                        required
+                        {...(errors.lastName && { invalid: true})}
+                        
                       />
+                       <FormFeedback>{errors.lastName}</FormFeedback>
                     </FormGroup>
                   </Col>
                 </Row>
@@ -461,7 +480,7 @@ useEffect(() => {
                         id="genderId"
                         value={values.genderId}
                         onChange={handleInputChange}
-                        required
+                        {...(errors.genderId && { invalid: true})}
                       >
                         <option  value=""> </option>
                       {gender.map(({ label, value }) => (
@@ -470,6 +489,7 @@ useEffect(() => {
                         </option>
                       ))}
                       </Input>
+                      <FormFeedback>{errors.genderId}</FormFeedback>
                     </FormGroup>
                   </Col>
                   <Col md={4}>
@@ -542,15 +562,26 @@ useEffect(() => {
                           onChange={value1 =>
                             setValues({ ...values, dob: value1 })
                           }
-                          defaultValue={new Date()}
+                          //defaultValue={new Date()}
                           max={new Date()}
-                          required
-                        />
+                          {...(errors.dob && { invalid: true})}
+                          />
+                      <FormFeedback>{errors.dob}</FormFeedback>
                       </FormGroup>
                     ) : (
                       <FormGroup>
                         <Label>Date OF Birth</Label>
-                        <Input type="text" id="dob" disabled />
+                        <Input 
+                        type="text" 
+                        id="dob" 
+                        disabled 
+                        value={values.dob}
+                        onChange={value1 =>
+                          setValues({ ...values, dob: value1 })
+                        }
+                        
+                      />
+                     
                         <FormText ><span style={{color:"blue", fontWeight:"bolder"}}>Estimated Date of Birth </span></FormText>
                       </FormGroup>
 
@@ -575,16 +606,7 @@ useEffect(() => {
                     </Row>
                   </Col>
                   <Col md={4}>
-                  {/* <FormGroup check>
-                      <Label check>
-                        <Input type="checkbox" onChange={value1 =>
-                            setEstimated(true)
-                          }
-                          // checked={estimated? "checked": ""}
-                          />{' '}
-                          Estimated Date of Birth
-                      </Label>
-                    </FormGroup> */}
+                  
                   </Col>
                 </Row>
               </CardContent>
@@ -605,12 +627,15 @@ useEffect(() => {
                       <Label for="phoneNumber">Phone Number *</Label>
                       <Input
                         type="text"
-                        name="phoneNumber"
-                        id="phoneNumber"
+                        name="mobilePhoneNumber"
+                        id="mobilePhoneNumber"
                        
                         value={values.mobilePhoneNumber}
                         onChange={handleInputChange}
-                      />
+                        {...(errors.mobilePhoneNumber && { invalid: true})}
+                        
+                        />
+                         <FormFeedback>{errors.mobilePhoneNumber}</FormFeedback>
                     </FormGroup>
                   </Col>
                   <Col md={4}>
@@ -789,6 +814,7 @@ useEffect(() => {
                         id="relationshipTypeId"
                         value={relative.relationshipTypeId}
                         onChange={onRelativeChange}
+                        {...(errors.relationshipTypeId && { invalid: true})}
                       >
                         <option  value=""> </option>
                         <option value="">
@@ -800,6 +826,7 @@ useEffect(() => {
                           </option>
                         ))}
                       </Input>
+                      <FormFeedback>{errors.relationshipTypeId}</FormFeedback>
                     </FormGroup>
                   </Col>
                   <Col md={3}>
@@ -812,7 +839,10 @@ useEffect(() => {
                         value={relative.firstName}
                         
                         onChange={onRelativeChange}
-                      />
+                        {...(errors.relativefirstName && { invalid: true})}
+                        />
+                         <FormFeedback>{errors.relativefirstName}</FormFeedback>
+                      
                     </FormGroup>
                   </Col>
                   <Col md={3}>
@@ -838,7 +868,9 @@ useEffect(() => {
                        
                         value={relative.lastName}
                         onChange={onRelativeChange}
-                      />
+                        {...(errors.relativelastName && { invalid: true})}
+                        />
+                         <FormFeedback>{errors.relativelastName}</FormFeedback>
                     </FormGroup>
                   </Col>
                 </Row>
@@ -859,7 +891,9 @@ useEffect(() => {
                             mobilePhoneNumber: e.target.value
                           })
                         }
-                      />
+                        {...(errors.relativemobilePhoneNumber && { invalid: true})}
+                        />
+                         <FormFeedback>{errors.relativemobilePhoneNumber}</FormFeedback>
                     </FormGroup>
                   </Col>
                   <Col md={3}>
@@ -982,7 +1016,7 @@ function RelativeList({
 const mapStateToProps = state => ({
   
   status: state.patients.status,
- // errormsg:state.patients.errormsg
+
 });
 
 

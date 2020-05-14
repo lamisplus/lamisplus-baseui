@@ -12,7 +12,7 @@ const useForm = (initialFieldValues) => {
             ...values,
             ...fieldValue
         })
-        //validate(fieldValue)
+
     }
 
 

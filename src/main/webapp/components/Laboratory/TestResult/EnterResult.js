@@ -106,7 +106,6 @@ const ModalSampleResult = (props) => {
   return (
       
       <div >
-       <ToastContainer autoClose={2000} hideProgressBar />
       <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
         
       <Form onSubmit={saveSample}>
@@ -137,7 +136,7 @@ const ModalSampleResult = (props) => {
                     /> 
                     </Col>
                     <Col xs="4">
-                    Date Of Reported
+                    Date Reported
                     <br/>
                     <DateTimePicker time={false} name="date_result_reported"  id="date_result_reported"  
                       
@@ -149,14 +148,12 @@ const ModalSampleResult = (props) => {
                     </Col>
                   
                   <Col xs="4">
-                    </Col>
-                  
-                    
+                    </Col>                 
                     <Col xs="4">
                     
                     <FormGroup>
                     <br/>
-                          <Label for="examplePassword">Enter Result  </Label>
+                          <Label for="examplePassword"> Result  </Label>
                           <Input
                             type='text'
                             name='test_result'

@@ -14,7 +14,6 @@ import { connect } from 'react-redux';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { DateTimePicker } from 'react-widgets';
@@ -90,12 +89,13 @@ const ModalSample = (props) => {
       
     const handleInputChangeSample = e => {
       setSamples ({ ...samples, [e.target.name]: e.target.value });
-      console.log(samples)
     }
+
     const saveSample = e => {
       e.preventDefault()
+
       setLoading(true);
-     
+
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
       datasample.data.lab_test_order_status = 1;
       datasample.data.date_sample_collected = newDatenow
@@ -121,8 +121,8 @@ const ModalSample = (props) => {
         props.togglestatus()       
       }
       props.createCollectedSample(datasample, labId,onSuccess,onError)
-    }
-  
+    
+  }
   function checklanumber (lab_num){
       if(lab_num===""){       
        return (                 
@@ -138,7 +138,6 @@ const ModalSample = (props) => {
        
         <Card >
         <CardBody>
-        <ToastContainer autoClose={3000} hideProgressBar />
           <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
             
           <Form onSubmit={saveSample}>

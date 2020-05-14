@@ -66,7 +66,6 @@ const useStyles = makeStyles({
     return (sample.data.lab_test_order_status !==0 );
   });
   console.log(newsample)
-
   //Get list of test type
   const [labTestType, setLabTestType] = useState([]) 
         newsample.forEach(function(value, index, array) {
@@ -126,8 +125,6 @@ const sampleAction = (e) =>{
 }
   return (
     <Page title=' Sample Verification'>
-    
-      <ToastContainer autoClose={2000} />
       <Row>
         
         <Col>

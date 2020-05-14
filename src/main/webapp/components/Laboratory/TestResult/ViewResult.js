@@ -90,7 +90,7 @@ const ModalViewResult = (props) => {
        <ToastContainer autoClose={2000} hideProgressBar />
       <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
 
-        <ModalHeader toggle={props.togglestatus}>Result Reporting</ModalHeader>
+        <ModalHeader toggle={props.togglestatus}>Lab test order detail</ModalHeader>
         <ModalBody>
         <Card>
           <CardBody>
@@ -112,17 +112,16 @@ const ModalViewResult = (props) => {
                    
                     </Col>
                     <Col xs="6">
-                    <span style={{ fontWeight: 'bold'}}>Date Of Reported </span>: {date_result_reported}
+                    <span style={{ fontWeight: 'bold'}}>Date Reported </span>: {date_result_reported}
                     <br/>
                               
                     </Col>
                   
-                
                     <Col xs="4">
                     
                     <FormGroup>
                     <br/>
-                     <Label for="examplePassword"><span style={{ fontWeight: 'bold'}}>Enter Result </span>: {test_result} </Label>
+                     <Label for="examplePassword"><span style={{ fontWeight: 'bold'}}> Result </span>: {test_result} </Label>
                        
                       </FormGroup>
                       </Col>

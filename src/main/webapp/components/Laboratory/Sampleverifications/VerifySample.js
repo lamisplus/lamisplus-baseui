@@ -11,15 +11,14 @@ import MatButton from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import SaveIcon from '@material-ui/icons/Save'
 import CancelIcon from '@material-ui/icons/Cancel'
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { DateTimePicker } from 'react-widgets';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
-import {url} from '../../../api'
-import { useSelector, useDispatch } from 'react-redux';
+
 import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
 import { Alert } from 'reactstrap';
 import { Spinner } from 'reactstrap';
@@ -101,7 +100,6 @@ const ModalSample = (props) => {
   return (
       
       <div >
-       <ToastContainer autoClose={3000} hideProgressBar />
       <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
         
       <Form onSubmit={saveSample}>

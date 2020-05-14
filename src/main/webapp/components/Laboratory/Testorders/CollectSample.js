@@ -98,9 +98,9 @@ const handlesample = (row) => {
    setcollectmodal({...collectmodal, ...row});
    setModal(!modal) 
 }
-const transfersample = (val) => {
+const transfersample = (row) => {
   setModal2(!modal2)
-  setcollectmodal(val);
+  setcollectmodal({...collectmodal, ...row});
 }
 const viewresult = (row) => {  
   setcollectmodal({...collectmodal, ...row});
@@ -116,15 +116,15 @@ const getGroup = e => {
 //This is function to check for the status of each collection to display on the tablist below 
 const samplestatus = e =>{
   if(e===1){
-    return <p><Badge  color="primary">Sample Collected</Badge></p>
+    return <p><Badge  color="light">Sample Collected</Badge></p>
   }else if(e===2){
-    return <p><Badge  color="primary">Sample Transfered</Badge></p>
+    return <p><Badge  color="light">Sample Transfered</Badge></p>
   }else if(e==="3"){
-    return <p><Badge  color="primary">Sample Verified</Badge></p>
+    return <p><Badge  color="light">Sample Verified</Badge></p>
   }else if(e==="4"){
-    return <p><Badge  color="primary">Sample Rejected</Badge></p>
+    return <p><Badge  color="light">Sample Rejected</Badge></p>
   }else if(e===5){
-    return <p><Badge  color="primary">Result Available</Badge></p>
+    return <p><Badge  color="light">Result Available</Badge></p>
   }else{
     return <p>{" "}</p>
   }
@@ -154,7 +154,6 @@ const sampleAction = (e) =>{
 
   return (
     <Page title='Collect Sample'>
-      <ToastContainer autoClose={2000} />
       <Row>
         <Col>
           <div >
