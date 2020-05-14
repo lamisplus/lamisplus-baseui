@@ -36,6 +36,12 @@ function PatientDashboardSubMenu (props){
         programCode:CODES.GENERAL_SERVICE,
         formName:"DISCHARGE_PATIENT"
     },
+    {
+      code:CODES.TRANSFER_INPATIENT_FORM,
+      programCode:CODES.GENERAL_SERVICE,
+      formName:"TRANSFER_INPATIENT"
+  },
+
   ]
   const checkInPatient = () => {
     setCheckIn(true);
@@ -139,8 +145,8 @@ function PatientDashboardSubMenu (props){
          <Dropdown item text='Visit Actions'>
             <Dropdown.Menu>
             <Dropdown.Item onClick={admitPatient}>Admit Patient</Dropdown.Item>
-            <Dropdown.Item >Transfer Patient to Ward / Service</Dropdown.Item>
-            <Dropdown.Item>Transfer Out</Dropdown.Item>
+            <Dropdown.Item onClick={() => displayFormByFormName('TRANSFER_INPATIENT')}> Transfer Patient to Ward / Service</Dropdown.Item>
+            {/* <Dropdown.Item>Transfer Out</Dropdown.Item> */}
             <Dropdown.Item onClick={() => displayFormByFormName('DISCHARGE_PATIENT')}>Discharge Patient</Dropdown.Item>
         
             </Dropdown.Menu>
