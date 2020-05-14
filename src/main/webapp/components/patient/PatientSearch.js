@@ -6,6 +6,8 @@ import { fetchAll, Delete as Del } from "../../actions/patients";
 import "./PatientSearch.css";
 import { Dashboard } from "@material-ui/icons";
 import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const PatientSearch = (props) => {
       useEffect(() => {
@@ -64,20 +66,50 @@ const PatientSearch = (props) => {
           address: row.street || '',
           actions: 
           <div>
+            <IconButton
+            color="primary"
+            aria-label="View Patient"
+            title="View Patient"
+            >
+              <Link
+                  to={{
+                    pathname: "/patient-dashboard",
+                    state: { hospitalNumber: row.hospitalNumber  }
+                  }}
+                >
+              <Dashboard title="Patient Dashboard" aria-label="View Patient" />
+            </Link>
+          </IconButton>
           <IconButton
-          color="primary"
-          aria-label="View Patient"
-          title="View Patient"
-        >
-          <Link
-            to={{
-              pathname: "/patient-dashboard",
-              state: { hospitalNumber: row.hospitalNumber  }
-            }}
-          >
-            <Dashboard title="Patient Dashboard" aria-label="View Patient" />
-          </Link>
-        </IconButton></div>
+            color="primary"
+            aria-label="Edit Patient"
+            title="Edit Patient"
+            >
+              <Link
+                  to={{
+                    pathname: "/patient-dashboard",
+                    state: { hospitalNumber: row.hospitalNumber  }
+                  }}
+                >
+              <EditIcon title="Edit" aria-label="Edit Patient" />
+            </Link>
+          </IconButton>
+          <IconButton
+            color="primary"
+            aria-label="Delete Patient"
+            title="Delete Patient"
+            >
+              <Link
+                  to={{
+                    pathname: "/patient-dashboard",
+                    state: { hospitalNumber: row.hospitalNumber  }
+                  }}
+                >
+              <DeleteIcon title="Edit" aria-label="Delete Patient" />
+            </Link>
+          </IconButton>
+
+        </div>
           
         }))}
         
