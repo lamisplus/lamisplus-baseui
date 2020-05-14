@@ -33,7 +33,7 @@ const FormRendererModal = (props ) => {
     
    return (
         
-    <Modal isOpen={props.showModal} toggle={toggle} zIndex={"9999"} >
+    <Modal isOpen={props.showModal} toggle={toggle} zIndex={"9999"} className="modal-xl" >
          <ToastContainer />
    <ModalHeader toggle={toggle}>{props.title || ''}</ModalHeader>
     <ModalBody>

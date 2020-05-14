@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState }  from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Col,
@@ -10,6 +10,11 @@ import {
 } from 'reactstrap';
 import Chip from '@material-ui/core/Chip';
 import CreatableSelect from 'react-select/creatable';
+import FormRendererModal from 'components/FormManager/FormRendererModal';
+import * as CODES from "api/codes";
+import { ToastContainer, toast } from 'react-toastify';
+import {connect} from 'react-redux';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,15 +41,29 @@ export const allergies = [
   { value: 'peanut', label: 'Peanut'},
 ];
 
-export default function PatientAlert(props ) {
+ function PatientAlert(props ) {
   const classes = useStyles(props);
+  const [showFormModal, setShowFormModal] = useState(false);
+  const [currentForm, setCurrentForm] = useState(false);
   const handleChange = (newValue: any, actionMeta: any) => {
     props.setNewAllergy(newValue ? newValue.map(it => it.value) : []);    
   };
+  const onSuccess = () => {
+    toast.success('Form saved successfully!', { appearance: 'success' })
+    setShowFormModal(false);
+  }
+  const addAllergy = () => {
+    setCurrentForm({
+      code:CODES.PATIENT_ALLERGY_FORM,
+      programCode:CODES.GENERAL_SERVICE,
+      formName:"PATIENT ALLERGY"
+  });
+    setShowFormModal(true);
+}
   return (
-
+<React.Fragment>
             <Card >
-              <CardHeader>Allergies</CardHeader>
+              <CardHeader>Allergies <button type="button" class="float-right ml-3" onClick={addAllergy}><i class="fa fa-plus"></i> Add Vitals</button></CardHeader>
                     <CardBody>
                         
                                     
@@ -81,5 +100,19 @@ export default function PatientAlert(props ) {
                             }                            
                     </CardBody>                      
             </Card>
+            <FormRendererModal patientId={props.patient.patientId} showModal={showFormModal} setShowModal={setShowFormModal} currentForm={currentForm} onSuccess={onSuccess}/>
+      <ToastContainer />
+      </React.Fragment>
   );
 }
+const mapStateToProps = state => {
+  return {
+  patient: state.patients.patient
+  }
+}
+
+const mapActionToProps = {
+  
+}
+
+export default connect(mapStateToProps, mapActionToProps)(PatientAlert)

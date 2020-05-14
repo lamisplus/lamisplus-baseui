@@ -41,13 +41,25 @@ function PatientDashboardSubMenu (props){
       programCode:CODES.GENERAL_SERVICE,
       formName:"TRANSFER_INPATIENT"
   },
+  {
+    code:CODES.CHECK_OUT_PATIENT_FORM,
+    programCode:CODES.GENERAL_SERVICE,
+    formName:"CHECK_OUT_PATIENT"
+},
+  
 
   ]
   const checkInPatient = () => {
     setCheckIn(true);
   }
   const checkOutPatient = () => {
-
+    try {
+      const response =  fetch(`${url}visits/${props.patient.visitId}`);
+      const body =  response.json();
+    } catch (error) {
+      console.log(error);
+    }
+    displayFormByFormName('CHECK_OUT_PATIENT');
   }
   const onSuccess = () => {
     toast.success('Form saved successfully!', { appearance: 'success' })
@@ -62,9 +74,7 @@ function PatientDashboardSubMenu (props){
       setShowFormModal(true);
   }
   const displayFormByFormName = (formName) => {
-    const formI = formInfo.find(x => x.formName === formName);
-    console.log(formI);
-    setCurrentForm(formI);
+    setCurrentForm(formInfo.find(x => x.formName === formName));
     setShowFormModal(true);
 }
   const [relationshipTypes, setRelationshipTypes] = useState(false);
