@@ -33,6 +33,8 @@ import { create } from "../../actions/patients";
 import { initialfieldState_patientRegistration } from "./InitialFieldState";
 import useForm from "../Functions/UseForm";
 import { Spinner } from 'reactstrap';
+import EditIcon from '@material-ui/icons/Edit';
+import {initialRelative} from './initialRealative';
 
 //Dtate Picker package
 Moment.locale("en");
@@ -75,7 +77,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const PatientRegistration = props => {
-  // const [currentId, setCurrentId] = useState(0) ;
+  console.log(moment("12-25-1995").format("DD/MM/YYYY"))
+
+    //const [currentId, setCurrentId] = useState(props.location.currentId) ;
+  const currentId = props.location.currentId!=='' ? props.location.currentId : null
+ 
   const classes = useStyles();
   const apicountries = url + "countries";
   const apistate = url + "countries/";
@@ -83,6 +89,22 @@ const PatientRegistration = props => {
   const { values, setValues, handleInputChange, resetForm,setErrors, errors } = useForm(
     initialfieldState_patientRegistration
   );
+  const [updateregdate, setupdateregdate] = useState('') ;
+  useEffect(() => {
+    if (currentId != 0){
+        setValues({
+            ...props.patientDetail.find(x => x.patientId == currentId)
+        })
+        setErrors({})
+
+        //const regDate = props.patientDetail.find(x => x.patientId === currentId)
+        //console.log(regDate)
+       //setupdateregdate(moment(regDate.dateRegistration).format("DD/MM/YYYY"))
+       //console.log(moment("12-25-1995", "MM/DD/YYYY"))
+    }
+
+}, [currentId])
+
   /**
    * Initializing state properties
    */
@@ -94,13 +116,7 @@ const PatientRegistration = props => {
   const [maritalStatus, setMaterialStatus] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [relatives, setRelatives] = useState([]);
-  const [relative, setRelative] = useState([{email: "",
-                                          firstName: "",
-                                          lastName: "",
-                                          otherNames: "",
-                                          relationshipTypeId: "",
-                                          mobilePhoneNumber: "",
-                                          address: ""}]);
+  const [relative, setRelative] = useState([initialRelative]);
   const relationshipTypes = [
     { id: "1", name: "Father" },
     { id: "2", name: "Mother" },
@@ -278,16 +294,30 @@ useEffect(() => {
   function getRelationshipName(id) {
     return id ? relationshipTypes.find(x => x.id === id).name : "";
   }
-
+/* Add Relative function **/
   const addRelative = value => {
     const allRelatives = [...relatives, value];
     setRelatives(allRelatives);
   };
-
+/* Remove Relative function **/
   const removeRelative = index => {
+    console.log(relatives)
+    relatives.splice(index, 1);
+    setRelative({...relative});
+    
+  };
+/* Edit Relative function **/
+  const editRelative = index => {
     const allRelatives = [...relatives];
-    allRelatives.splice(index, 1);
-    setRelatives(allRelatives);
+    //console.log(allRelatives)
+    //allRelatives.splice(index, 1);
+    //setRelatives(allRelatives);
+    //const updateRelative= allRelatives.filter(relative => relative.id !== index);
+    // settodos(updatedtodo)
+    //console.log(allRelatives[index])
+    setRelative(allRelatives[index])
+    relatives.splice(index, 1);
+
     
   };
 
@@ -296,7 +326,7 @@ useEffect(() => {
     //if (!relative) return;
     if(validate()){
     addRelative(relative);
-    setRelative({ ...relative});
+    setRelative(initialRelative);
     }else{
       console.log(Object.keys(errors))
       toast.error("Please fill all compulsory fields");
@@ -320,7 +350,7 @@ const validate = () => {
   //temp.dateRegistration = values.regDate ? "" : "Date of Registration required."
   
   temp.lastName = values.lastName ? "" : "Last Name  is required."
-  temp.genderId = values.genderId ? "" : "Gender is required." 
+  //temp.genderId = values.genderId ? "" : "Gender is required." 
   temp.relativefirstName = relative.firstName ? "" : "First Name is required" 
   temp.relativelastName = relative.lastName ? "" : "First Name is required" 
   temp.relativemobilePhoneNumber = relative.mobilePhoneNumber ? "" : "mobile number is required"
@@ -360,6 +390,28 @@ const validate = () => {
     toast.error("Please fill all compulsory fields");
    }
   };
+
+  // const addTodo = newtodotext => {
+  //   settodos ([...todo, {id:4, test:'new text'}])
+  // }
+
+// const removetodo = todoid => {
+//   const updatedtodo = todos.filter(todo => todo.id !== todoid);
+//   settodos(updatedtodo)
+// }
+// const toggoletodo = todoid =>{
+//   const updatedtodo = todos.map(todo =>
+//     todo.id === todoid ? {...todo, completed: !todo.completed } : todo 
+//     );
+// settodos(updatedtodo)
+// };
+
+// const edittodo = (todoid, newtask) =>{
+//   const updatedtodo = todos.map(todo =>
+//     todo.id === todoid ? {...todo, task: !todo.newtask } : todo 
+//     );
+// settodos(updatedtodo)
+// };
 
   return (
     <Page title="Patient Registration">
@@ -404,7 +456,7 @@ const validate = () => {
                   <Col md={4}>
                     <FormGroup>
                     <Label for="middleName">Date Of Registration * </Label>
-
+                      
                       <DateTimePicker
                         time={false}
                         name="dateRegistration"
@@ -413,8 +465,7 @@ const validate = () => {
                         onChange={value1 =>
                           setValues({ ...values, dateRegistration: moment(value1).format("DD-MM-YYYY") })
                         }
-                        
-                        //defaultValue={new Date()}
+                        //defaultValue={new Date(values.dateRegistration)}
                         max={new Date()}
                         {...(errors.dateRegistration && { invalid: true})}
                       />
@@ -933,8 +984,9 @@ const validate = () => {
                             index={index}
                             relative={relative}
                             removeRelative={removeRelative}
+                            editRelative={editRelative}
                             relationshipTypeName={getRelationshipName(
-                              relative.relationshipTypeId
+                            relative.relationshipTypeId
                             )}
                           />
                         ))}
@@ -983,7 +1035,8 @@ function RelativeList({
   relative,
   index,
   removeRelative,
-  relationshipTypeName
+  relationshipTypeName,
+  editRelative
 }) {
   return (
     <ListItem>
@@ -1004,9 +1057,12 @@ function RelativeList({
         }
       />
 
-      <ListItemSecondaryAction onClick={() => removeRelative(index)}>
-        <IconButton edge="end" aria-label="delete">
+      <ListItemSecondaryAction >
+        <IconButton edge="end" aria-label="delete" onClick={() => removeRelative(index)}>
           <DeleteIcon />
+        </IconButton>
+        <IconButton edge="end" aria-label="edit" onClick={() => editRelative(index)}>
+          <EditIcon />
         </IconButton>
       </ListItemSecondaryAction>
     </ListItem>
@@ -1014,9 +1070,8 @@ function RelativeList({
 }
 
 const mapStateToProps = state => ({
+  patientDetail: state.patients.list
   
-  status: state.patients.status,
-
 });
 
 

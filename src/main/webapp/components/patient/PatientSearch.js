@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
@@ -10,6 +10,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 const PatientSearch = (props) => {
+
       useEffect(() => {
         props.fetchAllPatients();
       }, []); //componentDidMount
@@ -87,8 +88,8 @@ const PatientSearch = (props) => {
             >
               <Link
                   to={{
-                    pathname: "/patient-dashboard",
-                    state: { hospitalNumber: row.hospitalNumber  }
+                    pathname: "/patient-registration",
+                    currentId: row.patientId
                   }}
                 >
               <EditIcon title="Edit" aria-label="Edit Patient" />

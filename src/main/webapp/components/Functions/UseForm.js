@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 
-const useForm = (initialFieldValues) => {
+const useForm = (initialFieldValues,setCurrentId) => {
     const [values, setValues] = useState(initialFieldValues)
     const [errors, setErrors] = useState({})
 
@@ -17,10 +17,9 @@ const useForm = (initialFieldValues) => {
 
 
   const resetForm = () => {
-    setValues({
-      ...initialFieldValues
-    })
+    setValues(initialFieldValues)
     setErrors({})
+    setCurrentId(0)
   }
 
   return {
