@@ -1,8 +1,8 @@
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Page from "components/Page";
-import React, { useState, useEffect } from "react";
 import MatButton from "@material-ui/core/Button";
-import "./PatientRegistrationPage.css";
+import "./Patient.css";
 import { Col, Form, FormGroup, Input, Label, Row, Alert, FormFeedback, FormText } from "reactstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
@@ -34,7 +34,7 @@ import { initialfieldState_patientRegistration } from "./InitialFieldState";
 import useForm from "../Functions/UseForm";
 import { Spinner } from 'reactstrap';
 import EditIcon from '@material-ui/icons/Edit';
-import {initialRelative} from './initialRealative';
+import {initialRelative} from './InitialRealative';
 
 //Dtate Picker package
 Moment.locale("en");
@@ -89,22 +89,16 @@ const PatientRegistration = props => {
   const { values, setValues, handleInputChange, resetForm,setErrors, errors } = useForm(
     initialfieldState_patientRegistration
   );
-  const [updateregdate, setupdateregdate] = useState('') ;
-  useEffect(() => {
+  
+  useEffect(() => { 
     if (currentId != 0){
         setValues({
-            ...props.patientDetail.find(x => x.patientId == currentId)
+          ...props.patientDetail.find(x => x.patientId == currentId)
         })
         setErrors({})
-
-        //const regDate = props.patientDetail.find(x => x.patientId === currentId)
-        //console.log(regDate)
-       //setupdateregdate(moment(regDate.dateRegistration).format("DD/MM/YYYY"))
-       //console.log(moment("12-25-1995", "MM/DD/YYYY"))
     }
 
 }, [currentId])
-
   /**
    * Initializing state properties
    */
@@ -117,12 +111,8 @@ const PatientRegistration = props => {
   const [provinces, setProvinces] = useState([]);
   const [relatives, setRelatives] = useState([]);
   const [relative, setRelative] = useState([initialRelative]);
-  const relationshipTypes = [
-    { id: "1", name: "Father" },
-    { id: "2", name: "Mother" },
-    { id: "3", name: "Sister" },
-    { id: "4", name: "Brother" }
-  ];
+  const [relativeButton, setRelativeButton] = useState(false) ;
+  const [relationshipTypes, setRelationshipTypes] = useState([]);
   const [saving, setSaving] = useState(false);
   const [display, setDisplay] = useState(false);
     //Get countries
@@ -141,7 +131,24 @@ const PatientRegistration = props => {
       }
       getCharacters();
     }, []);
+const newrel =[JSON.stringify(relationshipTypes)]
 
+/*# Get list of RelationshipTypes parameter from the endpoint #*/
+useEffect(() => {
+  async function getCharacters() {
+    try {
+      const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=RELATIONSHIP');
+      const body = await response.json();
+      setRelationshipTypes(body.map(({ display, id }) => ({ name: display, id: id })));
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  getCharacters();
+}, []);
+          
+/* ##### End of RelationshipTypes parameter from the endpoint ##########*/
 /*# Get list of gender parameter from the endpoint #*/
 useEffect(() => {
   async function getCharacters() {
@@ -156,7 +163,6 @@ useEffect(() => {
   getCharacters();
 }, []);
 /* ##### End of gender parameter from the endpoint ##########*/
-
 /*# Get list of OCUUPATION parameter from the endpoint #*/
 useEffect(() => {
   async function getCharacters() {
@@ -285,14 +291,17 @@ useEffect(() => {
     async function getCharacters() {
       const response = await fetch(`${url}state/` + stateId+"/provinces");
       const provinceList = await response.json();
-
       setProvinces(provinceList);
     }
     getCharacters();
   };
 
-  function getRelationshipName(id) {
-    return id ? relationshipTypes.find(x => x.id === id).name : "";
+  const  getRelationshipName = (id) => {
+    if(id){
+       const newId = parseInt(id) 
+      const objectArray = Object.values(relationshipTypes);
+      return objectArray.find(x => x.id === newId).name
+    }    
   }
 /* Add Relative function **/
   const addRelative = value => {
@@ -304,32 +313,25 @@ useEffect(() => {
     console.log(relatives)
     relatives.splice(index, 1);
     setRelative({...relative});
+    setRelativeButton(false) 
     
   };
 /* Edit Relative function **/
   const editRelative = index => {
     const allRelatives = [...relatives];
-    //console.log(allRelatives)
-    //allRelatives.splice(index, 1);
-    //setRelatives(allRelatives);
-    //const updateRelative= allRelatives.filter(relative => relative.id !== index);
-    // settodos(updatedtodo)
-    //console.log(allRelatives[index])
     setRelative(allRelatives[index])
-    relatives.splice(index, 1);
-
-    
+    relatives.splice(index, 1); 
+    setRelativeButton(true) 
   };
 
   const handleAddRelative = e => {
     e.preventDefault();
     //if (!relative) return;
-    if(validate()){
+    if(relatives.length > 0){
     addRelative(relative);
-    setRelative(initialRelative);
-    }else{
-      console.log(Object.keys(errors))
-      toast.error("Please fill all compulsory fields");
+    setRelative(initialRelative); 
+  }else{
+      toast.error("Relative fields cannot be empty");
     }
   };
 
@@ -348,13 +350,8 @@ const validate = () => {
   temp.mobilePhoneNumber = values.mobilePhoneNumber ? "" : "Mobile numner is required."
   //temp.dob = values.dob ? "" : "Date of birth is required."
   //temp.dateRegistration = values.regDate ? "" : "Date of Registration required."
-  
   temp.lastName = values.lastName ? "" : "Last Name  is required."
-  //temp.genderId = values.genderId ? "" : "Gender is required." 
-  temp.relativefirstName = relative.firstName ? "" : "First Name is required" 
-  temp.relativelastName = relative.lastName ? "" : "First Name is required" 
-  temp.relativemobilePhoneNumber = relative.mobilePhoneNumber ? "" : "mobile number is required"
-  temp.relationshipTypeId = relative.relationshipTypeId ? "" : "Relationship type  is required."
+  temp.genderId = values.genderId ? "" : "Gender is required." 
   setErrors({
       ...temp
   })
@@ -391,27 +388,6 @@ const validate = () => {
    }
   };
 
-  // const addTodo = newtodotext => {
-  //   settodos ([...todo, {id:4, test:'new text'}])
-  // }
-
-// const removetodo = todoid => {
-//   const updatedtodo = todos.filter(todo => todo.id !== todoid);
-//   settodos(updatedtodo)
-// }
-// const toggoletodo = todoid =>{
-//   const updatedtodo = todos.map(todo =>
-//     todo.id === todoid ? {...todo, completed: !todo.completed } : todo 
-//     );
-// settodos(updatedtodo)
-// };
-
-// const edittodo = (todoid, newtask) =>{
-//   const updatedtodo = todos.map(todo =>
-//     todo.id === todoid ? {...todo, task: !todo.newtask } : todo 
-//     );
-// settodos(updatedtodo)
-// };
 
   return (
     <Page title="Patient Registration">
@@ -839,7 +815,8 @@ const validate = () => {
             <Card className={classes.cardBottom}>
               <CardContent>
                 <Title>
-                  Relatives
+                  Relatives / Next of Kin
+                  
                   <MatButton
                     variant="contained"
                     color="primary"
@@ -848,36 +825,55 @@ const validate = () => {
                     onClick={handleAddRelative}
                     autoCapitalize = 'none'
                   >
-                    
-                    <span style={{textTransform: 'capitalize'}}>Add </span>
-                    &nbsp;&nbsp;
-                    <span style={{textTransform: 'lowercase'}}>Relative </span>
+                    {!relativeButton ? 
+                    (
+                    <>
+                        <span style={{textTransform: 'capitalize'}}>Add </span>
+                        &nbsp;&nbsp;
+                        <span style={{textTransform: 'lowercase'}}>Relative </span>
+                    </>
+                    )
+                    :
+                    <>
+                        <span style={{textTransform: 'capitalize'}}>Edit </span>
+                        &nbsp;&nbsp;
+                        <span style={{textTransform: 'lowercase'}}>Relative </span>
+                    </>
+                    }
+
                   </MatButton>
                 </Title>
                 <br />
                 <Row form>
                   <Col md={3}>
                     <FormGroup>
-                      <Label for="occupation">Relationship Type</Label>
+                  <Label for="occupation">Relationship Type 
+                  {
+                  //console.log(relationshipTypes);
+                  // alert( JSON.stringify(relationshipTypes, function replacer(key, value) {
+                  //   return (key != "" && value=== '77') ? key : value['name'];
+                  // }))
+                  console.log(newrel[0])
+                   
+                  
+                  }</Label>
                       <Input
                         type="select"
                         name="relationshipTypeId"
                         id="relationshipTypeId"
                         value={relative.relationshipTypeId}
                         onChange={onRelativeChange}
-                        {...(errors.relationshipTypeId && { invalid: true})}
                       >
                         <option  value=""> </option>
                         <option value="">
-                          Select Relative Relationship Type
+                          Select Relative Relationship Type 
                         </option>
-                        {relationshipTypes.map(({ id, name }) => (
+                        {relationshipTypes.map(({ name, id }) => (
                           <option key={id} value={id}>
                             {name}
                           </option>
                         ))}
                       </Input>
-                      <FormFeedback>{errors.relationshipTypeId}</FormFeedback>
                     </FormGroup>
                   </Col>
                   <Col md={3}>
@@ -887,13 +883,10 @@ const validate = () => {
                         type="text"
                         name="firstName"
                         id="firstName"
-                        value={relative.firstName}
-                        
+                        value={relative.firstName}                       
                         onChange={onRelativeChange}
-                        {...(errors.relativefirstName && { invalid: true})}
                         />
-                         <FormFeedback>{errors.relativefirstName}</FormFeedback>
-                      
+                        
                     </FormGroup>
                   </Col>
                   <Col md={3}>
@@ -919,9 +912,9 @@ const validate = () => {
                        
                         value={relative.lastName}
                         onChange={onRelativeChange}
-                        {...(errors.relativelastName && { invalid: true})}
+                       
                         />
-                         <FormFeedback>{errors.relativelastName}</FormFeedback>
+                        
                     </FormGroup>
                   </Col>
                 </Row>
@@ -942,9 +935,9 @@ const validate = () => {
                             mobilePhoneNumber: e.target.value
                           })
                         }
-                        {...(errors.relativemobilePhoneNumber && { invalid: true})}
+                       
                         />
-                         <FormFeedback>{errors.relativemobilePhoneNumber}</FormFeedback>
+                        
                     </FormGroup>
                   </Col>
                   <Col md={3}>

@@ -18,6 +18,9 @@ const DashboardPage = React.lazy(() => import("pages/DashboardPage"));
 const PateintRegistationPage = React.lazy(() =>
   import("components/patient/PateintRegistationPage")
 );
+const PateintUpdate= React.lazy(() =>
+  import("components/patient/EditPatient")
+);
 const CheckInPage = React.lazy(() => import("components/CheckIn/CheckInPage"));
 const VitalSignsPage = React.lazy(() =>
   import("components/Vitals/VitalSignsPage")
@@ -66,11 +69,11 @@ const TestPage = React.lazy(() => import("pages/TestPage"));
 const FormRendererPage = React.lazy(() => import("components/FormManager/FormRendererPage"));
 //Reporting components
 const ReportPage = React.lazy(() => import("components/Reports/ReportingPage"));
-const getBasename = () => {
-  return `/${process.env.PUBLIC_URL.split("/").pop()}`;
-};
+const getBasename = () => {return `/${process.env.PUBLIC_URL.split("/").pop()}`;};
 
-const Prescription = React.lazy(() => import("components/Pharmacy/prescriptions"))
+const Prescription = React.lazy(() => import("components/Pharmacy/Prescriptions"))
+
+
 class Routes extends Component {
   render() {
     return (
@@ -87,6 +90,11 @@ class Routes extends Component {
                 exact
                 path="/patient-registration"
                 component={PateintRegistationPage}
+              />
+              <Route
+                exact
+                path="/patient-update"
+                component={PateintUpdate}
               />
               <Route exact path="/checkin" component={CheckInPage} />
               <Route exact path="/vital-signs" component={VitalSignsPage} />

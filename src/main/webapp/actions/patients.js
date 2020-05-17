@@ -23,22 +23,24 @@ import { toast } from "react-toastify";
  * @method GET => fetchPatientEncounterProgramCodeExclusionList() get all patient's encounter that is not general service: params{patientId, onSuccess, onError} || query{null}
  */
 
-export const fetchAll = () => dispatch => {
-  console.log(baseUrl);
+export const fetchAll = (onSuccess, onError) => dispatch => {
   axios
     .get(`${baseUrl}patients/`)
     .then(response => {
-      //console.log(response.data);
+      console.log(response.data);
       dispatch({
         type: ACTION_TYPES.PATIENTS_FETCH_ALL,
         payload: response.data
       });
+      onSuccess();
     })
-    .catch(error =>
+    .catch(error => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
         payload: "Something went wrong, please try again"
       })
+      onError();
+    }
     );
 };
 

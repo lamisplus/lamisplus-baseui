@@ -3,18 +3,25 @@ import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
 import { fetchAll, Delete as Del } from "../../actions/patients";
-import "./PatientSearch.css";
+import "./Patient.css";
 import { Dashboard } from "@material-ui/icons";
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 const PatientSearch = (props) => {
+  const [loading, setLoading] = useState('')
 
       useEffect(() => {
-        props.fetchAllPatients();
-      }, []); //componentDidMount
-
+        setLoading('true');
+        const onSuccess = () => {
+          setLoading(false)
+        }
+        const onError = () => {
+          setLoading(false)     
+        }
+            props.fetchAllPatients(onSuccess, onError);
+          }, []); //componentDidMount
       const calculate_age = dob => {
         var today = new Date();
         var dateParts = dob.split("-");
@@ -54,7 +61,7 @@ const PatientSearch = (props) => {
             filtering: false,
           },
         ]}
-      
+        isLoading={loading}
         data={props.patientsList.map((row) => ({
           name: row.firstName +  ' ' + row.lastName,
           id: row.hospitalNumber,
@@ -88,8 +95,8 @@ const PatientSearch = (props) => {
             >
               <Link
                   to={{
-                    pathname: "/patient-registration",
-                    currentId: row.patientId
+                    pathname: "/patient-update",
+                    currentId: row
                   }}
                 >
               <EditIcon title="Edit" aria-label="Edit Patient" />
