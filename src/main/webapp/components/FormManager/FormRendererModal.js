@@ -33,14 +33,14 @@ const FormRendererModal = (props ) => {
     
    return (
         
-    <Modal isOpen={props.showModal} toggle={toggle} zIndex={"9999"} className="modal-xl" >
+    <Modal isOpen={props.showModal} toggle={toggle} zIndex={"9999"} className={props.options && props.options.modalSize ? props.options.modalSize :"" } >
          <ToastContainer />
    <ModalHeader toggle={toggle}>{props.title || ''}</ModalHeader>
     <ModalBody>
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
         {errorMsg}
       </Alert>
-      <FormRenderer patientId={props.patient.patientId} formCode={props.currentForm.code} programCode={props.currentForm.programCode} visitId={props.patient.visitId} onSuccess={props.onSuccess} />
+      <FormRenderer patientId={props.patient.patientId} formCode={props.currentForm.code} programCode={props.currentForm.programCode} visitId={props.patient.visitId} onSuccess={props.onSuccess} onSubmit={props.currentForm.onSubmit}/>
       </ModalBody>
      
       </Modal>

@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import { url } from "api/index";
+import { url } from "api";
 import Popover from '@material-ui/core/Popover';
 import {connect} from 'react-redux';
 import { Badge } from 'reactstrap';
@@ -13,6 +13,13 @@ import CheckInModal from 'components/CheckIn/CheckInModal';
 import FormRendererModal from 'components/FormManager/FormRendererModal';
 import * as CODES from "api/codes";
 import { ToastContainer, toast } from 'react-toastify'
+import Moment from 'moment'
+import momentLocalizer from 'react-widgets-moment'
+import {update} from '../../actions/visit'
+
+
+Moment.locale('en')
+momentLocalizer()
 
 const useStyles = makeStyles(theme => ({
     navItemText: {
@@ -52,27 +59,47 @@ function PatientDashboardSubMenu (props){
   const checkInPatient = () => {
     setCheckIn(true);
   }
-  const checkOutPatient = () => {
-    try {
-      const response =  fetch(`${url}visits/${props.patient.visitId}`);
-      const body =  response.json();
-    } catch (error) {
-      console.log(error);
-    }
-    displayFormByFormName('CHECK_OUT_PATIENT');
-  }
+
   const onSuccess = () => {
     toast.success('Form saved successfully!', { appearance: 'success' })
     setShowFormModal(false);
   }
-  const admitPatient = () => {
-      setCurrentForm({
-        code:CODES.ADMIT_PATIENT_FORM,
-        programCode:CODES.GENERAL_SERVICE,
-        formName:"ADMIT_PATIENT"
-    });
-      setShowFormModal(true);
+
+  const onError = () => {
+    toast.error('Something went wrong, request failed.')
+    setShowFormModal(false);
   }
+
+  const checkOutPatient = () => {
+   
+    displayFormByFormName('CHECK_OUT_PATIENT');
+    const onSubmit = (submission) => {
+      const data = {
+        "id": props.patient.visitId,
+        "dateVisitEnd": Moment(submission.data.checkOutDate).format('DD-MM-YYYY') ,
+        "dateVisitStart": props.patient.dateVisitStart,
+        "timeVisitEnd": Moment(submission.data.checkOutTime).format('hh:mm A'),
+        "timeVisitStart": props.patient.timeVisitStart,
+        "dateNextAppointment": null,
+        "patientId": props.patient.patientId,
+        "visitTypeId": null,
+        "typePatient": "OUTPATIENT"
+      }
+
+      props.checkOutPatient(props.patient.visitId, data, onSuccess, onError);
+    }
+    setCurrentForm({
+      code:CODES.CHECK_OUT_PATIENT_FORM,
+      programCode:CODES.GENERAL_SERVICE,
+      formName:"CHECK_OUT_PATIENT",
+      options:{
+        modalSize: "modal-lg"
+      },
+      onSubmit: onSubmit
+  });
+    setShowFormModal(true);
+  }
+  
   const displayFormByFormName = (formName) => {
     setCurrentForm(formInfo.find(x => x.formName === formName));
     setShowFormModal(true);
@@ -152,15 +179,18 @@ function PatientDashboardSubMenu (props){
                       </List>
       </Popover>
         </Menu.Item>
-         <Dropdown item text='Visit Actions'>
+
+          {/* Show visit actions only when patient is checked in */}
+        { (props.patient && props.patient.dateVisitStart ) ?
+         <Dropdown item text='Visit Actions' >
             <Dropdown.Menu>
-            <Dropdown.Item onClick={admitPatient}>Admit Patient</Dropdown.Item>
+            <Dropdown.Item onClick={() => displayFormByFormName('ADMIT_PATIENT')}>Admit Patient</Dropdown.Item>
             <Dropdown.Item onClick={() => displayFormByFormName('TRANSFER_INPATIENT')}> Transfer Patient to Ward / Service</Dropdown.Item>
-            {/* <Dropdown.Item>Transfer Out</Dropdown.Item> */}
             <Dropdown.Item onClick={() => displayFormByFormName('DISCHARGE_PATIENT')}>Discharge Patient</Dropdown.Item>
         
             </Dropdown.Menu>
           </Dropdown>
+        : ""}
 
         <Menu.Menu position='right'>
 
@@ -178,7 +208,7 @@ function PatientDashboardSubMenu (props){
         </Menu.Menu>
       </Menu>
       <CheckInModal patientId={props.patient.patientId} showModal={checkIn} setShowModal={setCheckIn}/>
-      <FormRendererModal patientId={props.patient.patientId} showModal={showFormModal} setShowModal={setShowFormModal} currentForm={currentForm} onSuccess={onSuccess}/>
+      <FormRendererModal patientId={props.patient.patientId} showModal={showFormModal} setShowModal={setShowFormModal} currentForm={currentForm} onSuccess={onSuccess} onError={onError} options={currentForm.options}/>
       <ToastContainer />
       </React.Fragment>
     )
@@ -217,7 +247,7 @@ const mapStateToProps = state => {
   }
   
   const mapActionToProps = {
-    
+    checkOutPatient: update
   }
   
   export default connect(mapStateToProps, mapActionToProps)(PatientDashboardSubMenu)

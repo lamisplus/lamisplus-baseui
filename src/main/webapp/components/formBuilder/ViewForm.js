@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import {url} from '../../api'
 import {fetchService, fetchAll, updateForm} from '../../actions/formBuilder'
+import {fetchByHospitalNumber} from '../../actions/patients'
 
 import {
     FormGroup,
@@ -41,32 +42,46 @@ const Update = props => {
     const [displayType, setDisplayType] = React.useState("");
     const [programCode, setprogramCode] = React.useState("");
     const [formCode, setformCode] = React.useState();
+    const [form2, setform2] = React.useState();
     const [showLoading, setShowLoading] = useState(false)
     const [message, setMessage] = useState('')
     const classes = useStyles();
     const [currentForm, setCurrentForm] = useState();
     let myform;
-    const submission = {data: {patientId:566233, firstName:"Deborah", lastName:"Obanisola"}};
+    const submission = props.patient;
     const textAreaRef = useRef(null);
 
     useEffect (() => {
         props.fetchService()
     }, [])
-
+    useEffect (() => {
+        props.fetchAll()
+        props.fetchPatientByHospitalNumber('P123189', null, null)
+    }, [])
     const handleProgramChange = (e) => {
         setprogramCode(e.target.value)
         props.fetchAll(e.target.value)
     }
 
 
-    const handleSubmit = e => {
-        newdata2['programCode']=programCode;
-        newdata2['resourceObject']=res;
-        newdata2['formCode']=formCode;
-        e.preventDefault()
-        props.updateForm(newdata2);
+    const handleSubmit = () => {
+        // newdata2['programCode']=form2.programCode;
+        // newdata2['resourceObject']=res;
+        // newdata2['formCode']=formCode;
+        // form2['resourceObject'] = res
+       // e.preventDefault()
+        props.updateForm(form2.id, form2);
     }
 
+    const loadForm = (e) => {
+        console.log(JSON.parse(e.target.value));
+        const v = JSON.parse(e.target.value);
+        
+        setformCode(v.code);
+        
+        setform2(v)
+        //setRes(form.resourceObject);
+    }
     return (
         <Page title="Form Renderer" >
             <Card >
@@ -74,10 +89,12 @@ const Update = props => {
                     <h4>View Form</h4>
                     <hr />
                     <Errors errors={props.errors} />
+    <small>{JSON.stringify(props.patient)}</small>
+                    {!res ? "" : 
                     <Form
-                        form={data}
+                        form={JSON.parse(res)}
                         ref={form => myform = form}
-                        submission={submission}
+                        submission={{data : {patient: props.patient}}}
                         //src={url}
                         hideComponents={props.hideComponents}
                         //onSubmit={props.onSubmit}
@@ -95,6 +112,7 @@ const Update = props => {
                                 myform.emit('submitDone', submission);
                             })}}
                     />
+                        }
                     <br></br>
                 </CardContent>
             </Card>
@@ -121,9 +139,10 @@ const Update = props => {
                         </FormGroup></Col>
                         <Col md={4}> <FormGroup>
                             <Label class="sr-only">Form Name</Label>
-                            {props.form.length && props.form.length > 0 ?
-                                <Input type="select" class="form-control" id="formCode" required value={formCode}  onChange={e => setformCode(e.target.value)}>
-                                    {props.form.map(form => (<option key={form.name} value={form.code}>{form.name}</option>))}
+                            {props.formList.length && props.formList.length > 0 ?
+                                <Input type="select" class="form-control" id="formCode" required value={formCode}  onChange={e => loadForm(e) }>
+                                    <option value="">Select One</option>
+                                    {props.formList.map(form => (<option value={JSON.stringify(form)}>{form.name}</option>))}
                                 </Input>:  <Input type="select" class="form-control" id="formCode" required value={formCode} onChange={e => setformCode(e.target.value)}>
                                     <option>No forms found</option>
                                 </Input>}
@@ -132,18 +151,22 @@ const Update = props => {
                     <Row>
                         <Col md={2}> <FormGroup>
                             <label class="sr-only"></label>
-                            <Button color="primary" className=" mt-4" >Load Form</Button>
+                            <Button color="primary" className=" mt-4" onClick={() => loadForm()}>Load Form</Button>
                         </FormGroup></Col>
+
 
                         <Col md={2}> <FormGroup>
                             <label class="sr-only"></label>
-                            <button type="submit"  class="form-control btn btn-primary mt-4">Update Form</button>
+                            <button type="button"  class="form-control btn btn-primary mt-4" onClick={() => handleSubmit()}>Update Form</button>
                         </FormGroup></Col>
                     </Row>
-                    <FormBuilder form={props.form.resourceObject} {...props} onChange={(schema) => {
-                        console.log(JSON.stringify(schema));
+                    { form2 ? 
+                    <FormBuilder form={form2.resourceObject} {...props} onChange={(schema) => {
+                       // console.log(JSON.stringify(schema));
                         setRes(JSON.stringify(schema));
                     }} />
+: ""
+                }
                     <br></br>
                 </CardContent>
             </Card>
@@ -191,14 +214,16 @@ const Update = props => {
 const mapStateToProps =  (state = { form:{}}) => {
     console.log(state.forms)
     return {
+        patient: state.patients.patient,
         services: state.formReducers.services,
-        form: state.formReducers.form,
+        formList: state.formReducers.form,
     }}
 
 const mapActionsToProps = ({
     fetchService: fetchService,
     fetchAll: fetchAll,
-    updateForm: updateForm
+    updateForm: updateForm,
+    fetchPatientByHospitalNumber: fetchByHospitalNumber,
 })
 
 export default connect(mapStateToProps, mapActionsToProps)(Update)

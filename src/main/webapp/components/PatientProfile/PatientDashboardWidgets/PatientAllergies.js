@@ -52,18 +52,27 @@ export const allergies = [
     toast.success('Form saved successfully!', { appearance: 'success' })
     setShowFormModal(false);
   }
+
+  const onError = () => {
+    toast.error('Something went wrong, request failed.')
+    setShowFormModal(false);
+  }
+  
   const addAllergy = () => {
     setCurrentForm({
       code:CODES.PATIENT_ALLERGY_FORM,
       programCode:CODES.GENERAL_SERVICE,
-      formName:"PATIENT ALLERGY"
+      formName:"PATIENT ALLERGY",
+      options:{
+        modalSize: "modal-lg"
+      },
   });
     setShowFormModal(true);
 }
   return (
 <React.Fragment>
             <Card >
-              <CardHeader>Allergies <button type="button" class="float-right ml-3" onClick={addAllergy}><i class="fa fa-plus"></i> Add Vitals</button></CardHeader>
+              <CardHeader>Allergies <button type="button" class="float-right ml-3" onClick={addAllergy}><i class="fa fa-plus"></i> Add Allergies</button></CardHeader>
                     <CardBody>
                         
                                     
@@ -100,7 +109,7 @@ export const allergies = [
                             }                            
                     </CardBody>                      
             </Card>
-            <FormRendererModal patientId={props.patient.patientId} showModal={showFormModal} setShowModal={setShowFormModal} currentForm={currentForm} onSuccess={onSuccess}/>
+            <FormRendererModal patientId={props.patient.patientId} showModal={showFormModal} setShowModal={setShowFormModal} currentForm={currentForm} onSuccess={onSuccess} onError={onError} options={currentForm.options}/>
       <ToastContainer />
       </React.Fragment>
   );
