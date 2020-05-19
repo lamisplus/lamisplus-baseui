@@ -151,14 +151,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-// const cardHeight = {
-//     height: 200,
-//     position: 'relative',
-//     overflow: 'auto',
-// };
-
-
 const genPieData = () => {
+  
     return {
         datasets: [
             {
@@ -248,7 +242,6 @@ const ScrollableTabsButtonForce = (props) => {
     };
 
     
-
     return (
       <div className={classes.root}>
         <div className={classes.inforoot}>
@@ -331,19 +324,11 @@ const ScrollableTabsButtonForce = (props) => {
             </Grid>
           </Grid>
         </TabPanel>
-        {/* End of dashboard */}
-
-        {/* Begining of Service Form */}
         <TabPanel value={value} index={1}>
           <PatientSearch />
         </TabPanel>
-        {/* Begining of consultation  */}
-        {/* <TabPanel value={value} index={2}>
-          <Dispensed />
-        </TabPanel> */}
 
         <TabPanel value={value} index={3}></TabPanel>
-        {/* End of consultation */}
         <TabPanel value={value} index={4}></TabPanel>
         <TabPanel value={value} index={5}>
           <Grid container spacing={7}>
