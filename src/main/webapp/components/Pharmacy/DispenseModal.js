@@ -108,16 +108,11 @@ const DispenseModal = (props) => {
             toggle={toggle}
             className={className}
             size="lg"
-            // contentClassName="custom-modal-style"
           >
             <ModalHeader toggle={toggle} close={closeBtn}>
-              {/* Dispense <b>{formData.data.generic_name}</b> */}
               Dispensing
             </ModalHeader>
             <ModalBody>
-              {/* <Card >
-        <CardBody> */}
-
               <Row>
                 <div
                   style={{
@@ -231,12 +226,8 @@ const DispenseModal = (props) => {
                 >
                   Cancel
                 </MatButton>
-                {/* </CardBody>
-          </Card> */}
               </Form>
             </ModalBody>
-
-            {/* <ModalFooter></ModalFooter> */}
           </Modal>
         </CardBody>
       </Card>

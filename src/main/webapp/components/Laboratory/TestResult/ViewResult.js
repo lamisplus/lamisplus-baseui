@@ -95,25 +95,24 @@ const ModalViewResult = (props) => {
         <Card>
           <CardBody>
               <Row style={{ marginTop: '20px'}}>
-                <Col md={12} >
-                    <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder'}}>
-                      <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}> {' '} {lab_test_group}</span> 
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : 
-                      <span style={{ fontWeight: 'bolder'}}>{' '}  {description}</span>
-                      &nbsp;&nbsp;&nbsp;&nbsp; Unit: 
-                      <span style={{ fontWeight: 'bolder'}}>{' '}  {unit_measurement}</span>
-                      </p>
-                      
-                    </Alert>
-                  </Col>
-                 
+                
                   <Col xs="6">
-                    Date Assayed : {date_result_reported}
+                  <span style={{ fontWeight: 'bold'}}>Lab Test Group</span> : {lab_test_group}
+                  <br/>
+                  
+                  </Col>
+                  <Col xs="6">
+                  <span style={{ fontWeight: 'bold'}}>Lab Test Ordered</span> : {description}
+                  <br/>
+                    <p><span style={{ fontWeight: 'bold'}}>Unit</span>: {unit_measurement} </p>          
+                  </Col>
+                  <Col xs="6">
+                  <span style={{ fontWeight: 'bold'}}>Date Assayed </span>: {date_result_reported}
                     <br/>
                    
                     </Col>
                     <Col xs="6">
-                    Date Of Reported : {date_result_reported}
+                    <span style={{ fontWeight: 'bold'}}>Date Of Reported </span>: {date_result_reported}
                     <br/>
                               
                     </Col>
@@ -123,7 +122,7 @@ const ModalViewResult = (props) => {
                     
                     <FormGroup>
                     <br/>
-                          <Label for="examplePassword">Enter Result : {test_result} </Label>
+                     <Label for="examplePassword"><span style={{ fontWeight: 'bold'}}>Enter Result </span>: {test_result} </Label>
                        
                       </FormGroup>
                       </Col>

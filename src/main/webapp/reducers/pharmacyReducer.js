@@ -1,6 +1,11 @@
-import * as ACTION_TYPES from "../actions/types";
+ import * as ACTION_TYPES from "../actions/types";
 
-const pharmReducer = (state = { allPrescriptions: [], patientPrescriptions: [] }, action) => {
+const initialState = {
+  allPrescriptions: [],
+  patientPrescriptions: []
+};
+
+export default (state = initialState, action) => {
   switch (action.type) {
     case ACTION_TYPES.PHARMACY_FETCH_PRESCRIPTIONS:
       return { ...state, allPrescriptions: [...action.payload] };
@@ -13,5 +18,4 @@ const pharmReducer = (state = { allPrescriptions: [], patientPrescriptions: [] }
   }
 };
 
-export default pharmReducer;
 

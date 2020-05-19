@@ -79,6 +79,4 @@ function PatientDetailCard(props) {
   );
 }
 
-
-
 export default PatientDetailCard;

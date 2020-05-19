@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const ModalSample = (props) => {
-  const classes = useStyles()
+  const classes = useStyles() 
   const datasample = props.datasample ? props.datasample : {};
   const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
   const description = datasample.data ? datasample.data.description : null ;
@@ -73,7 +73,6 @@ const ModalSample = (props) => {
   const [visible, setVisible] = useState(true);
   const onDismiss = () => setVisible(false);
   const [samples, setSamples] = useState({}) 
-
   const [optionsample, setOptionsample] = useState([]);
   //This is to get SAMPLE TYPE from application Codeset
   useEffect(() => {
@@ -96,7 +95,7 @@ const ModalSample = (props) => {
     const saveSample = e => {
       e.preventDefault()
       setLoading(true);
-      toast.warn("Processing Sample ", { autoClose: 100, hideProgressBar:false });
+     
       const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
       datasample.data.lab_test_order_status = 1;
       datasample.data.date_sample_collected = newDatenow
@@ -224,10 +223,15 @@ const ModalSample = (props) => {
           
           </FormGroup>
         </Col>
+        <br/><br/>
+        {loading ? 
+          (
+            <><Spinner /> <p> &nbsp;&nbsp;Processing...</p></>
+          ): ""}
     </Row>
-    <br/>
-    {loading ? <Spinner /> : ""}
-    <br/>
+   
+    
+    
       {props.labnumber['lab_number']!==""?
           <MatButton
             type='submit'

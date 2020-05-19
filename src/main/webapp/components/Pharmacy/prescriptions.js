@@ -84,6 +84,25 @@ const useStyles = makeStyles((theme) => ({
 
 const Prescriptions = (props) => {
 
+  const getId = () => {
+    let Id
+    if (props.location.form) {
+      localStorage.setItem("Id", props.location.form.formDataObj.length);
+      Id = props.location.form.formDataObj.length;
+    } else {
+      Id = localStorage.getItem(Id);
+    }
+    console.log(Id)
+    return Id;
+    
+  }
+
+  useEffect(() => {
+    // console.log(props.location.form.formDataObj);
+    getId()
+  }, [])
+
+
   const classes = useStyles();
   const { buttonLabel, className } = props;
 
@@ -254,7 +273,7 @@ const Prescriptions = (props) => {
               <p>
                 {" "}
                 {/* <Spinner color="primary" /> Loading Please Wait.. */}
-                <h3>No Prescription details</h3>
+                No Prescription details
               </p>
             )}
           </div>
