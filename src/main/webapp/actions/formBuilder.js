@@ -62,31 +62,49 @@ export const updateForm = (id, data) => dispatch => {
         })
 }
 
-export const fetchById = (id, onSuccess, onError) => dispatch => {
-    dispatch({
-        type:FORMTYPES.FORMTYPES_FETCH_BY_ID,
-        payload: {}
-    })
+// export const fetchById = (id, onSuccess, onError) => dispatch => {
+//     dispatch({
+//         type:FORMTYPES.FORMTYPES_FETCH_BY_ID,
+//         payload: {}
+//     })
+//
+//     axios
+//         .get(`${url}forms/${id}/formCode`)
+//         .then(response => {
+//             dispatch({
+//                 type:FORMTYPES.FORMTYPES_FETCH_BY_ID,
+//                 payload: response.data
+//             })
+//             onSuccess()
+//         })
+//         .catch(error => {
+//             //onError()
+//             dispatch({
+//                 type: FORMTYPES.FORMTYPES_ERROR,
+//                 payload: 'Error loading form, something went wrong. Please try again'
+//             })
+//    // onError(error.response)
+//         })
+// }
 
-    axios
-        .get(`${url}forms/${id}/formCode`)
+export const fetchById = (programId) => dispatch => {
+    axios.get(`${url}programs/${programId}/forms`)
         .then(response => {
+            console.log(response)
             dispatch({
-                type:FORMTYPES.FORMTYPES_FETCH_BY_ID,
+                type: FORMTYPES.FORMTYPES_FETCH_BY_ID,
                 payload: response.data
             })
-            onSuccess()
         })
         .catch(error => {
-            //onError()
+            console.log(error)
             dispatch({
                 type: FORMTYPES.FORMTYPES_ERROR,
-                payload: 'Error loading form, something went wrong. Please try again'
+                payload: 'Something went wrong'
+
             })
-   // onError(error.response)
         })
 }
-
 export const fetchAll = (onSuccess, onError) => dispatch => {
     axios
         .get(`${url}forms`)

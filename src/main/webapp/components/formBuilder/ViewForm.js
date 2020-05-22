@@ -6,7 +6,7 @@ import {Card,CardContent,} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import {url} from '../../api'
-import {fetchService, fetchAll, updateForm} from '../../actions/formBuilder'
+import {fetchService, fetchById, updateForm} from '../../actions/formBuilder'
 import {fetchByHospitalNumber} from '../../actions/patients'
 
 import {
@@ -40,13 +40,10 @@ const Update = props => {
     const [newdata2] = React.useState(datanew);
     const [res, setRes] = React.useState("");
     const [displayType, setDisplayType] = React.useState("");
-    const [programCode, setprogramCode] = React.useState("");
+    const [programId, setprogramId] = React.useState("");
     const [formCode, setformCode] = React.useState();
     const [form2, setform2] = React.useState();
-    const [showLoading, setShowLoading] = useState(false)
-    const [message, setMessage] = useState('')
     const classes = useStyles();
-    const [currentForm, setCurrentForm] = useState();
     let myform;
     const submission = props.patient;
     const textAreaRef = useRef(null);
@@ -55,21 +52,16 @@ const Update = props => {
         props.fetchService()
     }, [])
     useEffect (() => {
-        props.fetchAll()
+         //props.fetchById()
         props.fetchPatientByHospitalNumber('P123189', null, null)
     }, [])
+
     const handleProgramChange = (e) => {
-        setprogramCode(e.target.value)
-        props.fetchAll(e.target.value)
+        setprogramId(e.target.value)
+        props.fetchById(e.target.value)
     }
 
-
     const handleSubmit = () => {
-        // newdata2['programCode']=form2.programCode;
-        // newdata2['resourceObject']=res;
-        // newdata2['formCode']=formCode;
-        // form2['resourceObject'] = res
-       // e.preventDefault()
         props.updateForm(form2.id, form2);
     }
 
@@ -89,7 +81,7 @@ const Update = props => {
                     <h4>View Form</h4>
                     <hr />
                     <Errors errors={props.errors} />
-    <small>{JSON.stringify(props.patient)}</small>
+                <small>{JSON.stringify(props.patient)}</small>
                     {!res ? "" : 
                     <Form
                         form={JSON.parse(res)}
@@ -131,12 +123,12 @@ const Update = props => {
                         <Col md={4}> <FormGroup>
                             <Label class="sr-only">Program Area</Label>
                             {props.services.length && props.services.length > 0 ?
-                                <Input type="select" class="form-control" id="programCode" required value={programCode} onChange={e => setprogramCode(e.target.value)}>
-                                    {props.services.map(service => (<option key={service.name} value={service.code}>{service.name}</option>))}
-                                </Input>:  <Input type="select" class="form-control" id="programCode" required value={programCode} onChange={e => setprogramCode(e.target.value)}>
-                                    <option>No Services found</option>
-                                </Input>}
+                                <select value={programId} onChange={handleProgramChange}>
+                                    <Input type="select" class="form-control" id="programId" onChange={e => handleProgramChange(e)}></Input>
+                                    { props.services.map(program => (<option key={program.id} value={program.id} >{program.name}</option>))}
+                                </select>: <select><option>No Services found</option></select>}
                         </FormGroup></Col>
+
                         <Col md={4}> <FormGroup>
                             <Label class="sr-only">Form Name</Label>
                             {props.formList.length && props.formList.length > 0 ?
@@ -153,7 +145,6 @@ const Update = props => {
                             <label class="sr-only"></label>
                             <Button color="primary" className=" mt-4" onClick={() => loadForm()}>Load Form</Button>
                         </FormGroup></Col>
-
 
                         <Col md={2}> <FormGroup>
                             <label class="sr-only"></label>
@@ -221,7 +212,7 @@ const mapStateToProps =  (state = { form:{}}) => {
 
 const mapActionsToProps = ({
     fetchService: fetchService,
-    fetchAll: fetchAll,
+    fetchById: fetchById,
     updateForm: updateForm,
     fetchPatientByHospitalNumber: fetchByHospitalNumber,
 })
