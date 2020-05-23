@@ -123,10 +123,12 @@ const Update = props => {
                         <Col md={4}> <FormGroup>
                             <Label class="sr-only">Program Area</Label>
                             {props.services.length && props.services.length > 0 ?
-                                <select value={programId} onChange={handleProgramChange}>
-                                    <Input type="select" class="form-control" id="programId" onChange={e => handleProgramChange(e)}></Input>
-                                    { props.services.map(program => (<option key={program.id} value={program.id} >{program.name}</option>))}
-                                </select>: <select><option>No Services found</option></select>}
+                                <Input type="select" class="form-control" id="programId" required value={programId}  onChange={e => handleProgramChange(e) }>
+                                    <option value="">Select One</option>
+                                    {props.services.map(program => (<option key={program.id} value={program.id} >{program.name}</option>))}
+                                </Input>:  <Input type="select" class="form-control" id="programId" required value={programId} onChange={e => setprogramId(e.target.value)}>
+                                    <option>No program found</option>
+                                </Input>}
                         </FormGroup></Col>
 
                         <Col md={4}> <FormGroup>
