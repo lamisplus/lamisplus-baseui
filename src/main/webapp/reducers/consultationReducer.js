@@ -9,4 +9,4 @@ const consultationReducer = (state = {newConsultation: {}}, action) => {
   }
 }
 
-export default consultationReducer
+export default consultationReducer;

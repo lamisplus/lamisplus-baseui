@@ -34,4 +34,4 @@ describe('Test Suite for Medication Reducer', () => {
        const state = medicationReducer(initialState, action);
        expect(state.errors).toEqual(["one", "two", "three"]);
      });
-});
+}); 
