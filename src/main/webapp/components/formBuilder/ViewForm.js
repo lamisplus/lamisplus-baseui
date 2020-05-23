@@ -112,7 +112,6 @@ const Update = props => {
                             <Label class="sr-only">Program Area</Label>
                             {props.services.length && props.services.length > 0 ?
                                 <Input type="select" class="form-control" id="programId" required value={programId}  onChange={e => handleProgramChange(e) }>
-                                    <option value="">Select One</option>
                                     {props.services.map(program => (<option key={program.id} value={program.id} >{program.name}</option>))}
                                 </Input>:  <Input type="select" class="form-control" id="programId" required value={programId} onChange={e => setprogramId(e.target.value)}>
                                     <option>No program found</option>
@@ -126,7 +125,6 @@ const Update = props => {
                                     <option value="">Select One</option>
                                     {props.formList.map(form => (<option value={JSON.stringify(form)}>{form.name}</option>))}
                                 </Input>:  <Input type="select" class="form-control" id="formCode" required value={formCode} onChange={e => setformCode(e.target.value)}>
-                                    <option>No forms found</option>
                                 </Input>}
                         </FormGroup></Col>
                     </Row>
