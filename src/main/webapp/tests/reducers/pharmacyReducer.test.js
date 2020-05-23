@@ -24,7 +24,7 @@ describe('Test Suite for Pharmacy Reducer', () => {
       const state = pharmacyReducer(initialState, action);
 
       expect(state.patientPrescriptions).toEqual(["a", "b", "c"]);
-    }); 
+    });  
 
      it("should set the state update field to the action payload", () => {
        const action = {
