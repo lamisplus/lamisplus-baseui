@@ -1,7 +1,6 @@
 import React, {useRef, useEffect, useState} from 'react';
 import Page from 'components/Page';
-import { data } from './recency-testing';
-import { saveForm, selectError, Errors, Form, FormBuilder } from 'react-formio';
+import {  Errors, Form, FormBuilder } from 'react-formio';
 import {Card,CardContent,} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -18,8 +17,6 @@ import {
     Button
 } from 'reactstrap';
 
-
-
 const useStyles = makeStyles(theme => ({
     root2: {
         width: '100%',
@@ -28,16 +25,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-
 const Update = props => {
-    const datanew = {
-        resourceObject: "",
-        programCode: "",
-        formCode: "",
-
-    }
-
-    const [newdata2] = React.useState(datanew);
     const [res, setRes] = React.useState("");
     const [displayType, setDisplayType] = React.useState("");
     const [programId, setprogramId] = React.useState("");
@@ -177,32 +165,6 @@ const Update = props => {
         </Page>
     );
 }
-
-// const mapStateToProps = (state) => {
-//     return {
-//         form: {display: 'form'},
-//         saveText: 'Create Form',
-//         errors: selectError('form', state),
-//         response: 'res'
-//     }
-// }
-//
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         saveForm: (form) => {
-//             const newForm = {
-//                 ...form,
-//                 tags: ['common'],
-//             };
-//             dispatch(saveForm('form', newForm, (err, form) => {
-//                 console.log('stroing form');
-//                 console.log(newForm);
-//             }))
-//         }
-//     }
-// }
-//
-// export default Create
 
 const mapStateToProps =  (state = { form:{}}) => {
     console.log(state.forms)
