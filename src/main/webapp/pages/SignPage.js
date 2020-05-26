@@ -14,6 +14,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import logo200Image from 'assets/img/logo/logo_200.png';
 
+import { authentication } from '../actions/Authentication';
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -65,17 +67,21 @@ export default function SignIn() {
   }, [username, password]);
 
   const handleLogin = () => {
-    
-    if (username === 'abc@mail.com' && password === '12345') {
-      setError(false);
-      setHelperText('Login Successfully');
-      history.push("/dashboard");
-      
-      
-    } else {
-      setError(true);
-      setHelperText('Incorrect username or password')
-    }
+    authentication.login(username, password).then(
+      (user) => {
+        //const { from } = this.props.location.state || {
+        //  from: { pathname: "/dashboard" },
+        //};
+        //this.props.history.push(from);
+        history.push("/dashboard");
+        setError(false);
+        setHelperText('Login Successfully');
+      },
+      (error) => {
+        setError(true);
+        setHelperText('Incorrect username or password');
+      }
+    );
   };
 
   const handleKeyPress = (e) => {
