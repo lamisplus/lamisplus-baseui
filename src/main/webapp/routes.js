@@ -11,6 +11,9 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import "./styles/reduction.scss";
 import SignIn from "pages/SignPage";
 import { history } from "./history";
+import { authentication } from "./actions/authentication";
+
+const currentUser = authentication.currentUserValue;
 
 const DashboardPage = React.lazy(() => import("pages/DashboardPage"));
 
@@ -73,15 +76,28 @@ const getBasename = () => {
 const Prescription = React.lazy(() => import("components/Pharmacy/prescriptions"))
 class Routes extends Component {
   render() {
+    console.log('User', currentUser);
+    if (!currentUser) {
+      // not logged in so redirect to login page with the return url
+      return (
+      <BrowserRouter basename={getBasename()} history={history}>
+        <Switch>
+          <LayoutRoute exact path="/login" layout={EmptyLayout} component={SignIn} />
+          <Redirect to="/login" />
+        </Switch>       
+      </BrowserRouter>
+    );
+    }
     return (
       <BrowserRouter basename={getBasename()} history={history}>
         <Switch>
-         
-          <LayoutRoute exact path="/" layout={EmptyLayout} component={SignIn} />
+
+        <LayoutRoute exact path="/login" layout={EmptyLayout} component={SignIn} />
 
           <MainLayout breakpoint={this.props.breakpoint}>
             <React.Suspense fallback={<PageSpinner />}>
               {/* The new routes are here  */}
+              <Route exact path="/" component={DashboardPage} />
               <Route exact path="/dashboard" component={DashboardPage} />
               <Route
                 exact
@@ -136,9 +152,9 @@ class Routes extends Component {
               
             </React.Suspense>
           </MainLayout>
+          
           <Redirect to="/" />
-        </Switch>
-        
+        </Switch>       
       </BrowserRouter>
     );
   }

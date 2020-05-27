@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import logo200Image from 'assets/img/logo/logo_200.png';
 
-import { authentication } from '../actions/Authentication';
+import { authentication } from '../actions/authentication';
 
 function Copyright() {
   return (
@@ -73,9 +73,9 @@ export default function SignIn() {
         //  from: { pathname: "/dashboard" },
         //};
         //this.props.history.push(from);
-        history.push("/dashboard");
         setError(false);
         setHelperText('Login Successfully');
+        history.push("/dashboard");
       },
       (error) => {
         setError(true);
