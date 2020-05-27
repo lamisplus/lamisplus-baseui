@@ -12,11 +12,11 @@ export const authentication = {
     get currentUserValue () { return currentUserSubject.value }
 };
 
-function login(username, password) {
+function login(username, password, remember) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password, remember })
     };
 
     return fetch(`${url}authenticate`, requestOptions)

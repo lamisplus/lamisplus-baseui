@@ -3,7 +3,6 @@ import { UserCard } from "components/Card";
 import Notifications from "components/Notifications";
 import { notificationsData } from "demos/header";
 import { authentication } from "../../actions/authentication";
-import { history } from "../../_helpers/history";
 // import withBadge from 'hocs/withBadge';
 import React from "react";
 import { Link } from "react-router-dom";
@@ -76,7 +75,6 @@ class Header extends React.Component {
 
   logout() {
     authentication.logout();
-    history.push("/login");
   }
 
   render() {

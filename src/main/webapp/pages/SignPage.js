@@ -54,6 +54,7 @@ export default function SignIn() {
   let history = useHistory();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [helperText, setHelperText] = useState('');
   const [error, setError] = useState(false);
@@ -67,7 +68,7 @@ export default function SignIn() {
   }, [username, password]);
 
   const handleLogin = () => {
-    authentication.login(username, password).then(
+    authentication.login(username, password, remember).then(
       (user) => {
         //const { from } = this.props.location.state || {
         //  from: { pathname: "/dashboard" },
@@ -144,6 +145,8 @@ export default function SignIn() {
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
+              id="remember"
+              onChange={(e)=>setRemember(e.target.value)}
             />
               <Button
                

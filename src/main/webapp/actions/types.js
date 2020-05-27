@@ -129,3 +129,9 @@ export const FORMTYPES_UPDATE = 'FORMTYPES_UPDATE'
 export const FORMTYPES_DELETE = 'FORMTYPES_DELETE'
 export const FORMTYPES_ERROR = 'FORMTYPES_ERROR'
 
+/**
+ * @TYPES
+ * ===============================================
+ * AUTHENTICATE
+ */
+export const AUTHENTICATE = 'AUTHENTICATE'
