@@ -13,8 +13,6 @@ import SignIn from "pages/SignPage";
 import { history } from "./history";
 import { authentication } from "./actions/authentication";
 
-const currentUser = authentication.currentUserValue;
-
 const DashboardPage = React.lazy(() => import("pages/DashboardPage"));
 
 /* New Page loading using easy loading */
@@ -74,6 +72,7 @@ const getBasename = () => {
 };
 
 const Prescription = React.lazy(() => import("components/Pharmacy/prescriptions"))
+const currentUser = authentication.currentUserValue;;
 class Routes extends Component {
   render() {
     console.log('User', currentUser);
