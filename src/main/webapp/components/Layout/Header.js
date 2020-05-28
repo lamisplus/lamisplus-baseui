@@ -2,7 +2,7 @@ import Avatar from "components/Avatar";
 import { UserCard } from "components/Card";
 import Notifications from "components/Notifications";
 import { notificationsData } from "demos/header";
-import { authentication } from "../../actions/authentication";
+import { authentication } from "../../_services/authentication";
 // import withBadge from 'hocs/withBadge';
 import React from "react";
 import { Link } from "react-router-dom";
