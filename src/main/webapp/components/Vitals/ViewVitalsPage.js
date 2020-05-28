@@ -112,7 +112,7 @@ const PatientPage = () => {
                     <ViewVitalsSearch />
                 </CardContent>
             </Card>
-            <Modal isOpen={modal} toggle={toggle} size='lg'>
+            <Modal isOpen={modal} toggle={toggle} size='lg' zIndex={"9999"} >
                 <ModalHeader toggle={toggle}>Add New Vitals</ModalHeader>
                 <ModalBody>
                     <AddVitalsPage patient={patientrow}/>

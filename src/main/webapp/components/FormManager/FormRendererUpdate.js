@@ -14,14 +14,31 @@ momentLocalizer()
 
 const FormRenderer = props => {
   const [form, setForm] = React.useState();
+  const [formData, setFormData] = React.useState();
   const [errorMsg, setErrorMsg] = React.useState('')
   const [showErrorMsg, setShowErrorMsg] = React.useState(false)
   const [showLoading, setShowLoading] = React.useState(false)
+  const [showLoadingEncounter, setShowLoadingEncounter] = React.useState(false)
+  const [submission, setSubmission] = React.useState(props.submission)
   const [showLoadingForm, setShowLoadingForm] = React.useState(true)
   const onDismiss = () => setShowErrorMsg(false)
+  const options = {}
+  //extract the formData as an obj (if form data length is one) or an array
+  const extractFormData = (formData) => {
+    if(!formData){
+        return null;
+    }
+    if(formData.length === 1){
+        setFormData(formData[0]);
+      return formData[0].data;
+    }
 
+    setFormData(formData);
+    return formData.map(item => {
+      return item.data;
+    })
+  }
   React.useEffect(() => {
-    
     const onSuccess = () => {
       setShowLoadingForm(false)
       }
@@ -33,16 +50,24 @@ const FormRenderer = props => {
     props.fetchForm(props.formCode, onSuccess, onError);
   }, [props.formCode]);
   React.useEffect(() => {
-    setErrorMsg('')
-    setShowErrorMsg(false)
-    if( props.form.name && !props.form.resourceObject){
-        setErrorMsg('Form resource not found, please contact adminstration.')
-        setShowErrorMsg(true)
-        return;
-      }
+    // if(!props.form.resourceObject && !props.form.resourcePath){
+    //     setErrorMsg('Form resource not found, please contact adminstration.')
+    //     setShowErrorMsg(true)
+    //     return;
+    //   }
       setForm(props.form);
   },[props.form]);
-  const submission = props.submission;
+  React.useEffect(() => {
+    //verify that the encounter in the store is the same as the one passed in props
+    if(props.encounterId){
+      setShowLoadingEncounter(true);
+    }
+    if(props.encounter.encounterId === props.encounterId){
+        setSubmission({data: extractFormData(props.encounter.formDataObj)});
+        setShowLoadingEncounter(false);
+    }
+  }, [props.encounter]);
+  
 
   const submitForm = ( submission) => {
    // e.preventDefault()
@@ -56,30 +81,26 @@ const FormRenderer = props => {
         setShowErrorMsg(true)
         setShowLoading(false)
       }
-      const encounterDate = submission['dateEncounter'] ? submission['dateEncounter'] : new Date();
-      const formatedDate = Moment(encounterDate).format('DD-MM-YYYY')
       const data = {
-          data: [submission.data],
-          patientId: props.patientId,
-          formCode: props.formCode,
-          programCode: props.form.programCode,
-          dateEncounter: formatedDate,
-          visitId: props.visitId
+          data: submission.data,
       }
-      props.saveEncounter(data, 
+      props.updateFormData(formData.id, data, 
         props.onSuccess ? props.onSuccess : onSuccess, 
         props.onError ? props.onError : onError);
   }
-
   return (
-    <Page title="" >
+    <React.Fragment>
       { (showLoadingForm) ? 
    <span className="text-center"><Spinner style={{ width: '3rem', height: '3rem' }} type="grow" /> Loading form...</span>
+:  
+<div>
+{ (showLoadingEncounter) ? 
+  <span className="text-center"><Spinner style={{ width: '3rem', height: '3rem' }} type="grow" /> Loading encounter information...</span>
 :  
  
    <Card >
       <CardBody>
-      <h4 class="text-capitalize">{'NEW '}{props.title || props.form.name}</h4>
+  <h4 class="text-capitalize">{'Edit: '}{props.title || props.form.name}</h4>
       <hr />
       {/* <Errors errors={props.errors} /> */}
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
@@ -89,6 +110,7 @@ const FormRenderer = props => {
       <Form
           form={props.form.resourceObject}
           submission={submission}
+          options={options}
           hideComponents={props.hideComponents}
           //onSubmit={props.onSubmit}
           onSubmit={(submission) => {
@@ -101,23 +123,24 @@ const FormRenderer = props => {
         />
     </CardBody>
     </Card>
-       }
-    </Page>
+      } </div>  }
+    </React.Fragment>
   );
 }
 
-const mapStateToProps = (state = { form:{}}) => {
+const mapStateToProps = (state = {formManager: {}}) => {
   return {
     form: state.formManager.form,
     formEncounter: state.formManager.formEncounter,
-    errors: state.formManager.errors
+    errors: state.formManager.errors,
+    encounter: state.encounter.encounter
   }
 }
 
 
 const mapActionToProps = {
   fetchForm: actions.fetchById,
-  saveEncounter: actions.saveEncounter
+  updateFormData: actions.updateFormData
 }
 
 export default connect(mapStateToProps, mapActionToProps)(FormRenderer)

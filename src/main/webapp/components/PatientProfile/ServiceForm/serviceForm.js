@@ -23,6 +23,7 @@ import {
   import FormRenderer from 'components/FormManager/FormRenderer';
   import ViewForm from 'components/FormManager/FormRendererView';
   import UpdateForm from 'components/FormManager/FormRendererUpdate';
+  import ViewAllForms from 'components/FormManager/FormRendererViewList';
   import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
   import * as CODES from "api/codes";
@@ -46,18 +47,11 @@ function ServiceFormPage (props) {
   const [serviceForms, setServiceForms] = useState([])
   const [programs, setPrograms] = useState([])
   const [filteredForms, setFilteredForms] = useState([])
-  const [filterText, setFilterText] = React.useState('')
   const [efilterText, setEFilterText] = React.useState('')
-  const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false)
   const [eresetPaginationToggle, setEResetPaginationToggle] = React.useState(false)
   const [showFormPage, setShowFormPage] = useState(false);
   const [currentForm, setCurrentForm] = useState();
   const [patientEncounters, setPatientEncouters] = useState([])
-  const filteredItems = !serviceForms ? [] : serviceForms.filter(
-    item =>
-    (item.name &&
-      item.name.toLowerCase().includes(filterText.toLowerCase()))
-  )
 
   const encounterFilteredItems = !patientEncounters ? [] : patientEncounters.filter(
     item =>
@@ -149,6 +143,10 @@ function ServiceFormPage (props) {
     togglePage();
   }
 
+  const viewAllForm = (value) => {
+    setCurrentForm({...value, type:'VIEW_ALL'});
+    togglePage();
+  }
   const editForm = (value) => {
     props.fetchEncounterInfo(value.encounterId);
     setCurrentForm({...value, type:'EDIT'});
@@ -160,21 +158,6 @@ function ServiceFormPage (props) {
     fetchEncounters();
     togglePage();
   }
-
-  const FilterComponent = ({ filterText, onFilter, onClear }) => (
-    <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >
-          <Card>
-              <CardBody>
-                    <Input
-                      type="search"
-                      placeholder="Search by Form Name "
-                      className="cr-search-form__input pull-right"
-                      value={filterText} onChange={onFilter}
-                    />
-              </CardBody>
-          </Card>
-      </Form>
-  );
 
   const EncounterFilterComponent = ({ efilterText, onFilter, onClear }) => (
     <Form  className="cr-search-form" onSubmit={e => e.preventDefault()} >
@@ -191,72 +174,36 @@ function ServiceFormPage (props) {
       </Form>
   );
 
-  const encounterColumns = (viewForm, editForm) => [
+  const encounterColumns = (viewForm, editForm, viewAllForm) => [
     {
       name: 'Service Form',
       selector: 'formName',
       sortable: false,
       cell: (row) => (
-        <div>
-          <p>{row.formName}</p>
-      <small>{row.dateEncounter || ''} {' '} {row.timeCreated || ''}</small>
-        </div>
+          <p>{row.formName} - <small>{row.dateEncounter || ''} {' '} {row.timeCreated || ''}</small></p>
       )
     },
     {
       cell: (row) => (
-        <div>
-        <IconButton color='primary' fontSize='small'   aria-label='View Form'
+        <React.Fragment>
+           <IconButton color='primary' size="small"   aria-label='View All Forms'
+         title='View All Form' onClick={() => viewAllForm(row)} className="fa fa-list">
+         </IconButton>
+        <IconButton color='primary' size='small'   aria-label='View Form'
         title='View Form' onClick={() => viewForm(row)}>
           <VisibilityIcon />
         </IconButton>
-         <IconButton color='primary' fontSize='small'   aria-label='Edit Form'
+         <IconButton color='primary' size='small'   aria-label='Edit Form'
          title='Edit Form' onClick={() => editForm(row)}>
            <EditIcon />
          </IconButton>
-         </div>
+         </React.Fragment>
       ),
       ignoreRowClick: true,
       allowOverflow: true,
       button: true
     }
   ]
-
-  const columns = (openForm) => [
-    {
-      name: 'Service Form',
-      selector: 'name',
-      sortable: false
-    },
-    {
-      cell: (row) => (
-        <IconButton color='primary' fontSize='small'   aria-label='Fill Form'
-        title='Fill Form' onClick={() => openForm(row)}>
-          <AddCircleOutlineIcon />
-        
-        </IconButton>
-      ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true
-    }
-  ]
-
-  const subHeaderComponentMemo = React.useMemo(() => {
-    const handleClear = () => {
-      if (filterText) {
-        setResetPaginationToggle(!resetPaginationToggle)
-        setFilterText('')
-      }
-    }
-    return (
-      <FilterComponent
-        onFilter={e => setFilterText(e.target.value)}
-        onClear={handleClear}
-        filterText={filterText}
-      />
-    )
-  }, [filterText, resetPaginationToggle])
 
     const esubHeaderComponentMemo = React.useMemo(() => {
       const handleClear = () => {
@@ -343,7 +290,7 @@ return (
 { (patientEncounters && patientEncounters.length) > 0 ? 
 <div>
     <DataTable
-      columns={encounterColumns(viewForm, editForm)}
+      columns={encounterColumns(viewForm, editForm, viewAllForm)}
       data={encounterFilteredItems}
       pagination
       paginationResetDefaultPage={eresetPaginationToggle} 
@@ -361,12 +308,16 @@ return (
                         </Col>
                         </Row>
 :
+<React.Fragment>
 <Row>
   <Col>
-  <div>
             <Button color="primary" className=" float-right mr-1" onClick={togglePage} >
                 Go Back
                 </Button>
+                </Col> 
+                </Row>
+                <Row>
+                <Col>
                 { currentForm && currentForm.type === 'NEW' &&
                   <FormRenderer patientId={props.patient.patientId} formCode={currentForm.code} programCode={currentForm.programCode} visitId={props.patient.visitId} onSuccess={onSuccess} />
                 }
@@ -376,12 +327,16 @@ return (
                  { currentForm && currentForm.type === 'EDIT' &&
                   <UpdateForm patientId={props.patient.patientId} formCode={currentForm.formCode} programCode={currentForm.programCode} visitId={props.patient.visitId} onSuccess={onSuccess} encounterId={currentForm.encounterId}/>
                 }
-        </div>
-  </Col>
+                 { currentForm && currentForm.type === 'VIEW_ALL' &&
+                  <ViewAllForms patientId={props.patient.patientId} formCode={currentForm.formCode} programCode={currentForm.programCode} visitId={props.patient.visitId} onSuccess={onSuccess} />
+                }
+               
+                 </Col> 
 </Row>
+</React.Fragment>
 }
 <ToastContainer />
-                        </div>
+  </div>
 )
 }
 

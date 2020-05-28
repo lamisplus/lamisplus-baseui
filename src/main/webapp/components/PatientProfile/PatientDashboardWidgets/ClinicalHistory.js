@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Table } from 'reactstrap';
 import {FaPencilAlt, FaTrashAlt} from 'react-icons/fa';
-import PreviousTestOrder from '../PatientConsultation/TestOrder/TestOrderHistory'
-import PreviousMedication from '../PatientConsultation/Medication/PreviousMedication'
+import PreviousTestOrder from '../TestOrder/TestOrderHistory'
+import PreviousMedication from '../Medication/PreviousMedication'
 import ViewVitalsSearch from 'components/Vitals/ViewVitalsSearch'
 import {connect} from 'react-redux';
 

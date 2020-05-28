@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { url as baseUrl } from '../api'
+import { url as baseUrl } from '../api/index'
 import * as ACTION_TYPES from './types'
 
 /**

@@ -70,37 +70,3 @@ export const create = (data, onSuccess, onError )=> dispatch => {
       // 
     })
 }
-
-export const update = (id, data) => dispatch => {
-  axios
-    .put(`${baseUrl}visits/${id}`, data)
-    .then(response => {
-      dispatch({
-        type: ACTION_TYPES.CHECKIN_UPDATE,
-        payload: response.data
-      });
-    })
-    .catch(error => {
-      dispatch({
-        type: ACTION_TYPES.CHECKIN_ERROR,
-        payload: "Something went wrong, please try again"
-      });
-    });
-};
-
-export const Delete = id => dispatch => {
-  axios
-    .delete(`${baseUrl}visits/${id}`)
-    .then(response => {
-      dispatch({
-        type: ACTION_TYPES.CHECKIN_DELETE,
-        payload: response.data
-      });
-    })
-    .catch(error => {
-      dispatch({
-        types: ACTION_TYPES.CHECKIN_ERROR,
-        payload: "Something went wrong, please try again"
-      });
-    });
-};

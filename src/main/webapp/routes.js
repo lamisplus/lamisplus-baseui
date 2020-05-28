@@ -54,12 +54,10 @@ const CheckInPatientPage = React.lazy(() =>
 const ViewVitalsPage = React.lazy(() =>
   import("components/Vitals/ViewVitalsPage")
 );
-const AddVitalsPage = React.lazy(() =>
-  import("components/Vitals/AddVitalsPage")
-);
+
 // const CheckInModal = React.lazy(() => import('components/CheckIn/CheckInModal'));
 const EnrolledPatientsDashboard = React.lazy(() =>
-  import("components/PatientConsultation/HomePage")
+  import("components/PatientProfile/HomePage")
 );
 
 /* Sample table i design */
@@ -117,14 +115,15 @@ class Routes extends Component {
                 path="/checkedin-patients"
                 component={CheckInPatientPage}
               />
+
               <PrivateRoute exact path="/view-vitals" component={ViewVitalsPage} />
-              <PrivateRoute exact path="/add-vitals" component={AddVitalsPage} />
+              /* <PrivateRoute exact path="/add-vitals" component={AddVitalsPage} /> */}
               {/* <PrivateRoute exact path="/checkin-modal" component={CheckInModal} /> */}
 
               {/* The rout to Hiv Module */}
               <PrivateRoute
                 exact
-                path="/patient-dashboard"
+                path="/patient-dashboard/:hospitalNumber"
                 component={EnrolledPatientsDashboard}
               />
               <PrivateRoute exact path="/form-dashboard" component={formDashboard} />

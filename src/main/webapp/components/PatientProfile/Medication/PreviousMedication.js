@@ -5,6 +5,8 @@ import * as actions from "actions/patients";
 import {connect} from 'react-redux';
 import "./Style.css";
 
+const status = [{name:"Not Dispensed", id: 0},
+{name:"Dispensed", id: 1}];
 
 const columns = [
   {
@@ -47,6 +49,7 @@ const columns = [
     name: 'Prescription Status',
     selector: 'prescription_status',
     sortable: false,
+    cell: row => <span>{status.find(x => x.id == row.prescription_status).name}</span>
   }
 ]
 function PreviousMedication (props) {

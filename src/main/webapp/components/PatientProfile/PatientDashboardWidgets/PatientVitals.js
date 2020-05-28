@@ -84,7 +84,7 @@ import {
                                             BMI: <span><b>{bmi || 'N/A'}</b></span> 
                                 </Col>
                                 <Col item xs='6'>
-                                            Blood Pressure (mmHg): <span><b>{data.systolic || ''} / {data.diastolic || ''}</b></span> 
+                                            BP (mmHg): <span><b>{data.systolic || ''} / {data.diastolic || ''}</b></span> 
                                 </Col>
                                 <Col item xs='6'>
                                             BMI Status: <span><b>{bmiStatus || 'N/A'}</b></span> 
@@ -94,7 +94,7 @@ import {
                                 </Col>
                                 </Row>
                     </CardBody>  
-                    <Modal isOpen={showModal} toggle={toggle} size='lg'>
+                    <Modal isOpen={showModal} toggle={toggle} size='lg' zIndex={"9999"}>
                       <ModalHeader toggle={toggle}>Take Patient Vitals</ModalHeader>
                       <ModalBody>
                       <AddVitalsPage patientId={props.patientId} showModal={showModal} toggle={toggle}/>

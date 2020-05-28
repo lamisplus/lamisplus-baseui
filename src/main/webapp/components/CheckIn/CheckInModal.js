@@ -99,7 +99,7 @@ const {
 
     return (
         
-        <Modal isOpen={props.showModal} toggle={toggle} size='lg'>
+        <Modal isOpen={props.showModal} toggle={toggle} size='lg'  zIndex={"9999"} >
              <ToastContainer />
         <ModalHeader toggle={toggle}>Check In Patient</ModalHeader>
         <ModalBody>
@@ -181,13 +181,7 @@ const {
             Cancel
           </MatButton>
           </div>
-          {/* <Button color='primary' onClick={handleSubmit}>
-            CheckIn  { loading ? <Spinner animation="border" role="status">
-                                            </Spinner> : ""}
-          </Button>{' '}
-          <Button color='secondary' onClick={toggle}>
-            Cancel
-          </Button> */}
+          
         </ModalFooter>
       </Modal>
     );
