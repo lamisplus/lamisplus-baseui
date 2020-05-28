@@ -117,7 +117,7 @@ class Routes extends Component {
               />
 
               <PrivateRoute exact path="/view-vitals" component={ViewVitalsPage} />
-              /* <PrivateRoute exact path="/add-vitals" component={AddVitalsPage} /> */}
+              {/* <PrivateRoute exact path="/add-vitals" component={AddVitalsPage} /> */}
               {/* <PrivateRoute exact path="/checkin-modal" component={CheckInModal} /> */}
 
               {/* The rout to Hiv Module */}
