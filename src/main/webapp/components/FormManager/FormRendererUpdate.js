@@ -38,6 +38,7 @@ const FormRenderer = props => {
       return item.data;
     })
   }
+
   React.useEffect(() => {
     const onSuccess = () => {
       setShowLoadingForm(false)
@@ -49,6 +50,7 @@ const FormRenderer = props => {
       }
     props.fetchForm(props.formCode, onSuccess, onError);
   }, [props.formCode]);
+
   React.useEffect(() => {
     // if(!props.form.resourceObject && !props.form.resourcePath){
     //     setErrorMsg('Form resource not found, please contact adminstration.')
@@ -57,6 +59,7 @@ const FormRenderer = props => {
     //   }
       setForm(props.form);
   },[props.form]);
+  
   React.useEffect(() => {
     //verify that the encounter in the store is the same as the one passed in props
     if(props.encounterId){

@@ -19,6 +19,7 @@ export const PATIENT_ENCOUNTER_LIST = 'PATIENT_ENCOUNTER_LIST'
 export const PATIENT_EXCLUSIVE_ENCOUNTER_LIST = 'PATIENT_EXCLUSIVE_ENCOUNTER_LIST'
 export const FETCH_COUNTRIES = "FETCH_COUNTRIES";
 
+
 /**
  * @TYPES
  * ===============================================

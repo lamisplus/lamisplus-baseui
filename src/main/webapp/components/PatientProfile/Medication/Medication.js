@@ -162,6 +162,7 @@ function MedicationPage(props) {
     const [previousMedicationList, setPreviousMedicationList] = useState([]);
     const [showLoading, setShowLoading] = useState(false);  
     
+    
     const saveDrugOrders = (e) => { 
       e.preventDefault()
       if(showLoading){
@@ -230,6 +231,7 @@ function MedicationPage(props) {
       };
 
       React.useEffect(() => {
+      
          if(props.drugList.length === 0){
         setErrorMsg();
         setFetchingDrugs(true);

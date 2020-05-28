@@ -45,7 +45,7 @@ export const allergies = [
   const classes = useStyles(props);
   const [showFormModal, setShowFormModal] = useState(false);
   const [currentForm, setCurrentForm] = useState(false);
-  const handleChange = (newValue: any, actionMeta: any) => {
+  const handleChange = (newValue, actionMeta) => {
     props.setNewAllergy(newValue ? newValue.map(it => it.value) : []);    
   };
   const onSuccess = () => {

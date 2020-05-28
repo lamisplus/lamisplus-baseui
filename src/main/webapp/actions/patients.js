@@ -262,28 +262,6 @@ export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
      }  
  }
 
- export const fetchPatientEncounters = (id, onSuccess, onError) => dispatch => {
-  if(id){
-   axios
-     .get(`${baseUrl}encounters/${id}` )
-     .then(response => {
-       dispatch({
-         type: ACTION_TYPES.PATIENT_ENCOUNTER_LIST,
-         payload: response.data
-       })
-       onSuccess()
-     })
-     .catch(error => {
-       dispatch({
-         type: ACTION_TYPES.PATIENTS_ERROR,
-         payload: 'Something went wrong, please try again'
-       })
-       onError()
-      }
-     )
-     }  
- }
-
  export const fetchByHospitalNumber = (id, onSuccess, onError) => dispatch => {
   axios
     .get(`${baseUrl}patients/${id}`)
@@ -346,4 +324,28 @@ export const fetchCountries = () => dispatch => {
         payload: 'Something went wrong, please try again'
     })
   })
+ }
+
+ export const fetchPatientEncounterByFormCode = (id, formCode, onSuccess, onError) => dispatch => {
+   axios
+     .get(`${baseUrl}patients/${id}/encounters/${formCode}`)
+     .then(response => {
+      dispatch({
+        type: ACTION_TYPES.PATIENT_ENCOUNTER_LIST,
+        payload: response.data
+      })
+      if(onSuccess){
+      onSuccess()
+      }
+    })
+    .catch(error => {
+      dispatch({
+        type: ACTION_TYPES.PATIENTS_ERROR,
+        payload: 'Something went wrong, please try again'
+      })
+      if(onError){
+      onError()
+      }
+     }
+    )
  }

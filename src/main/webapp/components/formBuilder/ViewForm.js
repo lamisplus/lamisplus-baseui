@@ -89,7 +89,7 @@ const Update = props => {
                     <h4>View Form</h4>
                     <hr />
                     <Errors errors={props.errors} />
-    <small>{JSON.stringify(props.patient)}</small>
+    
                     {!res ? "" : 
                     <Form
                         form={JSON.parse(res)}

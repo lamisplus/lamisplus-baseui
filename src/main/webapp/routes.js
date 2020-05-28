@@ -46,7 +46,6 @@ const ViewForm = React.lazy(() => import('components/formBuilder/ViewForm'));
 /* Pharmacy page loading */
 const PharmacyDashboard = React.lazy(() => import("./components/Pharmacy/PharmacyDashboard"))
 
-const AppointmentPage = React.lazy(() => import("pages/AppointmentPage"));
 const CheckInPatientPage = React.lazy(() =>
   import("components/CheckIn/CheckedInPatientPage")
 );
@@ -64,6 +63,8 @@ const TestPage = React.lazy(() => import("pages/TestPage"));
 const FormRendererPage = React.lazy(() => import("components/FormManager/FormRendererPage"));
 //Reporting components
 const ReportPage = React.lazy(() => import("components/Reports/ReportingPage"));
+//Appointment
+const AppointmentPage = React.lazy(() => import("components/Appointments/HomePage"));
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split("/").pop()}`;
 };
@@ -131,6 +132,8 @@ class Routes extends Component {
               <Route exact path="/form-renderer" component={FormRendererPage} />
               {/* The rout to Report*/}
               <Route exact path="/report" component={ReportPage} />
+              {/* The route to Appointment*/}
+              <Route exact path="/appointments" component={AppointmentPage} />
               
             </React.Suspense>
           </MainLayout>
