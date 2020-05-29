@@ -110,7 +110,9 @@ function HomePage(props) {
                         onChange={value =>
                           setValues({ ...values, endDate: value })
                         }
-                        
+                        defaultValue={new Date()}
+                        max={new Date()}
+                        required
                       />
                     </FormGroup>
                     </Col>

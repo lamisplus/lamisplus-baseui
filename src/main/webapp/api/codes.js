@@ -23,3 +23,11 @@ export const DISCHARGE_PATIENT_FORM = '8e07eb78-0449-42bd-bd21-9ef9b489ad7d'
 export const TRANSFER_INPATIENT_FORM = '4c0db2ee-7916-4ea6-b24d-42234c8ac0a7'
 export const CHECK_OUT_PATIENT_FORM = 'ec84dd9a-9493-4b73-b501-6201a06982a6'
 export const PATIENT_ALLERGY_FORM = '796f2a0f-1e76-42af-a24a-e6f09dfedbe7'
+
+/**
+ * @CODES
+ * ==============================================
+ * TYPE PATIENT CODES
+ */
+export const IN_PATENT_TYPE = 0
+export const OUT_PATIENT_TYPE = 1

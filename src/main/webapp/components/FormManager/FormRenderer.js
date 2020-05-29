@@ -67,7 +67,10 @@ const FormRenderer = props => {
           formCode: props.formCode,
           programCode: props.form.programCode,
           dateEncounter: formatedDate,
-          visitId: props.visitId
+          visitId: props.visitId,
+      }
+      if(props.typePatient){
+        data = {...data, ...{typePatient: props.typePatient}}
       }
       props.saveEncounter(data, 
         props.onSuccess ? props.onSuccess : onSuccess, 
