@@ -36,13 +36,13 @@ function PatientDashboardSubMenu(props) {
       code: CODES.ADMIT_PATIENT_FORM,
       programCode: CODES.GENERAL_SERVICE,
       formName: "ADMIT_PATIENT",
-      typePatient: CODES.IN_PATIENT_TYPE,
+      typePatient: CODES.IN_PATENT_UNBOOKED,
     },
     {
       code: CODES.DISCHARGE_PATIENT_FORM,
       programCode: CODES.GENERAL_SERVICE,
       formName: "DISCHARGE_PATIENT",
-      typePatient: CODES.OUT_PATIENT_TYPE,
+      typePatient: CODES.OUT_PATIENT_UNBOOKED,
     },
     {
       code: CODES.TRANSFER_INPATIENT_FORM,
@@ -81,36 +81,7 @@ function PatientDashboardSubMenu(props) {
         dateNextAppointment: null,
         patientId: props.patient.patientId,
         visitTypeId: null,
-        typePatient: "OUTPATIENT",
-      };
-
-      props.checkOutPatient(props.patient.visitId, data, onSuccess, onError);
-    };
-    setCurrentForm({
-      code: CODES.CHECK_OUT_PATIENT_FORM,
-      programCode: CODES.GENERAL_SERVICE,
-      formName: "CHECK_OUT_PATIENT",
-      options: {
-        modalSize: "modal-lg",
-      },
-      onSubmit: onSubmit,
-    });
-    setShowFormModal(true);
-  };
-
-  const checkOutPatient = () => {
-    displayFormByFormName("CHECK_OUT_PATIENT");
-    const onSubmit = (submission) => {
-      const data = {
-        id: props.patient.visitId,
-        dateVisitEnd: Moment(submission.data.checkOutDate).format("DD-MM-YYYY"),
-        dateVisitStart: props.patient.dateVisitStart,
-        timeVisitEnd: Moment(submission.data.checkOutTime).format("hh:mm A"),
-        timeVisitStart: props.patient.timeVisitStart,
-        dateNextAppointment: null,
-        patientId: props.patient.patientId,
-        visitTypeId: null,
-        typePatient: "OUTPATIENT",
+        typePatient: props.patient.typePatient,
       };
 
       props.checkOutPatient(props.patient.visitId, data, onSuccess, onError);

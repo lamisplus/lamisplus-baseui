@@ -29,5 +29,10 @@ export const PATIENT_ALLERGY_FORM = '796f2a0f-1e76-42af-a24a-e6f09dfedbe7'
  * ==============================================
  * TYPE PATIENT CODES
  */
-export const IN_PATENT_TYPE = 0
-export const OUT_PATIENT_TYPE = 1
+export const IN_PATENT_BOOKED = 3
+export const IN_PATENT_UNBOOKED = 2
+export const OUT_PATIENT_BOOKED = 1
+export const OUT_PATIENT_UNBOOKED = 0
+export const EMERGENCY_PATIENT = 4
+
+
