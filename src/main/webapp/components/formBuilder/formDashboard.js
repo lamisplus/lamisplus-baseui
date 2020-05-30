@@ -182,7 +182,7 @@ export default function ScrollableTabsButtonForce(props) {
                     textColor="white"
                     aria-label="scrollable force tabs example">
                     <Tab className={classes.title} label="Form Builder" icon={<MdDashboard />} {...a11yProps(0)} />
-                    <Tab className={classes.title} label="Form Renderer" icon={<MdContacts />} {...a11yProps(1)} />
+                    <Tab className={classes.title} label="Form Update" icon={<MdContacts />} {...a11yProps(1)} />
                     <Tab className={classes.title} label="Application CodeSet Setup" icon={<GiFiles />} {...a11yProps(2)} />
                     <Tab className={classes.title} label="Facility Setup " icon={<GiFiles />} {...a11yProps(3)} />
                 </Tabs>

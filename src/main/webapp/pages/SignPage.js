@@ -14,6 +14,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import logo200Image from 'assets/img/logo/logo_200.png';
 
+import { authentication } from '../_services/authentication';
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -52,6 +54,7 @@ export default function SignIn() {
   let history = useHistory();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [helperText, setHelperText] = useState('');
   const [error, setError] = useState(false);
@@ -65,17 +68,21 @@ export default function SignIn() {
   }, [username, password]);
 
   const handleLogin = () => {
-    
-    if (username === 'abc@mail.com' && password === '12345') {
-      setError(false);
-      setHelperText('Login Successfully');
-      history.push("/dashboard");
-      
-      
-    } else {
-      setError(true);
-      setHelperText('Incorrect username or password')
-    }
+    authentication.login(username, password, remember).then(
+      (user) => {
+        //const { from } = this.props.location.state || {
+        //  from: { pathname: "/dashboard" },
+        //};
+        //this.props.history.push(from);
+        setError(false);
+        setHelperText('Login Successfully');
+        history.push("/");
+      },
+      (error) => {
+        setError(true);
+        setHelperText('Incorrect username or password');
+      }
+    );
   };
 
   const handleKeyPress = (e) => {
@@ -138,6 +145,8 @@ export default function SignIn() {
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
+              id="remember"
+              onChange={(e)=>setRemember(e.target.value)}
             />
               <Button
                

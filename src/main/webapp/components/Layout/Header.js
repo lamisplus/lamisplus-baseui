@@ -1,10 +1,11 @@
-import Avatar from 'components/Avatar';
-import { UserCard } from 'components/Card';
-import Notifications from 'components/Notifications';
-import { notificationsData } from 'demos/header';
+import Avatar from "components/Avatar";
+import { UserCard } from "components/Card";
+import Notifications from "components/Notifications";
+import { notificationsData } from "demos/header";
+import { authentication } from "../../_services/authentication";
 // import withBadge from 'hocs/withBadge';
-import React from 'react';
-import {Link} from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 import {
   MdClearAll,
@@ -12,7 +13,7 @@ import {
   MdHelp,
   // MdNotificationsActive,
   MdPersonPin,
-} from 'react-icons/md';
+} from "react-icons/md";
 import {
   Button,
   ListGroup,
@@ -24,10 +25,10 @@ import {
   NavLink,
   Popover,
   PopoverBody,
-} from 'reactstrap';
-import bn from 'utils/bemnames';
+} from "reactstrap";
+import bn from "utils/bemnames";
 
-const bem = bn.create('header');
+const bem = bn.create("header");
 
 // const MdNotificationsActiveWithBadge = withBadge({
 //   size: 'md',
@@ -65,31 +66,32 @@ class Header extends React.Component {
     });
   };
 
-  handleSidebarControlButton = event => {
+  handleSidebarControlButton = (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    document.querySelector('.cr-sidebar').classList.toggle('cr-sidebar--open');
+    document.querySelector(".cr-sidebar").classList.toggle("cr-sidebar--open");
   };
+
+  logout() {
+    authentication.logout();
+  }
 
   render() {
     // const { isNotificationConfirmed } = this.state;
 
     return (
-      <Navbar light expand className={bem.b('bg-white')}>
+      <Navbar light expand className={bem.b("bg-white")}>
         <Nav navbar className="mr-2">
           <Button outline onClick={this.handleSidebarControlButton}>
             <MdClearAll size={25} />
           </Button>
         </Nav>
-        <Nav navbar>
-          {/* <SearchInput /> */}
-        </Nav>
+        <Nav navbar>{/* <SearchInput /> */}</Nav>
 
-        <Nav navbar className={bem.e('nav-right')}>
+        <Nav navbar className={bem.e("nav-right")}>
           <NavItem className="d-inline-flex">
-            <NavLink id="Popover1" className="position-relative">
-            </NavLink>
+            <NavLink id="Popover1" className="position-relative"></NavLink>
             <Popover
               placement="bottom"
               isOpen={this.state.isOpenNotificationPopover}
@@ -117,11 +119,13 @@ class Header extends React.Component {
               className="p-0 border-0"
               style={{ minWidth: 250 }}
             >
-              <PopoverBody className="p-0 border-light" style={{ backgroundColor: '#000 !important'}}>
+              <PopoverBody
+                className="p-0 border-light"
+                style={{ backgroundColor: "#000 !important" }}
+              >
                 <UserCard
                   title="Nurse"
                   subtitle="abce@mail.com"
-                  
                   className="border-light"
                 >
                   <ListGroup flush>
@@ -132,7 +136,10 @@ class Header extends React.Component {
                       <MdHelp /> Help
                     </ListGroupItem>
                     <ListGroupItem tag="button" action className="border-light">
-                      <MdExitToApp /> <Link className="option" to="/">Signout</Link>
+                      <MdExitToApp />{" "}
+                      <Link className="option"  onClick={this.logout} to="/login">
+                        Signout
+                      </Link>
                     </ListGroupItem>
                   </ListGroup>
                 </UserCard>

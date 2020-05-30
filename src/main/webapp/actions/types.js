@@ -133,6 +133,12 @@ export const FORMTYPES_ERROR = 'FORMTYPES_ERROR'
 /**
  * @TYPES
  * ===============================================
+ * AUTHENTICATE
+ */
+export const AUTHENTICATE = 'AUTHENTICATE'
+/**
+ * @TYPES
+ * ===============================================
  * VISIT
  */
 export const UPDATE_VISIT = 'UPDATE_VISIT'
