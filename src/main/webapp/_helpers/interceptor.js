@@ -19,14 +19,13 @@ axios.interceptors.request.use(function (config) {
 
 // Check if token is still valid
 axios.interceptors.response.use(function (response) {
-    // handleResponse(response);
     if ([401, 403].indexOf(response.status) !== -1) {
         // auto logout if 401 Unauthorized or 403 Forbidden response returned from api
+        authentication.logout();
         dispatch({
             type: ACTION_TYPES.UNAUTHORISED_ERROR,
             payload: response.status
         });
-        authentication.logout();
         window.location.reload(true);
     }
     return response;
