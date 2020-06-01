@@ -134,7 +134,9 @@ export const FORMTYPES_ERROR = 'FORMTYPES_ERROR'
  * ===============================================
  * AUTHENTICATE
  */
-export const AUTHENTICATE = 'AUTHENTICATE'
+export const AUTHENTICATION = 'AUTHENTICATION'
+export const AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR'
+export const UNAUTHORISED_ERROR = 'UNAUTHORISED_ERROR'
 /**
  * @TYPES
  * ===============================================

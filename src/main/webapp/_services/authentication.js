@@ -1,8 +1,10 @@
 import { BehaviorSubject } from 'rxjs';
-
 import { url } from "../api";
 import { handleResponse } from '../_helpers';
+import store from '../store';
+import * as ACTION_TYPES from "../actions/types";
 
+const { dispatch } = store;
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
 export const authentication = {
@@ -22,6 +24,10 @@ function login(username, password, remember) {
     return fetch(`${url}authenticate`, requestOptions)
         .then(handleResponse)
         .then(user => {
+            dispatch({
+                type: ACTION_TYPES.AUTHENTICATION,
+                payload: "Authenticated"
+            });
             // store user details and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('currentUser', JSON.stringify(user));
             currentUserSubject.next(user);
