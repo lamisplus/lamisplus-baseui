@@ -19,16 +19,16 @@ axios.interceptors.request.use(function (config) {
 
 // Check if token is still valid
 axios.interceptors.response.use(function (response) {
-    if ([401, 403].indexOf(response.status) !== -1) {
+    return response;
+  }, function (error) {
+    if (error.response.status === 401 || error.response.status == 403) {
         // auto logout if 401 Unauthorized or 403 Forbidden response returned from api
         authentication.logout();
         dispatch({
             type: ACTION_TYPES.UNAUTHORISED_ERROR,
-            payload: response.status
+            payload: error.response.status
         });
         window.location.reload(true);
-    }
-    return response;
-  }, function (error) {
+    }  
     return Promise.reject(error);
   })
