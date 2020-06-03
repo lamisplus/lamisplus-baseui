@@ -292,14 +292,18 @@ export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
         type: ACTION_TYPES.PATIENTS_FETCH_BY_ID,
         payload: response.data
       });
+      if(onSuccess){
       onSuccess();
+      }
     })
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
         payload: "Something went wrong, please try again"
       })
+      if(onError){
       onError();
+      }
     }
     );
 };

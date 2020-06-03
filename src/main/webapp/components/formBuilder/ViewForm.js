@@ -1,10 +1,21 @@
-import React, {useRef} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import Page from 'components/Page';
-import { data } from './HivEnrolment';
-import { saveForm, selectError, Errors, Form, FormBuilder } from 'react-formio';
+import {  Errors, Form, FormBuilder } from 'react-formio';
 import {Card,CardContent,} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import {url} from '../../api'
+import {fetchService, fetchById, updateForm} from '../../actions/formBuilder'
+import {fetchByHospitalNumber} from '../../actions/patients'
 
+import {
+    FormGroup,
+    Input,
+    Label,
+    Col,
+    Row,
+    Button
+} from 'reactstrap';
 
 const useStyles = makeStyles(theme => ({
     root2: {
@@ -14,15 +25,43 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-
-const Create = props => {
+const Update = props => {
+    const [res, setRes] = React.useState("");
+    const [displayType, setDisplayType] = React.useState("");
+    const [programId, setprogramId] = React.useState("");
+    const [formCode, setformCode] = React.useState();
+    const [form2, setform2] = React.useState();
     const classes = useStyles();
     let myform;
-    const [res, setRes] = React.useState("");
+    const submission = props.patient;
     const textAreaRef = useRef(null);
-    const submission = {data: {patientId:566233, firstName:"Deborah", lastName:"Obanisola"}};
-    const url = 'https://lp-base-app.herokuapp.com/api/';
 
+    useEffect (() => {
+        props.fetchService()
+    }, [])
+    useEffect (() => {
+         //props.fetchById()
+        props.fetchPatientByHospitalNumber('P123189', null, null)
+    }, [])
+
+    const handleProgramChange = (e) => {
+        setprogramId(e.target.value)
+        props.fetchById(e.target.value)
+    }
+
+    const handleSubmit = () => {
+        props.updateForm(form2.id, form2);
+    }
+
+    const loadForm = (e) => {
+        console.log(JSON.parse(e.target.value));
+        const v = JSON.parse(e.target.value);
+        
+        setformCode(v.code);
+        
+        setform2(v)
+        //setRes(form.resourceObject);
+    }
     return (
         <Page title="Form Renderer" >
             <Card >
@@ -30,10 +69,12 @@ const Create = props => {
                     <h4>View Form</h4>
                     <hr />
                     <Errors errors={props.errors} />
+                <small>{JSON.stringify(props.patient)}</small>
+                    {!res ? "" : 
                     <Form
-                        form={data}
+                        form={JSON.parse(res)}
                         ref={form => myform = form}
-                        submission={submission}
+                        submission={{data : {patient: props.patient}}}
                         //src={url}
                         hideComponents={props.hideComponents}
                         //onSubmit={props.onSubmit}
@@ -51,6 +92,7 @@ const Create = props => {
                                 myform.emit('submitDone', submission);
                             })}}
                     />
+                        }
                     <br></br>
                 </CardContent>
             </Card>
@@ -58,10 +100,52 @@ const Create = props => {
             <Card >
                 <CardContent>
                     <h4>Edit Form</h4>
-                    <FormBuilder form={data} {...props} onChange={(schema) => {
-                        console.log(JSON.stringify(schema));
+                    <Row>
+                        <Col md={4}> <FormGroup>
+                            <Label class="sr-only">Display Type</Label>
+                            <Input type="select"  id="displayType" value={displayType} onChange={e => setDisplayType(e.target.value)}>
+                                <option value="form">Form</option>
+                                <option value="wizard">Wizard</option></Input>
+                        </FormGroup></Col>
+
+                        <Col md={4}> <FormGroup>
+                            <Label class="sr-only">Program Area</Label>
+                            {props.services.length && props.services.length > 0 ?
+                                <Input type="select" class="form-control" id="programId" required value={programId}  onChange={e => handleProgramChange(e) }>
+                                    {props.services.map(program => (<option key={program.id} value={program.id} >{program.name}</option>))}
+                                </Input>:  <Input type="select" class="form-control" id="programId" required value={programId} onChange={e => setprogramId(e.target.value)}>
+                                    <option>No program found</option>
+                                </Input>}
+                        </FormGroup></Col>
+
+                        <Col md={4}> <FormGroup>
+                            <Label class="sr-only">Form Name</Label>
+                            {props.formList.length && props.formList.length > 0 ?
+                                <Input type="select" class="form-control" id="formCode" required value={formCode}  onChange={e => loadForm(e) }>
+                                    <option value="">Select One</option>
+                                    {props.formList.map(form => (<option value={JSON.stringify(form)}>{form.name}</option>))}
+                                </Input>:  <Input type="select" class="form-control" id="formCode" required value={formCode} onChange={e => setformCode(e.target.value)}>
+                                </Input>}
+                        </FormGroup></Col>
+                    </Row>
+                    <Row>
+                        <Col md={2}> <FormGroup>
+                            <label class="sr-only"></label>
+                            <Button color="primary" className=" mt-4" onClick={() => loadForm()}>Load Form</Button>
+                        </FormGroup></Col>
+
+                        <Col md={2}> <FormGroup>
+                            <label class="sr-only"></label>
+                            <button type="button"  class="form-control btn btn-primary mt-4" onClick={() => handleSubmit()}>Update Form</button>
+                        </FormGroup></Col>
+                    </Row>
+                    { form2 ? 
+                    <FormBuilder form={form2.resourceObject} {...props} onChange={(schema) => {
+                       // console.log(JSON.stringify(schema));
                         setRes(JSON.stringify(schema));
                     }} />
+: ""
+                }
                     <br></br>
                 </CardContent>
             </Card>
@@ -80,29 +164,21 @@ const Create = props => {
     );
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps =  (state = { form:{}}) => {
+    console.log(state.forms)
     return {
-        form: {display: 'form'},
-        saveText: 'Create Form',
-        errors: selectError('form', state),
-        response: 'res'
-    }
-}
+        patient: state.patients.patient,
+        services: state.formReducers.services,
+        formList: state.formReducers.form,
+    }}
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        saveForm: (form) => {
-            const newForm = {
-                ...form,
-                tags: ['common'],
-            };
-            dispatch(saveForm('form', newForm, (err, form) => {
-                console.log('stroing form');
-                console.log(newForm);
-            }))
-        }
-    }
-}
+const mapActionsToProps = ({
+    fetchService: fetchService,
+    fetchById: fetchById,
+    updateForm: updateForm,
+    fetchPatientByHospitalNumber: fetchByHospitalNumber,
+})
 
-export default Create
+export default connect(mapStateToProps, mapActionsToProps)(Update)
 
+//

@@ -71,8 +71,7 @@ const PatientSearch = (props) => {
         >
           <Link
             to={{
-              pathname: "/patient-dashboard",
-              state: { hospitalNumber: row.hospitalNumber  }
+              pathname: "/patient-dashboard/"+row.hospitalNumber
             }}
           >
             <Dashboard title="Patient Dashboard" aria-label="View Patient" />
