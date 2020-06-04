@@ -10,7 +10,7 @@ import React, {Component} from "react";
 import { BrowserRouter, Redirect, Switch } from "react-router-dom";
 import "./styles/reduction.scss";
 import SignIn from "pages/SignPage";
-import Register from "pages/Register";
+import { Register } from "pages/Register";
 import { history } from "./history";
 import { PrivateRoute } from "./PrivateRoute"
 

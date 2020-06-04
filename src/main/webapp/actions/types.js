@@ -150,5 +150,7 @@ export const UPDATE_VISIT_ERROR = 'UPDATE_VISIT_ERROR'
  * ===============================================
  * USER
  */
-export const REGISTER = 'REGISTER'
-export const REGISTER_ERROR = 'REGISTER_ERROR'
+
+export const REGISTER_REQUEST = 'USERS_REGISTER_REQUEST'
+export const REGISTER_SUCCESS =  'USERS_REGISTER_SUCCESS'
+export const REGISTER_FAILURE = 'USERS_REGISTER_FAILURE'
