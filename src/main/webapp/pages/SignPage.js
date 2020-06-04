@@ -66,9 +66,6 @@ export default function SignIn() {
   }, [username, password]);
 
   const handleLogin = () => {
-    if (remember){
-      remember = true;
-    }
     authentication.login(username, password, remember).then(
       (user) => {
         //const { from } = this.props.location.state || {

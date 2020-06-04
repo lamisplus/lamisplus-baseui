@@ -144,3 +144,11 @@ export const UNAUTHORISED_ERROR = 'UNAUTHORISED_ERROR'
  */
 export const UPDATE_VISIT = 'UPDATE_VISIT'
 export const UPDATE_VISIT_ERROR = 'UPDATE_VISIT_ERROR'
+
+/**
+ * @TYPES
+ * ===============================================
+ * USER
+ */
+export const REGISTER = 'REGISTER'
+export const REGISTER_ERROR = 'REGISTER_ERROR'

@@ -12,6 +12,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import logo200Image from "assets/img/logo/logo_200.png";
 
+import { register } from "../actions/user";
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -94,6 +96,19 @@ export default function Register() {
       setPasswordError(false);
       setHelperEmailText("");
       setHelperText("");
+      register(firstName, lastName, email, password).then(
+        (user) => {
+          setError(false);
+          setHelperText("User registered successfully");
+          history.push("/");
+        },
+        (error) => {
+          setError(true);
+          setEmailError(true);
+          setPasswordError(true);
+          setHelperText("Something went wrong");
+        }
+      );
     }
   };
 

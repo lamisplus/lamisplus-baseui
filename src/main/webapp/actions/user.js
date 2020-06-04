@@ -1,6 +1,9 @@
-import axios from "axios";
-import { url as baseUrl } from "../api";
-import * as ACTION_TYPES from "./types";
+import { url } from "../api";
+import { handleResponse } from '../_helpers';
+import store from '../store';
+import * as ACTION_TYPES from "../actions/types";
+
+const { dispatch } = store;
 
 /**
  * @Actions
@@ -10,24 +13,20 @@ import * as ACTION_TYPES from "./types";
  * @method POST => register() -> register a new User
 
  */
-export const register = (firstName, lastName, userName, password) => dispatch => {
-    const data = { firstName, lastName, userName, password }
-    axios
-      .post(`${baseUrl}register`, data)
-      .then(response => {
-        dispatch({
 
-        });
-        if(onSuccess){
-            onSuccess();
-        }
-      })
-      .catch(error => {
-        dispatch({
+  export function register(firstName, lastName, userName, password) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ firstName, lastName, userName, password })
+    };
 
+    return fetch(`${url}register`, requestOptions)
+        .then(handleResponse)
+        .then(user => {
+            dispatch({
+                type: ACTION_TYPES.REGISTER,
+                payload: "Registered"
+            });
         });
-        if(onError){
-            onError();
-        }
-      });
-  };
+}
