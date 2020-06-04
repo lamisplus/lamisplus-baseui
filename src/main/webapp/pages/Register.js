@@ -5,23 +5,19 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import { Link } from 'react-router-dom';
+import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import logo200Image from "assets/img/logo/logo_200.png";
-
-import { authentication } from "../_services/authentication";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="#">
-        LAMISPlaus
+        LAMISPlus
       </Link>{" "}
     </Typography>
   );
@@ -47,54 +43,68 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function Register() {
   const classes = useStyles();
   let history = useHistory();
-  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [helperText, setHelperText] = useState("");
+  const [helperEmailText, setHelperEmailText] = useState("");
   const [error, setError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   useEffect(() => {
-    if (username.trim() && password.trim()) {
+    if (
+      firstName.trim() &&
+      lastName.trim() &&
+      password.trim() &&
+      confirmPassword.trim()
+    ) {
       setIsButtonDisabled(false);
     } else {
       setIsButtonDisabled(true);
     }
-  }, [username, password]);
+  }, [firstName, lastName, email, password]);
 
-  const handleLogin = () => {
-    if (remember){
-      remember = true;
+  function ValidateEmail(email) {
+    const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (email.match(mailformat)) {
+      return true;
+    } else {
+      return false;
     }
-    authentication.login(username, password, remember).then(
-      (user) => {
-        //const { from } = this.props.location.state || {
-        //  from: { pathname: "/dashboard" },
-        //};
-        //this.props.history.push(from);
-        setError(false);
-        setHelperText("Login Successfully");
-        history.push("/");
-      },
-      (error) => {
-        setError(true);
-        setHelperText("Incorrect username or password");
-      }
-    );
+  }
+  const registerUser = () => {
+    let validEmail = ValidateEmail(email);
+    if (!validEmail) {
+      setEmailError(true);
+      setHelperEmailText("You have entred an invalid email address");
+    } else if (password !== confirmPassword) {
+      setEmailError(false);
+      setPasswordError(true);
+      setHelperEmailText("");
+      setHelperText("Passwords do not match");
+    } else {
+      setEmailError(false);
+      setPasswordError(false);
+      setHelperEmailText("");
+      setHelperText("");
+    }
   };
 
   const handleKeyPress = (e) => {
     if (e.keyCode === 13 || e.which === 13) {
-      isButtonDisabled || handleLogin();
+      isButtonDisabled || registerUser();
     }
   };
   return (
     <div
       style={{
-        //backgroundImage: `url(${sigInLogo})`,
         backgroundColor: "#fff",
         backgroundPosition: "center",
         backgroundSize: "cover",
@@ -112,7 +122,7 @@ export default function SignIn() {
             alt="logo"
           />
           <Typography component="h1" variant="h5">
-            Sign in
+            Register
           </Typography>
           <form className={classes.form} noValidate>
             <TextField
@@ -121,12 +131,12 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="username"
-              type="email"
-              label="Username"
-              placeholder="Username"
-              name="email"
-              onChange={(e) => setUsername(e.target.value)}
+              id="firstName"
+              type="text"
+              label="First Name"
+              placeholder="First Name"
+              name="First Name"
+              onChange={(e) => setFirstName(e.target.value)}
               onKeyPress={(e) => handleKeyPress(e)}
             />
             <TextField
@@ -135,36 +145,66 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
+              id="lastName"
+              type="text"
+              label="Last Name"
+              placeholder="Last Name"
+              name="Last Name"
+              onChange={(e) => setLastName(e.target.value)}
+              onKeyPress={(e) => handleKeyPress(e)}
+            />
+            <TextField
+              error={emailError}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              type="email"
+              label="email"
+              placeholder="your@email.com"
+              name="email"
+              helperText={helperEmailText}
+              onChange={(e) => setEmail(e.target.value)}
+              onKeyPress={(e) => handleKeyPress(e)}
+            />
+            <TextField
+              error={passwordError}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
               id="password"
               type="password"
               label="Password"
               placeholder="Password"
-              helperText={helperText}
               onChange={(e) => setPassword(e.target.value)}
               onKeyPress={(e) => handleKeyPress(e)}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-              id="remember"
-              onChange={(e) => setRemember(e.target.value)}
+            <TextField
+              error={passwordError}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="confirmPassword"
+              type="password"
+              label="Confirm Password"
+              placeholder="Confirm Password"
+              helperText={helperText}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              onKeyPress={(e) => handleKeyPress(e)}
             />
             <Button
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={() => handleLogin()}
+              onClick={() => registerUser()}
               disabled={isButtonDisabled}
             >
-              Sign In
+              Register
             </Button>
-            <div className="text-center pt-1">
-              <h6>or</h6>
-              <h6>
-                <Link to="/register">Register</Link>
-              </h6>
-            </div>
             <Grid container>
               <Grid item></Grid>
             </Grid>
