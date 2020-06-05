@@ -39,10 +39,8 @@ class Register extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-
     this.setState({ submitted: true });
     const { user } = this.state;
-    debugger
     if (user.firstName && user.lastName && user.userName && user.password) {
       this.props.register(user);
     }

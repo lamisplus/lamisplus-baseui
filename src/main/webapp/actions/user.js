@@ -10,20 +10,24 @@ import * as ACTION_TYPES from "./types";
  * @method POST => register() -> register a new User
 
  */
-export const register = (firstName, lastName, userName, password) => dispatch => {
-    const data = { firstName, lastName, userName, password }
-    axios
-      .post(`${baseUrl}register`, data)
-      .then(response => {
+export const register = (data) => (dispatch) => {
+  axios
+    .post(`${baseUrl}register/`, data)
+    .then((response) => {
+      try {
         dispatch({
-            type: ACTION_TYPES.REGISTER_SUCCESS,
-            payload: "Registered"
+          type: ACTION_TYPES.REGISTER_SUCCESS,
+          payload: response.data,
         });
-      })
-      .catch(error => {
-        dispatch({
-            type: ACTION_TYPES.REGISTER_FAILURE,
-            payload: "Erro registering"
-        });
+      } catch (err) {
+        console.log(err);
+      }
+    })
+    .catch((error) => {
+      dispatch({
+        type: ACTION_TYPES.REGISTER_FAILURE,
+        payload: "Something went wrong, please try again",
       });
-  };
+      console.log(error);
+    });
+};
