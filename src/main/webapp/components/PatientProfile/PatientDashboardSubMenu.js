@@ -15,7 +15,10 @@ import * as CODES from "api/codes";
 import { ToastContainer, toast } from "react-toastify";
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
-import { update } from "../../actions/visit";
+import { update } from "actions/visit";
+import { fetchByHospitalNumber} from "actions/patients";
+import { APPLICATION_CODESET_RELATIONSHIPS } from "actions/types";
+import { fetchApplicationCodeSet } from "actions/applicationCodeset";
 
 Moment.locale("en");
 momentLocalizer();
@@ -31,12 +34,13 @@ function PatientDashboardSubMenu(props) {
   const [showFormModal, setShowFormModal] = useState(false);
   const [currentForm, setCurrentForm] = useState(false);
   const [checkIn, setCheckIn] = useState(false);
+  const [patientType, setPatientType] = useState();
   const formInfo = [
     {
       code: CODES.ADMIT_PATIENT_FORM,
       programCode: CODES.GENERAL_SERVICE,
       formName: "ADMIT_PATIENT",
-      typePatient: CODES.IN_PATENT_UNBOOKED,
+      typePatient: CODES.IN_PATIENT_UNBOOKED,
     },
     {
       code: CODES.DISCHARGE_PATIENT_FORM,
@@ -62,6 +66,7 @@ function PatientDashboardSubMenu(props) {
   const onSuccess = () => {
     toast.success("Form saved successfully!", { appearance: "success" });
     setShowFormModal(false);
+    props.fetchPatientByHospitalNumber(props.patientHospitalNumber)
   };
 
   const onError = () => {
@@ -102,25 +107,20 @@ function PatientDashboardSubMenu(props) {
     setCurrentForm(formInfo.find((x) => x.formName === formName));
     setShowFormModal(true);
   };
-  const [relationshipTypes, setRelationshipTypes] = useState(false);
-  /*# Get list of RELATIVE parameter from the endpoint #*/
+
+  /*# Get list of RELATIVE parameter  #*/
   React.useEffect(() => {
-    async function getCharacters() {
-      try {
-        const response = await fetch(
-          `${url}application-codesets/codesetGroup?codesetGroup=RELATIONSHIP`
-        );
-        const body = await response.json();
-        setRelationshipTypes(body);
-      } catch (error) {
-        console.log(error);
-      }
+    if(props.relationships.length === 0){
+      props.fetchApplicationCodeSet("RELATIONSHIP", APPLICATION_CODESET_RELATIONSHIPS);
     }
-    getCharacters();
-  }, []);
+  }, [props.relationships]);
+
+  React.useEffect(() => {
+    setPatientType(props.patient.typePatient);
+  }, [props.patient]);
 
   function getRelationshipName(id) {
-    return id ? relationshipTypes.find((x) => x.id == id).display : "";
+    return id ? props.relationships.find((x) => x.id == id).display : "";
   }
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -191,23 +191,28 @@ function PatientDashboardSubMenu(props) {
         {/* Show visit actions only when patient is checked in */}
         {props.patient && props.patient.dateVisitStart ? (
           <Dropdown item text="Visit Actions">
-            <Dropdown.Menu>
-              <Dropdown.Item
-                onClick={() => displayFormByFormName("ADMIT_PATIENT")}
-              >
-                Admit Patient
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => displayFormByFormName("TRANSFER_INPATIENT")}
-              >
-                Transfer Patient to Ward / Service
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => displayFormByFormName("DISCHARGE_PATIENT")}
-              >
-                Discharge Patient
-              </Dropdown.Item>
-            </Dropdown.Menu>
+            {patientType && ( patientType === CODES.IN_PATIENT_UNBOOKED || patientType === CODES.IN_PATIENT_BOOKED)  ? (
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={() => displayFormByFormName("TRANSFER_INPATIENT")}
+                >
+                  Transfer Patient to Ward / Service
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => displayFormByFormName("DISCHARGE_PATIENT")}
+                >
+                  Discharge Patient
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            ) : (
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={() => displayFormByFormName("ADMIT_PATIENT")}
+                >
+                  Admit Patient
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            )}
           </Dropdown>
         ) : (
           ""
@@ -279,11 +284,14 @@ function RelativeList({ relative, relationshipTypeName }) {
 const mapStateToProps = (state) => {
   return {
     patient: state.patients.patient,
+    relationships: state.applicationCodesets.relationships
   };
 };
 
 const mapActionToProps = {
   checkOutPatient: update,
+  fetchPatientByHospitalNumber: fetchByHospitalNumber,
+  fetchApplicationCodeSet: fetchApplicationCodeSet,
 };
 
 export default connect(

@@ -5,7 +5,7 @@ import {Card,CardContent,} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import {url} from '../../api'
-import {fetchService, fetchById, updateForm} from '../../actions/formBuilder'
+import {fetchService, fetchById, updateForm, fetchForms} from '../../actions/formBuilder'
 import {fetchByHospitalNumber} from '../../actions/patients'
 
 import {
@@ -37,7 +37,8 @@ const Update = props => {
     const textAreaRef = useRef(null);
 
     useEffect (() => {
-        props.fetchService()
+        props.fetchService();
+        props.fetchForms();
     }, [])
     useEffect (() => {
          //props.fetchById()
@@ -177,6 +178,7 @@ const mapActionsToProps = ({
     fetchById: fetchById,
     updateForm: updateForm,
     fetchPatientByHospitalNumber: fetchByHospitalNumber,
+    fetchForms:fetchForms
 })
 
 export default connect(mapStateToProps, mapActionsToProps)(Update)

@@ -1,13 +1,20 @@
 import React, { useState } from "react";
-import Page from "components/Page";
 import { ToastContainer, toast } from "react-toastify";
 import { makeStyles } from "@material-ui/core/styles";
-
+import Button from "@material-ui/core/Button";
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import CalendarViewPage from "components/Appointments/CalendarView";
+
 import ListViewPage from "components/Appointments/ListView";
 import * as actions from "actions/patients";
+import {fetchAllAppointments} from "actions/appointments"
 import { connect } from "react-redux";
-import { Tab } from 'semantic-ui-react'
+import Typography from '@material-ui/core/Typography';
+import {FaCalendarWeek, FaCalendarAlt, FaCalendarPlus} from 'react-icons/fa';
+import Box from '@material-ui/core/Box';
+import PropTypes from 'prop-types';
 import {
     Form,
     Input,
@@ -18,13 +25,15 @@ import {
     Row,
     FormGroup,
     Label,
-    Button
+    
   } from 'reactstrap';
   import { DateTimePicker } from "react-widgets";
   import SaveIcon from "@material-ui/icons/Search";
   import MatButton from "@material-ui/core/Button";
+  import AddIcon from '@material-ui/icons/Add';
   import Moment from "moment";
   import momentLocalizer from "react-widgets-moment";
+import NewAppointment from "./NewAppointment";
 
   //Dtate Picker package
 Moment.locale("en");
@@ -41,19 +50,58 @@ const useStyles = makeStyles((theme) => ({
     margin: "5px",
   }
 }));
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
+  return (
+      <Typography
+          component="div"
+          role="tabpanel"
+          hidden={value !== index}
+          id={`scrollable-force-tabpanel-${index}`}
+          aria-labelledby={`scrollable-force-tab-${index}`}
+          {...other}
+      >
+          {value === index && <Box p={5}>{children}</Box>}
+      </Typography>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+      id: `scrollable-force-tab-${index}`,
+      'aria-controls': `scrollable-force-tabpanel-${index}`,
+  };
+}
 function HomePage(props) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const [values, setValues] = useState({});
   const [searching, setSearching] = useState(false);
   const [fetchingPatient, setFetchingPatient] = useState(false);
-  const hospitalNumber =
-    props.hospitalNumber || props.patient.hospitalNumber || "";
-
+  const [loading, setLoading] = useState(false);
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+      setValue(newValue);
   };
+  React.useEffect(() => {
+    setLoading(true)
+    const onSuccess = () => {
+     // setData(props.previousMedications);
+      setLoading(false)
+    }
+    const onError = () => {
+      setLoading(false)
+     // setErrorMsg("Could not fetch previous medications, try again later");
+    }
+    props.fetchAllAppointments(onSuccess, onError);
+  }, [props.patientId]);
+  
  
  const events = [
   { id: 1, title: 'event 1', date: '2020-05-26' },
@@ -71,113 +119,78 @@ function HomePage(props) {
     {
       menuItem: 'Calendar View',
       render: () => <Tab.Pane attached={false}><CalendarViewPage events={events}/></Tab.Pane>,
+    },
+    {
+      menuItem: 'New Appointment',
+      render: () => <Tab.Pane attached={false}><CalendarViewPage events={events}/></Tab.Pane>,
     }
   ]
+
+  return(
+    <React.Fragment>
+    <AppBar position="static">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            variant="scrollable"
+            scrollButtons="on"
+            indicatorColor="secondary"
+            textColor="inherit"
+            aria-label="scrollable force tabs example"
+          >
+            <Tab
+              className={classes.title}
+              label="List View"
+              icon={<FaCalendarWeek />}
+              {...a11yProps(0)}
+            />
+            <Tab
+              className={classes.title}
+              label="Calendar View"
+              icon={<FaCalendarAlt />}
+              {...a11yProps(1)}
+            />
+             <Tab
+              className={classes.title}
+              label="Create Appointment"
+              icon={<FaCalendarPlus />}
+              {...a11yProps(2)}
+            /> 
+          </Tabs>
+          <div></div>
+        </AppBar>
+
+        <TabPanel value={value} index={0}>
+        <ListViewPage events={events}/>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+        <CalendarViewPage events={events}/>
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+        <NewAppointment />
+        </TabPanel>
+        </React.Fragment>
+  )
   return (
     <div className={classes.inforoot}>
      <ToastContainer  />
      <div className={classes.header}>Appointments</div >
-    <Form>
-           <Row>
-               <Col md={12}>
-           <Card>
-              <CardBody>
-                <Row>
-                    <Col md={3}>
-                    <FormGroup>
-                      <Label for="startDate">Appointments From</Label>
-                      <DateTimePicker
-                        time={false}
-                        name="startDate"
-                        id="startDate"
-                        value={values.startDate}
-                        onChange={value =>
-                          setValues({ ...values, startDate: value })
-                        }
-                        
-                        
-                      />
-                    </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                    <FormGroup>
-                      <Label for="endDate">Appointments To</Label>
-                      <DateTimePicker
-                        time={false}
-                        name="endDate"
-                        id="endDate"
-                        value={values.endDate}
-                        onChange={value =>
-                          setValues({ ...values, endDate: value })
-                        }
-                        defaultValue={new Date()}
-                        max={new Date()}
-                        required
-                      />
-                    </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                    <FormGroup>
-                      <Label for="patientId">Patient ID</Label>
-                      <Input
-                        type="text"
-                        name="patientId"
-                        id="patientId"
-                      
-                        value={values.patientId}
-                        onChange={value =>
-                            setValues({ ...values, patientId: value })
-                          }
-
-                      />
-                    </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                    <FormGroup>
-                      <Label for="service">Services</Label>
-                      <Input
-                         type="select"
-                        name="service"
-                        id="service"
-                      
-                        value={values.service}
-                        onChange={value =>
-                            setValues({ ...values, service: value })
-                          }
-                      >
-<option>No Services</option>
-                          </Input>
-                    </FormGroup>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md={12}>
-                    <MatButton
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  startIcon={<SaveIcon />}
-                  disabled={searching}
-                >
-
-                  {!searching ?
-                  <span style={{textTransform: 'capitalize'}}>Search</span>
-                   : <span style={{textTransform: 'capitalize'}}>Searching...</span>}
-                  
-                </MatButton>
-                    </Col>
-                </Row>
-</CardBody>
-               </Card>
-              
-               </Col>
-           </Row>
-        <Row>
-          <Col md={12}>
-          <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
-          </Col>
-        </Row>
-        </Form>   
+     <Row>
+<Col md={12}>
+     <Button
+                variant="contained"
+                color="primary"
+                className="float-right mr-1"
+                startIcon={<AddIcon />}
+              >
+                <span style={{textTransform: 'capitalize'}}>Add </span>
+                &nbsp;&nbsp;
+                <span style={{textTransform: 'lowercase'}}>Patient </span>
+                
+              </Button>
+              </Col>
+              </Row>
+          <Tab menu={{ secondary: true, pointing: true }} panes={panes} /> 
        
     </div>
   );
@@ -185,13 +198,13 @@ function HomePage(props) {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    patient: state.patients.patient,
     hospitalNumber: ownProps.match.params.hospitalNumber,
   };
 };
 
 const mapActionToProps = {
   fetchPatientByHospitalNumber: actions.fetchByHospitalNumber,
+  fetchAllAppointments: fetchAllAppointments
 };
 
 export default connect(mapStateToProps, mapActionToProps)(HomePage);

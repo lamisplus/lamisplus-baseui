@@ -8,8 +8,16 @@ import { Dashboard } from "@material-ui/icons";
 import IconButton from '@material-ui/core/IconButton';
 
 const PatientSearch = (props) => {
+  const [loading, setLoading] = React.useState(true);
+
       useEffect(() => {
-        props.fetchAllPatients();
+        const onSuccess = () => {
+          setLoading(false);
+        };
+        const onError = () => {
+          setLoading(false);
+        };
+        props.fetchAllPatients(onSuccess, onError);
       }, []); //componentDidMount
 
       const calculate_age = dob => {
@@ -44,14 +52,9 @@ const PatientSearch = (props) => {
           },
           { title: "Patient ID", field: "id" },
           { title: "Age", field: "age", filtering: false },
-          { title: "Address", field: "address", filtering: false },
-          {
-            title: "Action",
-            field: "actions",
-            filtering: false,
-          },
+          { title: "Address", field: "address", filtering: false }
         ]}
-      
+        isLoading={loading}
         data={props.patientsList.map((row) => ({
           name: row.firstName +  ' ' + row.lastName,
           id: row.hospitalNumber,
@@ -61,25 +64,20 @@ const PatientSearch = (props) => {
           row.dob === "" )
             ? 0
             : calculate_age(row.dob),
-          address: row.street || '',
-          actions: 
-          <div>
-          <IconButton
-          color="primary"
-          aria-label="View Patient"
-          title="View Patient"
-        >
-          <Link
-            to={{
-              pathname: "/patient-dashboard/"+row.hospitalNumber
-            }}
-          >
-            <Dashboard title="Patient Dashboard" aria-label="View Patient" />
-          </Link>
-        </IconButton></div>
-          
+          address: row.street || ''  ,
+          patientId: row.patientId,
+          visitId: row.visitId        
         }))}
         
+        actions= {[
+          {
+            icon: 'dashboard',
+            iconProps: {color: 'primary'},
+            tooltip: 'Patient Dashboard',
+            onClick: (event, rowData) => window.location.href = "/patient-dashboard/"+rowData.id
+          }]}
+          //overriding action menu with props.actions 
+          components={props.actions}
         options={{
           headerStyle: {
             backgroundColor: "#9F9FA5",
@@ -92,7 +90,7 @@ const PatientSearch = (props) => {
           filtering: true,
           exportButton: false,
           searchFieldAlignment: 'left',
-
+          actionsColumnIndex: -1
         }}
       />
     </div>

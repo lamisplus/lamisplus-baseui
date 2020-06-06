@@ -159,7 +159,6 @@ function MedicationPage(props) {
     const PatientID = props.patientId;
     const visitId = props.visitId;
     const [medis, setmedis] = useState([]);
-    const [previousMedicationList, setPreviousMedicationList] = useState([]);
     const [showLoading, setShowLoading] = useState(false);  
     
     
@@ -283,10 +282,7 @@ function MedicationPage(props) {
                    
                 { medis.length > 0 ?
                     <Row>
-                        
-                        <br/>
-                        <br/>
-                       
+                      
                         <Col lg={12} >
                             <Card  style={cardStyle} >
                                 <CardHeader>Current Drug Order</CardHeader>

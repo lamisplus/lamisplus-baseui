@@ -19,7 +19,7 @@ const FormRenderer = props => {
   const [showErrorMsg, setShowErrorMsg] = React.useState(false)
   const [showLoading, setShowLoading] = React.useState(false)
   const [showLoadingEncounter, setShowLoadingEncounter] = React.useState(false)
-  const [submission, setSubmission] = React.useState(props.submission)
+  const [submission, setSubmission] = React.useState({...props.submission, ...{ data: { patient: props.patient }}})
   const [showLoadingForm, setShowLoadingForm] = React.useState(true)
   const onDismiss = () => setShowErrorMsg(false)
   const options = {}
@@ -133,6 +133,7 @@ const FormRenderer = props => {
 
 const mapStateToProps = (state = {formManager: {}}) => {
   return {
+    patient: state.patients.patient,
     form: state.formManager.form,
     formEncounter: state.formManager.formEncounter,
     errors: state.formManager.errors,

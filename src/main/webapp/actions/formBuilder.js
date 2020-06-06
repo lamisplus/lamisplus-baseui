@@ -124,3 +124,22 @@ export const fetchAll = (onSuccess, onError) => dispatch => {
 
         })
 }
+
+export const fetchForms = () => dispatch => {
+    axios.get(`${url}programs/1/forms`)
+        .then(response => {
+            console.log(response)
+            dispatch({
+                type: FORMTYPES.FORMTYPES_FETCH_ALL,
+                payload: response.data
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            dispatch({
+                type: FORMTYPES.FORMTYPES_ERROR,
+                payload: 'Something went wrong'
+
+            })
+        })
+}

@@ -143,3 +143,18 @@ export const AUTHENTICATE = 'AUTHENTICATE'
  */
 export const UPDATE_VISIT = 'UPDATE_VISIT'
 export const UPDATE_VISIT_ERROR = 'UPDATE_VISIT_ERROR'
+
+/**
+ * @TYPES
+ * ===============================================
+ * APPLICATION CODESET
+ */
+export const APPLICATION_CODESET_PRIORITIES = 'APPLICATION_CODESET_PRIORITIES'
+export const APPLICATION_CODESET_RELATIONSHIPS = 'APPLICATION_CODESET_RELATIONSHIPS'
+/**
+ * @TYPES
+ * ===============================================
+ * APPOINTMENTS
+ */
+export const APPOINTMENTS_FETCH_ALL = 'APPOINTMENTS_FETCH_ALL'
+export const APPOINTMENTS_ERROR = 'APPOINTMENTS_ERROR'

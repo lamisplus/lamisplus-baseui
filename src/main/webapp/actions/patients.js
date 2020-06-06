@@ -23,22 +23,27 @@ import { toast } from "react-toastify";
  * @method GET => fetchPatientEncounterProgramCodeExclusionList() get all patient's encounter that is not general service: params{patientId, onSuccess, onError} || query{null}
  */
 
-export const fetchAll = () => dispatch => {
-  console.log(baseUrl);
+export const fetchAll = (onSuccess, onError) => dispatch => {
   axios
     .get(`${baseUrl}patients/`)
     .then(response => {
-      //console.log(response.data);
+      if(onSuccess){
+        onSuccess();
+      }
       dispatch({
         type: ACTION_TYPES.PATIENTS_FETCH_ALL,
         payload: response.data
       });
     })
-    .catch(error =>
+    .catch(error => {
+      if(onError){
+        onError();
+      }
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
         payload: "Something went wrong, please try again"
       })
+    }
     );
 };
 
@@ -154,21 +159,27 @@ export const Delete = (id, onSuccess) => dispatch => {
 
 
 
-export const fetchPatientAllergies = id => dispatch => {
+export const fetchPatientAllergies = (id, onSuccess, onError) => dispatch => {
   axios
-    .get(`${baseUrl}patients/${id}/encounters/d157d4e2-4031-499d-b32b-7562208a10cf/`)
+    .get(`${baseUrl}patients/${id}/encounters/${CODES.PATIENT_ALLERGY_FORM}/`)
     .then(response => {
+      if(onSuccess){
+        onSuccess();
+      }
       dispatch({
         type: ACTION_TYPES.PATIENT_ALLERGIES,
         payload: response.data
       })
     })
-    .catch(error =>
+    .catch(error => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
         payload: 'Something went wrong, please try again'
       })
-      
+      if(onError){
+        onError();
+      }
+    }
     )
    
 }
@@ -227,14 +238,18 @@ export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
          type: ACTION_TYPES.PATIENT_LAB_ORDERS,
          payload: response.data
        })
+       if(onSuccess){
        onSuccess()
+       }
      })
      .catch(error => {
        dispatch({
          type: ACTION_TYPES.PATIENTS_ERROR,
          payload: 'Something went wrong, please try again'
        })
+       if(onError){
        onError()
+       }
       }
      )
      }  
@@ -266,6 +281,7 @@ export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
   axios
     .get(`${baseUrl}patients/${id}`)
     .then(response => {
+      console.log('about to dispatch patient')
       dispatch({
         type: ACTION_TYPES.PATIENTS_FETCH_BY_ID,
         payload: response.data
