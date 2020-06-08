@@ -1,11 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import { Modal, ModalHeader, ModalBody,
-Form,
-Row,
-Col,
-FormGroup,
-Label,Input,Card,CardBody
-} from 'reactstrap';
+import React, {useState} from 'react';
+import { Modal, ModalHeader, ModalBody,Form,FormFeedback,Row,Col,
+FormGroup,Label,Input,Card,CardBody} from 'reactstrap';
 import { connect } from 'react-redux';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -72,30 +67,59 @@ const ModalSampleResult = (props) => {
   const labId = datasample.id
   const [loading, setLoading] = useState(false)
   const [samples, setSamples] = useState({}) 
+  const [otherfields, setOtherFields] = 
+          useState({
+          sample_priority:"",
+          time_result_enetered:"",
+          date_result_reported:"",
+          result_entered_by:"",
+          test_result:"",
+          date_asseyed:""
+        });
+  const [errors, setErrors] = useState({});
 
-    const handleInputChangeSample = e => {
-      setSamples ({ ...samples, [e.target.name]: e.target.value });
-      console.log(samples)
-    }
+  const handleOtherFieldInputChange = e => {
+    setOtherFields ({ ...otherfields, [e.target.name]: e.target.value });
+    console.log(otherfields)
+  }
+
+  const validate = () => {
+    let temp = { ...errors }
+    temp.time_result_enetered = otherfields.time_result_enetered ? "" : "Date is required"
+    temp.date_result_reported = otherfields.date_result_reported ? "" : "Time  is required."
+    temp.result_entered_by = otherfields.result_entered_by ? "" : "This filed is required." 
+    temp.date_asseyed = otherfields.date_asseyed ? "" : "This filed is required." 
+    temp.test_result = otherfields.test_result ? "" : "This filed is required." 
+    setErrors({
+        ...temp
+    })
+    console.log(temp)
+    return Object.values(temp).every(x => x == "")
+  }
     const saveSample = e => {
       e.preventDefault()
-      setLoading(true);
-     
-      const newDatenow = moment(samples.date_result_reported).format("DD-MM-YYYY");
-      datasample.data.date_result_reported = newDatenow
-      datasample.data.lab_test_order_status = 5;
-      datasample.data.test_result = samples.test_result
+      if(validate()){
+          setLoading(true);
+          const newDateReported = moment(otherfields.date_result_reported).format("DD-MM-YYYY");
+          const newTimeSampleEntered = moment(otherfields.time_result_enetered).format("LT");
+          datasample.data.date_result_reported = newDateReported
+          datasample.data['time_sample_transfered'] = newTimeSampleEntered
+          datasample.data.lab_test_order_status = 5;
+          datasample.data.test_result = otherfields.test_result
+          datasample.data['result_entered_by'] = otherfields['result_entered_by']
+          datasample.data['date_asseyed'] = otherfields['date_asseyed']
+          
+          const onSuccess = () => {
+            setLoading(false);
+            props.togglestatus()       
+          }
+          const onError = () => {
+            setLoading(false); 
+            props.togglestatus()       
+          }
+          props.createCollectedSample(datasample, labId,onSuccess,onError)
 
-      
-      const onSuccess = () => {
-        setLoading(false);
-        props.togglestatus()       
-      }
-      const onError = () => {
-        setLoading(false); 
-        props.togglestatus()       
-      }
-      props.createCollectedSample(datasample, labId,onSuccess,onError)
+    }
     }
     //console.log(formdata)
     const textstyle = {
@@ -114,7 +138,7 @@ const ModalSampleResult = (props) => {
         <Card>
           <CardBody>
               <Row style={{ marginTop: '20px'}}>
-                <Col md={12} >
+                <Col md="12" >
                     <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder'}}>
                       <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}> {' '} {lab_test_group}</span> 
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : 
@@ -128,10 +152,8 @@ const ModalSampleResult = (props) => {
                     Date Assayed
                     <br/>
                     <DateTimePicker time={false} name="date_asseyed"  id="date_asseyed"  
-                      
-                      value={samples.date_asseyed}
                       onChange={value1 =>
-                        setSamples({ ...samples, date_asseyed: value1 })
+                        setOtherFields({ ...otherfields, date_asseyed: value1 })
                       }
                     /> 
                     </Col>
@@ -139,18 +161,32 @@ const ModalSampleResult = (props) => {
                     Date Reported
                     <br/>
                     <DateTimePicker time={false} name="date_result_reported"  id="date_result_reported"  
-                      
-                      value={samples.date_result_reported}
                       onChange={value1 =>
-                        setSamples({ ...samples, date_result_reported: value1 })
+                        setOtherFields({ ...otherfields, date_result_reported: value1 })
                       }
                     />            
                     </Col>
-                  
-                  <Col xs="4">
-                    </Col>                 
-                    <Col xs="4">
+                    <Col md="4">
                     
+                      <Label for=''>Time Transfer</Label>
+                      
+                      <DateTimePicker
+                          date={false}
+                          name="time_result_enetered"
+                          id="time_result_enetered"
+                          onChange={value1 =>
+                            setOtherFields({ ...otherfields, time_result_enetered: value1 })
+                          }
+                      />
+                          {errors.time_result_enetered !="" ? (
+                            <span className={classes.error}>{errors.time_result_enetered}</span>
+                          ) : "" }
+                   
+                    </Col>  
+                  </Row>
+                  <Row>             
+                    <Col xs="5">
+
                     <FormGroup>
                     <br/>
                           <Label for="examplePassword"> Result  </Label>
@@ -158,25 +194,42 @@ const ModalSampleResult = (props) => {
                             type='text'
                             name='test_result'
                             id='test_result'
-                            onChange={handleInputChangeSample}
-                            value = {samples.test_result}
+                            onChange={handleOtherFieldInputChange}
+                            value = {otherfields.test_result}
                             style={{marginTop: '0rem' }}                                    
                           >
                         </Input>
                       </FormGroup>
                       </Col>
-                    <Col xs="4">
-                    <br/>
+                    <Col xs="3">
                     <FormGroup>
-                     
                       <p style={{marginTop: '2rem' }} >{unit_measurement}</p>   
                       </FormGroup>                 
                     </Col>
-             
-            </Row>
-            <br/>
-            {loading ? <Spinner /> : ""}
-            <br/>
+                    <Col md="4">
+                        <FormGroup>
+                        <Label for="occupation">Result Entered by </Label>
+
+                            <Input
+                              type="select"
+                              name="result_entered_by"
+                              id="result_entered_by"
+                              vaule={otherfields.result_entered_by}
+                              onChange={handleOtherFieldInputChange}
+                              {...(errors.result_entered_by && { invalid: true})} 
+                            >
+                              <option value=""></option>
+                                <option value="Dorcas"> Dorcas </option>
+                                <option value="Jeph"> Jeph </option>
+                                <option value="Debora"> Debora </option>
+                          </Input>
+                              <FormFeedback>{errors.result_entered_by}</FormFeedback>
+                    </FormGroup>
+                </Col>
+                </Row>
+              <br/>
+              {loading ? <Spinner /> : ""}
+              <br/>
               <MatButton
                   type='submit'
                   variant='contained'

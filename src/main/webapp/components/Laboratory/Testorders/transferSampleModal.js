@@ -1,33 +1,22 @@
-import React, {useState, useEffect} from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter ,
-Form,
-Row,
-Col,
-FormGroup,
-Label,
-Input, Card,CardBody
-} from 'reactstrap';
+import React, {useState} from 'react';
+import { Modal, ModalHeader, ModalBody,Form,FormFeedback,
+Row,Col,FormGroup,Label,Input, Card,CardBody} from 'reactstrap';
 import { connect } from 'react-redux';
-import { ToastContainer, toast } from "react-toastify";
 import MatButton from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import SaveIcon from '@material-ui/icons/Save'
 import CancelIcon from '@material-ui/icons/Cancel'
-import "react-toastify/dist/ReactToastify.css";
-import "react-widgets/dist/css/react-widgets.css";
 import { DateTimePicker } from 'react-widgets';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
 import {url} from '../../../api'
 import { Alert } from 'reactstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
 import { Spinner } from 'reactstrap';
 
 Moment.locale('en');
 momentLocalizer();
-
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -61,12 +50,17 @@ const useStyles = makeStyles(theme => ({
   },
   input: {
     display: 'none'
+  },
+  error:{
+    color: '#f85032',
+    fontSize: '12.8px'
   }
 }))
 
 const ModalSampleTransfer = (props) => {
   const classes = useStyles()
   const datasample = props.datasample ? props.datasample : {};
+  //console.log(datasample)
   const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
   const description = datasample.data ? datasample.data.description : null ;
   console.log(lab_test_group)
@@ -74,29 +68,49 @@ const ModalSampleTransfer = (props) => {
   const [loading, setLoading] = useState(false)
   const [visible, setVisible] = useState(true);
   const onDismiss = () => setVisible(false);
-  const [samples, setSamples] = useState({}) 
+  const [otherfields, setOtherFields] = useState({date_sample_transfered:"",sample_transfered_by:"",sample_priority:"",time_sample_transfered:"",comment:"", lab_test_order_status:""});
+  const [errors, setErrors] = useState({});
 
-    const handleInputChangeSample = e => {
-      setSamples ({ ...samples, [e.target.name]: e.target.value });
-      console.log(samples)
+    const handleOtherFieldInputChange = e => {
+      setOtherFields ({ ...otherfields, [e.target.name]: e.target.value });
+      console.log(otherfields)
     }
+    const validate = () => {
+      let temp = { ...errors }
+      temp.date_sample_transfered = otherfields.date_sample_transfered ? "" : "Date is required"
+      temp.time_sample_transfered = otherfields.time_sample_transfered ? "" : "Time  is required."
+      temp.lab_test_order_status = otherfields.lab_test_order_status ? "" : "This field is required."
+      temp.sample_transfered_by = otherfields.sample_transfered_by ? "" : "This filed is required."
+      temp.comment = otherfields.comment ? "" : "Comment is required." 
+      setErrors({
+          ...temp
+      })
+      console.log(temp)
+      return Object.values(temp).every(x => x == "")
+    }
+
     const saveSample = e => {
       e.preventDefault()
-      setLoading(true);
-      const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
-      datasample.data.lab_test_order_status = 2;
-      datasample.data.date_sample_collected = newDatenow
-      datasample.data.comment = samples.comment
-      
-      const onSuccess = () => {
-        setLoading(false);
-        props.togglestatus()       
+      if(validate()){
+        setLoading(true);
+        const newDateSampleTransfered = moment(otherfields.date_sample_transfered).format("DD-MM-YYYY");
+        const newTimeSampleTransfered = moment(otherfields.time_sample_transfered).format("LT");
+        datasample.data.lab_test_order_status = 2;
+        const onSuccess = () => {
+          setLoading(false);
+          props.togglestatus()       
+        }
+        const onError = () => {
+          setLoading(false); 
+          props.togglestatus()       
+        }
+        datasample['lab_number']= props.labnumber['lab_number']
+        datasample.data['date_sample_transfered'] = newDateSampleTransfered
+        datasample.data['time_sample_transfered'] = newTimeSampleTransfered
+        datasample.data['sample_transfered_by'] = otherfields['sample_transfered_by']
+        datasample.data.comment= otherfields['comment']
+        props.createCollectedSample(datasample, labId,onSuccess,onError)
       }
-      const onError = () => {
-        setLoading(false); 
-        props.togglestatus()       
-      }
-      props.createCollectedSample(datasample, labId,onSuccess,onError)
     }
   
   function checklanumber (lab_num){
@@ -128,45 +142,70 @@ const ModalSampleTransfer = (props) => {
           <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}> {' '} {lab_test_group}</span> 
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : 
           <span style={{ fontWeight: 'bolder'}}>{' '}  {description}</span>
-          &nbsp;&nbsp;&nbsp; Lab Number : &nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp; Lab Number : &nbsp;&nbsp;
               <span style={{ fontWeight: 'bolder'}}>{props.labnumber['lab_number']===""?" ---":props.labnumber['lab_number']}</span>
-
+            Order by : &nbsp;&nbsp;
+            <span style={{ fontWeight: 'bolder'}}>{ "Debora"}</span>
+              &nbsp;&nbsp;&nbsp; Priority : &nbsp;&nbsp;
+          <span style={{ fontWeight: 'bolder'}}>{ "Normal"}</span>
           </p>
           
         </Alert>
         </Col>
-        <Col md={6}>
+        <Col md={4}>
           {/* <p>Sample Type {datasample.data.description}  </p> */}
           <FormGroup>
             
             <Label for='maritalStatus'>Date Transfer</Label>
             
             <DateTimePicker
-                        time={false}
-                        name="date_sample_collected"
-                        id="date_sample_collected"
-                        value={samples.date_sample_collected}
-                        onChange={value1 =>
-                          setSamples({ ...samples, date_sample_collected: value1 })
-                        }
-                        defaultValue={new Date()}
-                        max={new Date()}
-                        required
-                      /> 
+                time={false}
+                name="date_sample_transfered"
+                id="date_sample_transfered"
+                onChange={date_transfered =>
+                  setOtherFields({ ...otherfields, date_sample_transfered: date_transfered })
+                }
+                required
+            /> 
+                {errors.date_sample_transfered !="" ? (
+                    <span className={classes.error}>{errors.date_sample_transfered}</span>
+                ) : "" }
           </FormGroup>
           </Col>
-          <Col md={6}>
-          <FormGroup>
-            <Label for="exampleSelect">Lab Transfer To</Label>
-            <Input type="select" name="lab_test_order_status" id="lab_test_order_status" 
+          <Col md={3}>
+          <FormGroup> 
+            <Label for=''>Time Transfer</Label>
             
+            <DateTimePicker
+                date={false}
+                name="time_sample_transfered"
+                id="time_sample_transfered"
+                onChange={value1 =>
+                  setOtherFields({ ...otherfields, time_sample_transfered: value1 })
+                }
+            />
+                {errors.time_sample_transfered !="" ? (
+                  <span className={classes.error}>{errors.time_sample_transfered}</span>
+                ) : "" }
+          </FormGroup>
+          </Col>
+          <Col md={5}>
+          <FormGroup>
+            <Label for="exampleSelect">Lab Transfered To</Label>
+            <Input type="select" name="lab_test_order_status" id="lab_test_order_status" 
+            onChange={handleOtherFieldInputChange}
+              {...(errors.lab_test_order_status && { invalid: true})}
             >
               <option value=""></option>
-             
+              <option value="2">PCI Lab 1</option>
+              <option value="2">PCI Lab 2</option>
+              <option value="2">Turning Point Hospital Lab</option>
+              <option value="2">Others</option>
             </Input>
+            <FormFeedback>{errors.lab_test_order_status}</FormFeedback>
           </FormGroup>
           </Col>
-          <Col md={8}>
+          <Col md={7}>
           <FormGroup>
             
             <Label for='maritalStatus'>Note</Label>
@@ -174,11 +213,33 @@ const ModalSampleTransfer = (props) => {
               type='textarea'
               name='comment'
               id='comment'
-              onChange={handleInputChangeSample}
-               value = {samples.comment}                                     
-            >                        
-            </Input>          
+              onChange={handleOtherFieldInputChange}
+               value = {otherfields.comment}                                     
+               {...(errors.comment && { invalid: true})}                                   
+               >                         
+               </Input>
+               <FormFeedback>{errors.comment}</FormFeedback>          
           </FormGroup>          
+        </Col>
+        <Col md={5}>
+            <FormGroup>
+                <Label for="occupation">Transfer by </Label>
+
+                    <Input
+                      type="select"
+                      name="sample_transfered_by"
+                      id="sample_transfered_by"
+                      vaule={otherfields.sample_transfered_by}
+                      onChange={handleOtherFieldInputChange}
+                      {...(errors.sample_transfered_by && { invalid: true})} 
+                    >
+                      <option value=""></option>
+                        <option value="Dorcas"> Dorcas </option>
+                        <option value="Jeph"> Jeph </option>
+                        <option value="Debora"> Debora </option>
+                  </Input>
+                      <FormFeedback>{errors.sample_transfered_by}</FormFeedback>
+            </FormGroup>
         </Col>
        </Row>
        <br/>

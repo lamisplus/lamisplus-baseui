@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { Modal, ModalHeader, ModalBody,
-Form,
 Row,
 Col,
 FormGroup,
@@ -8,8 +7,8 @@ Label,Input,Card,CardBody
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import "react-widgets/dist/css/react-widgets.css";
+// import "../../Patient/node_modules/react-toastify/dist/ReactToastify.css";
+// import "../../Patient/node_modules/react-widgets/dist/css/react-widgets.css";
 import { DateTimePicker } from 'react-widgets';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';

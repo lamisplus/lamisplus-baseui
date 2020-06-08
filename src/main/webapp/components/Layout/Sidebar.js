@@ -34,7 +34,7 @@ const navItems = [
   { to: '/form-dashboard', name: 'Administration', exact: false, Icon: FaUserCog },
   { to: '/report', name: 'Report', exact: false, Icon: FaListUl },
   { to: '/visual', name: 'Visualization', exact: false, Icon: MdGraphicEq },
- 
+  { to: '/admin-dashboard', name: 'Administration Module', exact: false, Icon: FaUserCog },
 ];
 
 const bem = bn.create('sidebar');

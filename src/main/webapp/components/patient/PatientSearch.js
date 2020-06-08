@@ -1,155 +1,145 @@
 import React, {useEffect, useState} from 'react';
 import MaterialTable from 'material-table';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import { fetchAll, Delete as Del } from "../../actions/patients";
 import "./Patient.css";
-import { Dashboard } from "@material-ui/icons";
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { MdDashboard, MdDeleteForever, MdModeEdit } from "react-icons/md";
+import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
+import "@reach/menu-button/styles.css";
+
+
+
 
 const PatientSearch = (props) => {
-  const [loading, setLoading] = useState('')
-
-      useEffect(() => {
-        setLoading('true');
-        const onSuccess = () => {
-          setLoading(false)
-        }
-        const onError = () => {
-          setLoading(false)     
-        }
-            props.fetchAllPatients(onSuccess, onError);
-          }, []); //componentDidMount
-      const calculate_age = dob => {
-        var today = new Date();
-        var dateParts = dob.split("-");
-        var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-        var birthDate = new Date(dateObject); // create a date object directly from `dob1` argument
-        console.log(dateObject);
-        console.log(birthDate);
-        var age_now = today.getFullYear() - birthDate.getFullYear();
-        var m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          age_now--;
-        }
-      
-        if (age_now === 0) {
-          return m + " month(s)";
-        }
-        console.log(age_now);
-        return age_now + " year(s)";
-      };
+    const [loading, setLoading] = useState('')
+        useEffect(() => {
+            setLoading('true');
+            const onSuccess = () => {
+            setLoading(false)
+          }
+            const onError = () => {
+            setLoading(false)     
+          }
+              props.fetchAllPatients(onSuccess, onError);
+        }, []); //componentDidMount
+            const calculate_age = dob => {
+                var today = new Date();
+                    var dateParts = dob.split("-");
+                      var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+                          var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
+                            var age_now = today.getFullYear() - birthDate.getFullYear();
+                                var m = today.getMonth() - birthDate.getMonth();
+                                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                                          age_now--;
+                                      }
+                                    if (age_now === 0) {
+                                            return m + " month(s)";
+                                        }
+                                            return age_now + " year(s)";
+                                    };
 
     
-  return (
-    <div>
-      <MaterialTable
-        title="Find Patients"
-        columns={[
-          {
-            title: "Patient Name",
-            field: "name",
-          },
-          { title: "Patient ID", field: "id" },
-          { title: "Age", field: "age", filtering: false },
-          { title: "Address", field: "address", filtering: false },
-          {
-            title: "Action",
-            field: "actions",
-            filtering: false,
-          },
-        ]}
-        isLoading={loading}
-        data={props.patientsList.map((row) => ({
-          name: row.firstName +  ' ' + row.lastName,
-          id: row.hospitalNumber,
-          age: (row.dob === 0 ||
-          row.dob === undefined ||
-          row.dob === null ||
-          row.dob === "" )
-            ? 0
-            : calculate_age(row.dob),
-          address: row.street || '',
-          actions: 
-          <div>
-            <IconButton
-            color="primary"
-            aria-label="View Patient"
-            title="View Patient"
-            >
-              <Link
-                  to={{
-                    pathname: "/patient-dashboard",
-                    state: { hospitalNumber: row.hospitalNumber  }
-                  }}
-                >
-              <Dashboard title="Patient Dashboard" aria-label="View Patient" />
-            </Link>
-          </IconButton>
-          <IconButton
-            color="primary"
-            aria-label="Edit Patient"
-            title="Edit Patient"
-            >
-              <Link
-                  to={{
-                    pathname: "/patient-update",
-                    currentId: row
-                  }}
-                >
-              <EditIcon title="Edit" aria-label="Edit Patient" />
-            </Link>
-          </IconButton>
-          <IconButton
-            color="primary"
-            aria-label="Delete Patient"
-            title="Delete Patient"
-            >
-              <Link
-                  to={{
-                    pathname: "/patient-dashboard",
-                    state: { hospitalNumber: row.hospitalNumber  }
-                  }}
-                >
-              <DeleteIcon title="Edit" aria-label="Delete Patient" />
-            </Link>
-          </IconButton>
-
-        </div>
+    return (
+        <div>
+            <MaterialTable
+                title="Find patients"
+                    columns={[
+                        {
+                          title: "Patient Name",
+                          field: "name",
+                        },
+                            { title: "Patient ID", field: "id" },
+                            { title: "Age", field: "age", filtering: false },
+                            { title: "Address", field: "address", filtering: false },
+                            {title: "", field: "actions", filtering: false,},
+                          ]}
+                          isLoading={loading}
+                              data={props.patientsList.map((row) => ({
+                                  name: row.firstName +  ' ' + row.lastName,
+                                  id: row.hospitalNumber,
+                                  age: (row.dob === 0 ||
+                                  row.dob === undefined ||
+                                  row.dob === null ||
+                                  row.dob === "" )
+                                    ? 0
+                                    : calculate_age(row.dob),
+                                  address: row.street || '',
+                                  actions: 
+            <div>
           
-        }))}
-        
-        options={{
-          headerStyle: {
-            backgroundColor: "#9F9FA5",
-            color: "#000",
-          },
-          searchFieldStyle: {
-            width : '300%',
-            margingLeft: '250px',
-          },
-          filtering: true,
-          exportButton: false,
-          searchFieldAlignment: 'left',
+            <Menu>
+                <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px", }}>
+                  Actions <span aria-hidden>▾</span>
+                </MenuButton>
+                    <MenuList style={{ color:"#000 !important"}} >
+                        <MenuItem  style={{ color:"#000 !important"}}>                      
+                            <Link
+                                to={{
+                                  pathname: "/patient-dashboard",
+                                  state: { hospitalNumber: row.hospitalNumber  }
+                                }}
+                             >
+                                <MdDashboard size="15" />{" "}<span style={{color: '#000'}}>Patient Dashboard</span>
+                          </Link>                               
+                          </MenuItem>
+                          <MenuItem style={{ color:"#000 !important"}}>
+                                <Link
+                                    to={{
+                                      pathname: "/patient-update",
+                                      currentId: row
+                                    }}
+                                  >
+                                <MdModeEdit size="15" />{" "}<span style={{color: '#000'}}>Edit Patient </span>                   
+                              </Link>
+                          </MenuItem>                                      
+                          <MenuItem style={{ color:"#000 !important"}}>
+                              <Link
+                                  to={{
+                                    pathname: "/patient-dashboard",
+                                    state: { hospitalNumber: row.hospitalNumber  }
+                                  }}
+                              >
+                                <MdDeleteForever size="15"  />{" "}
+                                <span style={{color: '#000'}}>Delete Patient</span>
+                            </Link>                                  
+                          </MenuItem>
+                  </MenuList>
+            </Menu>
+          </div>            
+          }))}
+          
+          options={{
+              headerStyle: {
+              backgroundColor: "#9F9FA5",
+              color: "#000",
+            },
+              searchFieldStyle: {
+              width : '300%',
+              margingLeft: '250px',
+            },
+              filtering: true,
+              exportButton: false,
+              searchFieldAlignment: 'left',
 
-        }}
-      />
-    </div>
-  );
-}
+          }}
+        />
+      </div>
+    );
+  }
 
-const mapStateToProps = state => {
 
-    return {
-      patientsList: state.patients.list
+    const mapStateToProps = state => {
+      return {
+          patientsList: state.patients.list
+      };
+    };    
+  
+  
+    const mapActionToProps = {
+        fetchAllPatients: fetchAll,
+        deletePatient: Del
     };
-  };
-  
-  const mapActionToProps = {
-    fetchAllPatients: fetchAll,
-    deletePatient: Del
-  };
-  
-export default connect(mapStateToProps, mapActionToProps)(PatientSearch);
+    
+    
+  export default connect(mapStateToProps, mapActionToProps)(PatientSearch);

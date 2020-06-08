@@ -13,13 +13,13 @@ import SignIn from "pages/SignPage";
 import { history } from "./history";
 
 const DashboardPage = React.lazy(() => import("pages/DashboardPage"));
-
+const AdministrativeDashboard = React.lazy(() => import("components/Admin/AdministrativeDashBoard"));
 /* New Page loading using easy loading */
 const PateintRegistationPage = React.lazy(() =>
-  import("components/patient/PateintRegistationPage")
+  import("components/Patient/PateintRegistationPage")
 );
 const PateintUpdate= React.lazy(() =>
-  import("components/patient/EditPatient")
+  import("components/Patient/EditPatient")
 );
 const CheckInPage = React.lazy(() => import("components/CheckIn/CheckInPage"));
 const VitalSignsPage = React.lazy(() =>
@@ -40,7 +40,7 @@ const CollectSample = React.lazy(() =>import("components/Laboratory/Testorders/C
 const LaboratorySampleResultPage = React.lazy(() =>import("components/Laboratory/TestResult/CollectResult"));
 const SampleVerification = React.lazy(() => import("components/Laboratory/Sampleverifications/SampleVerification"));
 const PatientsPage = React.lazy(() =>
-  import("components/patient/PatientsPage")
+  import("components/Patient/PatientsPage")
 );
 const formDashboard = React.lazy(() => import('components/formBuilder/formDashboard'));
 const FormBuilder = React.lazy(() => import('components/formBuilder/FormBuilder'));
@@ -86,6 +86,7 @@ class Routes extends Component {
             <React.Suspense fallback={<PageSpinner />}>
               {/* The new routes are here  */}
               <Route exact path="/dashboard" component={DashboardPage} />
+              <Route exact path="/admin-dashboard" component={AdministrativeDashboard} />
               <Route
                 exact
                 path="/patient-registration"

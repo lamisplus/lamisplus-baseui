@@ -1,10 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {  Modal, ModalHeader, ModalBody, ModalFooter ,
-Form,
-Row,
-Col,
-FormGroup,
-Label,Input,Card,CardBody
+import {  Modal, ModalHeader, ModalBody, FormFeedback ,
+Form,Row,Col,FormGroup,Label,Input,Card,CardBody
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import MatButton from '@material-ui/core/Button'
@@ -19,7 +15,7 @@ import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
 
-import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
+import { sampleVerification, fetchFormById } from '../../../actions/laboratory';
 import { Alert } from 'reactstrap';
 import { Spinner } from 'reactstrap';
 
@@ -55,6 +51,10 @@ const useStyles = makeStyles(theme => ({
   },
   input: {
     display: 'none'
+  },
+  error:{
+    color: '#f85032',
+    fontSize: '12.8px'
   }
 }))
 
@@ -64,38 +64,66 @@ momentLocalizer();
 
 const ModalSample = (props) => {
   const classes = useStyles()
-
-  const datasample = props.datasample ? props.datasample : {};
-  const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
-  const description = datasample.data ? datasample.data.description : null ;
-  const date_sample_collected = datasample.data ? datasample.data.date_sample_collected : null ;
+  console.log()
+  const dataSample = props.datasample ? props.datasample : {};
+  const lab_test_group = dataSample.data ? dataSample.data.lab_test_group : null ;
+  const description = dataSample.data ? dataSample.data.description : null ;
+  const date_sample_verified = dataSample.data ? dataSample.data.date_sample_verified : null ;
   console.log(lab_test_group)
-  const labId = datasample.id
+  const labId = dataSample.id
   const [loading, setLoading] = useState(false)
   const [samples, setSamples] = useState({}) 
+  const [otherFields, setotherFields] = 
+            useState({  date_sample_verified:"",
+                        sample_verified_by:"",
+                        sample_priority:"",
+                        time_sample_verified:"",
+                        comment:"", 
+                        verification_status:""
+                    });
 
-    const handleInputChangeSample = e => {
-      setSamples ({ ...samples, [e.target.name]: e.target.value });
-      console.log(samples)
+  const [errors, setErrors] = useState({});
+
+    const handleOtherFieldInputChange = e => {
+      setotherFields ({ ...otherFields, [e.target.name]: e.target.value });
+      console.log(otherFields)
+    }
+
+    const validate = () => {
+      let temp = { ...errors }
+      temp.date_sample_verified = otherFields.date_sample_verified ? "" : "Date is required"
+      temp.time_sample_transfered = otherFields.time_sample_transfered ? "" : "Time  is required."
+      temp.sample_verified_by = otherFields.sample_verified_by ? "" : "This filed is required." 
+      temp.comment = otherFields.comment ? "" : "Comment is required." 
+      temp.verification_status = otherFields.verification_status ? "" : "This filed is required."
+      setErrors({
+          ...temp
+      })
+      console.log(temp)
+      return Object.values(temp).every(x => x == "")
     }
     const saveSample = e => {
       e.preventDefault()
-      setLoading(true);
-      
-      const newDatenow = moment(samples.date_sample_collected).format("DD-MM-YYYY");
-      datasample.data.lab_test_order_status = samples.lab_test_order_status;
-      datasample.data.date_sample_collected = newDatenow
-      datasample.data.comment = samples.comment
-      
-      const onSuccess = () => {
-        setLoading(false);
-        props.togglestatus()       
-      }
-      const onError = () => {
-        setLoading(false); 
-        props.togglestatus()       
-      }
-      props.createCollectedSample(datasample, labId,onSuccess,onError)
+      if(validate()){
+          setLoading(true);    
+          const newDateSampleVerified = moment(otherFields.date_sample_transfered).format("DD-MM-YYYY");
+          const newTimeSampleVerified = moment(otherFields.time_sample_Verified).format("LT");
+          dataSample.data.lab_test_order_status = otherFields.verification_status;
+          dataSample.data['date_sample_verified'] = newDateSampleVerified
+          dataSample.data['time_sample_Verified'] = newTimeSampleVerified
+          dataSample.data.comment = otherFields['comment']
+          dataSample.data['sample_verified_by'] = otherFields.sample_verified_by
+          
+          const onSuccess = () => {
+            setLoading(false);
+            props.togglestatus()       
+          }
+          const onError = () => {
+            setLoading(false); 
+            props.togglestatus()       
+          }
+          props.sampleVerification(dataSample, labId,onSuccess,onError)
+        }
     }
   return (
       
@@ -115,62 +143,95 @@ const ModalSample = (props) => {
               &nbsp;&nbsp;&nbsp;&nbsp;Test Ordered : 
               <span style={{ fontWeight: 'bolder'}}>{" "}{description}</span>
                       &nbsp;&nbsp;&nbsp;&nbsp; Date Ordered :        
-              <span style={{ fontWeight: 'bolder'}}>{" "}{date_sample_collected}</span>
+              <span style={{ fontWeight: 'bolder'}}>{" "}{date_sample_verified}</span>
           </p>
           
         </Alert>
       </Col>
-      <Col md={6}>
-          
+      <Col md={4}>
           <FormGroup>
-            
             <Label for='maritalStatus'>Date Verified</Label>
-            
             <DateTimePicker
-                        time={false}
-                        name="date_sample_collected"
-                        id="date_sample_collected"
-                        value={samples.date_sample_collected}
-                        onChange={value1 =>
-                          setSamples({ ...samples, date_sample_collected: value1 })
-                        }
-                        defaultValue={new Date()}
-                        max={new Date()}
-                        required
-                      /> 
+                time={false}
+                name="date_sample_verified"
+                id="date_sample_verified"
+                onChange={value1 =>
+                  setotherFields({ ...otherFields, date_sample_verified: value1 })
+                }
+            /> 
+              {errors.time_sample_transfered !="" ? (
+                <span className={classes.error}>{errors.time_sample_transfered}</span>
+              ) : "" }
           </FormGroup>
         </Col>
-         
-          <Col md={6}>
+        <Col md={3}>
+          <FormGroup> 
+            <Label for=''>Time Verified</Label>
+            
+            <DateTimePicker
+                date={false}
+                name="time_sample_transfered"
+                id="time_sample_transfered"
+                onChange={value1 =>
+                  setotherFields({ ...otherFields, time_sample_transfered: value1 })
+                }
+            />
+                {errors.time_sample_transfered !="" ? (
+                  <span className={classes.error}>{errors.time_sample_transfered}</span>
+                  ) : "" }
+          </FormGroup>
+          </Col>
+        <Col md={5}>
           <FormGroup>
             <Label for="exampleSelect">Confirm Sample</Label>
-            <Input type="select" name="lab_test_order_status" id="lab_test_order_status" 
-            value={samples.lab_test_order_status}
-            onChange={handleInputChangeSample}>
+            <Input type="select" name="verification_status" id="verification_status" 
+              value={otherFields.verification_status}
+              {...(errors.verification_status && { invalid: true})}
+            onChange={handleOtherFieldInputChange}>
               <option value=""></option>
               <option value="3">Sample Valid </option>
               <option value="4">Sample Rejected</option>
+              
             </Input>
+            <FormFeedback>{errors.verification_status}</FormFeedback>
           </FormGroup>
           </Col>
-          <Col md={8}>
+          <Col md={7}>
           <FormGroup>
-            
             <Label for='maritalStatus'>Note</Label>
             <Input
               type='textarea'
               name='comment'
               id='comment'
-              onChange={handleInputChangeSample}
-               value = {samples.comment}
-                                                    
-            >
-                                     
-            </Input>
-          
+              onChange={handleOtherFieldInputChange}
+              value = {otherFields.comment}                                      
+              {...(errors.comment && { invalid: true})}                                   
+              >                         
+              </Input>
+              <FormFeedback>{errors.comment}</FormFeedback>                        
+            
           </FormGroup>
         </Col>  
-         
+        <Col md={5}>
+            <FormGroup>
+                <Label for="occupation">Verify by </Label>
+
+                    <Input
+                      type="select"
+                      name="sample_verified_by"
+                      id="sample_verified_by"
+                      vaule={otherFields.sample_verified_by}
+                      onChange={handleOtherFieldInputChange}
+                      {...(errors.sample_verified_by && { invalid: true})} 
+                    >
+                      <option value=""></option>
+                        <option value="Dorcas"> Dorcas </option>
+                        <option value="Jeph"> Jeph </option>
+                        <option value="Debora"> Debora </option>
+                  </Input>
+                      <FormFeedback>{errors.sample_verified_by}</FormFeedback>
+            </FormGroup>
+        </Col>
       
      </Row>
      <br/>
@@ -206,4 +267,4 @@ const ModalSample = (props) => {
   );
 }
 
-export default connect(null, { createCollectedSample, fetchFormById })(ModalSample);
+export default connect(null, { sampleVerification, fetchFormById })(ModalSample);

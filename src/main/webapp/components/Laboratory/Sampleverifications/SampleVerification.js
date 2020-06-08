@@ -5,7 +5,7 @@ import { TiArrowBack } from 'react-icons/ti'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Link } from 'react-router-dom'
 import MatButton from '@material-ui/core/Button'
-
+import {FaPlusSquare} from 'react-icons/fa';
 import {GoChecklist} from 'react-icons/go';
 import 'react-widgets/dist/css/react-widgets.css'
 import { ToastContainer } from 'react-toastify'
@@ -27,7 +27,7 @@ import {
   MenuItem,
 } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
-
+import ModalSample from './../Testorders/collectSampleModal';
 
 const useStyles = makeStyles({
   root: {
@@ -76,13 +76,25 @@ const useStyles = makeStyles({
   const userInfo = encounterresult
   const [modal, setModal] = useState(false) //Modal to collect sample 
   const togglemodal = () => setModal(!modal)
+  const [modal2, setModal2] = useState(false)//modal to Re-collect sample
+  const togglemodal2 = () => setModal2(!modal2)
   const [collectmodal, setcollectmodal] = useState([])//to collect array of datas into the modal and pass it as props
+
+  const [labNum, setlabNum] = useState({lab_number:"567845"})
+
+  const  checkLabNumber = newsample.hasOwnProperty("lab_number"); //check if that key exist in the array
+      if(checkLabNumber !==false){    
+           setlabNum({...labNum, lab_number:newsample.lab_number})
+      }
 
 const handlesample = (row) => {  
    setcollectmodal({...collectmodal, ...row});
    setModal(!modal) 
 }
-
+const handleSample = (row) => { 
+  setcollectmodal({...collectmodal, ...row});
+  setModal2(!modal2) 
+}
 const getGroup = e => {
   const getvalue =e.target.value;
   const testing = newsample.length>0?newsample:null
@@ -118,7 +130,10 @@ const sampleAction = (e) =>{
                 </MenuButton>
                 <MenuList style={{hover:"#eee"}}>
                   <MenuItem onSelect={() => handlesample(e)}><GoChecklist size="15" style={{color: '#3F51B5'}}/>{" "}Verify Sample</MenuItem>
-                                
+                  { e.data.lab_test_order_status==="4" ?
+                      <MenuItem onSelect={() => handleSample(e)}><FaPlusSquare size="15" style={{color: '#3F51B5'}}/>{" "}Re-collect Sample</MenuItem>
+                    :""
+                  }               
                 </MenuList>
             </Menu>
           )
@@ -187,7 +202,7 @@ const sampleAction = (e) =>{
                             className='cr-search-form__input '
                             name='lab_number'
                             id='lab_number'
-                            value=""
+                            value={labNum.lab_number}
                             disabled
                           />
                           </FormGroup>
@@ -231,7 +246,8 @@ const sampleAction = (e) =>{
         </Col>
       </Row>
       <ModalSampleVerify modalstatus={modal} togglestatus={togglemodal} datasample={collectmodal} />
-        
+      <ModalSample modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal}  labnumber={labNum}/>
+
       </Page>
   )
 }

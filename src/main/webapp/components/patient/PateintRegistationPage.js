@@ -20,13 +20,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { connect } from "react-redux";
-//Date Picker
 import "react-widgets/dist/css/react-widgets.css";
 import { DateTimePicker } from "react-widgets";
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import moment from "moment";
-// React Notification
 import Title from "components/Title/CardTitle";
 import { url } from "../../api";
 import { create } from "../../actions/patients";
@@ -35,10 +33,10 @@ import useForm from "../Functions/UseForm";
 import { Spinner } from 'reactstrap';
 import EditIcon from '@material-ui/icons/Edit';
 import {initialRelative} from './InitialRealative';
-
 //Dtate Picker package
 Moment.locale("en");
 momentLocalizer();
+
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -76,10 +74,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+
+
+
+
 const PatientRegistration = props => {
   console.log(moment("12-25-1995").format("DD/MM/YYYY"))
-
-    //const [currentId, setCurrentId] = useState(props.location.currentId) ;
   const currentId = props.location.currentId!=='' ? props.location.currentId : null
  
   const classes = useStyles();
@@ -90,15 +90,7 @@ const PatientRegistration = props => {
     initialfieldState_patientRegistration
   );
   
-  useEffect(() => { 
-    if (currentId != 0){
-        setValues({
-          ...props.patientDetail.find(x => x.patientId == currentId)
-        })
-        setErrors({})
-    }
 
-}, [currentId])
   /**
    * Initializing state properties
    */
@@ -116,77 +108,67 @@ const PatientRegistration = props => {
   const [saving, setSaving] = useState(false);
   const [display, setDisplay] = useState(false);
     //Get countries
-    useEffect(() => {
-      async function getCharacters() {
-        try {
-          const response = await fetch(apicountries);
-          const body = await response.json();
-          setCountries(body.map(({ name, id }) => ({ label: name, value: id })));
-          const defaultCountryId = body.find(x => x.name === "Nigeria").id;
-          setValues({ ...values, countryId: defaultCountryId });
-          setStateByCountryId(defaultCountryId);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      getCharacters();
-    }, []);
-const newrel =[JSON.stringify(relationshipTypes)]
+      useEffect(() => {
+          async function getCharacters() {
+              try {
+                const response = await fetch(apicountries);
+                    const body = await response.json();
+                        setCountries(body.map(({ name, id }) => ({ label: name, value: id })));
+                            const defaultCountryId = body.find(x => x.name === "Nigeria").id;
+                                setValues({ ...values, countryId: defaultCountryId });
+                                    setStateByCountryId(defaultCountryId);
+              } catch (error) {
+                //console.log(error);
+              }
+            }
+            getCharacters();
+      }, []);
 
 /*# Get list of RelationshipTypes parameter from the endpoint #*/
 useEffect(() => {
-  async function getCharacters() {
-    try {
-      const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=RELATIONSHIP');
-      const body = await response.json();
-      setRelationshipTypes(body.map(({ display, id }) => ({ name: display, id: id })));
-      
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  getCharacters();
-}, []);
+    async function getCharacters() {
+        try {
+            const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=RELATIONSHIP');
+                const body = await response.json();
+                    setRelationshipTypes(body.map(({ display, id }) => ({ name: display, id: id })));
           
+        } catch (error) {}
+      }
+    getCharacters();
+}, []);          
 /* ##### End of RelationshipTypes parameter from the endpoint ##########*/
 /*# Get list of gender parameter from the endpoint #*/
 useEffect(() => {
-  async function getCharacters() {
-    try {
-      const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=GENDER');
-      const body = await response.json();
-      setGender(body.map(({ display, id }) => ({ label: display, value: id })));
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  getCharacters();
+    async function getCharacters() {
+        try {
+            const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=GENDER');
+                const body = await response.json();
+                  setGender(body.map(({ display, id }) => ({ label: display, value: id })));
+        } catch (error) {}
+      }
+      getCharacters();
 }, []);
 /* ##### End of gender parameter from the endpoint ##########*/
 /*# Get list of OCUUPATION parameter from the endpoint #*/
 useEffect(() => {
-  async function getCharacters() {
-    try {
-      const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=OCCUPATION');
-      const body = await response.json();
-      setOccupation(body.map(({ display, id }) => ({ label: display, value: id })));
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  getCharacters();
+    async function getCharacters() {
+        try {
+            const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=OCCUPATION');
+               const body = await response.json();
+                  setOccupation(body.map(({ display, id }) => ({ label: display, value: id })));
+        } catch (error) {}
+      }
+    getCharacters();
 }, []);
 
 /*# Get list of EDUCATION parameter from the endpoint #*/
 useEffect(() => {
   async function getCharacters() {
     try {
-      const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=EDUCATION');
-      const body = await response.json();
-      setQualification(body.map(({ display, id }) => ({ label: display, value: id })));
-    } catch (error) {
-      console.log(error);
-    }
+        const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=EDUCATION');
+            const body = await response.json();
+                setQualification(body.map(({ display, id }) => ({ label: display, value: id })));
+    } catch (error) {}
   }
   getCharacters();
 }, []);
@@ -196,12 +178,10 @@ useEffect(() => {
 useEffect(() => {
   async function getCharacters() {
     try {
-      const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=MARITAL_STATUS');
-      const body = await response.json();
-      setMaterialStatus(body.map(({ display, id }) => ({ label: display, value: id })));
-    } catch (error) {
-      console.log(error);
-    }
+        const response = await fetch('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=MARITAL_STATUS');
+            const body = await response.json();
+                setMaterialStatus(body.map(({ display, id }) => ({ label: display, value: id })));
+    } catch (error) {}
   }
   getCharacters();
 }, []);
@@ -210,13 +190,12 @@ useEffect(() => {
    * Estimates the dob of an individual given
    */
   const estimatedob = age => {
-    const newage = (values["age"] = age);
-    var d = new Date();
-    var year = d.getFullYear();
-    // var month = d.getMonth();
-    // var day = d.getDate();
-    var c = new Date(year - newage, 6, 15);
-
+      const newage = (values["age"] = age);
+          var d = new Date();
+              var year = d.getFullYear();
+                // var month = d.getMonth();
+                // var day = d.getDate();
+                  var c = new Date(year - newage, 6, 15);
     return c;
   };
 
@@ -224,29 +203,28 @@ useEffect(() => {
    * Handles UI behaviour on Age Input change
    */
   const onAgeInputChange = e => {
-    setDisplay(true);
-    setValues({ ...values, dobEstimated: 1 });
-
-    if (e.target.value === "" || e.target.value === null) {
-      setDisplay(false);
-    }
-    handleEstimation();
+      setDisplay(true);
+          setValues({ ...values, dobEstimated: 1 });
+            if (e.target.value === "" || e.target.value === null) {
+              setDisplay(false);
+            }
+                handleEstimation();
   };
 
   /**
    * Handles UI behaviour on check of Estimation box
    */
   const handleEstimation = () => {
-    if (display) {
-      const actualAge = document.getElementById("age").value;
-      const dateOfBirth = moment(estimatedob(actualAge)).format("MM/DD/YYYY");
-      document.getElementById("dob").value = dateOfBirth;
-      //convert to the date format and setDob
-      const newdobdate = moment(dateOfBirth).format("MM-DD-YYYY");
-      setValues({ ...values, dob: newdobdate });
-      console.log(values)
-    }
-  };
+      if (display) {
+          const actualAge = document.getElementById("age").value;
+              const dateOfBirth = moment(estimatedob(actualAge)).format("MM/DD/YYYY");
+                document.getElementById("dob").value = dateOfBirth;
+                //convert to the date format and setDob
+                    const newdobdate = moment(dateOfBirth).format("MM-DD-YYYY");
+                        setValues({ ...values, dob: newdobdate });
+          }
+    };
+
 
   useEffect(() => {
      getCharacters();
@@ -254,59 +232,54 @@ useEffect(() => {
 
      async function getCharacters() {
        try {
-         const countries = await axios.get(apicountries);
-         setCountries(countries.data.map(({ name, id }) => ({ label: name, value: id })));
-         const defaultCountryId = countries.data.find(x => x.name === "Nigeria").id;
-         setValues({ ...values, countryId: defaultCountryId });
-         setStateByCountryId(defaultCountryId);
-       } catch (error) {
-         console.log(error);
-       }
+          const countries = await axios.get(apicountries);
+              setCountries(countries.data.map(({ name, id }) => ({ label: name, value: id })));
+                  const defaultCountryId = countries.data.find(x => x.name === "Nigeria").id;
+                      setValues({ ...values, countryId: defaultCountryId });
+                          setStateByCountryId(defaultCountryId);
+       } catch (error) {}
      }
-
-  
   //Get States from selected country
   const getStates = e => {
-    const getCountryId =
-     e.target.value;
-    setStateByCountryId(getCountryId); 
-    setValues({ ...values, countryId: getCountryId });
+      const getCountryId =
+          e.target.value;
+              setStateByCountryId(getCountryId); 
+                  setValues({ ...values, countryId: getCountryId });
   };
 
   function setStateByCountryId(getCountryId) {
-    async function getCharacters() {
-      const response = await fetch(apistate + getCountryId+"/states");
-      console.log(response)
-      const stateList = await response.json();
-      console.log(stateList)
-      setStates(stateList.map(({ name, id }) => ({ label: name, value: id })));
-    }
-    getCharacters();
+      async function getCharacters() {
+          const response = await fetch(apistate + getCountryId+"/states");
+              const stateList = await response.json();
+                  setStates(stateList.map(({ name, id }) => ({ label: name, value: id })));
+          }
+          getCharacters();
   }
 
   //fetch province
   const getProvinces = e => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-    const stateId = e.target.value;
-    async function getCharacters() {
-      const response = await fetch(`${url}state/` + stateId+"/provinces");
-      const provinceList = await response.json();
-      setProvinces(provinceList);
-    }
-    getCharacters();
+      setValues({ ...values, [e.target.name]: e.target.value });
+          const stateId = e.target.value;
+              async function getCharacters() {
+                  const response = await fetch(`${url}state/` + stateId+"/provinces");
+                      const provinceList = await response.json();
+                          setProvinces(provinceList);
+              }
+                  getCharacters();
   };
 
   const  getRelationshipName = (id) => {
-    if(id){
-       const newId = parseInt(id) 
-      const objectArray = Object.values(relationshipTypes);
-      return objectArray.find(x => x.id === newId).name
-    }    
+      if(id){
+          const newId = parseInt(id) 
+            const objectArray = Object.values(relationshipTypes);
+            return objectArray.find(x => x.id === newId).name
+      }    
   }
 /* Add Relative function **/
   const addRelative = value => {
     const allRelatives = [...relatives, value];
     setRelatives(allRelatives);
+    setRelativeButton(false)
   };
 /* Remove Relative function **/
   const removeRelative = index => {
@@ -327,11 +300,12 @@ useEffect(() => {
   const handleAddRelative = e => {
     e.preventDefault();
     //if (!relative) return;
-    if(relatives.length > 0){
-    addRelative(relative);
-    setRelative(initialRelative); 
-  }else{
-      toast.error("Relative fields cannot be empty");
+    console.log()
+    if((Object.entries(relative).length >0  && relative.constructor === Object)){
+        addRelative(relative);
+        setRelative(initialRelative); 
+    }else{
+        toast.error("Relative fields cannot be empty");
     }
   };
 
@@ -348,14 +322,12 @@ const validate = () => {
   temp.firstName = values.firstName ? "" : "First Name is required"
   temp.hospitalNumber = values.hospitalNumber ? "" : "Patient Id is required."
   temp.mobilePhoneNumber = values.mobilePhoneNumber ? "" : "Mobile numner is required."
-  //temp.dob = values.dob ? "" : "Date of birth is required."
-  //temp.dateRegistration = values.regDate ? "" : "Date of Registration required."
   temp.lastName = values.lastName ? "" : "Last Name  is required."
   temp.genderId = values.genderId ? "" : "Gender is required." 
   setErrors({
       ...temp
   })
-  console.log(temp.dateRegistration)
+  console.log(temp)
   return Object.values(temp).every(x => x == "")
 }
 
@@ -365,26 +337,27 @@ const validate = () => {
   const handleSubmit = e => {
     e.preventDefault();
    if(validate()){
-    const newDatenow = moment(values.dateRegistration).format("DD-MM-YYYY");
-    const newDateOfBirth = moment(values.dob).format("DD-MM-YYYY");
-    //setValues({ dateRegistration: newDatenow});
-    values["dateRegistration"] = newDatenow;
-    values["personRelativesDTO"] = relatives;
-    values["dob"] = newDateOfBirth;
-    setSaving(true);
-    const onSuccess = () => {
-      setSaving(false);
-      resetForm() 
-      removeRelative()
-    }
-    const onError = () => {
-      setSaving(false);        
-    }
-    props.create(values, onSuccess, onError);
-    //toast.success("Registration Successful")
+    
+        const newDatenow = moment(values.dateRegistration).format("MM-DD-YYYY");
+        const newDateOfBirth = moment(values.dob).format("MM-DD-YYYY");
+        //setValues({ dateRegistration: newDatenow});
+        values["dateRegistration"] = newDatenow;
+        values["personRelativesDTOs"] = relatives;
+        values["dob"] = newDateOfBirth;
+        setSaving(true);
+        const onSuccess = () => {
+          setSaving(false);
+          resetForm() 
+          removeRelative()
+        }
+        const onError = () => {
+          setSaving(false);        
+        }
+        props.create(values, onSuccess, onError);
+        //toast.success("Registration Successful")
    }else{
-    console.log(Object.keys(errors))
-    toast.error("Please fill all compulsory fields");
+      console.log(Object.keys(errors))
+      toast.error("Please fill all compulsory fields");
    }
   };
 
@@ -428,8 +401,9 @@ const validate = () => {
                       <FormFeedback>{errors.hospitalNumber}</FormFeedback>
                     </FormGroup>
                   </Col>
-
+                  
                   <Col md={4}>
+                 
                     <FormGroup>
                     <Label for="middleName">Date Of Registration * </Label>
                       
@@ -439,14 +413,13 @@ const validate = () => {
                         id="dateRegistration"
                         value={values.regDate}
                         onChange={value1 =>
-                          setValues({ ...values, dateRegistration: moment(value1).format("DD-MM-YYYY") })
+                          setValues({ ...values, dateRegistration: moment(value1).format("MM-DD-YYYY") })
                         }
                         //defaultValue={new Date(values.dateRegistration)}
                         max={new Date()}
-                        {...(errors.dateRegistration && { invalid: true})}
+                        //{...(errors.dateRegistration && { invalid: true})}
                       />
-                      <FormFeedback>{errors.dateRegistration}</FormFeedback>
-                       
+                      {/* <FormFeedback>{errors.dateRegistration}</FormFeedback> */}
                     </FormGroup>
                   </Col>
                 </Row>
@@ -648,50 +621,7 @@ const validate = () => {
                 <Title>
                   Contact Details <br />
                 </Title>
-                <Row form>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="phoneNumber">Phone Number *</Label>
-                      <Input
-                        type="text"
-                        name="mobilePhoneNumber"
-                        id="mobilePhoneNumber"
-                       
-                        value={values.mobilePhoneNumber}
-                        onChange={handleInputChange}
-                        {...(errors.mobilePhoneNumber && { invalid: true})}
-                        
-                        />
-                         <FormFeedback>{errors.mobilePhoneNumber}</FormFeedback>
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="altPhoneNumber">Alt. Phone Number</Label>
-                      <Input
-                        type="text"
-                        name="alternatePhoneNumber"
-                        id="alternatePhoneNumber"
-                       
-                        value={values.alternatePhoneNumber}
-                        onChange={handleInputChange}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="emailAddress">Email Address</Label>
-                      <Input
-                        type="email"
-                        name="email"
-                        id="email"
-                       
-                        value={values.email}
-                        onChange={handleInputChange}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
+               
                 <Row>
                   <Col xl={12} lg={12} md={12}>
                     <Card className={classes.cardBottom}>
@@ -700,7 +630,50 @@ const validate = () => {
                           {" "}
                           Address <br />
                         </Title>
-
+                        <Row form>
+                            <Col md={4}>
+                              <FormGroup>
+                                <Label for="phoneNumber">Phone Number *</Label>
+                                <Input
+                                  type="text"
+                                  name="mobilePhoneNumber"
+                                  id="mobilePhoneNumber"
+                                
+                                  value={values.mobilePhoneNumber}
+                                  onChange={handleInputChange}
+                                  {...(errors.mobilePhoneNumber && { invalid: true})}
+                                  
+                                  />
+                                  <FormFeedback>{errors.mobilePhoneNumber}</FormFeedback>
+                              </FormGroup>
+                            </Col>
+                            <Col md={4}>
+                              <FormGroup>
+                                <Label for="altPhoneNumber">Alt. Phone Number</Label>
+                                <Input
+                                  type="text"
+                                  name="alternatePhoneNumber"
+                                  id="alternatePhoneNumber"
+                                
+                                  value={values.alternatePhoneNumber}
+                                  onChange={handleInputChange}
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md={4}>
+                              <FormGroup>
+                                <Label for="emailAddress">Email Address</Label>
+                                <Input
+                                  type="email"
+                                  name="email"
+                                  id="email"
+                                
+                                  value={values.email}
+                                  onChange={handleInputChange}
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
                         <Row form>
                           <Col md={4}>
                             <FormGroup>
@@ -797,6 +770,18 @@ const validate = () => {
                               />
                             </FormGroup>
                           </Col>
+                          <Col md={4}>
+                            <FormGroup>
+                              <Label for="landMark">National ID/Security No.</Label>
+                              <Input
+                                type="text"
+                                name="landmark"
+                                id="landmark"
+                              
+                              />
+                            </FormGroup>
+                          </Col>
+                        
                         </Row>
                       </CardContent>
                     </Card>
@@ -835,7 +820,7 @@ const validate = () => {
                     )
                     :
                     <>
-                        <span style={{textTransform: 'capitalize'}}>Edit </span>
+                        <span style={{textTransform: 'capitalize'}}>Update </span>
                         &nbsp;&nbsp;
                         <span style={{textTransform: 'lowercase'}}>Relative </span>
                     </>
@@ -848,15 +833,7 @@ const validate = () => {
                   <Col md={3}>
                     <FormGroup>
                   <Label for="occupation">Relationship Type 
-                  {
-                  //console.log(relationshipTypes);
-                  // alert( JSON.stringify(relationshipTypes, function replacer(key, value) {
-                  //   return (key != "" && value=== '77') ? key : value['name'];
-                  // }))
-                  console.log(newrel[0])
-                   
-                  
-                  }</Label>
+                 </Label>
                       <Input
                         type="select"
                         name="relationshipTypeId"

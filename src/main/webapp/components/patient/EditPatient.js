@@ -30,16 +30,15 @@ import moment from "moment";
 // React Notification
 import Title from "components/Title/CardTitle";
 import { url } from "../../api";
-import { create } from "../../actions/patients";
-import { initialfieldState_patientRegistration } from "./InitialFieldState";
+import { update } from "../../actions/patients";
 import useForm from "../Functions/UseForm";
 import { Spinner } from 'reactstrap';
 import EditIcon from '@material-ui/icons/Edit';
 import {initialRelative} from './InitialRealative';
-
 //Dtate Picker package
 Moment.locale("en");
 momentLocalizer();
+
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -82,7 +81,7 @@ if(props.location.currentId){
     console.log(props.location.currentId.personRelativeDTOs)
   //console.log(moment("12-25-1995").format("DD/MM/YYYY"))
     const intialRelativesValues = props.location.currentId.personRelativeDTOs === "" ? props.location.currentId.personRelativeDTOs : {}
-    //const [currentId, setCurrentId] = useState(props.location.currentId) ;
+    console.log(intialRelativesValues)
   const currentId = props.location.currentId!=='' ? props.location.currentId : {}
   const classes = useStyles();
   const apicountries = url + "countries";
@@ -90,16 +89,23 @@ if(props.location.currentId){
   const { values, setValues, handleInputChange, resetForm,setErrors, errors } = useForm(
     currentId
   );
-  
-//   useEffect(() => { 
-//     if (currentId != 0){
-//         setValues({
-//           ...props.patientDetail.find(x => x.patientId == currentId)
-//         })
-//         setErrors({})
-//     }
+  function stringToDate(_date,_format,_delimiter) {
+    var formatLowerCase=_format.toLowerCase();
+    var formatItems=formatLowerCase.split(_delimiter);
+    var dateItems=_date.split(_delimiter);
+    var monthIndex=formatItems.indexOf("mm");
+    var dayIndex=formatItems.indexOf("dd");
+    var yearIndex=formatItems.indexOf("yyyy");
+    var year = parseInt(dateItems[yearIndex]); 
+    // adjust for 2 digit year
+    if (year < 100) { year += 2000; }
+    var month=parseInt(dateItems[monthIndex]);
+    month-=1;
+    var formatedDate = new Date(year,month,dateItems[dayIndex]);
+    return formatedDate;
+}
 
-// }, [currentId])
+
   /**
    * Initializing state properties
    */
@@ -294,23 +300,25 @@ useEffect(() => {
     getCharacters();
   };
 
-  function getRelationshipName(id) {
+  const  getRelationshipName = (id) => {
     if(id){
-        const newId = parseInt(id) 
-       const objectArray = Object.values(relationshipTypes);
-       return objectArray.find(x => x.id === newId).name
-     }  
+       const newId = parseInt(id) 
+      const objectArray = Object.values(relationshipTypes);
+      return objectArray.find(x => x.id === newId).name
+    }    
   }
 /* Add Relative function **/
   const addRelative = value => {
     const allRelatives = [...relatives, value];
     setRelatives(allRelatives);
+    setRelativeButton(false)
   };
 /* Remove Relative function **/
   const removeRelative = index => {
     console.log(relatives)
     relatives.splice(index, 1);
     setRelative({...relative});
+    setRelativeButton(false) 
     
   };
 /* Edit Relative function **/
@@ -324,12 +332,12 @@ useEffect(() => {
   const handleAddRelative = e => {
     e.preventDefault();
     //if (!relative) return;
-    if(validate()){
+    console.log()
+    if((Object.entries(relative).length >0  && relative.constructor === Object)){
     addRelative(relative);
-    setRelative(initialRelative);
-    }else{
-      console.log(Object.keys(errors))
-      toast.error("Please fill all compulsory fields");
+    setRelative(initialRelative); 
+  }else{
+      toast.error("Relative fields cannot be empty");
     }
   };
 
@@ -346,14 +354,12 @@ const validate = () => {
   temp.firstName = values.firstName ? "" : "First Name is required"
   temp.hospitalNumber = values.hospitalNumber ? "" : "Patient Id is required."
   temp.mobilePhoneNumber = values.mobilePhoneNumber ? "" : "Mobile numner is required."
-  //temp.dob = values.dob ? "" : "Date of birth is required."
-  //temp.dateRegistration = values.regDate ? "" : "Date of Registration required." 
   temp.lastName = values.lastName ? "" : "Last Name  is required."
   temp.genderId = values.genderId ? "" : "Gender is required." 
    setErrors({
       ...temp
   })
-  console.log(temp.dateRegistration)
+  
   return Object.values(temp).every(x => x == "")
 }
 
@@ -367,7 +373,7 @@ const validate = () => {
     const newDateOfBirth = moment(values.dob).format("DD-MM-YYYY");
     //setValues({ dateRegistration: newDatenow});
     values["dateRegistration"] = newDatenow;
-    values["personRelativesDTO"] = relatives;
+    values["personRelativesDTOs"] = relatives;
     values["dob"] = newDateOfBirth;
     setSaving(true);
     const onSuccess = () => {
@@ -378,13 +384,13 @@ const validate = () => {
     const onError = () => {
       setSaving(false);        
     }
-    props.create(values, onSuccess, onError);
+    props.update(values, currentId.patientId, onSuccess, onError);
     //toast.success("Registration Successful")
    }else{
-    console.log(Object.keys(errors))
     toast.error("Please fill all compulsory fields");
    }
   };
+
 
 
   return (
@@ -439,13 +445,13 @@ const validate = () => {
                         onChange={value1 =>
                           setValues({ ...values, dateRegistration: moment(value1).format("DD-MM-YYYY") })
                         }
-                        //defaultValue={new Date(values.dateRegistration)}
+                        defaultValue={new Date(new Date(moment(values.dateRegistration, "DD-MM-YYYY").format("MM/DD/YYYY") ))}
                         max={new Date()}
-                        {...(errors.dateRegistration && { invalid: true})}
-                      />
-                      <FormFeedback>{errors.dateRegistration}</FormFeedback>
                        
+                      />
+                      
                     </FormGroup>
+                    
                   </Col>
                 </Row>
                 <Row form>
@@ -587,7 +593,7 @@ const validate = () => {
                           onChange={value1 =>
                             setValues({ ...values, dob: value1 })
                           }
-                          //defaultValue={new Date()}
+                          defaultValue={new Date(moment(values.dob, "DD-MM-YYYY").format("MM/DD/YYYY") )}
                           max={new Date()}
                           {...(errors.dob && { invalid: true})}
                           />
@@ -795,6 +801,17 @@ const validate = () => {
                               />
                             </FormGroup>
                           </Col>
+                          <Col md={4}>
+                            <FormGroup>
+                              <Label for="landMark">National ID/Security No.</Label>
+                              <Input
+                                type="text"
+                                name="landmark"
+                                id="landmark"
+                              
+                              />
+                            </FormGroup>
+                          </Col>
                         </Row>
                       </CardContent>
                     </Card>
@@ -958,6 +975,7 @@ const validate = () => {
                       />
                     </FormGroup>
                   </Col>
+                
                 </Row>
                 <Row>
                   <Col md={12}>
@@ -994,8 +1012,8 @@ const validate = () => {
                 >
 
                   {!saving ?
-                  <span style={{textTransform: 'capitalize'}}>Save</span>
-                   : <span style={{textTransform: 'capitalize'}}>Saving...</span>}
+                  <span style={{textTransform: 'capitalize'}}>Update</span>
+                   : <span style={{textTransform: 'capitalize'}}>Updating...</span>}
                   
                 </MatButton>
                
@@ -1015,7 +1033,12 @@ const validate = () => {
     </Page>
   );
     }else{
-
+      return ( 
+          <Page >
+              <h2>Please Slelect a patient</h2>
+          </Page>
+       
+    );
     }
 };
 
@@ -1026,38 +1049,45 @@ function RelativeList({
   relationshipTypeName,
   editRelative
 }) {
-  return (
-  
-    <ListItem>
-    <ListItemText
-        primary={
-          <React.Fragment>
-            {relationshipTypeName} {relative.firstName} {relative.otherNames}{" "}
-            {relative.lastName}
-          </React.Fragment>
-        }
-        secondary={
-          <React.Fragment>
-            <Typography component="span" variant="body2" color="textPrimary">
-              {relative.mobilePhoneNumber} {relative.email} <br></br>
-            </Typography>
-            {relative.address}
-          </React.Fragment>
-        }
-      />
-
-      <ListItemSecondaryAction >
-        <IconButton edge="end" aria-label="delete" onClick={() => removeRelative(index)}>
-          <DeleteIcon />
-        </IconButton>
-        <IconButton edge="end" aria-label="edit" onClick={() => editRelative(index)}>
-          <EditIcon />
-        </IconButton>
-      </ListItemSecondaryAction>
+  if((Object.entries(relative).length >0  && relative.constructor === Object)){
+    return (
     
-    </ListItem>
- 
-  );
+      <ListItem>
+      <ListItemText
+          primary={
+            <React.Fragment>
+              {relationshipTypeName} {relative.firstName} {relative.otherNames}{" "}
+              {relative.lastName}
+            </React.Fragment>
+          }
+          secondary={
+            <React.Fragment>
+              <Typography component="span" variant="body2" color="textPrimary">
+                {relative.mobilePhoneNumber} {relative.email} <br></br>
+              </Typography>
+              {relative.address}
+            </React.Fragment>
+          }
+        />
+  
+        <ListItemSecondaryAction >
+          <IconButton edge="end" aria-label="delete" onClick={() => removeRelative(index)}>
+            <DeleteIcon />
+          </IconButton>
+          <IconButton edge="end" aria-label="edit" onClick={() => editRelative(index)}>
+            <EditIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      
+      </ListItem>
+   
+    ); 
+  }else{
+    return (
+        <></>
+    );
+  }
+  
 }
 
 const mapStateToProps = state => ({
@@ -1066,4 +1096,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { create })(PatientRegistration);
+export default connect(mapStateToProps, { update })(PatientRegistration);

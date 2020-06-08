@@ -47,6 +47,7 @@ const useStyles = makeStyles({
   const testorder = useSelector(state => state.laboratory.testorder);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState('')
+  const [labNum, setlabNum] = useState({lab_number:"lab456"})
   useEffect(() => {
     const personId = encounterresult.hospitalNumber;
     const ecounterId = encounterresult.encounterId;
@@ -196,7 +197,7 @@ const sampleAction = (e) =>{
                             className='cr-search-form__input '
                             name='lab_number'
                             id='lab_number'
-                            value=""
+                            value={labNum.lab_number}
                             disabled
                           />
                           </FormGroup>

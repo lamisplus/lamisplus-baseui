@@ -7,24 +7,18 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-
 // {/* Auto textfield complete */}
-import {
-    MdDashboard,
-    MdContacts
-  } from 'react-icons/md';
+import {MdDashboard,MdContacts} from 'react-icons/md';
 import {GiFiles} from 'react-icons/gi';  
-
-import { 
-  // Nav, NavItem, NavLink, Badge, 
-  Card, CardBody, CardDeck, CardHeader } from 'reactstrap';
+import {Card, CardBody, CardDeck, CardHeader } from 'reactstrap';
 import { Bar, Pie } from 'react-chartjs-2';
 import { getColor } from 'utils/colors';
 import { randomNum } from 'utils/demos';
 import UserProgressTable from 'components/UserProgressTable';
 import LabTestOrderSearch from './Testorders/LabTestOrderSearch';
 import LabTestResultSearch from './TestResult/LabTestResultSearch';
-import LabTestVerifySampleSearch from './Sampleverifications/LabTestVerifySampleSearch'
+import LabTestVerifySampleSearch from './Sampleverifications/LabTestVerifySampleSearch';
+import DispatchedManifest from './DispatchedManifest/DispatchedManifest'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -278,63 +272,64 @@ export default function ScrollableTabsButtonForce(props) {
           <Tab className={classes.title} label="Lab Test Orders" icon={<MdContacts />} {...a11yProps(1)} />
           <Tab className={classes.title} label="Sample Verification " icon={<GiFiles />} {...a11yProps(2)} />
           <Tab className={classes.title} label="Lab Results " icon={<GiFiles />} {...a11yProps(3)} />
+          <Tab className={classes.title} label="Dispatch Manifest " icon={<GiFiles />} {...a11yProps(4)} />
         </Tabs>
         <div>
      
     </div>
-      </AppBar>
+</AppBar>
 
       {/* The DashBoad Tab  */}
-      <TabPanel value={value} index={0}>
-      <CardDeck>
-                <Card >
-                    
-                    <CardHeader> Laboratory Test Group Analysis</CardHeader>
-                        <CardBody>
-                        
-                        <Pie data={genPieData()} />                      
-                        </CardBody>                      
-                        </Card>
-                        <Card >
-                        <CardHeader> Laboratory Test Order/ Result</CardHeader>
-                            <CardBody>
-                            <Bar data={genLineData()} />                     
-                            </CardBody>                      
-                    </Card>
-                   
-      </CardDeck>
-      <br/><br/>
-      <Grid container spacing={2}>
-                <Grid item xs='6' >                    
-                  <Card  >
-                      <CardHeader> Recent Lab. Test Order</CardHeader>
-                          
-                        <CardBody>
-                            <UserProgressTable
-                                headers={[
-                                  'name'  
-                                ]}
-                                usersData={userProgressTableData}
-                            />
-                        </CardBody>                      
-                  </Card>   
-                </Grid>
-                <Grid item xs='6'>
-                    <Card  >
-                        <CardHeader> Recent Lab. Test Result</CardHeader>
-                            
-                        <CardBody>
-                            <UserProgressTable
-                                headers={[
-                                  'name'  
-                                ]}
-                                usersData={userProgressTableData}
-                            />
-                      </CardBody>                      
-                  </Card>  
-                </Grid>
+<TabPanel value={value} index={0}>
+<CardDeck>
+    <Card >
+        
+        <CardHeader> Laboratory Test Group Analysis</CardHeader>
+            <CardBody>
+            
+            <Pie data={genPieData()} />                      
+            </CardBody>                      
+            </Card>
+            <Card >
+            <CardHeader> Laboratory Test Order/ Result</CardHeader>
+                <CardBody>
+                <Bar data={genLineData()} />                     
+                </CardBody>                      
+        </Card>
+        
+</CardDeck>
+<br/><br/>
+<Grid container spacing={2}>
+    <Grid item xs='6' >                    
+      <Card  >
+          <CardHeader> Recent Lab. Test Order</CardHeader>
+              
+            <CardBody>
+                <UserProgressTable
+                    headers={[
+                      'name'  
+                    ]}
+                    usersData={userProgressTableData}
+                />
+            </CardBody>                      
+      </Card>   
+    </Grid>
+    <Grid item xs='6'>
+        <Card  >
+            <CardHeader> Recent Lab. Test Result</CardHeader>
                 
-            </Grid> 
+            <CardBody>
+                <UserProgressTable
+                    headers={[
+                      'name'  
+                    ]}
+                    usersData={userProgressTableData}
+                />
+          </CardBody>                      
+      </Card>  
+    </Grid>
+    
+</Grid> 
 
 </TabPanel>
     {/* End of dashboard */}
@@ -354,73 +349,74 @@ export default function ScrollableTabsButtonForce(props) {
 </TabPanel>
 
     {/* End of consultation */}
-    <TabPanel value={value} index={4}>
-        {/* Card stats */}
-        {/* <Medication getpatientdetails={props.location.state }  /> */}
+<TabPanel value={value} index={4}>
+    {/* Card stats */}
+      <DispatchedManifest />
+      
 
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-      <Grid container spacing={7} > 
-                <Grid item xs='7'>                    
-                    <Card >
-                        <CardBody>
-                            <Typography className={classes.title} color="primary" gutterBottom>
-                            
-                            </Typography>
-                                <Grid >
-                                    <Grid item xs='6'>
-                                        <Typography className={classes.pos} color="textSecondary" >
-                                                Pulse : <span style={{fontSize: 'bold'}}>56pm</span>
-                                               
-                                        </Typography>
-                                    </Grid>
-                                    
-                                </Grid>                               
-                        </CardBody>                      
-                        </Card>                     
-                </Grid>
-                
-                <Grid item xs='5'>                    
-                    <Card >
-                        <CardBody>
-                            <Typography className={classes.title} color="primary" gutterBottom>
-                            Drug Order 
-                            </Typography>
-                                <Grid container >
-                                    <Grid item >
-                                        <Typography className={classes.pos} color="textSecondary" >
-                                                Pulse : <span style={{fontSize: 'bold'}}>56pm</span>
-                                               
-                                        </Typography>
-                                    </Grid>
-                                    
-                                </Grid>                               
-                        </CardBody>                      
-                        </Card>                     
-                </Grid>
-                <br/>
-                <Grid item xs='7'>                    
-                    <Card >
-                        <CardBody>
-                            <Typography className={classes.title} color="primary" gutterBottom>
-                            Drug Order 
-                            </Typography>
-                                <Grid container >
-                                    <Grid item >
-                                        <Typography className={classes.pos} color="textSecondary" >
-                                                Pulse : <span style={{fontSize: 'bold'}}>56pm</span>
-                                               
-                                        </Typography>
-                                    </Grid>
-                                    
-                                </Grid>                               
-                        </CardBody>                      
-                        </Card>                     
-                </Grid>
-             
-            
-            </Grid>
-      </TabPanel>
+</TabPanel>
+<TabPanel value={value} index={5}>
+<Grid container spacing={7} > 
+          <Grid item xs='7'>                    
+              <Card >
+                  <CardBody>
+                      <Typography className={classes.title} color="primary" gutterBottom>
+                      
+                      </Typography>
+                          <Grid >
+                              <Grid item xs='6'>
+                                  <Typography className={classes.pos} color="textSecondary" >
+                                          Pulse : <span style={{fontSize: 'bold'}}>56pm</span>
+                                          
+                                  </Typography>
+                              </Grid>
+                              
+                          </Grid>                               
+                  </CardBody>                      
+                  </Card>                     
+          </Grid>
+          
+          <Grid item xs='5'>                    
+              <Card >
+                  <CardBody>
+                      <Typography className={classes.title} color="primary" gutterBottom>
+                      Drug Order 
+                      </Typography>
+                          <Grid container >
+                              <Grid item >
+                                  <Typography className={classes.pos} color="textSecondary" >
+                                          Pulse : <span style={{fontSize: 'bold'}}>56pm</span>
+                                          
+                                  </Typography>
+                              </Grid>
+                              
+                          </Grid>                               
+                  </CardBody>                      
+                  </Card>                     
+          </Grid>
+          <br/>
+          <Grid item xs='7'>                    
+              <Card >
+                  <CardBody>
+                      <Typography className={classes.title} color="primary" gutterBottom>
+                      Drug Order 
+                      </Typography>
+                          <Grid container >
+                              <Grid item >
+                                  <Typography className={classes.pos} color="textSecondary" >
+                                          Pulse : <span style={{fontSize: 'bold'}}>56pm</span>
+                                          
+                                  </Typography>
+                              </Grid>
+                              
+                          </Grid>                               
+                  </CardBody>                      
+                  </Card>                     
+          </Grid>
+        
+      
+      </Grid>
+</TabPanel>
 
     </div>
   );

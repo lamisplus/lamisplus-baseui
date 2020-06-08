@@ -101,21 +101,34 @@ export const create = (data,onSuccess, onError) => dispatch => {
     });
 };
 
-export const update = (id, data) => dispatch => {
-  axios
+export const update = (data, id, onSuccess, onError) => dispatch => {
+  console.log(data);
+    axios
     .put(`${baseUrl}patients/${id}`, data)
     .then(response => {
+
       dispatch({
         type: ACTION_TYPES.PATIENTS_UPDATE,
         payload: response.data
       });
+      onSuccess()
+      toast.success("Patient record was updated successfully!");
     })
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
-        payload: "Something went wrong, please try again"
+        payload: "Something went wrong"
       });
+      onError()
+      if(error.response.data.apierror.message===null || error.response.data.apierror.message===""){
+        toast.error("Something went wrong");
+      }else{
+        toast.error(error.response.data.apierror.message);
+      }
+     //console.log(error.response.data.apierror.message);
     });
+
+
 };
 
 export const Delete = (id, onSuccess) => dispatch => {
