@@ -43,13 +43,7 @@ const useStyles = makeStyles({
 
  function CollectResult  (props){
   const classes = useStyles()
-<<<<<<< HEAD
-  const encounterresult = props.location.state.getpatientlists.row ? props.location.state.getpatientlists.row  : null;
-||||||| merged common ancestors
-  const encounterresult = props.location.state.getpatientlists.row ;
-=======
   const encounterresult = props.location.state.getpatientlists.row ? props.location.state.getpatientlists.row : null ;
->>>>>>> mathew
   const testorder = useSelector(state => state.laboratory.testorder);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState('')
