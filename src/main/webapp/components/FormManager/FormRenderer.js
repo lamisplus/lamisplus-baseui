@@ -10,6 +10,7 @@ import { Card, Alert, CardBody, Spinner } from "reactstrap";
 import { fetchLastEncounter } from '_services/form-renderer';
 import { url } from "api";
 import axios from "axios";
+import { formRendererService } from "_services/form-renderer";
 
 Moment.locale("en");
 momentLocalizer();
@@ -20,59 +21,60 @@ const FormRenderer = (props) => {
   const [showErrorMsg, setShowErrorMsg] = React.useState(false);
   const [showLoading, setShowLoading] = React.useState(false);
   const [showLoadingForm, setShowLoadingForm] = React.useState(true);
-  const [showLoadingFormData, setShowLoadingFormData] = React.useState(false);
+  const [showLoadingEncounter, setShowLoadingEncounter] = React.useState(false)
+  const [encounterId, setEncounterId] = React.useState()
   const [submission, setSubmission] = React.useState({...props.submission, ...{ data: { patient: props.patient }}});
   const onDismiss = () => setShowErrorMsg(false);
   const options = {
     noAlerts: true,
   };
-//fetch form resource
-  React.useEffect(() => {
-    const onSuccess = () => {
-      setShowLoadingForm(false);
-    };
-    const onError = (errstatus) => {
-      setErrorMsg("Error loading form, something went wrong");
-      setShowErrorMsg(true);
-      setShowLoadingForm(false);
-    };
-    props.fetchForm(props.formCode, onSuccess, onError);
-  }, [props.formCode]);
-  //retrieve form resource
-  React.useEffect(() => {
-    setErrorMsg("");
-    setShowErrorMsg(false);
-    if (props.form.name && !props.form.resourceObject) {
-      setErrorMsg("Form resource not found, please contact adminstration.");
-      setShowErrorMsg(true);
-      return;
-    }
-    
-    //check if an existing encounter has been created for this
-    //TODO: store the encounter id and make an update when user saves
-    if(props.form && props.form.usageCode == 0){
-      console.log('fetching enc')
-        fetchEncounter();
-        return;
-    }
 
-    setForm(props.form);
-  }, [props.form]);
+ //fetch form by form code
+ React.useEffect(() => {
+  formRendererService
+    .fetchFormByFormCode(props.formCode).then((response) => {
+      if (response.data.name && !response.data.resourceObject) {
+        setErrorMsg("Form resource not found, please contact adminstration.");
+        setShowErrorMsg(true);
+        return;
+      }
+      //for forms with usage code 0, check if an encounter exists for this patient
+      if(props.form && props.form.usageCode == 0){
+          fetchEncounter();
+      }
+      setForm(response.data);
+      setShowLoadingForm(false);
+    }) .catch((error) => {
+      setErrorMsg("Error loading form, something went wrong");
+    setShowErrorMsg(true);
+    setShowLoadingForm(false);
+    });
+}, []);
+
+
   //Add patient info to the submission object. This make patient data accessible within the form
   async function fetchEncounter(){
+    setShowLoadingEncounter(true);
     await axios.get(`${url}patients/${props.patientId}/encounters/${props.formCode}`, {})
     .then(response => {
+      //get encounter form data and store it in submission object
         if( response.data.length > 0 ){
           const lastEncounter = response.data[0]
-          console.log(lastEncounter);
+          setEncounterId(lastEncounter.encounterId);
           const e = {
             ...submission, ...{...submission.data, ...{data: lastEncounter}}
              };
-             console.log(e)
           setSubmission(e);
+          setShowLoadingEncounter(false);
     };
+  }) .catch((error) => {
+    setErrorMsg("Error loading encounter, something went wrong");
+  setShowErrorMsg(true);
+  setShowLoadingEncounter(false);
   });
-      setForm(props.form);
+  
+  ;
+      
   }
 
   // Submit form to server
@@ -96,7 +98,7 @@ const FormRenderer = (props) => {
       data: [submission.data],
       patientId: props.patientId,
       formCode: props.formCode,
-      programCode: props.form.programCode,
+      programCode: form.programCode,
       dateEncounter: formatedDate,
       visitId: props.visitId,
     };
@@ -112,19 +114,34 @@ const FormRenderer = (props) => {
     );
   };
 
+  const saveForm = () => {
+
+  }
+
+  const updateForm = () => {
+    
+  }
+  if(showLoadingForm){
+    return (<span className="text-center">
+    <Spinner style={{ width: "3rem", height: "3rem" }} type="grow" />{" "}
+    Loading form...
+  </span>);
+  }
+
+  if(showLoadingEncounter){
+    return (<span className="text-center">
+    <Spinner style={{ width: "3rem", height: "3rem" }} type="grow" />{" "}
+    Loading encounter information...
+  </span>);
+  }
+
   return (
     <React.Fragment>
-      {showLoadingForm ? (
-        <span className="text-center">
-          <Spinner style={{ width: "3rem", height: "3rem" }} type="grow" />{" "}
-          Loading form...
-        </span>
-      ) : (
         <Card>
           <CardBody>
             <h4 class="text-capitalize">
               {"New: "}
-              {props.title || props.form.name}
+              {props.title || form.name}
             </h4>
 
             <hr />
@@ -134,11 +151,10 @@ const FormRenderer = (props) => {
             </Alert>
 
             <Form
-              form={props.form.resourceObject}
+              form={form.resourceObject}
               submission={submission}
               hideComponents={props.hideComponents}
               options={options}
-              //onSubmit={props.onSubmit}
               onSubmit={(submission) => {
                 if (props.onSubmit) {
                   return props.onSubmit(submission);
@@ -148,7 +164,6 @@ const FormRenderer = (props) => {
             />
           </CardBody>
         </Card>
-      )}
     </React.Fragment>
   );
 };

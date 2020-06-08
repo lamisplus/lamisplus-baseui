@@ -1,9 +1,22 @@
 import { url } from "../api";
 import axios from "axios";
 
-export async function fetchLastEncounter(patientId, formCode){
-    return await axios.get(`${url}patients/${patientId}/encounters/${formCode}`, {})
-        .then(response => {
-            return response.data.length > 0 ? response.data[0]: null
-        });
+export const formRendererService = {
+    fetchEncounterById,
+    fetchFormByFormCode,
+    updateFormData
+};
+
+function fetchEncounterById(encounterId) {
+   return axios
+      .get(`${url}encounters/${encounterId}`, {})
 }
+
+function fetchFormByFormCode(formCode) {
+    return axios
+       .get(`${url}forms/${formCode}/formCode`, {})
+ }
+
+ function updateFormData(id, data){
+    return axios.put(`${url}form-data/${id}`, data)
+ }

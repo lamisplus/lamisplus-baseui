@@ -1,119 +1,117 @@
-import React from 'react';
-import Page from 'components/Page';
-import { SubmissionGrid, Form } from 'react-formio';
-import * as actions from "actions/formManager";
-import {connect} from 'react-redux';
-import Moment from 'moment'
-import momentLocalizer from 'react-widgets-moment'
-import { toast } from 'react-toastify'
-import { Card, Alert, CardBody, Spinner } from 'reactstrap'
+import React from "react";
+import {  Form } from "react-formio";
+import { connect } from "react-redux";
+import Moment from "moment";
+import momentLocalizer from "react-widgets-moment";
+import { Card, Alert, CardBody, Spinner } from "reactstrap";
+import { formRendererService } from "_services/form-renderer";
 
+Moment.locale("en");
+momentLocalizer();
 
-Moment.locale('en')
-momentLocalizer()
-
-const FormRenderer = props => {
+const FormRenderer = (props) => {
   const [form, setForm] = React.useState();
-  const [errorMsg, setErrorMsg] = React.useState('')
-  const [showErrorMsg, setShowErrorMsg] = React.useState(false)
-  const [showLoading, setShowLoading] = React.useState(false)
-  const [showLoadingEncounter, setShowLoadingEncounter] = React.useState(false)
-  const [submission, setSubmission] = React.useState(props.submission)
-  const [showLoadingForm, setShowLoadingForm] = React.useState(true)
-  const onDismiss = () => setShowErrorMsg(false)
+  const [errorMsg, setErrorMsg] = React.useState("");
+  const [showErrorMsg, setShowErrorMsg] = React.useState(false);
+  const [showLoadingEncounter, setShowLoadingEncounter] = React.useState(false);
+  const [submission, setSubmission] = React.useState(props.submission);
+  const [showLoadingForm, setShowLoadingForm] = React.useState(true);
+  const onDismiss = () => setShowErrorMsg(false);
   const options = {
-    readOnly: true
-    }
+    readOnly: true,
+  };
   //extract the formData as an obj (if form data length is one) or an array
   const extractFormData = (formData) => {
-    if(!formData){
-        return null;
+    if (!formData) {
+      return null;
     }
-    if(formData.length === 1){
+    if (formData.length === 1) {
       return formData[0].data;
     }
-    return formData.map(item => {
+    return formData.map((item) => {
       return item.data;
-    })
-  }
-  React.useEffect(() => {
-    const onSuccess = () => {
-      setShowLoadingForm(false)
-      }
-      const onError = errstatus => {
-        setErrorMsg('Error loading form, something went wrong')
-        setShowErrorMsg(true)
-        setShowLoadingForm(false)
-      }
-    props.fetchForm(props.formCode, onSuccess, onError);
-  }, [props.formCode]);
+    });
+  };
 
   React.useEffect(() => {
-      setForm(props.form);
-  },[props.form]);
+    formRendererService
+      .fetchFormByFormCode(props.formCode).then((response) => {
+        setForm(response.data);
+        setShowLoadingForm(false);
+      }) .catch((error) => {
+        setErrorMsg("Error loading form, something went wrong");
+      setShowErrorMsg(true);
+      setShowLoadingForm(false);
+      });
+  }, []);
 
   React.useEffect(() => {
-    //verify that the encounter in the store is the same as the one passed in props
-      setShowLoadingEncounter(true);
-    if(props.encounter.encounterId === props.encounterId){
-        console.log(props.encounter)
+    formRendererService
+      .fetchEncounterById(props.encounterId)
+      .then((response) => {
         setShowLoadingEncounter(false);
-        const extractedData = extractFormData(props.encounter.formDataObj);
-        if(!extractedData){
-            setErrorMsg('Could not load form information');
-            setShowErrorMsg(true);
-            return;
+        const extractedData = extractFormData(response.data.formDataObj);
+        if (!extractedData) {
+          setErrorMsg("Could not load encounter information");
+          setShowErrorMsg(true);
         }
-        setSubmission({data: extractedData});
-    }
-  }, [props.encounter]);
-  
+        setSubmission({ data: extractedData });
+      })
+      .catch((error) => {
+        setErrorMsg("Could not load encounter information");
+        setShowErrorMsg(true);
+        setShowLoadingEncounter(false);
+      });
+  }, []);
+
+  if(showLoadingForm){
+    return (<span className="text-center">
+    <Spinner style={{ width: "3rem", height: "3rem" }} type="grow" />{" "}
+    Loading form...
+  </span>);
+  }
+
+  if(showLoadingEncounter){
+    return (<span className="text-center">
+    <Spinner style={{ width: "3rem", height: "3rem" }} type="grow" />{" "}
+    Loading encounter information...
+  </span>);
+  }
+
   return (
     <React.Fragment>
-      { (showLoadingForm) ? 
-   <span className="text-center"><Spinner style={{ width: '3rem', height: '3rem' }} type="grow" /> Loading form...</span>
-:  
-<div>
-{ (showLoadingEncounter) ? 
-  <span className="text-center"><Spinner style={{ width: '3rem', height: '3rem' }} type="grow" /> Loading encounter information...</span>
-:  
- 
-   <Card >
-      <CardBody>
-  <h4 class="text-capitalize">{'View: '}{props.title || props.form.name}</h4>
-      <hr />
-      {/* <Errors errors={props.errors} /> */}
-      <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
-            {errorMsg}
-          </Alert>
-      <Form
-          form={props.form.resourceObject}
-          submission={submission}
-          options={options}
-          hideComponents={props.hideComponents}
-          
-        />
-
-    </CardBody>
-    </Card>
-      } </div>  }
+            <Card>
+              <CardBody>
+                <h4 class="text-capitalize">
+                  {"View: "}
+                  {props.title || form.name}
+                </h4>
+                <hr />
+                <Alert color="danger" isOpen={showErrorMsg} toggle={onDismiss}>
+                  {errorMsg}
+                </Alert>
+                <Form
+                  form={form.resourceObject}
+                  submission={submission}
+                  options={options}
+                  hideComponents={props.hideComponents}
+                />
+              </CardBody>
+            </Card>
     </React.Fragment>
   );
-}
+};
 
-const mapStateToProps = (state = {formManager: {}}) => {
+const mapStateToProps = (state = { formManager: {} }) => {
   return {
     form: state.formManager.form,
     formEncounter: state.formManager.formEncounter,
     errors: state.formManager.errors,
-    encounter: state.encounter.encounter
-  }
-}
-
+    encounter: state.encounter.encounter,
+  };
+};
 
 const mapActionToProps = {
-  fetchForm: actions.fetchById,
-}
+};
 
-export default connect(mapStateToProps, mapActionToProps)(FormRenderer)
-
+export default connect(mapStateToProps, mapActionToProps)(FormRenderer);

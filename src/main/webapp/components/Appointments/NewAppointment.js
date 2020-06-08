@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import PatientList from "components/patient/PatientSearch";
+import PatientList from "components/PatientSearch/ActivePatientSearch";
 import { connect } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import { FaCalendarPlus } from "react-icons/fa";

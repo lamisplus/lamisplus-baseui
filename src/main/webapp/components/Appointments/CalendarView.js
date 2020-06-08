@@ -32,7 +32,12 @@ function CalendarViewPage(props){
          weekends={true}
          dateClick={handleDateClick}
          eventClick={handleEventClick}
-         events={props.events}
+         events={props.appointments.map((row) => ({
+          id: row.encounterId,
+           title: row.hospitalNumber +" - "+row.firstName + " " + row.lastName,
+            date: row.formDataObj[0].data.appointmentDate,
+            extendedProps: row
+         }))}
          />
                    </React.Fragment>
     )
@@ -40,7 +45,8 @@ function CalendarViewPage(props){
 
 const mapStateToProps = (state) => {
     return {
-      patient: state.patients.patient
+      patient: state.patients.patient,
+      appointments: state.appointments.list,
     };
   };
   
