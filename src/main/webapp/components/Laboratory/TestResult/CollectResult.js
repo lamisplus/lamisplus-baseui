@@ -43,7 +43,7 @@ const useStyles = makeStyles({
 
  function CollectResult  (props){
   const classes = useStyles()
-  const encounterresult = props.location.state.getpatientlists.row ? props.location.state.getpatientlists.row  : null;
+  const encounterresult = props.location.state.getpatientlists.row ? props.location.state.getpatientlists.row : null ;
   const testorder = useSelector(state => state.laboratory.testorder);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState('')
@@ -157,7 +157,7 @@ const sampleAction = (e) =>{
                   
                   className=" float-right mr-1"
                 >
-                  <TiArrowBack/>{" "} Back
+                  <TiArrowBack/>  Back
                 </MatButton>
               </Link>
             </CardHeader>
@@ -204,7 +204,7 @@ const sampleAction = (e) =>{
                         </Col>
                       </Row>
                    
-                      <Table style={{ fontWeight: 'bolder', borderColor:"#000"}} striped responsive>
+                      <Table style={{ fontWeight: 'bolder', borderColor:"#000"}}  responsive>
                         <thead style={{  backgroundColor:'#9F9FA5', color:"#000" }}>
                           <tr>
                             <th>Test</th>
