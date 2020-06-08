@@ -10,6 +10,7 @@ import medicationReducer from './medicationReducer'
 import formReducers from './formReducers'
 import visitReducer from './visitReducer'
 import registrationReducer from './registrationReducer'
+import userReducer from './userReducer'
 
 export default combineReducers({
   patients: patientReducer,
@@ -22,6 +23,7 @@ export default combineReducers({
   formReducers: formReducers,
   medication: medicationReducer,
   visit: visitReducer,
-  registration: registrationReducer
+  registration: registrationReducer,
+  users: userReducer
 })
 

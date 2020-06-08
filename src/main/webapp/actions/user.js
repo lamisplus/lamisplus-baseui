@@ -31,3 +31,21 @@ export const register = (data) => (dispatch) => {
       console.log(error);
     });
 };
+
+
+export const fetchUsers = () => dispatch => {
+  axios
+    .get(`${baseUrl}users/`)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.FETCH_USERS,
+        payload: response.data
+      });
+    })
+    .catch(error =>
+      dispatch({
+        type: ACTION_TYPES.USERS_ERROR,
+        payload: "Something went wrong, please try again"
+      })
+    );
+};
