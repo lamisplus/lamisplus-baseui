@@ -309,7 +309,6 @@ function MedicationPage(props) {
                             </Card>
                         </Col>
                         <Col lg={12}>
-                          { props.visitId ?
                         <MatButton  
                                         type="submit" 
                                         variant="contained"
@@ -323,9 +322,6 @@ function MedicationPage(props) {
                                               <span className="sr-only">Loading...</span>
                                             </Spinner> : ""}
                                 </MatButton> 
-                                :
-          <Alert color='danger'> This patient does not have a current visit. You have to check in to proceed</Alert>
-  }
                                 <br></br>
                                 <br></br>
                         </Col>
@@ -465,7 +461,7 @@ function NewDrugOrderForm({addDrugs, drugOrder, fetchingDrugs}){
                                             >
                                                 Add
                                             </MatButton>
-                                        
+
                                                </Form >
     )
 

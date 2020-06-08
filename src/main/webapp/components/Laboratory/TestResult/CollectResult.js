@@ -43,7 +43,13 @@ const useStyles = makeStyles({
 
  function CollectResult  (props){
   const classes = useStyles()
+<<<<<<< HEAD
   const encounterresult = props.location.state.getpatientlists.row ? props.location.state.getpatientlists.row  : null;
+||||||| merged common ancestors
+  const encounterresult = props.location.state.getpatientlists.row ;
+=======
+  const encounterresult = props.location.state.getpatientlists.row ? props.location.state.getpatientlists.row : null ;
+>>>>>>> mathew
   const testorder = useSelector(state => state.laboratory.testorder);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState('')
@@ -157,7 +163,7 @@ const sampleAction = (e) =>{
                   
                   className=" float-right mr-1"
                 >
-                  <TiArrowBack/>{" "} Back
+                  <TiArrowBack/>  Back
                 </MatButton>
               </Link>
             </CardHeader>
@@ -204,7 +210,7 @@ const sampleAction = (e) =>{
                         </Col>
                       </Row>
                    
-                      <Table style={{ fontWeight: 'bolder', borderColor:"#000"}} striped responsive>
+                      <Table style={{ fontWeight: 'bolder', borderColor:"#000"}}  responsive>
                         <thead style={{  backgroundColor:'#9F9FA5', color:"#000" }}>
                           <tr>
                             <th>Test</th>
