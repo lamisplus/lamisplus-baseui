@@ -1,13 +1,13 @@
 import React from 'react';
 import { Card, CardHeader,CardBody, CardDeck} from 'reactstrap';
 import { Line } from 'react-chartjs-2';
-import {
-    ViralLoad,Weight
-  } from '../../demos/patientVIral';
-export default function laboratoryCharts (props ) {
-  return (
+import {ViralLoad,Weight} from '../../demos/patientVIral';
 
+
+
+export default function laboratoryCharts (props ) {
     
+    return (
             <CardDeck>
                 <Card >
                     
@@ -29,7 +29,7 @@ export default function laboratoryCharts (props ) {
                             <Line data={ViralLoad({ fill: false }, { fill: false })} height={100} />                      
                             </CardBody>                      
                     </Card>
-                </CardDeck>
+        </CardDeck>
                 
     );
 }
