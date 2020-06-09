@@ -14,16 +14,16 @@ import Button from "@material-ui/core/Button";
 
 const PatientSearch = (props) => {
   const [loading, setLoading] = useState('')
-  useEffect(() => {
+useEffect(() => {
     setLoading('true');
-    const onSuccess = () => {
-      setLoading(false)
-    }
-    const onError = () => {
+  const onSuccess = () => {
+     setLoading(false)
+  }
+  const onError = () => {
       setLoading(false)     
-    }
-        props.fetchAllLabTestOrderToday(onSuccess, onError);
-      }, []); //componentDidMount
+  }
+      props.fetchAllLabTestOrderToday(onSuccess, onError);
+    }, []); //componentDidMount
     // function totalSampleConllected (test){
     //   const  maxVal = []
      
@@ -37,18 +37,15 @@ const PatientSearch = (props) => {
     //   return maxVal.length;
     // }
     const labTestType = [];
-
     props.testOrder.forEach(function(value, index, array) {
           const getList = value['formDataObj'].find(x => { 
             if(x.data.lab_test_order_status == 2){
               labTestType.push(x.data);
-            }})
-          
+            }})         
      });
-     console.log(labTestType) 
-     
+    
      function removeData (evt, data){
-      alert('You want to delete ' + evt + data)
+        alert('You want to delete ' + evt + data)
      }
      
          //This is function to check for the status of each collection to display on the tablist below 
@@ -78,14 +75,12 @@ const PatientSearch = (props) => {
               variant="contained"
               color="primary"
               className=" float-right mr-1"
-              
             >
               <span style={{textTransform: 'capitalize'}}>Dispatched  </span>
-              &nbsp;&nbsp;
-              <span style={{textTransform: 'lowercase'}}>samples list </span>
-              
+                  &nbsp;&nbsp;
+              <span style={{textTransform: 'lowercase'}}>samples list </span>              
             </Button>
-          </Link>
+      </Link>
         <br/>
         <br/>
         <br/>
@@ -94,20 +89,19 @@ const PatientSearch = (props) => {
         columns={[
           { title: "Lab  Test", field: "LabTest" },
           {
-            title: "Sample Type",
-            field: "SampleType",
+              title: "Sample Type",
+              field: "SampleType",
           },
-          { title: "Date Sample Collected", field: "dateSampleCollected", type: "date" , filtering: false},          
-          
+          { title: "Date Sample Collected", field: "dateSampleCollected", type: "date" , filtering: false},                  
           {
-            title: "Sample Status ",
-            field: "samplestatus",
-            filtering: false
+              title: "Sample Status ",
+              field: "samplestatus",
+              filtering: false
           },
           {
-            title: "Action",
-            field: "actions",
-            filtering: false,
+              title: "Action",
+              field: "actions",
+              filtering: false,
           },
         ]}
         isLoading={loading}
@@ -118,37 +112,31 @@ const PatientSearch = (props) => {
           dateSampleCollected: row.date_sample_collected,
           samplestatus: sampleStatus(row.lab_test_order_status),
           actions: <Link to ={{ 
-                          pathname: "/collect-sample",  
-                          state: row
-                          
-                        }} 
+                      pathname: "/collect-sample",  
+                      state: row 
+                     }} 
                         style={{ cursor: "pointer", color: "blue", 
                         fontStyle: "bold" }}>
-                          {/* <Tooltip title="Collect Sample">
-                            <IconButton aria-label="Collect Sample" >
-                              <VisibilityIcon color="primary"/>
-                            </IconButton>
-                          </Tooltip> */}
-                        </Link>
+                          
+                    </Link>
 
-            }))}
+                    }))}
         options={{
-          search: false,
-          selection: true,
-          headerStyle: {
-            backgroundColor: "#9F9FA5",
-            color: "#000",
-            margin: "auto"
-          },
+            search: false,
+            selection: true,
+            headerStyle: {
+                backgroundColor: "#9F9FA5",
+                color: "#000",
+                margin: "auto"
+            },
          
         }}
-        actions={[
-          
-          {
-            tooltip: 'Dispatch All Selected Sample',
-            icon: 'add',
-            onClick: (evt, data) => alert('You want to dispatch ' + evt + data)
-          }
+        actions={[         
+            {
+              tooltip: 'Dispatch All Selected Sample',
+              icon: 'add',
+              onClick: (evt, data) => alert('You want to dispatch ' + evt + data)
+            }
         ]}
       />
     </div>
@@ -156,14 +144,13 @@ const PatientSearch = (props) => {
 }
 
 const mapStateToProps = state => {
-
     return {
-      testOrder: state.laboratory.list
+        testOrder: state.laboratory.list
     };
   };
   
   const mapActionToProps = {
-    fetchAllLabTestOrderToday: fetchAllLabTestOrder
+      fetchAllLabTestOrderToday: fetchAllLabTestOrder
   };
   
 export default connect(mapStateToProps, mapActionToProps)(PatientSearch);

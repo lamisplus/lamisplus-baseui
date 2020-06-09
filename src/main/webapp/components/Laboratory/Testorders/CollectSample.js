@@ -60,38 +60,36 @@ const useStyles = makeStyles({
                     const onError = () => {
                         setLoading(false)     
                     }
-          dispatch(fetchAllLabTestOrderOfPatient(props.location.state.encounterId,onSuccess,onError ));
-          dispatch(fetchById(props.location.state.hospitalNumber,onSuccess,onError));
+            dispatch(fetchAllLabTestOrderOfPatient(props.location.state.encounterId,onSuccess,onError ));
+            dispatch(fetchById(props.location.state.hospitalNumber,onSuccess,onError));
         }
     }, [props.location.state.encounterId]); //componentDidMount  
     
     const fetchTestOrders = testorder;
-    console.log(testorder)
-    
         //Get list of test type
-            const labTestType = [];
+        const labTestType = [];
             if(fetchTestOrders !== null || fetchTestOrders ===""){
-              fetchTestOrders.forEach(function(value, index, array) {
+                fetchTestOrders.forEach(function(value, index, array) {
                     labTestType.push(value['data'].lab_test_group);
                 });
             }
 
-      //Make the list contain unique list of Data 
-          const uniqueValues = [...new Set(labTestType)];
-          const [modal, setModal] = useState(false) //Modal to collect sample 
-          const toggleModal = () => setModal(!modal)
-          const [modal2, setModal2] = useState(false)//modal to transfer sample
-          const toggleModal2 = () => setModal2(!modal2)
-          const [modal3, setModal3] = useState(false)//modal to View Result
-          const toggleModal3 = () => setModal3(!modal3)
-          const [collectModal, setcollectModal] = useState([])//to collect array of datas into the modal and pass it as props
+        //Make the list contain unique list of Data 
+        const uniqueValues = [...new Set(labTestType)];
+        const [modal, setModal] = useState(false) //Modal to collect sample 
+        const toggleModal = () => setModal(!modal)
+        const [modal2, setModal2] = useState(false)//modal to transfer sample
+        const toggleModal2 = () => setModal2(!modal2)
+        const [modal3, setModal3] = useState(false)//modal to View Result
+        const toggleModal3 = () => setModal3(!modal3)
+        const [collectModal, setcollectModal] = useState([])//to collect array of datas into the modal and pass it as props
 
-    const [labNum, setlabNum] = useState({lab_number:""})
+        const [labNum, setlabNum] = useState({lab_number:""})
 
-    const  checkLabNumber = fetchTestOrders.hasOwnProperty("lab_number"); //check if that key exist in the array
-        if(checkLabNumber !==false || checkLabNumber ===undefined){    
-             setlabNum({...labNum, lab_number:fetchTestOrders.lab_number})
-        }
+        const  checkLabNumber = fetchTestOrders.hasOwnProperty("lab_number"); //check if that key exist in the array
+            if(checkLabNumber !==false || checkLabNumber ===undefined){    
+                setlabNum({...labNum, lab_number:fetchTestOrders.lab_number})
+            }
 
     const handleLabNumber = e => {
       //  e.preventDefault();   
@@ -99,26 +97,24 @@ const useStyles = makeStyles({
     }
 
     const handleSample = (row) => { 
-      setcollectModal({...collectModal, ...row});
-          setModal(!modal) 
+        setcollectModal({...collectModal, ...row});
+        setModal(!modal) 
     }
 
     const transferSample = (row) => {
         setModal2(!modal2)
-            setcollectModal({...collectModal, ...row});
+        setcollectModal({...collectModal, ...row});
     }
 
     const viewresult = (row) => {  
         setcollectModal({...collectModal, ...row});
-            setModal3(!modal3) 
+        setModal3(!modal3) 
     }
 
     const getGroup = e => {
-      const getvalue =e.target.value;
-        const testing = fetchTestOrders.length >0 ? fetchTestOrders:{}
-            console.log(testing.data)
-            const getnew = fetchTestOrders.find(x => x.lab_test_group === getvalue)
-                console.log(getnew) 
+        const getValue =e.target.value;
+        const testOrders = fetchTestOrders.length >0 ? fetchTestOrders:{}
+        const getNewTestOrder = fetchTestOrders.find(x => x.lab_test_group === getValue)
     };
     //This is function to check for the status of each collection to display on the tablist below 
     const sampleStatus = e =>{
@@ -138,22 +134,22 @@ const useStyles = makeStyles({
     }
 
 //This is function to check for the status of each collection to display on the tablist below 
-  const sampleAction = (e) =>{
-    console.log(e)
-      return (
-          <Menu>
-              <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
-                  Action <span aria-hidden>▾</span>
-              </MenuButton>
-              <MenuList style={{hover:"#eee"}}>
-                  <MenuItem onSelect={() => handleSample(e)}><FaPlusSquare size="15" style={{color: '#000'}}/>{" "}Collect Sample</MenuItem>
-                      <MenuItem onSelect={() => transferSample(e)}><TiArrowForward size="15" style={{color: '#000'}}/>{" "} Transfer Sample</MenuItem>             
-                          { e.data.lab_test_order_status===5 ?
-                              <MenuItem onSelect={() => viewresult(e)}><FaRegEye size="15" style={{color: '#3F51B5'}}/>{" "}View Result</MenuItem>
-                            :""
-                          }  
-              </MenuList>
-          </Menu>
+    const sampleAction = (e) =>{
+    
+        return (
+            <Menu>
+                <MenuButton style={{ backgroundColor:"#3F51B5", color:"#fff", border:"2px solid #3F51B5", borderRadius:"4px"}}>
+                    Action <span aria-hidden>▾</span>
+                </MenuButton>
+                    <MenuList style={{hover:"#eee"}}>
+                        <MenuItem onSelect={() => handleSample(e)}><FaPlusSquare size="15" style={{color: '#000'}}/>{" "}Collect Sample</MenuItem>
+                            <MenuItem onSelect={() => transferSample(e)}><TiArrowForward size="15" style={{color: '#000'}}/>{" "} Transfer Sample</MenuItem>             
+                                { e.data.lab_test_order_status===5 ?
+                                    <MenuItem onSelect={() => viewresult(e)}><FaRegEye size="15" style={{color: '#3F51B5'}}/>{" "}View Result</MenuItem>
+                                    :""
+                                }  
+                    </MenuList>
+            </Menu>
           )
   }
 
