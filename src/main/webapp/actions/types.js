@@ -19,6 +19,7 @@ export const PATIENT_ENCOUNTER_LIST = 'PATIENT_ENCOUNTER_LIST'
 export const PATIENT_EXCLUSIVE_ENCOUNTER_LIST = 'PATIENT_EXCLUSIVE_ENCOUNTER_LIST'
 export const FETCH_COUNTRIES = "FETCH_COUNTRIES";
 
+
 /**
  * @TYPES
  * ===============================================
@@ -157,3 +158,17 @@ export const REGISTER_FAILURE = 'USERS_REGISTER_FAILURE'
 export const FETCH_USERS = 'FETCH_USERS'
 export const FETCH_USER_BY_ID = 'FETCH_USER_BY_ID'
 export const USERS_ERROR = 'USERS_ERROR'
+/**
+ * @TYPES
+ * ===============================================
+ * APPLICATION CODESET
+ */
+export const APPLICATION_CODESET_PRIORITIES = 'APPLICATION_CODESET_PRIORITIES'
+export const APPLICATION_CODESET_RELATIONSHIPS = 'APPLICATION_CODESET_RELATIONSHIPS'
+/**
+ * @TYPES
+ * ===============================================
+ * APPOINTMENTS
+ */
+export const APPOINTMENTS_FETCH_ALL = 'APPOINTMENTS_FETCH_ALL'
+export const APPOINTMENTS_ERROR = 'APPOINTMENTS_ERROR'

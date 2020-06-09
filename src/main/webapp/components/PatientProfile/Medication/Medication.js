@@ -159,8 +159,8 @@ function MedicationPage(props) {
     const PatientID = props.patientId;
     const visitId = props.visitId;
     const [medis, setmedis] = useState([]);
-    const [previousMedicationList, setPreviousMedicationList] = useState([]);
     const [showLoading, setShowLoading] = useState(false);  
+    
     
     const saveDrugOrders = (e) => { 
       e.preventDefault()
@@ -230,6 +230,7 @@ function MedicationPage(props) {
       };
 
       React.useEffect(() => {
+      
          if(props.drugList.length === 0){
         setErrorMsg();
         setFetchingDrugs(true);
@@ -281,10 +282,7 @@ function MedicationPage(props) {
                    
                 { medis.length > 0 ?
                     <Row>
-                        
-                        <br/>
-                        <br/>
-                       
+                      
                         <Col lg={12} >
                             <Card  style={cardStyle} >
                                 <CardHeader>Current Drug Order</CardHeader>
@@ -309,7 +307,6 @@ function MedicationPage(props) {
                             </Card>
                         </Col>
                         <Col lg={12}>
-                          { props.visitId ?
                         <MatButton  
                                         type="submit" 
                                         variant="contained"
@@ -323,9 +320,6 @@ function MedicationPage(props) {
                                               <span className="sr-only">Loading...</span>
                                             </Spinner> : ""}
                                 </MatButton> 
-                                :
-          <Alert color='danger'> This patient does not have a current visit. You have to check in to proceed</Alert>
-  }
                                 <br></br>
                                 <br></br>
                         </Col>
@@ -465,7 +459,7 @@ function NewDrugOrderForm({addDrugs, drugOrder, fetchingDrugs}){
                                             >
                                                 Add
                                             </MatButton>
-                                        
+
                                                </Form >
     )
 

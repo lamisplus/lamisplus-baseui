@@ -179,7 +179,7 @@ function HomePage(props) {
       </AppBar>
 
       <div>
-        <PatientDashboardSubMenu />
+        <PatientDashboardSubMenu patientHospitalNumber={props.hospitalNumber}/>
 
         {/* The DashBoard Tab  */}
         <TabPanel value={value} index={0}>

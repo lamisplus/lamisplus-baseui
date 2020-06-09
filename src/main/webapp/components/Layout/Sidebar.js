@@ -16,18 +16,13 @@ const sidebarBackground = {
 };
 
 const navItems = [
-  { to: "/dashboard", name: "Dashboard", exact: true, Icon: MdDashboard },
-  { to: "/patients", name: "Find Patient", exact: false, Icon: FaUserPlus },
-  { to: "/laboratory", name: "Laboratory", exact: false, Icon: GiTestTubes },
-  { to: "/pharmacy", name: "Pharmacy", exact: false, Icon: GiMedicines },
-  {
-    to: "/form-dashboard",
-    name: "Administration",
-    exact: false,
-    Icon: FaUserCog,
-  },
-  { to: "/report", name: "Report", exact: false, Icon: FaListUl },
-  { to: "/visual", name: "Visualization", exact: false, Icon: MdGraphicEq },
+  { to: '/dashboard', name: 'Dashboard', exact: true, Icon: MdDashboard },
+  { to: '/patients', name: 'Find Patient', exact: false, Icon: FaUserPlus },
+  { to: '/laboratory', name: 'Laboratory', exact: false, Icon: GiTestTubes },
+  { to: '/pharmacy', name: 'Pharmacy', exact: false, Icon: GiMedicines },
+  { to: '/report', name: 'Report', exact: false, Icon: FaListUl },
+  { to: '/visual', name: 'Visualization', exact: false, Icon: MdGraphicEq },
+  { to: '/appointments', name: 'Appointments', exact: false, Icon: MdGraphicEq },
 ];
 
 const adminItems = [

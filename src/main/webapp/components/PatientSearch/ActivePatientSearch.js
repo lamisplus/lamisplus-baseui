@@ -7,7 +7,7 @@ import "./PatientSearch.css";
 import { Dashboard } from "@material-ui/icons";
 import IconButton from '@material-ui/core/IconButton';
 
-const PatientSearch = (props) => {
+const ActivePatientSearch = (props) => {
   const [loading, setLoading] = React.useState(true);
 
       useEffect(() => {
@@ -25,8 +25,6 @@ const PatientSearch = (props) => {
         var dateParts = dob.split("-");
         var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
         var birthDate = new Date(dateObject); // create a date object directly from `dob1` argument
-        console.log(dateObject);
-        console.log(birthDate);
         var age_now = today.getFullYear() - birthDate.getFullYear();
         var m = today.getMonth() - birthDate.getMonth();
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
@@ -36,7 +34,6 @@ const PatientSearch = (props) => {
         if (age_now === 0) {
           return m + " month(s)";
         }
-        console.log(age_now);
         return age_now + " year(s)";
       };
 
@@ -52,12 +49,7 @@ const PatientSearch = (props) => {
           },
           { title: "Patient ID", field: "id" },
           { title: "Age", field: "age", filtering: false },
-          { title: "Address", field: "address", filtering: false },
-          {
-            title: "Action",
-            field: "actions",
-            filtering: false,
-          }, 
+          { title: "Address", field: "address", filtering: false }
         ]}
         isLoading={loading}
         data={props.patientsList.map((row) => ({
@@ -70,23 +62,19 @@ const PatientSearch = (props) => {
             ? 0
             : calculate_age(row.dob),
           address: row.street || ''  ,
-          actions: 
-          <div>
-          <IconButton
-          color="primary"
-          aria-label="View Patient"
-          title="View Patient"
-        >
-          <Link
-            to={{
-              pathname: "/patient-dashboard/"+row.hospitalNumber
-            }}
-          >
-            <Dashboard title="Patient Dashboard" aria-label="View Patient" />
-          </Link>
-        </IconButton></div>
-                 
+          patientId: row.patientId,
+          visitId: row.visitId        
         }))}
+        
+        actions= {[
+          {
+            icon: 'dashboard',
+            iconProps: {color: 'primary'},
+            tooltip: 'Patient Dashboard',
+            onClick: (event, rowData) => window.location.href = "/patient-dashboard/"+rowData.id
+          }]}
+          //overriding action menu with props.actions 
+          components={props.actions}
         options={{
           headerStyle: {
             backgroundColor: "#9F9FA5",
@@ -99,6 +87,7 @@ const PatientSearch = (props) => {
           filtering: true,
           exportButton: false,
           searchFieldAlignment: 'left',
+          actionsColumnIndex: -1
         }}
       />
     </div>
@@ -117,4 +106,4 @@ const mapStateToProps = state => {
     deletePatient: Del
   };
   
-export default connect(mapStateToProps, mapActionToProps)(PatientSearch);
+export default connect(mapStateToProps, mapActionToProps)(ActivePatientSearch);

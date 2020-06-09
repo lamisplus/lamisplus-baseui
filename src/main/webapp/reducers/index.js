@@ -11,6 +11,8 @@ import formReducers from './formReducers'
 import visitReducer from './visitReducer'
 import registrationReducer from './registrationReducer'
 import userReducer from './userReducer'
+import applicationCodesetReducer from './applicationCodesetReducer'
+import appointmentReducer from './appointmentReducer'
 
 export default combineReducers({
   patients: patientReducer,
@@ -24,6 +26,8 @@ export default combineReducers({
   medication: medicationReducer,
   visit: visitReducer,
   registration: registrationReducer,
-  users: userReducer
+  users: userReducer,
+  applicationCodesets: applicationCodesetReducer,
+  appointments: appointmentReducer
 })
 

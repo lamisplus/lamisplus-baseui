@@ -3,6 +3,8 @@ import DataTable from 'react-data-table-component'
 import { Alert } from 'reactstrap'
 import * as actions from "actions/patients";
 import {connect} from 'react-redux';
+import {LAB_ORDER_STATUS} from 'api/codes'
+import { Badge } from 'reactstrap';
 
 const columns = [
 //   {
@@ -23,7 +25,7 @@ const columns = [
     selector: 'lab_test_order_status',
     sortable: false,
     cell: (row) => (
-        <span>{row.dateEncounter || ''}</span>
+        <span><Badge  color="primary">{LAB_ORDER_STATUS.find(x => x.id == row.lab_test_order_status) ? LAB_ORDER_STATUS.find(x => x.id == row.lab_test_order_status).name : ''}</Badge></span>
       )
   },
   {
