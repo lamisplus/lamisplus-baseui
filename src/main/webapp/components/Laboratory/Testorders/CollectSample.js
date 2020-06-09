@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, CardBody,CardHeader,Col,Row,Alert, Form,FormGroup,Label,Input} from 'reactstrap'
+import {Card, CardBody,CardHeader,Col,Row,Alert,Table, Form,FormGroup,Label,Input} from 'reactstrap'
 import { useState , useEffect} from 'react'
 import { TiArrowBack } from 'react-icons/ti'
 import MatButton from '@material-ui/core/Button'
@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom'
 import {FaPlusSquare, FaRegEye} from 'react-icons/fa';
 import {TiArrowForward} from 'react-icons/ti'
 import { toast } from 'react-toastify'
+import 'react-widgets/dist/css/react-widgets.css'
+//Date Picker
 import { ToastContainer } from 'react-toastify'
 import Page from './../../Page'
 import {  fetchById } from '../../../actions/patients'
@@ -18,7 +20,6 @@ import ModalSampleTransfer from './transferSampleModal';
 import { useSelector, useDispatch } from 'react-redux';
 import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import { Spinner } from 'reactstrap';
-import { Table } from 'reactstrap';
 import { Badge } from 'reactstrap';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";

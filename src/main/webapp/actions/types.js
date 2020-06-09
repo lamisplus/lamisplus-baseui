@@ -20,6 +20,7 @@ export const PATIENT_EXCLUSIVE_ENCOUNTER_LIST = 'PATIENT_EXCLUSIVE_ENCOUNTER_LIS
 export const FETCH_COUNTRIES = "FETCH_COUNTRIES";
 export const PATIENT_UPDATE = "PATIENT_UPDATE"
 
+
 /**
  * @TYPES
  * ===============================================
@@ -130,3 +131,33 @@ export const FORMTYPES_UPDATE = 'FORMTYPES_UPDATE'
 export const FORMTYPES_DELETE = 'FORMTYPES_DELETE'
 export const FORMTYPES_ERROR = 'FORMTYPES_ERROR'
 
+/**
+ * @TYPES
+ * ===============================================
+ * AUTHENTICATE
+ */
+export const AUTHENTICATION = 'AUTHENTICATION'
+export const AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR'
+export const UNAUTHORISED_ERROR = 'UNAUTHORISED_ERROR'
+/**
+ * @TYPES
+ * ===============================================
+ * VISIT
+ */
+export const UPDATE_VISIT = 'UPDATE_VISIT'
+export const UPDATE_VISIT_ERROR = 'UPDATE_VISIT_ERROR'
+
+/**
+ * @TYPES
+ * ===============================================
+ * APPLICATION CODESET
+ */
+export const APPLICATION_CODESET_PRIORITIES = 'APPLICATION_CODESET_PRIORITIES'
+export const APPLICATION_CODESET_RELATIONSHIPS = 'APPLICATION_CODESET_RELATIONSHIPS'
+/**
+ * @TYPES
+ * ===============================================
+ * APPOINTMENTS
+ */
+export const APPOINTMENTS_FETCH_ALL = 'APPOINTMENTS_FETCH_ALL'
+export const APPOINTMENTS_ERROR = 'APPOINTMENTS_ERROR'

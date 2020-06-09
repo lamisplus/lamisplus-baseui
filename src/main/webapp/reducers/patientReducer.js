@@ -5,7 +5,7 @@ const initialState = {
   status: 0,
   vitalSigns: {},
   vitalSignsList: [],
-  allergies: {},
+  allergies: [],
   patient: {},
   previousMedications: [],
   encounters: [],

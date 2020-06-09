@@ -7,10 +7,11 @@ import React, {Component} from "react";
 // import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 // import componentQueries from 'react-component-queries';
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Redirect, Switch } from "react-router-dom";
 import "./styles/reduction.scss";
 import SignIn from "pages/SignPage";
 import { history } from "./history";
+import { PrivateRoute } from "./PrivateRoute"
 
 const DashboardPage = React.lazy(() => import("pages/DashboardPage"));
 const AdministrativeDashboard = React.lazy(() => import("components/Admin/AdministrativeDashBoard"));
@@ -49,19 +50,16 @@ const ViewForm = React.lazy(() => import('components/formBuilder/ViewForm'));
 /* Pharmacy page loading */
 const PharmacyDashboard = React.lazy(() => import("./components/Pharmacy/PharmacyDashboard"))
 
-const AppointmentPage = React.lazy(() => import("pages/AppointmentPage"));
 const CheckInPatientPage = React.lazy(() =>
   import("components/CheckIn/CheckedInPatientPage")
 );
 const ViewVitalsPage = React.lazy(() =>
   import("components/Vitals/ViewVitalsPage")
 );
-const AddVitalsPage = React.lazy(() =>
-  import("components/Vitals/AddVitalsPage")
-);
+
 // const CheckInModal = React.lazy(() => import('components/CheckIn/CheckInModal'));
 const EnrolledPatientsDashboard = React.lazy(() =>
-  import("components/PatientConsultation/HomePage")
+  import("components/PatientProfile/HomePage")
 );
 
 /* Sample table i design */
@@ -73,81 +71,93 @@ const getBasename = () => {return `/${process.env.PUBLIC_URL.split("/").pop()}`;
 
 const Prescription = React.lazy(() => import("components/Pharmacy/Prescriptions"))
 
+//Appointment
+const AppointmentPage = React.lazy(() => import("components/Appointments/HomePage"));
+// const getBasename = () => {
+//   return `/${process.env.PUBLIC_URL.split("/").pop()}`;
+// };
+
+// const Prescription = React.lazy(() => import("components/Pharmacy/prescriptions"))
 
 class Routes extends Component {
   render() {
     return (
       <BrowserRouter basename={getBasename()} history={history}>
         <Switch>
-         
-          <LayoutRoute exact path="/" layout={EmptyLayout} component={SignIn} />
+
+        <LayoutRoute exact path="/login" layout={EmptyLayout} component={SignIn} />
 
           <MainLayout breakpoint={this.props.breakpoint}>
             <React.Suspense fallback={<PageSpinner />}>
               {/* The new routes are here  */}
-              <Route exact path="/dashboard" component={DashboardPage} />
-              <Route exact path="/admin-dashboard" component={AdministrativeDashboard} />
-              <Route
+              <PrivateRoute exact path="/" component={DashboardPage} />
+              <PrivateRoute exact path="/dashboard" component={DashboardPage} />
+              <PrivateRoute
                 exact
                 path="/patient-registration"
                 component={PateintRegistationPage}
               />
-              <Route
+              <PrivateRoute
                 exact
                 path="/patient-update"
                 component={PateintUpdate}
               />
-              <Route exact path="/checkin" component={CheckInPage} />
-              <Route exact path="/vital-signs" component={VitalSignsPage} />
+              <PrivateRoute exact path="/checkin" component={CheckInPage} />
+              <PrivateRoute exact path="/vital-signs" component={VitalSignsPage} />
+              <PrivateRoute exact path="/checkin" component={CheckInPage} />
+              <PrivateRoute exact path="/vital-signs" component={VitalSignsPage} />
               {/* Consultation Links */}
-              <Route exact path="/consultation" component={ConsultationPage} />
+              <PrivateRoute exact path="/consultation" component={ConsultationPage} />
               
-              <Route
+              <PrivateRoute
                 exact
                 path="/consultation-dashbaord"
                 component={ConsultationDashboardPage}
               />
-             <Route exact path="/collect-result" component={LaboratorySampleResultPage} />
-              <Route exact path="/laboratory" component={LaboratoryPage} />
-              <Route exact path="/sample-verification" component={SampleVerification} />
-              <Route exact path="/collect-sample" component={CollectSample} />
-              <Route exact path="/patients" component={PatientsPage} />
+             <PrivateRoute exact path="/collect-result" component={LaboratorySampleResultPage} />
+              <PrivateRoute exact path="/laboratory" component={LaboratoryPage} />
+              <PrivateRoute exact path="/sample-verification" component={SampleVerification} />
+              <PrivateRoute exact path="/collect-sample" component={CollectSample} />
+              <PrivateRoute exact path="/patients" component={PatientsPage} />
 
               {/* Pharmacy Links */}
-              <Route exact path="/pharmacy" component={PharmacyDashboard} />
+              <PrivateRoute exact path="/pharmacy" component={PharmacyDashboard} />
               
-              <Route exact path="/prescriptions" component={Prescription}/>
-              <Route exact path="/appointment" component={AppointmentPage} />
-              <Route
+              <PrivateRoute exact path="/prescriptions" component={Prescription}/>
+              <PrivateRoute exact path="/appointment" component={AppointmentPage} />
+              <PrivateRoute
                 exact
                 path="/checkedin-patients"
                 component={CheckInPatientPage}
               />
-              <Route exact path="/view-vitals" component={ViewVitalsPage} />
-              <Route exact path="/add-vitals" component={AddVitalsPage} />
-              {/* <Route exact path="/checkin-modal" component={CheckInModal} /> */}
+
+              <PrivateRoute exact path="/view-vitals" component={ViewVitalsPage} />
+              {/* <PrivateRoute exact path="/add-vitals" component={AddVitalsPage} /> */}
+              {/* <PrivateRoute exact path="/checkin-modal" component={CheckInModal} /> */}
 
               {/* The rout to Hiv Module */}
-              <Route
+              <PrivateRoute
                 exact
-                path="/patient-dashboard"
+                path="/patient-dashboard/:hospitalNumber"
                 component={EnrolledPatientsDashboard}
               />
-              <Route exact path="/form-dashboard" component={formDashboard} />
-              <Route exact path="/form-builder" component={FormBuilder} />
-              <Route exact path="/view-form" component={ViewForm} />
+              <PrivateRoute exact path="/form-dashboard" component={formDashboard} />
+              <PrivateRoute exact path="/form-builder" component={FormBuilder} />
+              <PrivateRoute exact path="/view-form" component={ViewForm} />
               
               {/* The rout to that DataTabel */}
-              <Route exact path="/testpage" component={TestPage} />
-              <Route exact path="/form-renderer" component={FormRendererPage} />
+              <PrivateRoute exact path="/testpage" component={TestPage} />
+              <PrivateRoute exact path="/form-renderer" component={FormRendererPage} />
               {/* The rout to Report*/}
-              <Route exact path="/report" component={ReportPage} />
+              <PrivateRoute exact path="/report" component={ReportPage} />
+              <PrivateRoute exact path="/appointments" component={AppointmentPage} />
+              {/* The route to Appointment*/}
               
             </React.Suspense>
           </MainLayout>
+          
           <Redirect to="/" />
-        </Switch>
-        
+        </Switch>       
       </BrowserRouter>
     );
   }

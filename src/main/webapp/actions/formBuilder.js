@@ -1,28 +1,8 @@
 import axios from 'axios'
 
-import {url} from '../api'
+import {url as baseUrl, url} from '../api'
 
 import * as FORMTYPES from './types'
-
-
-export const fetchModules = () => dispatch => {
-    axios.get(`${url}modules`)
-        .then(response => {
-            console.log(response.data)
-            dispatch({
-                type: FORMTYPES.FORMTYPES_FETCH_ALL,
-                payload: response.data
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            dispatch({
-                type: FORMTYPES.FORMTYPES_ERROR,
-                payload: 'Something went wrong'
-
-            })
-        })
-}
 
 export const fetchService = () => dispatch => {
     axios.get(`${url}programs`)
@@ -54,11 +34,14 @@ export const createForm = (data) => dispatch => {
             })
             console.log(response)
         })
+        //onSuccess()
         .catch(error => {
+            //onError()
             dispatch({
                 type: FORMTYPES.FORMTYPES_ERROR,
                 payload: 'please try again'
             })
+            //onError(error.response)
         })
 }
 
@@ -79,28 +62,73 @@ export const updateForm = (id, data) => dispatch => {
         })
 }
 
-export const fetchById = (id, programCode, onSuccess) => dispatch => {
-    axios
-        .get(`${url}forms/${id}/${programCode}`)
+// export const fetchById = (id, onSuccess, onError) => dispatch => {
+//     dispatch({
+//         type:FORMTYPES.FORMTYPES_FETCH_BY_ID,
+//         payload: {}
+//     })
+//
+//     axios
+//         .get(`${url}forms/${id}/formCode`)
+//         .then(response => {
+//             dispatch({
+//                 type:FORMTYPES.FORMTYPES_FETCH_BY_ID,
+//                 payload: response.data
+//             })
+//             onSuccess()
+//         })
+//         .catch(error => {
+//             //onError()
+//             dispatch({
+//                 type: FORMTYPES.FORMTYPES_ERROR,
+//                 payload: 'Error loading form, something went wrong. Please try again'
+//             })
+//    // onError(error.response)
+//         })
+// }
+
+export const fetchById = (programId) => dispatch => {
+    axios.get(`${url}programs/${programId}/forms`)
         .then(response => {
+            console.log(response)
             dispatch({
                 type: FORMTYPES.FORMTYPES_FETCH_BY_ID,
+                payload: response.data
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            dispatch({
+                type: FORMTYPES.FORMTYPES_ERROR,
+                payload: 'Something went wrong'
+
+            })
+        })
+}
+export const fetchAll = (onSuccess, onError) => dispatch => {
+    axios
+        .get(`${url}forms`)
+        .then(response => {
+            dispatch({
+                type: FORMTYPES.FORMTYPES_FETCH_ALL,
                 payload: response.data
             })
             onSuccess()
         })
         .catch(error => {
+            //onError()
             dispatch({
                 type:  FORMTYPES.FORMTYPES_ERROR,
-                payload: 'Error loading form, something went wrong. Please try again'
+                payload: 'Something went wrong, please try again'
             })
+
         })
 }
 
-export const fetchPrograms = () => dispatch => {
-    axios.get(`${url}programs`)
+export const fetchForms = () => dispatch => {
+    axios.get(`${url}programs/1/forms`)
         .then(response => {
-            console.log(response.data)
+            console.log(response)
             dispatch({
                 type: FORMTYPES.FORMTYPES_FETCH_ALL,
                 payload: response.data
@@ -115,40 +143,3 @@ export const fetchPrograms = () => dispatch => {
             })
         })
 }
-
-export const fetchForms = (programCode) => dispatch => {
-    axios.get(`${url}programs?programCode=${programCode}`)
-        .then(response => {
-            console.log(response)
-            dispatch({
-                type: FORMTYPES.FORMTYPES_FETCH_SERVICES,
-                payload: response.data
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            dispatch({
-                type: FORMTYPES.FORMTYPES_ERROR,
-                payload: 'Something went wrong'
-
-            })
-        })
-}
-
-
-// export const fetchAll = (programCode) => dispatch => {
-//   axios
-//     .get(`${url}forms/${programCode}}`)
-//     .then(response => {
-//       dispatch({
-//         type: FORMTYPES.FORMTYPES_FETCH_ALL,
-//         payload: response.data
-//       })
-//     })
-//     .catch(error =>
-//       dispatch({
-//         type: FORMTYPES.FORMTYPES_ERROR,
-//         payload: 'Something went wrong, please try again'
-//       })
-//     )
-// }
