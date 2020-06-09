@@ -139,12 +139,15 @@ const FormRenderer = (props) => {
     <React.Fragment>
         <Card>
           <CardBody>
+            { props.options && props.hideHeader &&
+            <>
             <h4 class="text-capitalize">
               {"New: "}
               {props.title || form.name}
             </h4>
-
             <hr />
+            </>
+}
             {/* <Errors errors={props.errors} /> */}
             <Alert color="danger" isOpen={showErrorMsg} toggle={onDismiss}>
               {errorMsg}
