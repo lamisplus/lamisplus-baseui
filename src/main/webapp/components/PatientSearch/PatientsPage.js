@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PatientPage = props => {
+const GeneralPatientSearch = props => {
   const classes = useStyles();
 
   return (
@@ -50,4 +50,4 @@ const PatientPage = props => {
   );
 };
 
-export default PatientPage;
+export default GeneralPatientSearch;
