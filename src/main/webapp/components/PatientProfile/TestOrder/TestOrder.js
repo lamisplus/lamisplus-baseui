@@ -34,13 +34,15 @@ import ListItemText from "@material-ui/core/ListItemText";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { APPLICATION_CODESET_PRIORITIES } from "actions/types";
+import CheckedInValidation from "components/Utils/CheckedInValidation";
 
 function TestOrderPage(props) {
   const PatientID = props.patientId;
   const visitId = props.visitId;
   const [tests, setTests] = React.useState([]);
   const [testOrders, setTestOrders] = React.useState([]);
-  const [testOrder, setTestOrder] = React.useState({});
+  const defaultFormValue = { test: {}, priority: {}, testGroup: {}, vlIndication: "" };
+  const [testOrder, setTestOrder] = React.useState(defaultFormValue);
   const [showLoading, setShowLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -73,7 +75,6 @@ function TestOrderPage(props) {
 
   const getTestByTestGroup = (testGroup) => {
     setTestOrder({ ...testOrder, testGroup: testGroup });
-    console.log(testGroup);
     async function fetchTests() {
       setErrorMessage("");
       const onSuccess = () => {
@@ -123,7 +124,7 @@ function TestOrderPage(props) {
       return;
     }
     setTestOrders([...testOrders, testOrder]);
-    setTestOrder({ test: {}, priority: {}, testGroup: {}, vlIndication: "" });
+    setTestOrder(defaultFormValue);
   };
 
   const saveTestOrder = (e) => {
@@ -267,8 +268,9 @@ function TestOrderPage(props) {
                     </FormGroup>
                   </Col>
                 )}
-                {props.visitId ? (
                   <Col md={12}>
+                    <CheckedInValidation
+                    actionButton={
                     <Button
                       class="btn btn-primary "
                       type="button"
@@ -276,16 +278,9 @@ function TestOrderPage(props) {
                     >
                       Add Test
                     </Button>
+                    } visitId={props.patient.visitId } />
                   </Col>
-                ) : (
-                  <Col md={12}>
-                    <Alert color="danger">
-                      {" "}
-                      This patient does not have a current visit. You have to
-                      check in to proceed
-                    </Alert>
-                  </Col>
-                )}
+              
               </Row>
             </form>
           </CardBody>

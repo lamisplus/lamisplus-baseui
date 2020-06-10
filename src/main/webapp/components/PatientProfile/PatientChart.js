@@ -140,7 +140,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapActionToProps = {
-  fetchPatientVitalSigns: actions.fetchPatientLatestVitalSigns,
+  fetchPatientVitalSigns: actions.fetchPatientVitalSigns,
 };
 
 export default connect(mapStateToProps, mapActionToProps)(PatientChart);

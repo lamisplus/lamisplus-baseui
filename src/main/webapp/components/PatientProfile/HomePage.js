@@ -140,7 +140,6 @@ function HomePage(props) {
           variant="scrollable"
           scrollButtons="on"
           indicatorColor="primary"
-          textColor="white"
           aria-label="scrollable force tabs example"
         >
           <Tab

@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
-import { fetchAll, Delete as Del } from "../../actions/patients";
+import { fetchAll, Delete as Del , fetchCheckedInPatients} from "../../actions/patients";
 import "./PatientSearch.css";
 import { Dashboard } from "@material-ui/icons";
 import IconButton from '@material-ui/core/IconButton';
@@ -97,12 +97,12 @@ const ActivePatientSearch = (props) => {
 const mapStateToProps = state => {
 
     return {
-      patientsList: state.patients.list
+      patientsList: state.patients.checkedInPatientList
     };
   };
   
   const mapActionToProps = {
-    fetchAllPatients: fetchAll,
+    fetchAllPatients: fetchCheckedInPatients,
     deletePatient: Del
   };
   

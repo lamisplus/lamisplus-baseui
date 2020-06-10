@@ -62,7 +62,6 @@ function DataTableList (props) {
   React.useEffect(() => {
     setLoading(true)
     const onSuccess = () => {
-      console.log('setting data');
       setData(props.vitalSignsList);
       setLoading(false)
     }

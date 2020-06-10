@@ -16,7 +16,7 @@ Moment.locale("en");
 momentLocalizer();
 
 const FormRenderer = (props) => {
-  const [form, setForm] = React.useState();
+  const [form, setForm] = React.useState({});
   const [errorMsg, setErrorMsg] = React.useState("");
   const [showErrorMsg, setShowErrorMsg] = React.useState(false);
   const [showLoading, setShowLoading] = React.useState(false);
@@ -33,7 +33,8 @@ const FormRenderer = (props) => {
  React.useEffect(() => {
   formRendererService
     .fetchFormByFormCode(props.formCode).then((response) => {
-      if (response.data.name && !response.data.resourceObject) {
+      setShowLoadingForm(false);
+      if (!response.data.resourceObject) {
         setErrorMsg("Form resource not found, please contact adminstration.");
         setShowErrorMsg(true);
         return;
@@ -43,7 +44,6 @@ const FormRenderer = (props) => {
           fetchEncounter();
       }
       setForm(response.data);
-      setShowLoadingForm(false);
     }) .catch((error) => {
       setErrorMsg("Error loading form, something went wrong");
     setShowErrorMsg(true);
