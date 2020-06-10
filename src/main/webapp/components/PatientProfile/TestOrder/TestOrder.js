@@ -272,7 +272,7 @@ function TestOrderPage(props) {
                     <CheckedInValidation
                     actionButton={
                     <Button
-                      class="btn btn-primary "
+                      className="btn btn-primary "
                       type="button"
                       onClick={addNewTest}
                     >

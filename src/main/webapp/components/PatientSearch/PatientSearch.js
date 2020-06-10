@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
-import { fetchAll, Delete as Del } from "../../actions/patients";
+import { fetchAll, Delete as Del } from "actions/patients";
 import "./PatientSearch.css";
 import { Dashboard } from "@material-ui/icons";
 import IconButton from '@material-ui/core/IconButton';
@@ -25,8 +25,6 @@ const PatientSearch = (props) => {
         var dateParts = dob.split("-");
         var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
         var birthDate = new Date(dateObject); // create a date object directly from `dob1` argument
-        console.log(dateObject);
-        console.log(birthDate);
         var age_now = today.getFullYear() - birthDate.getFullYear();
         var m = today.getMonth() - birthDate.getMonth();
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
@@ -36,7 +34,6 @@ const PatientSearch = (props) => {
         if (age_now === 0) {
           return m + " month(s)";
         }
-        console.log(age_now);
         return age_now + " year(s)";
       };
 
@@ -79,7 +76,7 @@ const PatientSearch = (props) => {
         >
           <Link
             to={{
-              pathname: "/patient-dashboard/"+row.hospitalNumber
+              pathname: "/patients/"+row.hospitalNumber
             }}
           >
             <Dashboard title="Patient Dashboard" aria-label="View Patient" />
