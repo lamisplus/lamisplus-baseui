@@ -16,7 +16,7 @@ export const initialfieldState_patientRegistration = {
   city: '',
   countryId: '',
   landmark: '',
-  provinceId: '',
+  provinceId: '2',
   zipCode: '',
   stateId: '',
   street: '',

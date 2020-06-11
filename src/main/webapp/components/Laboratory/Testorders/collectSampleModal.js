@@ -7,6 +7,7 @@ Col,Input,
 FormGroup,
 Label,Card, CardBody
 } from 'reactstrap';
+import axios from 'axios';
 import MatButton from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
@@ -84,8 +85,8 @@ const ModalSample = (props) => {
 useEffect(() => {
     async function getCharacters() {
         try {
-            const response = await fetch(url+'application-codesets/codesetGroup?codesetGroup=SAMPLE_TYPE');
-            const body = await response.json();
+            const response = await axios(url+'application-codesets/codesetGroup?codesetGroup=SAMPLE_TYPE');
+            const body =  response.data;
             setOptionsample(body.map(({ display, id }) => ({ title: display, value: id })));
         } catch (error) {
             console.log(error);
@@ -219,7 +220,7 @@ useEffect(() => {
                                                                 date={false}
                                                                 name="time_sample_collected"
                                                                 id="time_sample_collected"
-                                                                value={otherfields.time_sample_collected}
+                                                               
                                                                 onChange={value1 =>
                                                                   setOtherFields({ ...otherfields, time_sample_collected: value1 })
                                                                 }
