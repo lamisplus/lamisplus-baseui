@@ -78,7 +78,7 @@ useEffect(() => {
             >
               <span style={{textTransform: 'capitalize'}}>Dispatched  </span>
                   &nbsp;&nbsp;
-              <span style={{textTransform: 'lowercase'}}>samples list </span>              
+              <span style={{textTransform: 'lowercase'}}>samples </span>              
             </Button>
       </Link>
         <br/>
@@ -98,29 +98,16 @@ useEffect(() => {
               field: "samplestatus",
               filtering: false
           },
-          {
-              title: "Action",
-              field: "actions",
-              filtering: false,
-          },
+          
         ]}
         isLoading={loading}
         data={labTestType.map((row) => ({
-          LabTest: row.description,
-          SampleType: row.sample_type,
-          
-          dateSampleCollected: row.date_sample_collected,
-          samplestatus: sampleStatus(row.lab_test_order_status),
-          actions: <Link to ={{ 
-                      pathname: "/collect-sample",  
-                      state: row 
-                     }} 
-                        style={{ cursor: "pointer", color: "blue", 
-                        fontStyle: "bold" }}>
-                          
-                    </Link>
-
-                    }))}
+            LabTest: row.description,
+            SampleType: row.sample_type,
+            
+            dateSampleCollected: row.date_sample_collected,
+            samplestatus: sampleStatus(row.lab_test_order_status),
+            }))}
         options={{
             search: false,
             selection: true,

@@ -148,7 +148,7 @@ const ModalSampleTransfer = (props) => {
                                             </p>        
                                         </Alert>
                                     </Col>
-                                    <Col md={4}>
+                                    <Col md={6}>
                                         {/* <p>Sample Type {datasample.data.description}  </p> */}
                                           <FormGroup>
                                               <Label for='maritalStatus'>Date Transfer</Label>
@@ -167,7 +167,7 @@ const ModalSampleTransfer = (props) => {
                                                       ) : "" }
                                           </FormGroup>
                                       </Col>
-                                      <Col md={3}>
+                                      <Col md={6}>
                                           <FormGroup> 
                                               <Label for=''>Time Transfer</Label>
                                                   <DateTimePicker
@@ -183,7 +183,7 @@ const ModalSampleTransfer = (props) => {
                                                       ) : "" }      
                                           </FormGroup>
                                       </Col>
-                                      <Col md={5}>
+                                      <Col md={6}>
                                           <FormGroup>
                                               <Label for="exampleSelect">Lab Transfered To</Label>
                                                   <Input type="select" name="lab_test_order_status" id="lab_test_order_status" 
@@ -198,21 +198,6 @@ const ModalSampleTransfer = (props) => {
                                                   </Input>
                                                       <FormFeedback>{errors.lab_test_order_status}</FormFeedback>
                                           </FormGroup>
-                                      </Col>
-                                      <Col md={7}>
-                                          <FormGroup>
-                                              <Label for='maritalStatus'>Note</Label>
-                                                  <Input
-                                                      type='textarea'
-                                                      name='comment'
-                                                      id='comment'
-                                                      onChange={handleOtherFieldInputChange}
-                                                        value = {otherfields.comment}                                     
-                                                            {...(errors.comment && { invalid: true})}                                   
-                                                  >                         
-                                                   </Input>
-                                                      <FormFeedback>{errors.comment}</FormFeedback>          
-                                          </FormGroup>          
                                       </Col>
                                       <Col md={5}>
                                           <FormGroup>
@@ -234,6 +219,22 @@ const ModalSampleTransfer = (props) => {
                                                     <FormFeedback>{errors.sample_transfered_by}</FormFeedback>
                                           </FormGroup>
                                       </Col>
+                                      <Col md={7}>
+                                          <FormGroup>
+                                              <Label for='maritalStatus'>Note</Label>
+                                                  <Input
+                                                      type='textarea'
+                                                      name='comment'
+                                                      id='comment'
+                                                      onChange={handleOtherFieldInputChange}
+                                                        value = {otherfields.comment}                                     
+                                                            {...(errors.comment && { invalid: true})}                                   
+                                                  >                         
+                                                   </Input>
+                                                      <FormFeedback>{errors.comment}</FormFeedback>          
+                                          </FormGroup>          
+                                      </Col>
+                                      
                                   </Row>
                                       <br/>
                                       {loading ? <Spinner /> : ""}

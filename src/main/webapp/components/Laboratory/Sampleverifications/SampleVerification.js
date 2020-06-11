@@ -27,7 +27,7 @@ import {
   MenuItem,
 } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
-import ModalSample from './../Testorders/collectSampleModal';
+import ModalSample from '../Testorders/CollectSampleModal';
 
 const useStyles = makeStyles({
   root: {

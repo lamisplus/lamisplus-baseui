@@ -15,8 +15,8 @@ import { ToastContainer } from 'react-toastify'
 import Page from './../../Page'
 import {  fetchById } from '../../../actions/patients'
 import {  fetchAllLabTestOrderOfPatient } from '../../../actions/laboratory'
-import ModalSample from './collectSampleModal';
-import ModalSampleTransfer from './transferSampleModal';
+import ModalSample from './CollectSampleModal';
+import ModalSampleTransfer from './TransferSampleModal';
 import { useSelector, useDispatch } from 'react-redux';
 import PatientDetailCard from 'components/Functions/PatientDetailCard';
 import { Spinner } from 'reactstrap';

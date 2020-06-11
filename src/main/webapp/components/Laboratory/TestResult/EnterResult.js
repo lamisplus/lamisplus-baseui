@@ -144,7 +144,7 @@ const ModalSampleResult = (props) => {
                                               </p>
                                           </Alert>
                                       </Col>
-                                      <Col xs="4">
+                                      <Col xs="6">
                                           Date Assayed
                                             <br/>
                                             <DateTimePicker time={false} name="date_asseyed"  id="date_asseyed"  
@@ -153,7 +153,7 @@ const ModalSampleResult = (props) => {
                                               }
                                             /> 
                                       </Col>
-                                      <Col xs="4">
+                                      <Col xs="6">
                                           Date Reported
                                               <br/>
                                               <DateTimePicker time={false} name="date_result_reported"  id="date_result_reported"  
@@ -162,7 +162,7 @@ const ModalSampleResult = (props) => {
                                                 }
                                               />            
                                       </Col>
-                                      <Col md="4">
+                                      <Col md="6">
                                           <Label for=''>Time Transfer</Label>
                                               <DateTimePicker
                                                   date={false}
@@ -175,10 +175,29 @@ const ModalSampleResult = (props) => {
                                                   {errors.time_result_enetered !="" ? (
                                                     <span className={classes.error}>{errors.time_result_enetered}</span>
                                                   ) : "" }
-                                      </Col>  
+                                      </Col> 
+                                      <Col md="6">
+                                        <FormGroup>
+                                            <Label for="occupation">Result Entered by </Label>
+                                                <Input
+                                                  type="select"
+                                                  name="result_entered_by"
+                                                  id="result_entered_by"
+                                                  vaule={otherfields.result_entered_by}
+                                                  onChange={handleOtherFieldInputChange}
+                                                  {...(errors.result_entered_by && { invalid: true})} 
+                                                >
+                                                    <option value=""></option>
+                                                    <option value="Dorcas"> Dorcas </option>
+                                                    <option value="Jeph"> Jeph </option>
+                                                    <option value="Debora"> Debora </option>
+                                                </Input>
+                                                    <FormFeedback>{errors.result_entered_by}</FormFeedback>
+                                        </FormGroup>
+                                    </Col> 
                                   </Row>
                                   <Row>             
-                                      <Col xs="5">
+                                      <Col xs="7">
                                           <FormGroup>
                                             <br/>
                                               <Label for="examplePassword"> Result  </Label>
@@ -198,25 +217,7 @@ const ModalSampleResult = (props) => {
                                             <p style={{marginTop: '2rem' }} >{unit_measurement}</p>   
                                         </FormGroup>                 
                                     </Col>
-                                    <Col md="4">
-                                        <FormGroup>
-                                            <Label for="occupation">Result Entered by </Label>
-                                                <Input
-                                                  type="select"
-                                                  name="result_entered_by"
-                                                  id="result_entered_by"
-                                                  vaule={otherfields.result_entered_by}
-                                                  onChange={handleOtherFieldInputChange}
-                                                  {...(errors.result_entered_by && { invalid: true})} 
-                                                >
-                                                    <option value=""></option>
-                                                    <option value="Dorcas"> Dorcas </option>
-                                                    <option value="Jeph"> Jeph </option>
-                                                    <option value="Debora"> Debora </option>
-                                                </Input>
-                                                    <FormFeedback>{errors.result_entered_by}</FormFeedback>
-                                        </FormGroup>
-                                    </Col>
+                                    
                                 </Row>
                                     <br/>
                                     {loading ? <Spinner /> : ""}

@@ -250,10 +250,10 @@ export default function ScrollableTabsButtonForce(props) {
                           aria-label="scrollable force tabs example"
                     >
                         <Tab className={classes.title} label="Dashboard" icon={<MdDashboard />} {...a11yProps(0)} />         
-                        <Tab className={classes.title} label="Lab Test Orders" icon={<MdContacts />} {...a11yProps(1)} />
+                        <Tab className={classes.title} label="Sample Collection" icon={<MdContacts />} {...a11yProps(1)} />
                         <Tab className={classes.title} label="Sample Verification " icon={<GiFiles />} {...a11yProps(2)} />
-                        <Tab className={classes.title} label="Lab Results " icon={<GiFiles />} {...a11yProps(3)} />
-                        <Tab className={classes.title} label="Dispatch Manifest " icon={<GiFiles />} {...a11yProps(4)} />
+                        <Tab className={classes.title} label="Results Reporting" icon={<GiFiles />} {...a11yProps(3)} />
+                        <Tab className={classes.title} label="Sample Dispatched  " icon={<GiFiles />} {...a11yProps(4)} />
                     </Tabs>
           
                 </AppBar>

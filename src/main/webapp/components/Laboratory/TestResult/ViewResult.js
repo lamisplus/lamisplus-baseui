@@ -95,19 +95,24 @@ const ModalViewResult = (props) => {
                                         <span style={{ fontWeight: 'bold'}}>Lab Test Group</span> : {lab_test_group}
                                         <br/>
                                     </Col>
+                                    <br/>
                                     <Col xs="6">
-                                        <span style={{ fontWeight: 'bold'}}>Lab Test Ordered</span> : {description}
+                                        <span style={{ fontWeight: 'bold'}}>Lab Test Ordered</span> : {description} 
+                                            &nbsp;&nbsp;&nbsp;Unit: {unit_measurement} 
                                         <br/>
-                                            <p><span style={{ fontWeight: 'bold'}}>Unit</span>: {unit_measurement} </p>          
+                                                      
                                     </Col>
+                                    <br/>
                                     <Col xs="6">
                                         <span style={{ fontWeight: 'bold'}}>Date Assayed </span>: {date_result_reported}
                                         <br/>
                                     </Col>
+                                    <br/>
                                     <Col xs="6">
                                         <span style={{ fontWeight: 'bold'}}>Date Reported </span>: {date_result_reported}
                                         <br/>    
                                     </Col>
+                                    <br/>
                                     <Col xs="4">
                                         <FormGroup>
                                           <br/>

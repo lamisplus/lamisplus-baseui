@@ -148,7 +148,7 @@ const ModalSample = (props) => {
           
         </Alert>
       </Col>
-      <Col md={4}>
+      <Col md={6}>
           <FormGroup>
             <Label for='maritalStatus'>Date Verified</Label>
             <DateTimePicker
@@ -164,7 +164,7 @@ const ModalSample = (props) => {
               ) : "" }
           </FormGroup>
         </Col>
-        <Col md={3}>
+        <Col md={6}>
           <FormGroup> 
             <Label for=''>Time Verified</Label>
             
@@ -181,7 +181,7 @@ const ModalSample = (props) => {
                   ) : "" }
           </FormGroup>
           </Col>
-        <Col md={5}>
+        <Col md={6}>
           <FormGroup>
             <Label for="exampleSelect">Confirm Sample</Label>
             <Input type="select" name="verification_status" id="verification_status" 
@@ -196,23 +196,7 @@ const ModalSample = (props) => {
             <FormFeedback>{errors.verification_status}</FormFeedback>
           </FormGroup>
           </Col>
-          <Col md={7}>
-          <FormGroup>
-            <Label for='maritalStatus'>Note</Label>
-            <Input
-              type='textarea'
-              name='comment'
-              id='comment'
-              onChange={handleOtherFieldInputChange}
-              value = {otherFields.comment}                                      
-              {...(errors.comment && { invalid: true})}                                   
-              >                         
-              </Input>
-              <FormFeedback>{errors.comment}</FormFeedback>                        
-            
-          </FormGroup>
-        </Col>  
-        <Col md={5}>
+          <Col md={6}>
             <FormGroup>
                 <Label for="occupation">Verify by </Label>
 
@@ -232,6 +216,23 @@ const ModalSample = (props) => {
                       <FormFeedback>{errors.sample_verified_by}</FormFeedback>
             </FormGroup>
         </Col>
+          <Col md={7}>
+          <FormGroup>
+            <Label for='maritalStatus'>Note</Label>
+            <Input
+              type='textarea'
+              name='comment'
+              id='comment'
+              onChange={handleOtherFieldInputChange}
+              value = {otherFields.comment}                                      
+              {...(errors.comment && { invalid: true})}                                   
+              >                         
+              </Input>
+              <FormFeedback>{errors.comment}</FormFeedback>                        
+            
+          </FormGroup>
+        </Col>  
+        
       
      </Row>
      <br/>

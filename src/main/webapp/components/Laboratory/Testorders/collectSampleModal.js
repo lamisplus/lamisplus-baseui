@@ -193,7 +193,7 @@ useEffect(() => {
                                                       
                                                     </Alert>
                                                 </Col>
-                                                <Col md={4}>
+                                                <Col md={6}>
                                                   
                                                     <FormGroup> 
                                                         <Label for='maritalStatus'>Date Collected</Label>
@@ -212,7 +212,7 @@ useEffect(() => {
                                                                   ) : "" }
                                                     </FormGroup>
                                                 </Col>
-                                                <Col md={3}>
+                                                <Col md={6}>
                                                     <FormGroup> 
                                                         <Label for='maritalStatus'>Time Collected</Label>
                                                   
@@ -231,7 +231,7 @@ useEffect(() => {
                                                                 ) : "" }
                                                     </FormGroup>
                                                 </Col>
-                                                <Col md={5}>
+                                                <Col md={6}>
                                                     <FormGroup>
                                                         <Label for='maritalStatus'>Sample Type</Label>
                                                             <Autocomplete
@@ -259,23 +259,7 @@ useEffect(() => {
                                                                   ) : "" }
                                                     </FormGroup>
                                                 </Col>
-
-                                                <Col md="7">
-                                                    <FormGroup>
-                                                        <Label for='maritalStatus'>Note</Label>
-                                                            <Input
-                                                                type='textarea'
-                                                                name='comment'
-                                                                id='comment'
-                                                                onChange={handleInputChangeSample}
-                                                                value = {samples.comment}  
-                                                                    {...(errors.comment && { invalid: true})}                                   
-                                                            >                         
-                                                            </Input>
-                                                                <FormFeedback>{errors.comment}</FormFeedback>
-                                                    </FormGroup>
-                                                </Col>
-                                                <Col md={3}>
+                                                <Col md={6}>
                                                     <FormGroup>
                                                         <Label for="occupation">Collected by </Label>
 
@@ -295,6 +279,22 @@ useEffect(() => {
                                                               <FormFeedback>{errors.sample_collected_by}</FormFeedback>
                                                     </FormGroup>
                                                 </Col>
+                                                <Col md={7}>
+                                                    <FormGroup>
+                                                        <Label for='maritalStatus'>Note</Label>
+                                                            <Input
+                                                                type='textarea'
+                                                                name='comment'
+                                                                id='comment'
+                                                                onChange={handleInputChangeSample}
+                                                                value = {samples.comment}  
+                                                                    {...(errors.comment && { invalid: true})}                                   
+                                                            >                         
+                                                            </Input>
+                                                                <FormFeedback>{errors.comment}</FormFeedback>
+                                                    </FormGroup>
+                                                </Col>
+            
                                                   <br/><br/>
                                                 <Col md={12}>
                                                     {loading ? 
