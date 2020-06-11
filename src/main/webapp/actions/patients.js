@@ -107,6 +107,8 @@ export const create = (data,onSuccess, onError) => dispatch => {
 
 export const update = (data, id, onSuccess, onError) => dispatch => {
   console.log(data);
+  console.log(id);
+  console.log(`${baseUrl}patients/${id}`);
     axios
     .put(`${baseUrl}patients/${id}`, data)
     .then(response => {
@@ -121,8 +123,9 @@ export const update = (data, id, onSuccess, onError) => dispatch => {
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
-        payload: "Something went wrong"
+        payload:error.response.data
       });
+      console.log(error.response.data)
       onError()
       if(error.response.data.apierror.message===null || error.response.data.apierror.message===""){
         toast.error("Something went wrong");

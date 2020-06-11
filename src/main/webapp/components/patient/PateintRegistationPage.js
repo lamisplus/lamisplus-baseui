@@ -72,7 +72,11 @@ const useStyles = makeStyles(theme => ({
     },
     inline: {
         display: "inline"
-    }
+    },
+    error:{
+      color: '#f85032',
+      fontSize: '12.8px'
+  }
 }));
 
 
@@ -291,10 +295,10 @@ const validate = () => {
     temp.hospitalNumber = values.hospitalNumber ? "" : "Patient Id is required."
     temp.mobilePhoneNumber = values.mobilePhoneNumber ? "" : "Mobile numner is required."
     temp.lastName = values.lastName ? "" : "Last Name  is required."
-    temp.genderId = values.genderId ? "" : "Gender is required." 
-        setErrors({
-            ...temp
-        })
+    temp.genderId = values.genderId ? "" : "Gender is required."  
+    
+        setErrors({ ...temp })
+        console.log(temp)
             return Object.values(temp).every(x => x == "")
 }
 
@@ -304,16 +308,20 @@ const validate = () => {
     const handleSubmit = e => {
           e.preventDefault();
           
-              if(validate()){
+              
                   const newRegistrationDate = moment(values.dateRegistration).format("MM-DD-YYYY");
                   const newDateOfBirth = moment(values.dob).format("MM-DD-YYYY");
                   values["dateRegistration"] = newRegistrationDate;
                   values["personRelativeDTOs"] = relatives;
                   values["dob"] = newDateOfBirth;
+                  
+                  if(validate()){
+                    console.log(values);
                       setSaving(true);
                           const onSuccess = () => {
                               setSaving(false);
                               resetForm() 
+                              setRelative(initialRelative)
                               removeRelative()
                           }
                           const onError = () => {
@@ -321,10 +329,10 @@ const validate = () => {
                           }
                               console.log(values)
                               props.create(values, onSuccess, onError);
-                    //toast.success("Registration Successful")
-              }else{
-                  toast.error("Please fill all compulsory fields");
-              }
+                   
+                  }else{
+                      toast.error("Please fill all compulsory fields");
+                  }
     };
 
 
@@ -380,6 +388,9 @@ const validate = () => {
                                                             }
                                                                 max={new Date()}
                                                         />
+                                                            {values.dateRegistration ==="Invalid date" ? (
+                                                                <span className={classes.error}>{"This field is required"}</span>
+                                                            ) : "" }
                                                   </FormGroup>
                                             </Col>
                                         </Row>
@@ -514,15 +525,17 @@ const validate = () => {
                                                                 time={false}
                                                                 name="dob"
                                                                 dropUp
-                                                                value={values.regDate}
+                                                                value={values.dobDate}
                                                                 onChange={value1 =>
                                                                   setValues({ ...values, dob: value1 })
                                                                 }
                                                                 //defaultValue={new Date()}
                                                                 max={new Date()}
-                                                                {...(errors.dob && { invalid: true})}
                                                             />
-                                                                <FormFeedback>{errors.dob}</FormFeedback>
+                                                                {values.dob ==="Invalid date" ? (
+                                                                    <span className={classes.error}>{"This field is required"}</span>
+                                                                ) : "" }
+                                                              
                                                     </FormGroup>
                                                 ) : (
                                                     <FormGroup>
@@ -536,7 +549,8 @@ const validate = () => {
                                                                   setValues({ ...values, dob: value1 })
                                                                 }
                                                             />
-                                                                <FormText ><span style={{color:"blue", fontWeight:"bolder"}}>Estimated Date of Birth </span></FormText>
+                                                                
+                                                                    <FormText ><span style={{color:"blue", fontWeight:"bolder"}}>Estimated Date of Birth </span></FormText>
                                                     </FormGroup>
 
                                                 )}

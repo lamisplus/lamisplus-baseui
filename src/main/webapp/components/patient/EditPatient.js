@@ -27,7 +27,7 @@ import momentLocalizer from "react-widgets-moment";
 import moment from "moment";
 import Title from "components/Title/CardTitle";
 import { url } from "../../api";
-import { create } from "../../actions/patients";
+import { update } from "../../actions/patients";
 import { initialfieldState_patientRegistration } from "./InitialFieldState";
 import useForm from "../Functions/UseForm";
 import { Spinner } from 'reactstrap';
@@ -80,10 +80,11 @@ const useStyles = makeStyles(theme => ({
 
 
 const PatientRegistration = props => {
-
-  const intialRelativesValues = props.location.currentId.personRelativeDTOs === "" ? props.location.currentId.personRelativeDTOs : {}
-  console.log(intialRelativesValues)
+if(props.location.currentId){
+  const intialRelativesValues = props.location.currentId.personRelativeDTOs !== null ? props.location.currentId.personRelativeDTOs : {}
+  
   const currentId = props.location.currentId!=='' ? props.location.currentId : {}
+  console.log(currentId)
     const classes = useStyles();
     const apicountries = url + "countries";
     const apistate = url + "countries/";
@@ -98,7 +99,7 @@ const PatientRegistration = props => {
     const [qualification, setQualification] = useState([]);
     const [maritalStatus, setMaterialStatus] = useState([]);
     const [provinces, setProvinces] = useState([]);
-    const [relatives, setRelatives] = useState(props.location.currentId.personRelativeDTOs);
+    const [relatives, setRelatives] = useState(intialRelativesValues);
     const [relative, setRelative] = useState([initialRelative]);
     const [relativeButton, setRelativeButton] = useState(false) ;
     const [relationshipTypes, setRelationshipTypes] = useState([]);
@@ -319,19 +320,19 @@ const validate = () => {
                   const newRegistrationDate = moment(values.dateRegistration).format("MM-DD-YYYY");
                   const newDateOfBirth = moment(values.dob).format("MM-DD-YYYY");
                   values["dateRegistration"] = newRegistrationDate;
-                  values["personRelativesDTOs"] = relatives;
+                  values["personRelativeDTOs"] = relatives;
                   values["dob"] = newDateOfBirth;
                       setSaving(true);
                           const onSuccess = () => {
                               setSaving(false);
                               resetForm() 
-                              removeRelative()
+                              //removeRelative()
                           }
                           const onError = () => {
                               setSaving(false);        
                           }
                               console.log(values)
-                              props.create(values, onSuccess, onError);
+                              props.update(values, currentId.patientId,onSuccess, onError);
                     //toast.success("Registration Successful")
               }else{
                   toast.error("Please fill all compulsory fields");
@@ -389,6 +390,7 @@ const validate = () => {
                                                             onChange={value1 =>
                                                               setValues({ ...values, dateRegistration: moment(value1).format("MM-DD-YYYY") })
                                                             }
+                                                            defaultValue={new Date(new Date(moment(values.dateRegistration, "DD-MM-YYYY").format("MM/DD/YYYY") ))}
                                                                 max={new Date()}
                                                         />
                                                   </FormGroup>
@@ -529,7 +531,7 @@ const validate = () => {
                                                                 onChange={value1 =>
                                                                   setValues({ ...values, dob: value1 })
                                                                 }
-                                                                //defaultValue={new Date()}
+                                                                defaultValue={new Date(moment(values.dob, "DD-MM-YYYY").format("MM/DD/YYYY") )}
                                                                 max={new Date()}
                                                                 {...(errors.dob && { invalid: true})}
                                                             />
@@ -898,7 +900,7 @@ const validate = () => {
                                             <Col md={12}>
                                                   <div className={classes.demo}>
                                                       <List>
-                                                        {console.log(relatives)}
+                                                        
                                                           {relatives.map((relative, index) => (
                                                               <RelativeList
                                                                   key={index}
@@ -948,7 +950,16 @@ const validate = () => {
                     </Form>
                 </Page>
       );
-    };
+    }else{
+      return ( 
+          <Page >
+              <h2>Please Slelect a patient</h2>
+          </Page>
+       
+    );
+    }
+};
+
 
 function RelativeList({
   relative,
@@ -995,4 +1006,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { create })(PatientRegistration);
+export default connect(mapStateToProps, { update })(PatientRegistration);
