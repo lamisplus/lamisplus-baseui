@@ -7,15 +7,24 @@ import "./Patient.css";
 import { MdDashboard, MdDeleteForever, MdModeEdit } from "react-icons/md";
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "react-widgets/dist/css/react-widgets.css";
 
 
 
 
 const PatientSearch = (props) => {
     const [loading, setLoading] = useState('')
+    const [patients, setPatients] = useState()
+
+        
     useEffect(() => {
+        console.log(props.patientsList)
         setLoading('true');
         const onSuccess = () => {
+            
+        
         setLoading(false)
       }
         const onError = () => {
@@ -23,6 +32,16 @@ const PatientSearch = (props) => {
       }
           props.fetchAllPatients(onSuccess, onError);
     }, []); //componentDidMount
+
+        const onDelete = id => {
+            const onSuccess = () => {
+              
+            }       
+                if (window.confirm(`Are you sure to delete this record? ${id}`))
+                    props.deletePatient(id,onSuccess)
+        }
+
+
         const calculate_age = dob => {
             var today = new Date();
             var dateParts = dob.split("-");
@@ -42,6 +61,7 @@ const PatientSearch = (props) => {
     
     return (
         <div>
+          <ToastContainer autoClose={3000} hideProgressBar />
             <MaterialTable
                 title="Find patients"
                     columns={[
@@ -95,10 +115,7 @@ const PatientSearch = (props) => {
                           </MenuItem>                                      
                           <MenuItem style={{ color:"#000 !important"}}>
                               <Link
-                                  to={{
-                                    pathname: "/patient-dashboard",
-                                    state: { hospitalNumber: row.hospitalNumber  }
-                                  }}
+                                  onClick={() => onDelete(row.patientId)}
                               >
                                 <MdDeleteForever size="15"  />{" "}
                                 <span style={{color: '#000'}}>Delete Patient</span>
