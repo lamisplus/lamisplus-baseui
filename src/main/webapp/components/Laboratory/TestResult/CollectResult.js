@@ -47,7 +47,7 @@ const useStyles = makeStyles({
       const dispatch = useDispatch();
       const [loading, setLoading] = useState('')
       const [labNum, setlabNum] = useState({lab_number:"lab456"})
-useEffect(() => {
+  useEffect(() => {
     const personId = encounterresult.hospitalNumber;
     const ecounterId = encounterresult.encounterId;
     setLoading(true);
@@ -59,14 +59,21 @@ useEffect(() => {
         }
     dispatch(fetchAllLabTestOrderOfPatient(ecounterId,onSuccess,onError ));
     dispatch(fetchById(personId,onSuccess,onError));
-}, [fetchAllLabTestOrderOfPatient,fetchById]); //componentDidMount  
+  }, [fetchAllLabTestOrderOfPatient,fetchById]); //componentDidMount  
     const data = [testorder]
     const sampleslist =  data[0] ? data[0] : null 
 
   //Filter only sample that is collected in the array 
 const newsample =  sampleslist.filter(function(sample) {
     return (sample.data.lab_test_order_status !==0);
-});
+}); 
+
+let labNumber = "" //check if that key exist in the array
+sampleslist.forEach(function(value, index, array) {
+        if(value['data'].hasOwnProperty("lab_number")){
+            labNumber = value['data'].lab_number
+        }  
+    });
   //Get list of test type
     const [labTestType, setLabTestType] = useState([])
         newsample.forEach(function(value, index, array) {
@@ -79,20 +86,20 @@ const newsample =  sampleslist.filter(function(sample) {
             const [modal3, setModal3] = useState(false)//modal to View Result
             const togglemodal3 = () => setModal3(!modal3)
             const [collectmodal, setcollectmodal] = useState([])//to collect array of datas into the modal and pass it as props
-                const handleresult = (row) => {  
-                    setcollectmodal({...collectmodal, ...row});
-                    setModal2(!modal2) 
-                }
-                const viewresult = (row) => {  
-                    setcollectmodal({...collectmodal, ...row});
-                    setModal3(!modal3) 
-                }
-                const getGroup = e => {
-                    const getvalue =e.target.value;
-                    const testing = newsample.length>0?newsample:null
-                    const getnew = data[0].find(x => x.lab_test_group === getvalue)
-                    
-                };
+            const handleresult = (row) => {  
+                setcollectmodal({...collectmodal, ...row});
+                setModal2(!modal2) 
+            }
+            const viewresult = (row) => {  
+                setcollectmodal({...collectmodal, ...row});
+                setModal3(!modal3) 
+            }
+            const getGroup = e => {
+                const getvalue =e.target.value;
+                const testing = newsample.length>0?newsample:null
+                const getnew = data[0].find(x => x.lab_test_group === getvalue)
+                
+            };
     //This is function to check for the status of each collection to display on the tablist below 
     const samplestatus = e =>{
         if(e===1){
@@ -192,7 +199,7 @@ const sampleAction = (e) =>{
                                                                       className='cr-search-form__input '
                                                                       name='lab_number'
                                                                       id='lab_number'
-                                                                      value={labNum.lab_number}
+                                                                      value={labNumber}
                                                                       disabled
                                                                   />
                                                           </FormGroup>

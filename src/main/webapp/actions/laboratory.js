@@ -97,8 +97,7 @@ export const createCollectedSample = (data, lab_id, onSuccess, onError ) => disp
         payload: response.data
       });
       onSuccess()
-      toast.success("Sample Collection was successful");
-      //setInterval(window.location.reload(false), 80000);
+      //toast.success("Sample Collection was successful");
     })
     .catch(error =>{
       
@@ -107,9 +106,7 @@ export const createCollectedSample = (data, lab_id, onSuccess, onError ) => disp
         payload: error
       })
       onError()
-      toast.error("Something went wrong, please try again");
-      //setInterval(window.location.reload(false), 80000);
-      //window.location.reload()
+      //toast.error("Something went wrong, please try again");
       
     });
   }else{

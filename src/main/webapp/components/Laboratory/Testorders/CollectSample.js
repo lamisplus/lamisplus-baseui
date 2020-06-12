@@ -84,17 +84,19 @@ const useStyles = makeStyles({
         const [modal3, setModal3] = useState(false)//modal to View Result
         const toggleModal3 = () => setModal3(!modal3)
         const [collectModal, setcollectModal] = useState([])//to collect array of datas into the modal and pass it as props
-
         const [labNum, setlabNum] = useState({lab_number:""})
 
-        const  checkLabNumber = fetchTestOrders.hasOwnProperty("lab_number"); //check if that key exist in the array
-            if(checkLabNumber !==false || checkLabNumber ===undefined){    
-                setlabNum({...labNum, lab_number:fetchTestOrders.lab_number})
-            }
+        let labNumber = "" //check if that key exist in the array
+            fetchTestOrders.forEach(function(value, index, array) {
+                if(value['data'].hasOwnProperty("lab_number")){
+                    labNumber = value['data'].lab_number
+                }  
+            });
+          
 
     const handleLabNumber = e => {
-      //  e.preventDefault();   
-      setlabNum({ ...labNum, [e.target.name]: e.target.value })
+        e.preventDefault();   
+            setlabNum({ ...labNum, [e.target.name]: e.target.value })
     }
 
     const handleSample = (row) => { 
@@ -222,10 +224,9 @@ return (
                                             <Label for="occupation">Lab Number </Label>
                                         <Input
                                             type='text'
-                                            className='cr-search-form__input '
                                             name='lab_number'
                                             id='lab_number'
-                                            value={labNum.lab_number}
+                                            value={labNumber!=="" ? labNumber : labNum.lab_number}
                                             onChange={handleLabNumber}
                                         />
                                         </FormGroup>                            

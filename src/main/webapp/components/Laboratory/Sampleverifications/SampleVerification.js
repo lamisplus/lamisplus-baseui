@@ -80,12 +80,13 @@ const useStyles = makeStyles({
   const togglemodal2 = () => setModal2(!modal2)
   const [collectmodal, setcollectmodal] = useState([])//to collect array of datas into the modal and pass it as props
 
-  const [labNum, setlabNum] = useState({lab_number:"567845"})
-
-  const  checkLabNumber = newsample.hasOwnProperty("lab_number"); //check if that key exist in the array
-      if(checkLabNumber !==false){    
-           setlabNum({...labNum, lab_number:newsample.lab_number})
-      }
+  let labNumber = "" //check if that key exist in the array
+  sampleslist.forEach(function(value, index, array) {
+          if(value['data'].hasOwnProperty("lab_number")){
+              labNumber = value['data'].lab_number
+          }  
+      });
+    
 
 const handlesample = (row) => {  
    setcollectmodal({...collectmodal, ...row});
@@ -202,7 +203,7 @@ const sampleAction = (e) =>{
                             className='cr-search-form__input '
                             name='lab_number'
                             id='lab_number'
-                            value={labNum.lab_number}
+                            value={labNumber}
                             disabled
                           />
                           </FormGroup>
@@ -246,7 +247,7 @@ const sampleAction = (e) =>{
         </Col>
       </Row>
       <ModalSampleVerify modalstatus={modal} togglestatus={togglemodal} datasample={collectmodal} />
-      <ModalSample modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal}  labnumber={labNum}/>
+      <ModalSample modalstatus={modal2} togglestatus={togglemodal2} datasample={collectmodal}  labnumber={labNumber}/>
 
       </Page>
   )

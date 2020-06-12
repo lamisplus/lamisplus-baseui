@@ -148,6 +148,7 @@ useEffect(() => {
           datasample.data['sample_collected_by'] = otherfields['sample_collected_by']
           datasample.data['sample_ordered_by'] = otherfields['sample_ordered_by']
           datasample.data['sample_priority'] = "Normal"
+          datasample.data['lab_number']=props.labnumber['lab_number']
           datasample.data['time_sample_collected'] = otherfields['time_sample_collected']
           
               props.createCollectedSample(datasample, labId,onSuccess,onError)

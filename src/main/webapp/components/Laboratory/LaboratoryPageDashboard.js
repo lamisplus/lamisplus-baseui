@@ -18,7 +18,10 @@ import UserProgressTable from 'components/UserProgressTable';
 import LabTestOrderSearch from './Testorders/LabTestOrderSearch';
 import LabTestResultSearch from './TestResult/LabTestResultSearch';
 import LabTestVerifySampleSearch from './Sampleverifications/LabTestVerifySampleSearch';
-import DispatchedManifest from './DispatchedManifest/DispatchedManifest'
+import DispatchedManifest from './DispatchedManifest/DispatchedManifest';
+import { GiTestTubes, GiDrippingTube} from 'react-icons/gi';
+import { GoRepoClone} from 'react-icons/go';
+
 
 
 
@@ -151,6 +154,9 @@ const useStyles = makeStyles(theme => ({
         margin: 20,
         backgroundColor: '#eee',
     },
+    iconColor: {
+        color : '#fff'
+    }
     }));
 
     const cardHeight = {
@@ -250,9 +256,9 @@ export default function ScrollableTabsButtonForce(props) {
                           aria-label="scrollable force tabs example"
                     >
                         <Tab className={classes.title} label="Dashboard" icon={<MdDashboard />} {...a11yProps(0)} />         
-                        <Tab className={classes.title} label="Sample Collection" icon={<MdContacts />} {...a11yProps(1)} />
-                        <Tab className={classes.title} label="Sample Verification " icon={<GiFiles />} {...a11yProps(2)} />
-                        <Tab className={classes.title} label="Results Reporting" icon={<GiFiles />} {...a11yProps(3)} />
+                        <Tab className={classes.title} label="Sample Collection" icon={<GiTestTubes />} {...a11yProps(1)} />
+                        <Tab className={classes.title} label="Sample Verification " icon={<GiDrippingTube style={{ color:'#fff'}}/>} {...a11yProps(2)} />
+                        <Tab className={classes.title} label="Results Reporting" icon={<GoRepoClone />} {...a11yProps(3)} />
                         <Tab className={classes.title} label="Sample Dispatched  " icon={<GiFiles />} {...a11yProps(4)} />
                     </Tabs>
           

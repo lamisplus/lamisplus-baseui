@@ -68,7 +68,7 @@ const ModalSample = (props) => {
   const dataSample = props.datasample ? props.datasample : {};
   const lab_test_group = dataSample.data ? dataSample.data.lab_test_group : null ;
   const description = dataSample.data ? dataSample.data.description : null ;
-  const date_sample_verified = dataSample.data ? dataSample.data.date_sample_verified : null ;
+  const date_sample_collected = dataSample.data ? dataSample.data.date_sample_collected : null ;
   console.log(lab_test_group)
   const labId = dataSample.id
   const [loading, setLoading] = useState(false)
@@ -143,7 +143,7 @@ const ModalSample = (props) => {
               &nbsp;&nbsp;&nbsp;&nbsp;Test Ordered : 
               <span style={{ fontWeight: 'bolder'}}>{" "}{description}</span>
                       &nbsp;&nbsp;&nbsp;&nbsp; Date Ordered :        
-              <span style={{ fontWeight: 'bolder'}}>{" "}{date_sample_verified}</span>
+              <span style={{ fontWeight: 'bolder'}}>{" "}{date_sample_collected}</span>
           </p>
           
         </Alert>
