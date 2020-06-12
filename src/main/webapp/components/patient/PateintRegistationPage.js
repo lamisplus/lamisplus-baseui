@@ -85,14 +85,10 @@ const useStyles = makeStyles(theme => ({
 
 const PatientRegistration = props => {
 
-    const currentId = props.location.currentId!=='' ? props.location.currentId : null
     const classes = useStyles();
     const apicountries = url + "countries";
     const apistate = url + "countries/";
     const { values, setValues, handleInputChange, resetForm,setErrors, errors } = useForm(initialfieldState_patientRegistration);
-    /**
-     * Initializing state properties
-     */
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const [gender, setGender] = useState([]);
@@ -307,12 +303,11 @@ const validate = () => {
     */
     const handleSubmit = e => {
           e.preventDefault();
-          
-              
+
                   const newRegistrationDate = moment(values.dateRegistration).format("MM-DD-YYYY");
                   const newDateOfBirth = moment(values.dob).format("MM-DD-YYYY");
                   values["dateRegistration"] = newRegistrationDate;
-                  values["personRelativeDTOs"] = relatives;
+                  values["personRelativeDTOs"] = relatives.length <= 0 ? [relative] : relatives;
                   values["dob"] = newDateOfBirth;
                   
                   if(validate()){

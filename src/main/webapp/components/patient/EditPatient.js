@@ -81,10 +81,9 @@ const useStyles = makeStyles(theme => ({
 
 const PatientRegistration = props => {
 if(props.location.currentId){
-  const intialRelativesValues = props.location.currentId.personRelativeDTOs !== null ? props.location.currentId.personRelativeDTOs : {}
-  
+  const intialRelativesValues = props.location.currentId.personRelativeDTOs !== null ? props.location.currentId.personRelativeDTOs : []
   const currentId = props.location.currentId!=='' ? props.location.currentId : {}
-  console.log(currentId)
+ 
     const classes = useStyles();
     const apicountries = url + "countries";
     const apistate = url + "countries/";

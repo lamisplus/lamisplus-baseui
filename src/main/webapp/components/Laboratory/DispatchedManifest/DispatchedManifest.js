@@ -5,9 +5,7 @@ import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
 import { fetchAllLabTestOrder } from "./../../../actions/laboratory";
 import "./../laboratory.css";
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
+
 import { Badge } from 'reactstrap';
 import Button from "@material-ui/core/Button";
 
