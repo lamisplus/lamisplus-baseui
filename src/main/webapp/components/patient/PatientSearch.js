@@ -33,12 +33,9 @@ const PatientSearch = (props) => {
           props.fetchAllPatients(onSuccess, onError);
     }, []); //componentDidMount
 
-        const onDelete = id => {
-            const onSuccess = () => {
-              
-            }       
+        const onDelete = id => {      
                 if (window.confirm(`Are you sure to delete this record? ${id}`))
-                    props.deletePatient(id,onSuccess)
+                    props.deletePatient(id)
         }
 
 

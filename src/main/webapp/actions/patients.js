@@ -137,17 +137,17 @@ export const update = (data, id, onSuccess, onError) => dispatch => {
 
 };
 
-export const Delete = (id, onSuccess) => dispatch => {
+export const Delete = (id) => dispatch => {
   console.log(`${baseUrl}patients/${id}`);
   axios
   .delete(`${baseUrl}patients/${id}`)
   .then(response => {
 
     dispatch({
-      type: ACTION_TYPES.PATIENTS_UPDATE,
-      payload: response.data
+      type: ACTION_TYPES.PATIENT_DELETE,
+      payload: id
     });
-    onSuccess()
+    
     toast.success("Patient record was deleted successfully!");
   })
   .catch(error => {

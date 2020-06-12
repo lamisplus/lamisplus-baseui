@@ -340,7 +340,7 @@ const validate = () => {
 
 
   return (
-    <Page title="Patient Registration">
+    <Page title="Patient Update">
         <ToastContainer autoClose={3000} hideProgressBar />
             {errors ?
                 (<Alert color="primary">
@@ -930,7 +930,7 @@ const validate = () => {
                                                   disabled={saving}
                                                 >
                                                     {!saving ?
-                                                    <span style={{textTransform: 'capitalize'}}>Save</span>
+                                                    <span style={{textTransform: 'capitalize'}}>Update</span>
                                                     : <span style={{textTransform: 'capitalize'}}>Saving...</span>}
                                                 </MatButton>
                                       
