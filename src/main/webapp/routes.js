@@ -40,6 +40,7 @@ const LaboratoryPage = React.lazy(() =>
 const CollectSample = React.lazy(() =>import("components/Laboratory/Testorders/CollectSample"));
 const LaboratorySampleResultPage = React.lazy(() =>import("components/Laboratory/TestResult/CollectResult"));
 const SampleVerification = React.lazy(() => import("components/Laboratory/Sampleverifications/SampleVerification"));
+const DispatchedSamples = React.lazy(() => import("components/Laboratory/DispatchedManifest/DispatchedSamplesList"))
 const PatientsPage = React.lazy(() =>
   import("components/Patient/PatientsPage")
 );
@@ -118,6 +119,7 @@ class Routes extends Component {
               <PrivateRoute exact path="/laboratory" component={LaboratoryPage} />
               <PrivateRoute exact path="/sample-verification" component={SampleVerification} />
               <PrivateRoute exact path="/collect-sample" component={CollectSample} />
+              <PrivateRoute exact path="/dispatched-sample" component={DispatchedSamples} />
               <PrivateRoute exact path="/patients" component={PatientsPage} />
 
               {/* Pharmacy Links */}

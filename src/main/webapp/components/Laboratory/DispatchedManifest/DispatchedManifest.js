@@ -80,12 +80,13 @@ useEffect(() => {
                           
         </Button> */}
 
-      <Link to="/patient-registration">
+      <Link to="/dispatched-sample">
             <Button
               variant="contained"
               className=" float-right mr-1"
+              size="large"
             >
-              {<GiFiles />} { " "}
+              {<GiFiles />} &nbsp;&nbsp;
               <span style={{textTransform: 'capitalize'}}>Dispatched  </span>
                   &nbsp;&nbsp;
               <span style={{textTransform: 'lowercase'}}>samples </span>              
