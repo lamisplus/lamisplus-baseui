@@ -11,7 +11,6 @@ import {TiArrowForward} from 'react-icons/ti'
 import { toast } from 'react-toastify'
 import 'react-widgets/dist/css/react-widgets.css'
 //Date Picker
-import { ToastContainer } from 'react-toastify'
 import Page from './../../Page'
 import {  fetchById } from '../../../actions/patients'
 import {  fetchAllLabTestOrderOfPatient } from '../../../actions/laboratory'

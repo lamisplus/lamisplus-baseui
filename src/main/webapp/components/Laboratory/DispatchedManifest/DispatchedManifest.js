@@ -5,13 +5,19 @@ import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
 import { fetchAllLabTestOrder } from "./../../../actions/laboratory";
 import "./../laboratory.css";
-
+import {GiFiles} from 'react-icons/gi'; 
 import { Badge } from 'reactstrap';
 import Button from "@material-ui/core/Button";
+import DispatchedModal from './DispatchedModal';
 
 
 const PatientSearch = (props) => {
   const [loading, setLoading] = useState('')
+  const [modal3, setModal3] = useState(false)//modal to View Result
+  const togglemodal3 = () => setModal3(!modal3)
+  
+  const [collectmodal, setcollectmodal] = useState([])//to collect array of datas into the modal and pass it as props
+            
 useEffect(() => {
     setLoading('true');
   const onSuccess = () => {
@@ -22,18 +28,7 @@ useEffect(() => {
   }
       props.fetchAllLabTestOrderToday(onSuccess, onError);
     }, []); //componentDidMount
-    // function totalSampleConllected (test){
-    //   const  maxVal = []
-     
-    //   for(var i=0; i<test.length; i++){
-    //     for (var key in test[i]) {
-    //       if (test[i][key].lab_test_order_status >=1)
-    //         maxVal.push(test[i][key])
-    //     }
-       
-    //   }
-    //   return maxVal.length;
-    // }
+   
     const labTestType = [];
     props.testOrder.forEach(function(value, index, array) {
           const getList = value['formDataObj'].find(x => { 
@@ -44,6 +39,12 @@ useEffect(() => {
     
      function removeData (evt, data){
         alert('You want to delete ' + evt + data)
+     }
+
+     function getDispatch (evt, data){
+        console.log( data)
+        setcollectmodal({...collectmodal, ...data});
+        setModal3(!modal3) 
      }
      
          //This is function to check for the status of each collection to display on the tablist below 
@@ -68,12 +69,23 @@ useEffect(() => {
   return (
     <div>
       <br/>
+      
+        {/* <Button
+          variant="contained"
+          color="primary"
+          className=" float-left mr-1"
+        >
+          {<GiFiles />} { " "}
+          <span style={{textTransform: 'capitalize'}}>Dispatched  </span>
+                          
+        </Button> */}
+
       <Link to="/patient-registration">
             <Button
               variant="contained"
-              color="primary"
               className=" float-right mr-1"
             >
+              {<GiFiles />} { " "}
               <span style={{textTransform: 'capitalize'}}>Dispatched  </span>
                   &nbsp;&nbsp;
               <span style={{textTransform: 'lowercase'}}>samples </span>              
@@ -120,13 +132,22 @@ useEffect(() => {
             {
               tooltip: 'Dispatch All Selected Sample',
               icon: 'add',
-              onClick: (evt, data) => alert('You want to dispatch ' + evt + data)
+              onClick: (evt, data) =>
+                //alert('You want to dispatch ' + evt + data),
+                getDispatch(evt, data)
+                
+            
             }
         ]}
       />
+      <DispatchedModal modalstatus={modal3} togglestatus={togglemodal3} datasample={collectmodal} />
+
     </div>
+    
   );
 }
+
+
 
 const mapStateToProps = state => {
     return {
