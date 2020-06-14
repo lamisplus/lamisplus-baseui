@@ -83,8 +83,8 @@ const useStyles = makeStyles(theme => ({
 
 
 
-const PatientRegistration = props => {
-
+const PatientRegistration = ({...props}) => {
+    
     const classes = useStyles();
     const apicountries = url + "countries";
     const apistate = url + "countries/";
@@ -103,15 +103,19 @@ const PatientRegistration = props => {
     const [saving, setSaving] = useState(false);
     const [display, setDisplay] = useState(false);
     //Get countries
-    useEffect(async () => {
-      const result = await axios(apicountries);
-          const response  = result.data
-          const body = response;
-          setCountries(body.map(({ name, id }) => ({ label: name, value: id })));
-          const defaultCountryId = body.find(x => x.name === "Nigeria").id;
-          setValues({ ...values, countryId: defaultCountryId });
-          setStateByCountryId(defaultCountryId);
-    }, []);
+    useEffect(() => {
+      async function getCharacters() {
+          try {
+              const response = await axios.get(apicountries);
+              const body = response.data;
+              setCountries(body.map(({ name, id }) => ({ label: name, value: id })));
+              const defaultCountryId = body.find(x => x.name === "Nigeria").id;
+              setValues({ ...values, countryId: defaultCountryId });
+              setStateByCountryId(defaultCountryId);
+          } catch (error) {}
+        }
+      getCharacters();
+  }, []); 
 
     /*# Get list of RelationshipTypes parameter from the endpoint #*/
     useEffect(() => {
