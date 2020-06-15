@@ -59,6 +59,7 @@ const FormRenderer = (props) => {
     await axios.get(`${url}patients/${props.patientId}/encounters/${props.formCode}`, {})
     .then(response => {
       //get encounter form data and store it in submission object
+     
         if( response.data.length > 0 ){
           const lastEncounter = response.data[0]
           setFormId(lastEncounter.formDataId);
@@ -66,8 +67,8 @@ const FormRenderer = (props) => {
             ...submission, ...{...submission.data, ...{data: lastEncounter}}
              };
           setSubmission(e);
-          setShowLoadingEncounter(false);
     };
+    setShowLoadingEncounter(false);
   }) .catch((error) => {
     setErrorMsg("Error loading encounter, something went wrong");
   setShowErrorMsg(true);
