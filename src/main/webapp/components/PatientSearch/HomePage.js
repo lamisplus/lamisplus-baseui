@@ -7,7 +7,7 @@ import ActivePatientSearch from "components/PatientSearch/ActivePatientSearch";
 import GeneralPatientSearch from "components/PatientSearch/PatientsPage";
 import { connect } from "react-redux";
 import Typography from "@material-ui/core/Typography";
-import { FaCalendarWeek, FaCalendarAlt } from "react-icons/fa";
+import { FaUserFriends, FaStethoscope } from "react-icons/fa";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import Moment from "moment";
@@ -80,13 +80,13 @@ function HomePage(props) {
           <Tab
             className={classes.title}
             label="Find Patient"
-            icon={<FaCalendarWeek />}
+            icon={<FaUserFriends />}
             {...a11yProps(0)}
           />
           <Tab
             className={classes.title}
             label="Checked-In Patients"
-            icon={<FaCalendarAlt />}
+            icon={<FaStethoscope />}
             {...a11yProps(1)}
           />
          
