@@ -18,7 +18,6 @@ import { Spinner } from 'reactstrap';
 Moment.locale('en');
 momentLocalizer();
 
-
 const useStyles = makeStyles(theme => ({
     card: {
         margin: theme.spacing(20),
@@ -43,94 +42,116 @@ const useStyles = makeStyles(theme => ({
     button: {
         margin: theme.spacing(1)
     },
-
     root: {
         '& > *': {
-            margin: theme.spacing(1)
+          margin: theme.spacing(1)
         }
     },
     input: {
         display: 'none'
-    } 
+    },
+    error:{
+        color: '#f85032',
+        fontSize: '12.8px'
+    }
 }))
-Moment.locale('en');
-momentLocalizer();
 
 
-const ModalViewResult = (props) => {
-  const classes = useStyles()
-  const datasample = props.datasample ? props.datasample : {};
-  //console.log(datasample)
-  const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
-  const description = datasample.data ? datasample.data.description : null ;
-  console.log(lab_test_group)
-  const labId = datasample.id
-  const [loading, setLoading] = useState(false)
-  const [visible, setVisible] = useState(true);
-  const onDismiss = () => setVisible(false);
-  const [otherfields, setOtherFields] = useState({date_sample_transfered:"",sample_transfered_by:"",sample_priority:"",time_sample_transfered:"",comment:"", lab_test_order_status:""});
-  const [errors, setErrors] = useState({});
+const ModalSampleTransfer = (props) => {
+    const classes = useStyles()
+    const datasample = props.datasample ? props.datasample : {};
+    //console.log(datasample)
+    const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
+    const description = datasample.data ? datasample.data.description : null ;
+    console.log(lab_test_group)
+    const labId = datasample.id
+    const [loading, setLoading] = useState(false)
+    const [visible, setVisible] = useState(true);
+    const onDismiss = () => setVisible(false);
+    const [otherfields, setOtherFields] = useState({date_sample_transfered:"",sample_transfered_by:"",sample_priority:"",time_sample_transfered:"",comment:"", lab_test_order_status:""});
+    const [errors, setErrors] = useState({});
 
-  const handleOtherFieldInputChange = e => {
-      setOtherFields ({ ...otherfields, [e.target.name]: e.target.value });
-      console.log(otherfields)
-  }
-  const validate = () => {
-      let temp = { ...errors }
-      temp.date_sample_transfered = otherfields.date_sample_transfered ? "" : "Date is required"
-      temp.time_sample_transfered = otherfields.time_sample_transfered ? "" : "Time  is required."
-      temp.lab_test_order_status = otherfields.lab_test_order_status ? "" : "This field is required."
-      temp.sample_transfered_by = otherfields.sample_transfered_by ? "" : "This filed is required."
-      temp.comment = otherfields.comment ? "" : "Comment is required." 
-      setErrors({
-          ...temp
-      })
-    
-          return Object.values(temp).every(x => x == "")
-  }
-
-  const saveSample = e => {
-      e.preventDefault()
-          if(validate()){
-              setLoading(true);
-                  const newDateSampleTransfered = moment(otherfields.date_sample_transfered).format("DD-MM-YYYY");
-                  const newTimeSampleTransfered = moment(otherfields.time_sample_transfered).format("LT");
-                  datasample.data.lab_test_order_status = 2;
-              const onSuccess = () => {
-                  setLoading(false);
-                  props.togglestatus()       
-              }
-              const onError = () => {
-                  setLoading(false); 
-                  props.togglestatus()       
-              }
-                  datasample['lab_number']= props.labnumber['lab_number']
-                  datasample.data['date_sample_transfered'] = newDateSampleTransfered
-                  datasample.data['time_sample_transfered'] = newTimeSampleTransfered
-                  datasample.data['sample_transfered_by'] = otherfields['sample_transfered_by']
-                  datasample.data.comment= otherfields['comment']
-                      props.createCollectedSample(datasample, labId,onSuccess,onError)
-          }
-  }
-
-
+    const handleOtherFieldInputChange = e => {
+        setOtherFields ({ ...otherfields, [e.target.name]: e.target.value });
+        console.log(otherfields)
+    }
+    const validate = () => {
+        let temp = { ...errors }
+        temp.date_sample_transfered = otherfields.date_sample_transfered ? "" : "Date is required"
+        temp.time_sample_transfered = otherfields.time_sample_transfered ? "" : "Time  is required."
+        temp.lab_test_order_status = otherfields.lab_test_order_status ? "" : "This field is required."
+        temp.sample_transfered_by = otherfields.sample_transfered_by ? "" : "This filed is required."
+        temp.comment = otherfields.comment ? "" : "Comment is required." 
+        setErrors({
+            ...temp
+        })
       
-  return (      
+            return Object.values(temp).every(x => x == "")
+    }
+
+    const saveSample = e => {
+        e.preventDefault()
+            if(validate()){
+                setLoading(true);
+                    const newDateSampleTransfered = moment(otherfields.date_sample_transfered).format("DD-MM-YYYY");
+                    const newTimeSampleTransfered = moment(otherfields.time_sample_transfered).format("LT");
+                    datasample.data.lab_test_order_status = 2;
+                const onSuccess = () => {
+                    setLoading(false);
+                    props.togglestatus()       
+                }
+                const onError = () => {
+                    setLoading(false); 
+                    props.togglestatus()       
+                }
+                    datasample['lab_number']= props.labnumber['lab_number']
+                    datasample.data['date_sample_transfered'] = newDateSampleTransfered
+                    datasample.data['time_sample_transfered'] = newTimeSampleTransfered
+                    datasample.data['sample_transfered_by'] = otherfields['sample_transfered_by']
+                    datasample.data.comment= otherfields['comment']
+                        props.createCollectedSample(datasample, labId,onSuccess,onError)
+            }
+    }
+  
+  function checklanumber (lab_num){
+      if(lab_num===""){       
+          return (                 
+              <Alert color="danger" isOpen={visible} toggle={onDismiss}>
+                  Please make sure you enter a lab number
+              </Alert>
+          )
+      }
+  }
+
+  return (
       <div >
-         
-              <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
-              <Form onSubmit={saveSample}>
-            <ModalHeader toggle={props.togglestatus}>Dispatch Samples</ModalHeader>
+          <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
+        
+          <Form onSubmit={saveSample}>
+            <ModalHeader toggle={props.togglestatus}>Transfer Sample</ModalHeader>
                 <ModalBody>
-                    
+                    {checklanumber(props.labnumber['lab_number'])}
                         <Card >
                             <CardBody>
                                 <Row >
-                                    
+                                    <Col md={12} >
+                                        <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder', fontSize:'14px'}}>
+                                            <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}> {' '} {lab_test_group}</span> 
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : 
+                                                <span style={{ fontWeight: 'bolder'}}>{' '}  {description}</span>
+                                                    &nbsp;&nbsp;&nbsp; Lab Number : &nbsp;&nbsp;
+                                                <span style={{ fontWeight: 'bolder'}}>{props.labnumber['lab_number']===""?" ---":props.labnumber['lab_number']}</span>
+                                                    Order by : &nbsp;&nbsp;
+                                                <span style={{ fontWeight: 'bolder'}}>{ "Debora"}</span>
+                                                    &nbsp;&nbsp;&nbsp; Priority : &nbsp;&nbsp;
+                                                <span style={{ fontWeight: 'bolder'}}>{ "Normal"}</span>
+                                            </p>        
+                                        </Alert>
+                                    </Col>
                                     <Col md={6}>
                                         {/* <p>Sample Type {datasample.data.description}  </p> */}
                                           <FormGroup>
-                                              <Label for='maritalStatus'>Date Dispatch</Label>
+                                              <Label for='maritalStatus'>Date Transfer</Label>
                                           
                                                   <DateTimePicker
                                                       time={false}
@@ -148,7 +169,7 @@ const ModalViewResult = (props) => {
                                       </Col>
                                       <Col md={6}>
                                           <FormGroup> 
-                                              <Label for=''>Time Dispatch</Label>
+                                              <Label for=''>Time Transfer</Label>
                                                   <DateTimePicker
                                                       date={false}
                                                       name="time_sample_transfered"
@@ -180,7 +201,7 @@ const ModalViewResult = (props) => {
                                       </Col>
                                       <Col md={5}>
                                           <FormGroup>
-                                              <Label for="occupation">Dispatched by </Label>
+                                              <Label for="occupation">Transfer by </Label>
 
                                                 <Input
                                                     type="select"
@@ -218,7 +239,7 @@ const ModalViewResult = (props) => {
                                       <br/>
                                       {loading ? <Spinner /> : ""}
                                       <br/>
-                                      
+                                      {props.labnumber['lab_number']!==""?
                                           <MatButton
                                               type='submit'
                                               variant='contained'
@@ -229,7 +250,19 @@ const ModalViewResult = (props) => {
                                           >   
                                               Save
                                           </MatButton>
-                                           
+                                              :
+                                          <MatButton
+                                              type='submit'
+                                              variant='contained'
+                                              color='primary'
+                                              className={classes.button}
+                                              startIcon={<SaveIcon />}
+                                              disabled='true'
+                                          >   
+                                              Save
+                                          </MatButton>
+                                          
+                                      }
                                           <MatButton
                                               variant='contained'
                                               color='default'
@@ -244,9 +277,9 @@ const ModalViewResult = (props) => {
                     </ModalBody>
         
                 </Form>
-      </Modal>
-    </div>
-  );
+            </Modal>
+        </div>
+    );
 }
 
-export default connect(null, { createCollectedSample })(ModalViewResult);
+export default connect(null, { createCollectedSample, fetchFormById })(ModalSampleTransfer);

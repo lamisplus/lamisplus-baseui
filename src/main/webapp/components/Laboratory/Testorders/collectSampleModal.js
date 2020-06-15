@@ -70,7 +70,9 @@ const useStyles = makeStyles(theme => ({
 const ModalSample = (props) => {
     const classes = useStyles() 
     const datasample = props.datasample ? props.datasample : {};
+    const order_priority = datasample.data && datasample.data.order_priority && datasample.data.order_priority.display   ? datasample.data.order_priority.display : null;
     const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
+    const sample_ordered_by = datasample.data ? datasample.data.sample_ordered_by : null ;
     const description = datasample.data ? datasample.data.description : null ;
     const labId = datasample.id
     const [loading, setLoading] = useState(false)
@@ -187,9 +189,9 @@ useEffect(() => {
                                                             <span style={{ fontWeight: 'bolder'}}>{props.labnumber['lab_number']===""?" ---":props.labnumber['lab_number']}</span>
                                                             <br/>
                                                                 Order by : &nbsp;&nbsp;
-                                                            <span style={{ fontWeight: 'bolder'}}>{ "Debora"}</span>
+                                                            <span style={{ fontWeight: 'bolder'}}>{ sample_ordered_by}</span>
                                                                 &nbsp;&nbsp;&nbsp; Priority : &nbsp;&nbsp;
-                                                            <span style={{ fontWeight: 'bolder'}}>{ "Normal"}</span>
+                                                            <span style={{ fontWeight: 'bolder'}}>{order_priority}</span>
                                                         </p>
                                                       
                                                     </Alert>
