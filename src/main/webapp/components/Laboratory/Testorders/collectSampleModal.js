@@ -1,19 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Form,
-  FormFeedback,
-  Row,
-  Alert,
-  Col,
-  Input,
-  FormGroup,
-  Label,
-  Card,
-  CardBody,
-} from "reactstrap";
+import {Modal,ModalHeader, ModalBody,Form,FormFeedback,Row,Alert,Col,Input,FormGroup,Label,Card,CardBody,} from "reactstrap";
 import axios from "axios";
 import MatButton from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
