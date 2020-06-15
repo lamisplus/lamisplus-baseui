@@ -23,6 +23,7 @@ import { Badge } from 'reactstrap';
 import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 import ModalViewResult from './../TestResult/ViewResult';
+import findKey from 'lodash/differenceBy';
 
 
 const useStyles = makeStyles({
@@ -48,6 +49,7 @@ const useStyles = makeStyles({
         const testorder = useSelector(state => state.laboratory.testorder);
         const dispatch = useDispatch();
         const [loading, setLoading] = useState('')
+       
 
     useEffect(() => {
         if(props.location.state.encounterId !="" ){         
@@ -85,11 +87,14 @@ const useStyles = makeStyles({
         const [collectModal, setcollectModal] = useState([])//to collect array of datas into the modal and pass it as props
         const [labNum, setlabNum] = useState({lab_number:""})
 
-        let labNumber = "" //check if that key exist in the array
+
+        let  labNumber = "" //check if that key exist in the array
             fetchTestOrders.forEach(function(value, index, array) {
                 if(value['data'].hasOwnProperty("lab_number")){
                     labNumber = value['data'].lab_number
-                }  
+                } 
+                console.log(value['data']) 
+              
             });
           
 
@@ -190,7 +195,7 @@ return (
                   </CardHeader>
                 <CardBody>
                     <Alert color="primary">
-                        Please make sure you enter Lab number before collecting sample
+                        Please make sure you enter Lab number before collecting sample {console.log(labNum)}
                     </Alert>
                 <br />
                     <Row>
@@ -226,6 +231,7 @@ return (
                                             name='lab_number'
                                             id='lab_number'
                                             value={labNumber!=="" ? labNumber : labNum.lab_number}
+                                            
                                             onChange={handleLabNumber}
                                         />
                                         </FormGroup>                            
