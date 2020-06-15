@@ -42,7 +42,7 @@ const LaboratorySampleResultPage = React.lazy(() =>import("components/Laboratory
 const SampleVerification = React.lazy(() => import("components/Laboratory/Sampleverifications/SampleVerification"));
 const DispatchedSamples = React.lazy(() => import("components/Laboratory/DispatchedManifest/DispatchedSamplesList"))
 const PatientsPage = React.lazy(() =>
-  import("components/Patient/PatientsPage")
+  import("components/PatientSearch/HomePage")
 );
 const formDashboard = React.lazy(() => import('components/formBuilder/formDashboard'));
 const FormBuilder = React.lazy(() => import('components/formBuilder/FormBuilder'));
@@ -140,7 +140,7 @@ class Routes extends Component {
               {/* The rout to Hiv Module */}
               <PrivateRoute
                 exact
-                path="/patient-dashboard/:hospitalNumber"
+                path="/patients/:hospitalNumber"
                 component={EnrolledPatientsDashboard}
               />
               <PrivateRoute exact path="/form-dashboard" component={formDashboard} />

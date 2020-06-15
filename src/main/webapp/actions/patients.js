@@ -22,7 +22,6 @@ import { toast } from "react-toastify";
  * @method GET => fetchPatientEncounters() get all patient's encounter: params{patientId, onSuccess, onError} || query{null}
  * @method GET => fetchPatientEncounterProgramCodeExclusionList() get all patient's encounter that is not general service: params{patientId, onSuccess, onError} || query{null}
  */
-
 export const fetchAll = (onSuccess, onError) => dispatch => {
   axios
     .get(`${baseUrl}patients/`)
@@ -61,7 +60,7 @@ export const fetchById = (id, onSuccess, onError) => dispatch => {
         type: ACTION_TYPES.PATIENTS_FETCH_BY_ID,
         payload: response.data
       });
-      onSuccess()
+      onSuccess && onSuccess();
     })
     .catch(error =>
       {
@@ -69,7 +68,7 @@ export const fetchById = (id, onSuccess, onError) => dispatch => {
         type: ACTION_TYPES.PATIENTS_ERROR,
         payload: error
       })
-      onError()
+      onError && onError();
     } 
     );
     } 
@@ -86,7 +85,7 @@ export const create = (data,onSuccess, onError) => dispatch => {
         type: ACTION_TYPES.PATIENTS_CREATE,
         payload: response.data
       });
-      onSuccess()
+      onSuccess && onSuccess();
       toast.success("Patient Register Save Successfully!");
     })
     .catch(error => {
@@ -193,24 +192,30 @@ export const fetchPatientAllergies = (id, onSuccess, onError) => dispatch => {
 }
 
 
-export const fetchPatientLatestVitalSigns = (id) => dispatch => {
- if(id){
+export const fetchPatientLatestVitalSigns = (id, onSuccess, onError) => dispatch => {
   axios
     .get(`${baseUrl}patients/${id}/encounters/${CODES.VITAL_SIGNS_FORM}`, {limit: 1, sortField: "dateEncounter", sortOrder: "desc"} )
     .then(response => {
+      if(onSuccess){
+        onSuccess();
+      }
+      if(response.data.length > 0){
       dispatch({
         type: ACTION_TYPES.PATIENT_LATEST_VITAL_SIGNS,
         payload: response.data[0]
       })
+    }
     })
-    .catch(error =>
+    .catch(error => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
         payload: 'Something went wrong, please try again'
       })
-      
+      if(onError){
+        onError();
+      }
+    }
     )
-    }  
 }
 
 
@@ -223,14 +228,14 @@ export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
          type: ACTION_TYPES.PATIENT_VITAL_SIGNS,
          payload: response.data
        })
-       onSuccess()
+       onSuccess && onSuccess() ;
      })
      .catch(error => {
        dispatch({
          type: ACTION_TYPES.PATIENTS_ERROR,
          payload: 'Something went wrong, please try again'
        })
-       onError()
+       onError && onError();
       }
      )
      }  
@@ -267,14 +272,14 @@ export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
    axios
      .get(`${baseUrl}patients/${id}/encounters/${CODES.DRUG_PRESCRIPTION_FORM}`, {limit: 5, sortField: "dateEncounter", sortOrder: "desc"} )
      .then(response => {
-       onSuccess();
+      onSuccess && onSuccess() ;
        dispatch({
          type: ACTION_TYPES.PATIENT_LATEST_MEDICATION_LIST,
          payload: response.data
        })
      })
      .catch(error => {
-        onError();
+      onError && onError();
        dispatch({
          type: ACTION_TYPES.PATIENTS_ERROR,
          payload: 'Something went wrong, please try again'
@@ -289,7 +294,6 @@ export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
   axios
     .get(`${baseUrl}patients/${id}`)
     .then(response => {
-      console.log('about to dispatch patient')
       dispatch({
         type: ACTION_TYPES.PATIENTS_FETCH_BY_ID,
         payload: response.data
@@ -320,14 +324,14 @@ export const fetchPatientEncounterProgramCodeExclusionList = (id, onSuccess, onE
          type: ACTION_TYPES.PATIENT_EXCLUSIVE_ENCOUNTER_LIST,
          payload: response.data
        })
-       onSuccess()
+       onSuccess && onSuccess() ;
      })
      .catch(error => {
        dispatch({
          type: ACTION_TYPES.PATIENTS_ERROR,
          payload: 'Something went wrong, please try again'
        })
-       onError()
+       onError && onError() ;
       }
      )
      }  
@@ -336,7 +340,6 @@ export const fetchPatientEncounterProgramCodeExclusionList = (id, onSuccess, onE
 export const fetchCountries = () => dispatch => {
   axios(`${baseUrl}countries`)
     .then(response => {
-      console.log(response)
       dispatch({
         type: ACTION_TYPES.FETCH_COUNTRIES,
         payload: response.data
@@ -373,3 +376,28 @@ export const fetchCountries = () => dispatch => {
      }
     )
  }
+
+ 
+export const fetchCheckedInPatients = (onSuccess, onError) => dispatch => {
+  axios
+    .get(`${baseUrl}visits/`)
+    .then(response => {
+      if(onSuccess){
+        onSuccess();
+      }
+      dispatch({
+        type: ACTION_TYPES.CHECKEDIN_PATIENT_FETCH_ALL,
+        payload: response.data
+      });
+    })
+    .catch(error => {
+      if(onError){
+        onError();
+      }
+      dispatch({
+        type: ACTION_TYPES.PATIENTS_ERROR,
+        payload: "Something went wrong, please try again"
+      })
+    }
+    );
+};

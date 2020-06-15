@@ -83,7 +83,7 @@ const toggleAllergyList = () => {
   return (
 <React.Fragment>
             <Card >
-              <CardHeader>Allergies <button type="button" class="float-right ml-3" onClick={addAllergy}><i class="fa fa-plus"></i> Add Allergies</button> &nbsp; <button type="button" class="float-right ml-3" onClick={toggleAllergyList}><i class="fa fa-list"></i> List All</button></CardHeader>
+              <CardHeader>Allergies <button type="button" className="float-right ml-3" onClick={addAllergy}><i className="fa fa-plus"></i> Add Allergies</button> &nbsp; <button type="button" className="float-right ml-3" onClick={toggleAllergyList}><i className="fa fa-list"></i> List All</button></CardHeader>
              {loading && <LinearProgress color="primary" thickness={1}/>}
                     <CardBody>
                                 

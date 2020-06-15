@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
-import { fetchAll, Delete as Del } from "../../actions/patients";
+import { fetchAll, Delete as Del , fetchCheckedInPatients} from "../../actions/patients";
 import "./PatientSearch.css";
 import { Dashboard } from "@material-ui/icons";
 import IconButton from '@material-ui/core/IconButton';
@@ -41,7 +41,7 @@ const ActivePatientSearch = (props) => {
   return (
     <div>
       <MaterialTable
-        title="Find Patients"
+        title="Find Checked-In Patients"
         columns={[
           {
             title: "Patient Name",
@@ -49,7 +49,7 @@ const ActivePatientSearch = (props) => {
           },
           { title: "Patient ID", field: "id" },
           { title: "Age", field: "age", filtering: false },
-          { title: "Address", field: "address", filtering: false }
+          { title: "Check-In Time", field: "checkIn", filtering: false }
         ]}
         isLoading={loading}
         data={props.patientsList.map((row) => ({
@@ -63,7 +63,8 @@ const ActivePatientSearch = (props) => {
             : calculate_age(row.dob),
           address: row.street || ''  ,
           patientId: row.patientId,
-          visitId: row.visitId        
+          visitId: row.id,
+          checkIn: row.dateVisitStart + ' ' + (row.timeVisitStart ? row.timeVisitStart : '' ) 
         }))}
         
         actions= {[
@@ -71,7 +72,7 @@ const ActivePatientSearch = (props) => {
             icon: 'dashboard',
             iconProps: {color: 'primary'},
             tooltip: 'Patient Dashboard',
-            onClick: (event, rowData) => window.location.href = "/patient-dashboard/"+rowData.id
+            onClick: (event, rowData) => rowData.id ? window.location.href = "/patient-dashboard/"+rowData.id: ""
           }]}
           //overriding action menu with props.actions 
           components={props.actions}
@@ -97,12 +98,12 @@ const ActivePatientSearch = (props) => {
 const mapStateToProps = state => {
 
     return {
-      patientsList: state.patients.list
+      patientsList: state.patients.checkedInPatientList
     };
   };
   
   const mapActionToProps = {
-    fetchAllPatients: fetchAll,
+    fetchAllPatients: fetchCheckedInPatients,
     deletePatient: Del
   };
   

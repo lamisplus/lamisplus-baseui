@@ -11,6 +11,7 @@ const initialState = {
   encounters: [],
   exclusiveEncounters: [],
   previousTestOrders: [],
+  checkedInPatientList: []
 }
 
 const patientReducer = (state = initialState, action) => {
@@ -57,6 +58,9 @@ const patientReducer = (state = initialState, action) => {
       
     case ACTION_TYPES.PATIENT_LAB_ORDERS:
       return { ...state, previousTestOrders: action.payload }
+
+      case ACTION_TYPES.CHECKEDIN_PATIENT_FETCH_ALL:
+      return { ...state, checkedInPatientList: action.payload }
     
     case ACTION_TYPES.FETCH_COUNTRIES:
         return { ...state, countries: action.payload }
