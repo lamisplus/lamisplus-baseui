@@ -23,6 +23,7 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import { Alert } from 'reactstrap';
 import { Spinner } from 'reactstrap';
 
+
 const useStyles = makeStyles(theme => ({
     card: {
         margin: theme.spacing(20),
@@ -72,10 +73,6 @@ const ModalViewResult = (props) => {
     console.log(datasample)  
     const [samples, setSamples] = useState({}) 
 
-    const handleInputChangeSample = e => {
-        setSamples ({ ...samples, [e.target.name]: e.target.value });
-        console.log(samples)
-    }
 
     const textstyle = {
         fontSize: '14px',
@@ -84,43 +81,19 @@ const ModalViewResult = (props) => {
       
   return (      
       <div >
-          <ToastContainer autoClose={2000} hideProgressBar />
+         
               <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
-                  <ModalHeader toggle={props.togglestatus}>Lab test order detail</ModalHeader>
+                  <ModalHeader toggle={props.togglestatus}>Dispatched samples</ModalHeader>
                       <ModalBody>
                           <Card>
                             <CardBody>
                                 <Row style={{ marginTop: '20px'}}>
                                     <Col xs="6">
-                                        <span style={{ fontWeight: 'bold'}}>Lab Test Group</span> : {lab_test_group}
+                                        <p>List of Sample and form field to be send to Lims Portal</p>
                                         <br/>
                                     </Col>
-                                    <br/>
-                                    <Col xs="6">
-                                        <span style={{ fontWeight: 'bold'}}>Lab Test Ordered</span> : {description} 
-                                            &nbsp;&nbsp;&nbsp;Unit: {unit_measurement} 
-                                        <br/>
-                                                      
-                                    </Col>
-                                    <br/>
-                                    <Col xs="6">
-                                        <span style={{ fontWeight: 'bold'}}>Date Assayed </span>: {date_result_reported}
-                                        <br/>
-                                    </Col>
-                                    <br/>
-                                    <Col xs="6">
-                                        <span style={{ fontWeight: 'bold'}}>Date Reported </span>: {date_result_reported}
-                                        <br/>    
-                                    </Col>
-                                    <br/>
-                                    <Col xs="4">
-                                        <FormGroup>
-                                          <br/>
-                                            <Label for="examplePassword"><span style={{ fontWeight: 'bold'}}> Result </span>: {test_result} </Label>
-                                      
-                                        </FormGroup>
-                                    </Col>
-                    
+                                    
+                                   
                                 </Row>
                             <br/>
               

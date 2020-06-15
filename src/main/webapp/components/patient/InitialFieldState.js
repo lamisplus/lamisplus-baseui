@@ -10,15 +10,16 @@ export const initialfieldState_patientRegistration = {
   maritalStatusId: '',
   occupationId: '',
   alternatePhoneNumber: '',
+  mobilePhoneNumber:'',
   personRelativeDTOs: [],
   address: '',
   city: '',
   countryId: '',
   landmark: '',
-  provinceId: '',
+  provinceId: '2',
   zipCode: '',
   stateId: '',
   street: '',
   dob: '',
-  dateRegistration: new Date()
+  dateRegistration: ''
 }

@@ -8,6 +8,7 @@ import "./../laboratory.css";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import Page from './../../Page'
 
 
 const PatientSearch = (props) => {
@@ -36,9 +37,12 @@ function totalSampleConllected (test){
  
     
   return (
+    <Page title='Dispatched Samples '>
+      
       <div>
+        <br/><br/>
           <MaterialTable
-              title="Laboratory Test Orders"
+              title="Dispatched samples list"
               columns={[
                   { title: "Patient ID", field: "Id" },
                   {
@@ -100,6 +104,7 @@ function totalSampleConllected (test){
 
           />
     </div>
+  </Page>
   );
 }
 

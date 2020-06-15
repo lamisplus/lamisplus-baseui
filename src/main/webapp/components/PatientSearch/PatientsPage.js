@@ -1,4 +1,3 @@
-import Page from "components/Page";
 import React from "react";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -8,7 +7,7 @@ import { FaUserPlus } from "react-icons/fa";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Title from "components/Title/CardTitle";
-import PatientList from "./PatientSearch";
+import PatientSearch from "./PatientSearch";
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -43,7 +42,7 @@ const GeneralPatientSearch = props => {
             <br />
           </Title>
           <br />
-          <PatientList />
+          <PatientSearch />
         </CardContent>
       </Card>
     </div>
