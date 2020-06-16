@@ -35,17 +35,19 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { APPLICATION_CODESET_PRIORITIES } from "actions/types";
 import CheckedInValidation from "components/Utils/CheckedInValidation";
+import { BehaviorSubject } from 'rxjs';
 
 function TestOrderPage(props) {
   const PatientID = props.patientId;
   const visitId = props.visitId;
   const [tests, setTests] = React.useState([]);
   const [testOrders, setTestOrders] = React.useState([]);
-  const defaultFormValue = { test: {}, priority: {}, testGroup: {}, vlIndication: "" };
+  const defaultFormValue = { test: {}, priority: {}, testGroup: {}, vlIndication: "" , sampleOrderedBy: ""};
   const [testOrder, setTestOrder] = React.useState(defaultFormValue);
   const [showLoading, setShowLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
   React.useEffect(() => {
     if (props.priorities.length === 0) {
@@ -61,6 +63,7 @@ function TestOrderPage(props) {
       };
       props.fetchTestGroup(onSuccess, onError);
     }
+   
   }, []);
 
   React.useEffect(() => {
@@ -112,7 +115,7 @@ function TestOrderPage(props) {
     setErrorMessage("");
     if (!testOrder) return;
     //
-    if (!(testOrder.test.value && testOrder.priority.value)) {
+    if (!(testOrder.test.value && testOrder.priority.value && testOrder.sampleOrderedBy)) {
       window.scrollTo(0, 0);
       setErrorMessage("Fill all required fields");
       return;
@@ -149,6 +152,7 @@ function TestOrderPage(props) {
       sample_type: "",
       lab_test_order_id: uuidv1(),
       lab_test_order_status: 0,
+      sample_order_date: moment(new Date()).format("DD-MM-YYYY")
     };
 
     //looping through the test order to create the formData structure expected by the server
@@ -160,8 +164,9 @@ function TestOrderPage(props) {
           lab_test_group: x.testGroup.value.name,
           lab_test_group_id: x.testGroup.value.id,
           unit_measurement: x.test.value.unitMeasurement,
-          priority: x.priority.value,
-          viral_load_indication: x.vlIndication
+          order_priority: x.priority.value,
+          viral_load_indication: x.vlIndication,
+          sample_ordered_by: x.sampleOrderedBy
         },
         ...defaults,
       };
@@ -268,6 +273,19 @@ function TestOrderPage(props) {
                     </FormGroup>
                   </Col>
                 )}
+<Col md={12}>
+                    <FormGroup>
+                      <Label for="sampleOrderedBy">Sample Ordered By*</Label>
+                      <Input
+                        required
+                        name="sampleOrderedBy"
+                        id="sampleOrderedBy"
+                        value={testOrder.sampleOrderedBy}
+                        onChange={onInputChange}
+                      />
+                    </FormGroup>
+                  </Col>
+
                   <Col md={12}>
                     <CheckedInValidation
                     actionButton={
@@ -358,21 +376,22 @@ function TestOrderList({ testOrder, index, removeTest }) {
     <ListItem>
       <ListItemText
         primary={
-          <React.Fragment>
+          <strong>
             {testOrder.testGroup ? testOrder.testGroup.value.name : ""} -{" "}
             {testOrder.test ? testOrder.test.value.name : ""}
-          </React.Fragment>
+          </strong>
         }
         secondary={
           <React.Fragment>
             <Typography component="span" variant="body2" color="textPrimary">
               Priority:{" "}
-              {testOrder.priority ? testOrder.priority.value.display : ""}
+             <b> {testOrder.priority ? testOrder.priority.value.display : ""} </b>
               {testOrder.vlIndication ? (
-                <span> | VL Indication: {testOrder.vlIndication} </span>
+                <span> | VL Indication: <b>{testOrder.vlIndication} </b></span>
               ) : (
                 ""
-              )}
+              )} 
+            <br></br> Sample Ordered by: <b> {testOrder.sampleOrderedBy}</b>
             </Typography>
           </React.Fragment>
         }

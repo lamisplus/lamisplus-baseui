@@ -22,7 +22,7 @@ const FormRenderer = (props) => {
   const [showLoading, setShowLoading] = React.useState(false);
   const [showLoadingForm, setShowLoadingForm] = React.useState(true);
   const [showLoadingEncounter, setShowLoadingEncounter] = React.useState(false)
-  const [encounterId, setEncounterId] = React.useState()
+  const [formId, setFormId] = React.useState()
   const [submission, setSubmission] = React.useState({...props.submission, ...{ data: { patient: props.patient }}});
   const onDismiss = () => setShowErrorMsg(false);
   const options = {
@@ -40,7 +40,8 @@ const FormRenderer = (props) => {
         return;
       }
       //for forms with usage code 0, check if an encounter exists for this patient
-      if(props.form && props.form.usageCode == 0){
+      if(response.data && response.data.usageCode == 0){
+        console.log("fetching encounter")
           fetchEncounter();
       }
       setForm(response.data);
@@ -58,15 +59,16 @@ const FormRenderer = (props) => {
     await axios.get(`${url}patients/${props.patientId}/encounters/${props.formCode}`, {})
     .then(response => {
       //get encounter form data and store it in submission object
+     
         if( response.data.length > 0 ){
           const lastEncounter = response.data[0]
-          setEncounterId(lastEncounter.encounterId);
+          setFormId(lastEncounter.formDataId);
           const e = {
             ...submission, ...{...submission.data, ...{data: lastEncounter}}
              };
           setSubmission(e);
-          setShowLoadingEncounter(false);
     };
+    setShowLoadingEncounter(false);
   }) .catch((error) => {
     setErrorMsg("Error loading encounter, something went wrong");
   setShowErrorMsg(true);
@@ -90,6 +92,15 @@ const FormRenderer = (props) => {
       setShowErrorMsg(true);
       setShowLoading(false);
     };
+    if(formId){
+      updateForm(onSuccess, onError);
+    }else{
+      saveForm(onSuccess, onError);
+    }
+  };
+
+  const saveForm = (onSuccess, onError) => {
+
     const encounterDate = submission["dateEncounter"]
       ? submission["dateEncounter"]
       : new Date();
@@ -112,14 +123,20 @@ const FormRenderer = (props) => {
       props.onSuccess ? props.onSuccess : onSuccess,
       props.onError ? props.onError : onError
     );
-  };
-
-  const saveForm = () => {
-
   }
 
-  const updateForm = () => {
-    
+  const updateForm = (onSuccess, onError) => {
+    const data = {
+      data: submission.data,
+  }
+
+  formRendererService.updateFormData(formId, data)
+  .then((response) => {
+    props.onSuccess ? props.onSuccess() : onSuccess();
+  })
+  .catch((error) => {
+    props.onError ? props.onError() : onError()
+  });
   }
   if(showLoadingForm){
     return (<span className="text-center">
