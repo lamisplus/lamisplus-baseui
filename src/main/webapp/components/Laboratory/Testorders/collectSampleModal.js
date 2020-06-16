@@ -64,26 +64,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ModalSample = (props) => {
-  const classes = useStyles();
-  const datasample = props.datasample ? props.datasample : {};
-  const lab_test_group = datasample.data
-    ? datasample.data.lab_test_group
-    : null;
-  const description = datasample.data ? datasample.data.description : null;
-  const labId = datasample.id;
-  const [loading, setLoading] = useState(false);
-  const [visible, setVisible] = useState(true);
-  const onDismiss = () => setVisible(false);
-  const [samples, setSamples] = useState({});
-  const [optionsample, setOptionsample] = useState([]);
-  const [otherfields, setOtherFields] = useState({
-    sample_collected_by: "",
-    sample_ordered_by: "",
-    sample_priority: "",
-    time_sample_collected: "",
-  });
-  //This is to get SAMPLE TYPE from application Codeset
-  const [errors, setErrors] = useState({});
+    const classes = useStyles() 
+    const datasample = props.datasample ? props.datasample : {};
+    const order_priority = datasample.data && datasample.data.order_priority && datasample.data.order_priority.display   ? datasample.data.order_priority.display : null;
+    const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
+    const sample_ordered_by = datasample.data ? datasample.data.sample_ordered_by : null ;
+    const description = datasample.data ? datasample.data.description : null ;
+    const labId = datasample.id
+    const [loading, setLoading] = useState(false)
+    const [visible, setVisible] = useState(true);
+    const onDismiss = () => setVisible(false);
+    const [samples, setSamples] = useState({}); 
+    const [optionsample, setOptionsample] = useState([]);
+    const [otherfields, setOtherFields] = useState({sample_collected_by:"",sample_ordered_by:"",sample_priority:"",time_sample_collected:""});
+    //This is to get SAMPLE TYPE from application Codeset
+    const [errors, setErrors] = useState({});
 
   useEffect(() => {
     async function getCharacters() {
@@ -182,92 +177,103 @@ const ModalSample = (props) => {
     }
   }
   return (
-    <div>
-      <Card>
-        <CardBody>
-          <Modal
-            isOpen={props.modalstatus}
-            toggle={props.togglestatus}
-            className={props.className}
-            size="lg"
-          >
-            <Form onSubmit={saveSample}>
-              <ModalHeader toggle={props.togglestatus}>
-                Collect Sample{" "}
-              </ModalHeader>
-              <ModalBody>
-                {checklanumber(props.labnumber["lab_number"])}
-                <Card>
-                  <CardBody>
-                    <Row>
-                      <Col md={12}>
-                        <Alert
-                          color="dark"
-                          style={{
-                            backgroundColor: "#9F9FA5",
-                            color: "#000",
-                            fontWeight: "bolder",
-                            fontSize: "14px",
-                          }}
-                        >
-                          <p style={{ marginTop: ".7rem" }}>
-                            Lab Test Group :{" "}
-                            <span style={{ fontWeight: "bolder" }}>
-                              {lab_test_group}
-                            </span>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab
-                            Test Ordered : &nbsp;&nbsp;
-                            <span style={{ fontWeight: "bolder" }}>
-                              {description}
-                            </span>
-                            &nbsp;&nbsp;&nbsp; Lab Number : &nbsp;&nbsp;
-                            <span style={{ fontWeight: "bolder" }}>
-                              {props.labnumber["lab_number"] === ""
-                                ? " ---"
-                                : props.labnumber["lab_number"]}
-                            </span>
-                            <br />
-                            Order by : &nbsp;&nbsp;
-                            <span style={{ fontWeight: "bolder" }}>
-                              {"Debora"}
-                            </span>
-                            &nbsp;&nbsp;&nbsp; Priority : &nbsp;&nbsp;
-                            <span style={{ fontWeight: "bolder" }}>
-                              {"Normal"}
-                            </span>
-                          </p>
-                        </Alert>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup>
-                          <Label for="maritalStatus">Date Collected</Label>
-                          <DateTimePicker
-                            time={false}
-                            name="date_sample_collected"
-                            id="date_sample_collected"
-                            value={samples.date_sample_collected}
-                            onChange={(value1) =>
-                              setSamples({
-                                ...samples,
-                                date_sample_collected: value1,
-                              })
-                            }
-                            {...(errors.date_sample_collected && {
-                              invalid: true,
-                            })}
-                          />
-                          {errors.date_sample_collected != "" ? (
-                            <span className={classes.error}>
-                              {errors.date_sample_collected}
-                            </span>
-                          ) : (
-                            ""
-                          )}
-                        </FormGroup>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup>
-                          <Label for="maritalStatus">Time Collected</Label>
+      <div >
+          <Card >
+              <CardBody>
+                  <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
+                  
+                      <Form onSubmit={saveSample}>
+                          <ModalHeader toggle={props.togglestatus}>Collect Sample </ModalHeader>
+                              <ModalBody>
+                                  {checklanumber(props.labnumber['lab_number'])}
+                                      <Card >
+                                          <CardBody>
+                                              <Row >
+                                                <Col md={12} >
+                                                    <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder', fontSize:'14px'}}>
+                                                        <p style={{marginTop: '.7rem' }}>Lab Test Group : <span style={{ fontWeight: 'bolder'}}>{lab_test_group }</span> 
+                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : &nbsp;&nbsp;
+                                                            <span style={{ fontWeight: 'bolder'}}>{description}</span>              
+                                                                &nbsp;&nbsp;&nbsp; Lab Number : &nbsp;&nbsp;
+                                                            <span style={{ fontWeight: 'bolder'}}>{props.labnumber['lab_number']===""?" ---":props.labnumber['lab_number']}</span>
+                                                            <br/>
+                                                                Order by : &nbsp;&nbsp;
+                                                            <span style={{ fontWeight: 'bolder'}}>{ sample_ordered_by}</span>
+                                                                &nbsp;&nbsp;&nbsp; Priority : &nbsp;&nbsp;
+                                                            <span style={{ fontWeight: 'bolder'}}>{order_priority}</span>
+                                                        </p>
+                                                      
+                                                    </Alert>
+                                                </Col>
+                                                <Col md={6}>
+                                                  
+                                                    <FormGroup> 
+                                                        <Label for='maritalStatus'>Date Collected</Label>
+                                                            <DateTimePicker
+                                                                time={false}
+                                                                name="date_sample_collected"
+                                                                id="date_sample_collected"
+                                                                value={samples.date_sample_collected}
+                                                                onChange={value1 =>
+                                                                  setSamples({ ...samples, date_sample_collected: value1 })
+                                                                }
+                                                                    {...(errors.date_sample_collected && { invalid: true})}
+                                                              /> 
+                                                                  {errors.date_sample_collected !="" ? (
+                                                                      <span className={classes.error}>{errors.date_sample_collected}</span>
+                                                                  ) : "" }
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col md={6}>
+                                                    <FormGroup> 
+                                                        <Label for='maritalStatus'>Time Collected</Label>
+                                                  
+                                                            <DateTimePicker
+                                                                date={false}
+                                                                name="time_sample_collected"
+                                                                id="time_sample_collected"
+                                                               
+                                                                onChange={value1 =>
+                                                                  setOtherFields({ ...otherfields, time_sample_collected: value1 })
+                                                                }
+                                                                required
+                                                            /> 
+                                                                {errors.time_sample_collected !="" ? (
+                                                                  <span className={classes.error}>{errors.time_sample_collected}</span>
+                                                                ) : "" }
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col md={6}>
+                                                    <FormGroup>
+                                                        <Label for='maritalStatus'>Sample Type</Label>
+                                                            <Autocomplete
+                                                                multiple="true"
+                                                                id="sample_type"
+                                                                size="small"
+                                                                options={optionsample}
+                                                                getOptionLabel={(option) => option.title}
+                                                                onChange={(e, i) =>{ 
+                                                                    setSamples({ ...samples, sample_type: i })}}
+                                                                renderTags={(value, getTagProps) =>
+                                                                    value.map((option, index) => (
+                                                                      <Chip label={option.title} {...getTagProps({ index })} disabled={index === 0} />
+                                                                    ))
+                                                                }
+                                                                style={{ width: 'auto', marginTop: '-1rem' }}s
+                                                                renderInput={(params) => (
+                                                                  <TextField {...params} variant="outlined" margin="normal"  />
+                                                                )}
+                                                              required
+                                                              
+                                                            />
+                                                                {errors.sample_type !="" ? (
+                                                                        <span className={classes.error}>{errors.sample_type}</span>
+                                                                  ) : "" }
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col md={6}>
+                                                    <FormGroup>
+                                                        <Label for="occupation">Collected by </Label>
 
                           <DateTimePicker
                             date={false}
