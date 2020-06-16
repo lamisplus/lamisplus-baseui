@@ -3,6 +3,7 @@ import axios from 'axios';
 import Page from "components/Page";
 import MatButton from "@material-ui/core/Button";
 import "./Patient.css";
+import { Link } from 'react-router-dom'
 import { Col, Form, FormGroup, Input, Label, Row, Alert, FormFeedback, FormText } from "reactstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
@@ -121,7 +122,7 @@ const PatientRegistration = ({...props}) => {
     useEffect(() => {
         async function getCharacters() {
             try {
-                const response = await axios.get('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=RELATIONSHIP');
+                const response = await axios.get( url+ 'application-codesets/codesetGroup?codesetGroup=RELATIONSHIP');
                     const body = response.data;
                         setRelationshipTypes(body.map(({ display, id }) => ({ name: display, id: id })));            
             } catch (error) {}
@@ -134,7 +135,7 @@ const PatientRegistration = ({...props}) => {
     useEffect(() => {
         async function getCharacters() {
             try {
-                const response = await axios.get('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=GENDER');
+                const response = await axios.get(url + 'application-codesets/codesetGroup?codesetGroup=GENDER');
                     const body = response.data;
                         setGender(body.map(({ display, id }) => ({ label: display, value: id })));
             } catch (error) {}
@@ -146,7 +147,7 @@ const PatientRegistration = ({...props}) => {
     useEffect(() => {
         async function getCharacters() {
             try {
-                const response = await axios.get('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=OCCUPATION');
+                const response = await axios.get(url+'application-codesets/codesetGroup?codesetGroup=OCCUPATION');
                   const body =  response.data;
                         setOccupation(body.map(({ display, id }) => ({ label: display, value: id })));
             } catch (error) {}
@@ -158,7 +159,7 @@ const PatientRegistration = ({...props}) => {
     useEffect(() => {
       async function getCharacters() {
         try {
-            const response = await axios.get('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=EDUCATION');
+            const response = await axios.get(url + 'application-codesets/codesetGroup?codesetGroup=EDUCATION');
                 const body =  response.data;
                     setQualification(body.map(({ display, id }) => ({ label: display, value: id })));
         } catch (error) {}
@@ -171,7 +172,7 @@ const PatientRegistration = ({...props}) => {
     useEffect(() => {
       async function getCharacters() {
         try {
-            const response = await axios.get('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=MARITAL_STATUS');
+            const response = await axios.get( url +'application-codesets/codesetGroup?codesetGroup=MARITAL_STATUS');
                 const body =  response.data;
                     setMaterialStatus(body.map(({ display, id }) => ({ label: display, value: id })));
         } catch (error) {}
@@ -208,8 +209,9 @@ const PatientRegistration = ({...props}) => {
               const dateOfBirth = moment(estimatedob(actualAge)).format("MM/DD/YYYY");
                 document.getElementById("dob").value = dateOfBirth;
                 //convert to the date format and setDob
-                    const newdobdate = moment(dateOfBirth).format("MM-DD-YYYY");
+                    const newdobdate = moment(dateOfBirth).format("DD-MM-YYYY");
                         setValues({ ...values, dob: newdobdate });
+                        console.log(values.dob)
           }
     };
 
@@ -234,8 +236,10 @@ const PatientRegistration = ({...props}) => {
         setValues({ ...values, [e.target.name]: e.target.value });
             const stateId = e.target.value;
                 async function getCharacters() {
-                    const response = await axios.get(`${url}state/` + stateId+"/provinces");
-                        const provinceList =  response.data;
+                    const response = await axios.get(`${url}state/`+stateId+"/provinces");
+                    console.log(response)
+                    const provinceList =  {}; 
+                    //const provinceList =  response.data;
                             setProvinces(provinceList);
                 }
         getCharacters();
@@ -308,11 +312,12 @@ const validate = () => {
     const handleSubmit = e => {
           e.preventDefault();
 
-                  const newRegistrationDate = moment(values.dateRegistration).format("MM-DD-YYYY");
-                  const newDateOfBirth = moment(values.dob).format("MM-DD-YYYY");
+                  const newRegistrationDate = moment(values.dateRegistration).format("DD-MM-YYYY");
+                  
+                  const newDateOfBirth = moment(values.dob).format("DD-MM-YYYY");
                   values["dateRegistration"] = newRegistrationDate;
                   values["personRelativeDTOs"] = relatives.length <= 0 ? [relative] : relatives;
-                  values["dob"] = newDateOfBirth;
+                  //values["dob"] = newDateOfBirth;
                   
                   if(validate()){
                     console.log(values);
@@ -526,7 +531,7 @@ const validate = () => {
                                                                 dropUp
                                                                 value={values.dobDate}
                                                                 onChange={value1 =>
-                                                                  setValues({ ...values, dob: value1 })
+                                                                  setValues({ ...values, dob: moment(value1).format("DD-MM-YYYY")  })
                                                                 }
                                                                 //defaultValue={new Date()}
                                                                 max={new Date()}
@@ -933,15 +938,17 @@ const validate = () => {
                                                     <span style={{textTransform: 'capitalize'}}>Save</span>
                                                     : <span style={{textTransform: 'capitalize'}}>Saving...</span>}
                                                 </MatButton>
-                                      
+                                                <Link to ={{ pathname: "/patients"}} >
                                                 <MatButton
                                                   variant="contained"
                                                   className={classes.button}
                                                   startIcon={<CancelIcon />}
                                                   onClick={resetForm}
                                                 >
+                                               
                                                     <span style={{textTransform: 'capitalize'}}>Cancel</span>
                                                 </MatButton>
+                                            </Link>
                                     </CardContent>
                                 </Card>
                             </Col>
