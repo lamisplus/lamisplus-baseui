@@ -312,7 +312,7 @@ const validate = () => {
     */
     const handleSubmit = e => {
           e.preventDefault();
-
+          
                   const newRegistrationDate = moment(values.dateRegistration).format("DD-MM-YYYY");
                   
                   const newDateOfBirth = moment(values.dob).format("DD-MM-YYYY");
@@ -328,6 +328,8 @@ const validate = () => {
                               resetForm() 
                               setRelative(initialRelative)
                               removeRelative()
+                              props.history.go(-1)
+                             
                           }
                           const onError = () => {
                               setSaving(false);        

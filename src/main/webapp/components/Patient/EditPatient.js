@@ -328,7 +328,8 @@ const validate = () => {
                           const onSuccess = () => {
                               setSaving(false);
                               resetForm() 
-                              //removeRelative()
+                              removeRelative()
+                              props.history.go(-1)
                           }
                           const onError = () => {
                               setSaving(false);        

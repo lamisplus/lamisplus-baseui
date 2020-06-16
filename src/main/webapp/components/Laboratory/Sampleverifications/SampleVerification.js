@@ -135,7 +135,8 @@ const sampleAction = (e) =>{
                   { e.data.lab_test_order_status==="4" ?
                       <MenuItem onSelect={() => handleSample(e)}><FaPlusSquare size="15" style={{color: '#3F51B5'}}/>{" "}Re-collect Sample</MenuItem>
                     :""
-                  }               
+                  }  
+                               
                 </MenuList>
             </Menu>
           )
