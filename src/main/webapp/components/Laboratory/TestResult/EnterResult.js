@@ -72,7 +72,7 @@ const ModalSampleResult = (props) => {
             sample_priority:"",
             time_result_enetered:"",
             date_result_reported:"",
-            result_entered_by:"",
+            result_reported_by:"",
             test_result:"",
             date_asseyed:""
           }); 
@@ -87,7 +87,7 @@ const ModalSampleResult = (props) => {
       let temp = { ...errors }
       temp.time_result_enetered = otherfields.time_result_enetered ? "" : "Date is required"
       temp.date_result_reported = otherfields.date_result_reported ? "" : "Time  is required."
-      temp.result_entered_by = otherfields.result_entered_by ? "" : "This filed is required." 
+      temp.result_reported_by = otherfields.result_reported_by ? "" : "This filed is required." 
       temp.date_asseyed = otherfields.date_asseyed ? "" : "This filed is required." 
       temp.test_result = otherfields.test_result ? "" : "This filed is required." 
       setErrors({
@@ -105,7 +105,7 @@ const ModalSampleResult = (props) => {
               datasample.data['time_sample_transfered'] = newTimeSampleEntered
               datasample.data.lab_test_order_status = 5;
               datasample.data.test_result = otherfields.test_result
-              datasample.data['result_entered_by'] = otherfields['result_entered_by']
+              datasample.data['result_reported_by'] = otherfields['result_reported_by']
               datasample.data['date_asseyed'] = otherfields['date_asseyed']
             
         const onSuccess = () => {
@@ -166,7 +166,7 @@ const ModalSampleResult = (props) => {
                                           <Label for=''>Time Reported</Label>
                                               <DateTimePicker
                                                   date={false}
-                                                  name="time_result_enetered"
+                                                  name="time_result_reported"
                                                   id="time_result_enetered"
                                                   onChange={value1 =>
                                                     setOtherFields({ ...otherfields, time_result_enetered: value1 })
@@ -181,18 +181,18 @@ const ModalSampleResult = (props) => {
                                             <Label>Result Reported by </Label>
                                                 <Input
                                                   type="select"
-                                                  name="result_entered_by"
-                                                  id="result_entered_by"
-                                                  vaule={otherfields.result_entered_by}
+                                                  name="result_reported_by"
+                                                  id="result_reported_by"
+                                                  vaule={otherfields.result_reported_by}
                                                   onChange={handleOtherFieldInputChange}
-                                                  {...(errors.result_entered_by && { invalid: true})} 
+                                                  {...(errors.result_reported_by && { invalid: true})} 
                                                 >
                                                     <option value=""></option>
                                                     <option value="Dorcas"> Dorcas </option>
                                                     <option value="Jeph"> Jeph </option>
                                                     <option value="Debora"> Debora </option>
                                                 </Input>
-                                                    <FormFeedback>{errors.result_entered_by}</FormFeedback>
+                                                    <FormFeedback>{errors.result_reported_by}</FormFeedback>
                                         </FormGroup>
                                     </Col> 
                                   </Row>
