@@ -2,8 +2,7 @@ import React, {useState} from 'react';
 import { Modal, ModalHeader, ModalBody,Form,FormFeedback,Row,Col,
 FormGroup,Label,Input,Card,CardBody} from 'reactstrap';
 import { connect } from 'react-redux';
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 import "react-widgets/dist/css/react-widgets.css";
 import { DateTimePicker } from 'react-widgets';
 import Moment from 'moment';

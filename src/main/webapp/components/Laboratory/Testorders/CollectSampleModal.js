@@ -70,6 +70,8 @@ const ModalSample = (props) => {
     const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
     const sample_ordered_by = datasample.data ? datasample.data.sample_ordered_by : null ;
     const description = datasample.data ? datasample.data.description : null ;
+    const lab_number = props.labnumber && props.labnumber["lab_number"]  ? props.labnumber["lab_number"] : null;
+    console.log(props)
     const labId = datasample.id
     const [loading, setLoading] = useState(false)
     const [visible, setVisible] = useState(true);
@@ -154,12 +156,12 @@ const ModalSample = (props) => {
                 setLoading(false);
                 props.togglestatus();
             };
-            datasample["lab_number"] = props.labnumber["lab_number"];
+            datasample["lab_number"] = lab_number;
             datasample.data["sample_collected_by"] =
                 otherfields["sample_collected_by"];
             datasample.data["sample_ordered_by"] = otherfields["sample_ordered_by"];
             datasample.data["sample_priority"] = "Normal";
-            datasample.data["lab_number"] = props.labnumber["lab_number"];
+            datasample.data["lab_number"] = lab_number;
             datasample.data["time_sample_collected"] =
                 otherfields["time_sample_collected"];
 
@@ -185,7 +187,7 @@ const ModalSample = (props) => {
                         <Form onSubmit={saveSample}>
                             <ModalHeader toggle={props.togglestatus}>Collect Sample </ModalHeader>
                             <ModalBody>
-                                {checklanumber(props.labnumber['lab_number'])}
+                                {checklanumber(lab_number)}
                                 <Card >
                                     <CardBody>
                                         <Row >
@@ -195,7 +197,7 @@ const ModalSample = (props) => {
                                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lab Test Ordered : &nbsp;&nbsp;
                                                         <span style={{ fontWeight: 'bolder'}}>{description}</span>
                                                         &nbsp;&nbsp;&nbsp; Lab Number : &nbsp;&nbsp;
-                                                        <span style={{ fontWeight: 'bolder'}}>{props.labnumber['lab_number']===""?" ---":props.labnumber['lab_number']}</span>
+                                                        <span style={{ fontWeight: 'bolder'}}>{lab_number===""?" ---":lab_number}</span>
                                                         <br/>
                                                         Order by : &nbsp;&nbsp;
                                                         <span style={{ fontWeight: 'bolder'}}>{ sample_ordered_by}</span>
@@ -243,59 +245,7 @@ const ModalSample = (props) => {
                                                     ) : "" }
                                                 </FormGroup>
                                             </Col>
-                                            {/* <Col md={6}>
-                                                    <FormGroup>
-                                                        <Label for='maritalStatus'>Sample Type</Label>
-                                                            <Autocomplete
-                                                                multiple="true"
-                                                                id="sample_type"
-                                                                size="small"
-                                                                options={optionsample}
-                                                                getOptionLabel={(option) => option.title}
-                                                                onChange={(e, i) =>{
-                                                                    setSamples({ ...samples, sample_type: i })}}
-                                                                renderTags={(value, getTagProps) =>
-                                                                    value.map((option, index) => (
-                                                                      <Chip label={option.title} {...getTagProps({ index })} disabled={index === 0} />
-                                                                    ))
-                                                                }
-                                                                style={{ width: 'auto', marginTop: '-1rem' }}s
-                                                                renderInput={(params) => (
-                                                                  <TextField {...params} variant="outlined" margin="normal"  />
-                                                                )}
-                                                              required
-
-                                                            />
-                                                                {errors.sample_type !="" ? (
-                                                                        <span className={classes.error}>{errors.sample_type}</span>
-                                                                  ) : "" }
-                                                    </FormGroup>
-                                                </Col>
-                                                <Col md={6}>
-                                                    <FormGroup>
-                                                        <Label for="occupation">Collected by </Label>
-
-                          <DateTimePicker
-                            date={false}
-                            name="time_sample_collected"
-                            id="time_sample_collected"
-                            onChange={(value1) =>
-                              setOtherFields({
-                                ...otherfields,
-                                time_sample_collected: value1,
-                              })
-                            }
-                            required
-                          />
-                          {errors.time_sample_collected != "" ? (
-                            <span className={classes.error}>
-                              {errors.time_sample_collected}
-                            </span>
-                          ) : (
-                            ""
-                          )}
-                        </FormGroup>
-                      </Col>*/}
+               
                                             <Col md={6}>
                                                 <FormGroup>
                                                     <Label for="maritalStatus">Sample Type</Label>
@@ -389,7 +339,7 @@ const ModalSample = (props) => {
                                             </Col>
                                         </Row>
 
-                                        {props.labnumber["lab_number"] !== "" ? (
+                                        {lab_number !== "" ? (
                                             <MatButton
                                                 type="submit"
                                                 variant="contained"

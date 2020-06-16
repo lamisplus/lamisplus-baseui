@@ -94,6 +94,7 @@ const handlesample = (row) => {
 }
 const handleSample = (row) => { 
   setcollectmodal({...collectmodal, ...row});
+  console.log(labNumber)
   setModal2(!modal2) 
 }
 const getGroup = e => {

@@ -125,7 +125,7 @@ export const sampleVerification = (data, lab_id, onSuccess, onError ) => dispatc
         payload: response.data
       });
       onSuccess()
-      toast.success("Sample verified successful");
+      //toast.success("Sample verified successful");
       //setInterval(window.location.reload(false), 80000);
     })
     .catch(error =>{
@@ -154,7 +154,7 @@ export const transferSample = (samples, lab_id) => dispatch => {
         type: ACTION_TYPES.TRANSFER_SAMPLE,
         payload: response.data
       });
-      toast.success("Sample Transfer was successful");
+      //toast.success("Sample Transfer was successful");
     })
     .catch(error =>{
       
