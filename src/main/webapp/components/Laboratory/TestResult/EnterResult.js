@@ -163,7 +163,7 @@ const ModalSampleResult = (props) => {
                                               />            
                                       </Col>
                                       <Col md="6">
-                                          <Label for=''>Time Transfer</Label>
+                                          <Label for=''>Time Reported</Label>
                                               <DateTimePicker
                                                   date={false}
                                                   name="time_result_enetered"
@@ -178,7 +178,7 @@ const ModalSampleResult = (props) => {
                                       </Col> 
                                       <Col md="6">
                                         <FormGroup>
-                                            <Label for="occupation">Result Entered by </Label>
+                                            <Label>Result Reported by </Label>
                                                 <Input
                                                   type="select"
                                                   name="result_entered_by"

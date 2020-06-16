@@ -84,7 +84,7 @@ const useStyles = makeStyles(theme => ({
 
 
 const PatientRegistration = ({...props}) => {
-    
+
     const classes = useStyles();
     const apicountries = url + "countries";
     const apistate = url + "countries/";
@@ -115,7 +115,7 @@ const PatientRegistration = ({...props}) => {
           } catch (error) {}
         }
       getCharacters();
-  }, []); 
+  }, []);
 
     /*# Get list of RelationshipTypes parameter from the endpoint #*/
     useEffect(() => {
@@ -123,12 +123,12 @@ const PatientRegistration = ({...props}) => {
             try {
                 const response = await axios.get('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=RELATIONSHIP');
                     const body = response.data;
-                        setRelationshipTypes(body.map(({ display, id }) => ({ name: display, id: id })));            
+                        setRelationshipTypes(body.map(({ display, id }) => ({ name: display, id: id })));
             } catch (error) {}
           }
         getCharacters();
-    }, []);  
-            
+    }, []);
+
     /* ##### End of RelationshipTypes parameter from the endpoint ##########*/
     /*# Get list of gender parameter from the endpoint #*/
     useEffect(() => {
@@ -216,7 +216,7 @@ const PatientRegistration = ({...props}) => {
     //Get States from selected country
     const getStates = e => {
         const getCountryId =e.target.value;
-            setStateByCountryId(getCountryId); 
+            setStateByCountryId(getCountryId);
             setValues({ ...values, countryId: getCountryId });
     };
 
@@ -235,8 +235,7 @@ const PatientRegistration = ({...props}) => {
             const stateId = e.target.value;
                 async function getCharacters() {
                     const response = await axios.get(`${url}state/` + stateId+"/provinces");
-                    console.log(response)
-                    const provinceList =  {}; 
+                    const provinceList =  {};
                     // const provinceList =  response.data;
                             setProvinces(provinceList);
                 }
@@ -245,10 +244,10 @@ const PatientRegistration = ({...props}) => {
 
     const  getRelationshipName = (id) => {
         if(id){
-            const newId = parseInt(id) 
+            const newId = parseInt(id)
               const objectArray = Object.values(relationshipTypes);
               return objectArray.find(x => x.id === newId).name
-        }    
+        }
     }
 
     /* Add Relative function **/
@@ -262,15 +261,15 @@ const PatientRegistration = ({...props}) => {
     const removeRelative = index => {
         relatives.splice(index, 1);
         setRelative({...relative});
-        setRelativeButton(false)       
+        setRelativeButton(false)
     };
 
     /* Edit Relative function **/
     const editRelative = index => {
         const allRelatives = [...relatives];
         setRelative(allRelatives[index])
-        relatives.splice(index, 1); 
-        setRelativeButton(true) 
+        relatives.splice(index, 1);
+        setRelativeButton(true)
     };
 
   const handleAddRelative = e => {
@@ -278,7 +277,7 @@ const PatientRegistration = ({...props}) => {
       //if (!relative) return;
           if((Object.entries(relative).length >0  && relative.constructor === Object)){
               addRelative(relative);
-              setRelative(initialRelative); 
+              setRelative(initialRelative);
           }else{
               toast.error("Relative fields cannot be empty");
           }
@@ -288,7 +287,7 @@ const PatientRegistration = ({...props}) => {
       setRelative({ ...relative, [e.target.name]: e.target.value });
   };
 /****
- *  Validation 
+ *  Validation
  */
 const validate = () => {
     console.log(values)
@@ -297,15 +296,15 @@ const validate = () => {
     temp.hospitalNumber = values.hospitalNumber ? "" : "Patient Id is required."
     temp.mobilePhoneNumber = values.mobilePhoneNumber ? "" : "Mobile numner is required."
     temp.lastName = values.lastName ? "" : "Last Name  is required."
-    temp.genderId = values.genderId ? "" : "Gender is required."  
-    
+    temp.genderId = values.genderId ? "" : "Gender is required."
+
         setErrors({ ...temp })
         console.log(temp)
             return Object.values(temp).every(x => x == "")
 }
 
     /***
-    * Submit Button Processing 
+    * Submit Button Processing
     */
     const handleSubmit = e => {
           e.preventDefault();
@@ -315,22 +314,22 @@ const validate = () => {
                   values["dateRegistration"] = newRegistrationDate;
                   values["personRelativeDTOs"] = relatives.length <= 0 ? [relative] : relatives;
                   values["dob"] = newDateOfBirth;
-                  
+
                   if(validate()){
                     console.log(values);
                       setSaving(true);
                           const onSuccess = () => {
                               setSaving(false);
-                              resetForm() 
+                              resetForm()
                               setRelative(initialRelative)
                               removeRelative()
                           }
                           const onError = () => {
-                              setSaving(false);        
+                              setSaving(false);
                           }
                               console.log(values)
                               props.create(values, onSuccess, onError);
-                   
+
                   }else{
                       toast.error("Please fill all compulsory fields");
                   }
@@ -357,7 +356,7 @@ const validate = () => {
                                 <CardContent>
                                     <Title>
                                       Basic Information <br />
-                                      
+
                                     </Title>
                                     <br />
                                         <Row form>
@@ -368,7 +367,7 @@ const validate = () => {
                                                           type="text"
                                                           name="hospitalNumber"
                                                           id="hospitalNumber"
-                                                        
+
                                                           value={values.hospitalNumber}
                                                           onChange={handleInputChange}
                                                           {...(errors.hospitalNumber && { invalid: true})}
@@ -403,7 +402,7 @@ const validate = () => {
                                                             type="text"
                                                             name="firstName"
                                                             id="firstName"
-                                                            
+
                                                             value={values.firstName}
                                                             onChange={handleInputChange}
                                                             {...(errors.firstName && { invalid: true})}
@@ -418,7 +417,7 @@ const validate = () => {
                                                             type="text"
                                                             name="otherNames"
                                                             id="otherNames"
-                                                          
+
                                                             onChange={handleInputChange}
                                                             value={values.otherNames}
                                                         />
@@ -431,7 +430,7 @@ const validate = () => {
                                                             type="text"
                                                             name="lastName"
                                                             id="lastName"
-                                                            
+
                                                             onChange={handleInputChange}
                                                             value={values.lastName}
                                                             {...(errors.lastName && { invalid: true})}
@@ -536,21 +535,21 @@ const validate = () => {
                                                                 {values.dob ==="Invalid date" ? (
                                                                     <span className={classes.error}>{"This field is required"}</span>
                                                                 ) : "" }
-                                                              
+
                                                     </FormGroup>
                                                 ) : (
                                                     <FormGroup>
                                                         <Label>Date OF Birth</Label>
-                                                            <Input 
-                                                                type="text" 
-                                                                id="dob" 
-                                                                disabled 
+                                                            <Input
+                                                                type="text"
+                                                                id="dob"
+                                                                disabled
                                                                 value={values.dob}
                                                                 onChange={value1 =>
                                                                   setValues({ ...values, dob: value1 })
                                                                 }
                                                             />
-                                                                
+
                                                                     <FormText ><span style={{color:"blue", fontWeight:"bolder"}}>Estimated Date of Birth </span></FormText>
                                                     </FormGroup>
 
@@ -566,7 +565,7 @@ const validate = () => {
                                                                     id="age"
                                                                     type="text"
                                                                     name="age"
-                                                                    
+
                                                                     onChange={onAgeInputChange}
                                                                 />
                                                         </FormGroup>
@@ -603,11 +602,11 @@ const validate = () => {
                                                                                 type="text"
                                                                                 name="mobilePhoneNumber"
                                                                                 id="mobilePhoneNumber"
-                                                                              
+
                                                                                 value={values.mobilePhoneNumber}
                                                                                 onChange={handleInputChange}
                                                                                 {...(errors.mobilePhoneNumber && { invalid: true})}
-                                                                                
+
                                                                               />
                                                                                   <FormFeedback>{errors.mobilePhoneNumber}</FormFeedback>
                                                                     </FormGroup>
@@ -619,7 +618,7 @@ const validate = () => {
                                                                                 type="text"
                                                                                 name="alternatePhoneNumber"
                                                                                 id="alternatePhoneNumber"
-                                                                              
+
                                                                                 value={values.alternatePhoneNumber}
                                                                                 onChange={handleInputChange}
                                                                             />
@@ -632,7 +631,7 @@ const validate = () => {
                                                                                 type="email"
                                                                                 name="email"
                                                                                 id="email"
-                                                                              
+
                                                                                 value={values.email}
                                                                                 onChange={handleInputChange}
                                                                             />
@@ -665,7 +664,7 @@ const validate = () => {
                                                                                 type="select"
                                                                                 name="stateId"
                                                                                 id="stateId"
-                                                                                
+
                                                                                 value={values.stateId}
                                                                                 onChange={getProvinces}
                                                                             >
@@ -711,7 +710,7 @@ const validate = () => {
                                                                                 type="text"
                                                                                 name="city"
                                                                                 id="city"
-                                                                              
+
                                                                                 value={values.city}
                                                                                 onChange={handleInputChange}
                                                                             />
@@ -725,7 +724,7 @@ const validate = () => {
                                                                                 type="text"
                                                                                 name="landmark"
                                                                                 id="landmark"
-                                                                              
+
                                                                                 value={values.landmark}
                                                                                 onChange={handleInputChange}
                                                                             />
@@ -738,7 +737,7 @@ const validate = () => {
                                                                                 type="text"
                                                                                 name="landmark"
                                                                                 id="landmark"
-                                                                            
+
                                                                             />
                                                                     </FormGroup>
                                                                 </Col>
@@ -768,7 +767,7 @@ const validate = () => {
                                                 onClick={handleAddRelative}
                                                 autoCapitalize = 'none'
                                               >
-                                                  {!relativeButton ? 
+                                                  {!relativeButton ?
                                                       (
                                                           <>
                                                               <span style={{textTransform: 'capitalize'}}>Add </span>
@@ -800,7 +799,7 @@ const validate = () => {
                                                       >
                                                           <option  value=""> </option>
                                                           <option value="">
-                                                            Select Relative Relationship Type 
+                                                            Select Relative Relationship Type
                                                           </option>
                                                           {relationshipTypes.map(({ name, id }) => (
                                                             <option key={id} value={id}>
@@ -817,9 +816,9 @@ const validate = () => {
                                                         type="text"
                                                         name="firstName"
                                                         id="firstName"
-                                                        value={relative.firstName}                       
+                                                        value={relative.firstName}
                                                         onChange={onRelativeChange}
-                                                        />    
+                                                        />
                                                   </FormGroup>
                                               </Col>
                                               <Col md={3}>
@@ -829,7 +828,7 @@ const validate = () => {
                                                           type="text"
                                                           name="otherNames"
                                                           id="otherNames"
-                                                        
+
                                                           value={relative.otherNames}
                                                           onChange={onRelativeChange}
                                                       />
@@ -842,12 +841,12 @@ const validate = () => {
                                                           type="text"
                                                           name="lastName"
                                                           id="lastName"
-                                                        
+
                                                           value={relative.lastName}
                                                           onChange={onRelativeChange}
-                                                      
+
                                                         />
-                                                      
+
                                                   </FormGroup>
                                               </Col>
                                         </Row>
@@ -868,7 +867,7 @@ const validate = () => {
                                                             })
                                                         }
                                                     />
-                                                
+
                                                 </FormGroup>
                                             </Col>
                                             <Col md={3}>
@@ -878,7 +877,7 @@ const validate = () => {
                                                         type="text"
                                                         name="email"
                                                         id="email"
-                                                        
+
                                                         value={relative.email}
                                                         onChange={onRelativeChange}
                                                     />
@@ -891,7 +890,7 @@ const validate = () => {
                                                         type="text"
                                                         name="address"
                                                         id="address"
-                                                      
+
                                                         onChange={onRelativeChange}
                                                         value={relative.address}
                                                     />
@@ -935,7 +934,7 @@ const validate = () => {
                                                     <span style={{textTransform: 'capitalize'}}>Save</span>
                                                     : <span style={{textTransform: 'capitalize'}}>Saving...</span>}
                                                 </MatButton>
-                                      
+
                                                 <MatButton
                                                   variant="contained"
                                                   className={classes.button}
@@ -993,7 +992,7 @@ function RelativeList({
 
 const mapStateToProps = state => ({
     patientDetail: state.patients.list
-  
+
 });
 
 
