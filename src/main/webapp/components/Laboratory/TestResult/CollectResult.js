@@ -46,7 +46,7 @@ const useStyles = makeStyles({
       const testorder = useSelector(state => state.laboratory.testorder);
       const dispatch = useDispatch();
       const [loading, setLoading] = useState('')
-      const [labNum, setlabNum] = useState({lab_number:"lab456"})
+      const [labNum, setlabNum] = useState({lab_number:""})
   useEffect(() => {
     const personId = encounterresult.hospitalNumber;
     const ecounterId = encounterresult.encounterId;
@@ -65,7 +65,7 @@ const useStyles = makeStyles({
 
   //Filter only sample that is collected in the array 
 const newsample =  sampleslist.filter(function(sample) {
-    return (sample.data.lab_test_order_status !==0);
+    return (sample.data.lab_test_order_status !==0 && sample.data.lab_test_order_status !=="4");
 }); 
 
 let labNumber = "" //check if that key exist in the array
@@ -181,9 +181,9 @@ const sampleAction = (e) =>{
                                                                     id="testgroup"
                                                                     onChange={getGroup}
                                                                   >
-                                                                      <option value=""></option>
+                                                                    <option value=""></option>
                                                                           {
-                                                                              uniqueValues.map(x => 
+                                                                            uniqueValues.map(x => 
                                                                                   <option key={x} value={x}>
                                                                                       {x}
                                                                                   </option>
