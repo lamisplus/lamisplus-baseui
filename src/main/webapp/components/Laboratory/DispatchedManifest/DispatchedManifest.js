@@ -141,7 +141,7 @@ useEffect(() => {
             }
         ]}
       />
-      <DispatchedModal modalstatus={modal3} togglestatus={togglemodal3} datasample={collectmodal} />
+      <DispatchedModal modalstatus={modal3} togglestatus={togglemodal3} manifestSamples={collectmodal} />
 
     </div>
     
