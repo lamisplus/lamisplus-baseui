@@ -236,8 +236,8 @@ const PatientRegistration = ({...props}) => {
                 async function getCharacters() {
                     const response = await axios.get(`${url}state/`+stateId+"/provinces");
                     console.log(response)
-                    //const provinceList =  {}; 
-                    const provinceList =  response.data;
+                    const provinceList =  {}; 
+                    //const provinceList =  response.data;
                         setProvinces(provinceList);
                 }
                 getCharacters();
