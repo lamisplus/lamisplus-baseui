@@ -236,11 +236,11 @@ const PatientRegistration = ({...props}) => {
                 async function getCharacters() {
                     const response = await axios.get(`${url}state/`+stateId+"/provinces");
                     console.log(response)
-                    const provinceList =  {}; 
-                    //const provinceList =  response.data;
-                    setProvinces(provinceList);
+                    //const provinceList =  {}; 
+                    const provinceList =  response.data;
+                        setProvinces(provinceList);
                 }
-        getCharacters();
+                getCharacters();
     };
 
     const  getRelationshipName = (id) => {
@@ -303,7 +303,7 @@ const handleSubmit = e => {
     e.preventDefault();    
         const newRegistrationDate = moment(values.dateRegistration).format("DD-MM-YYYY");        
         const newDateOfBirth = moment(values.dob).format("DD-MM-YYYY");
-        values["dateRegistration"] = newRegistrationDate;
+        //values["dateRegistration"] = newRegistrationDate;
         values["personRelativeDTOs"] = relatives.length <= 0 ? [relative] : relatives;
         //values["dob"] = newDateOfBirth;               
             if(validate() && values["dateRegistration"]!=='Invalid date'){
@@ -375,7 +375,7 @@ const handleSubmit = e => {
                                                             id="dateRegistration"
                                                             value={values.regDate}
                                                             onChange={value1 =>
-                                                              setValues({ ...values, dateRegistration: moment(value1).format("MM-DD-YYYY") })
+                                                              setValues({ ...values, dateRegistration: moment(value1).format("DD-MM-YYYY") })
                                                             }
                                                                 max={new Date()}
                                                         />
