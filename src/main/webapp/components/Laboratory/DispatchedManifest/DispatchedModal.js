@@ -15,6 +15,7 @@ import {url} from '../../../api'
 import { Alert } from 'reactstrap';
 import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
 import { Spinner } from 'reactstrap';
+import { v4 as uuidv4 } from 'uuid';
 
 Moment.locale('en');
 momentLocalizer();
@@ -62,14 +63,10 @@ const ModalViewResult = (props) => {
     const classes = useStyles()
     const manifestSamples = props.manifestSamples !==null ? props.manifestSamples : {};
     const manifestSample= [manifestSample]
-    const lab_test_group = manifestSamples.data ? manifestSamples.data.lab_test_group : null ;
-    const description = manifestSamples.data ? manifestSamples.data.description : null ;
-
     const labId = manifestSamples.id
     const [loading, setLoading] = useState(false)
-    const [visible, setVisible] = useState(true);
-    const onDismiss = () => setVisible(false);
-    const [otherfields, setOtherFields] = useState({date_sample_dispatched:"",packaged_by:"",courier_phone_number:"",time_sample_dispatched:"",packaged_by_phone_number:"", courier_name:""});
+    const [manifestId, setManifestId] = useState(uuidv4());
+    const [otherfields, setOtherFields] = useState({date_sample_dispatched:"",packaged_by:"",courier_phone_number:"",time_sample_dispatched:"",packaged_by_phone_number:"", courier_name:"", receiving_lab_name:""});
 
     const [errors, setErrors] = useState({});
 
@@ -132,9 +129,11 @@ const ModalViewResult = (props) => {
                                 <Row >
                                     <Col md={12} >
                                         <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder', fontSize:'14px'}}>
-                                            <p style={{marginTop: '.7rem' }}>Total Sample Shipment : &nbsp;&nbsp;&nbsp;<span style={{ fontWeight: 'bolder'}}>{manifestSample.length }</span>
-                                                
-                                                
+                                            <p style={{marginTop: '.7rem' }}>
+                                                Total Sample Shipment : &nbsp;&nbsp;&nbsp;<span style={{ fontWeight: 'bolder'}}>{manifestSample.length }</span>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                Manifest ID : &nbsp;&nbsp;&nbsp;<span style={{ fontWeight: 'bolder'}}>{'Lamis'+manifestId }</span>
+                                          
                                             </p>
 
                                         </Alert>
@@ -243,7 +242,26 @@ const ModalViewResult = (props) => {
                                                       <FormFeedback>{errors.packaged_by_phone_number}</FormFeedback>
                                           </FormGroup>
                                       </Col>
-                             
+                                      <Col md={6}>
+                                          <FormGroup>
+                                              <Label for="occupation">Receiving Lab Name </Label>
+
+                                                <Input
+                                                    type="select"
+                                                    name="receiving_lab_name"
+                                                    id="receiving_lab_name"
+                                                    vaule={otherfields.receiving_lab_name}
+                                                    onChange={handleOtherFieldInputChange}
+                                                    {...(errors.receiving_lab_name && { invalid: true})} 
+                                                >
+                                                      <option value=""></option>
+                                                      <option value="Lab1"> FHI360 Lab </option>
+                                                      <option value="Lab2"> Abuja Teaching Hospital Lab </option>
+                                                      <option value="otherlabs"> Others </option>
+                                                </Input>
+                                                    <FormFeedback>{errors.receiving_lab_name}</FormFeedback>
+                                          </FormGroup>
+                                      </Col>                   
                                   </Row>
                                       <br/>
                                       {loading ? <Spinner /> : ""}
