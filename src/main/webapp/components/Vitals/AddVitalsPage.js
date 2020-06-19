@@ -16,6 +16,8 @@ import * as encounterAction from "actions/encounter";
 import * as actions from "actions/patients";
 import * as CODES from "api/codes";
 import {connect} from 'react-redux';
+import CheckedInValidation from 'components/Utils/CheckedInValidation';
+
 //Dtate Picker package
 Moment.locale('en')
 momentLocalizer()
@@ -91,7 +93,7 @@ function AddVitalsPage (props) {
       }
     setShowLoading(true)
     const newDatenow = Moment(vitals.dateEncounter).format('DD-MM-YYYY')
-    const encounterDateTime = Moment(vitals.dateEncounter).format('DD-MM-YYYY hh:mm a')
+    const encounterDateTime = Moment(vitals.dateEncounter).format('DD-MM-YYYY hh:mm A')
     formDataForVitals['dateEncounter'] = encounterDateTime;
     const data = {
       formCode: CODES.VITAL_SIGNS_FORM,
@@ -127,12 +129,13 @@ function AddVitalsPage (props) {
       [e.target.name]: e.target.value
     })
   }
+
+
   return (
     <Form className={classes.form} onSubmit={SaveVitals}>
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
             {errorMsg}
           </Alert>
-          
       <Card >
         <CardBody>
           <Row form>
@@ -255,22 +258,27 @@ function AddVitalsPage (props) {
               </FormGroup>
             </Col>
           </Row>
+          <Row>
+            <Col md={12}>
+              {showLoading && (
+                <Spinner animation='border' role='status'>
+                  <span className='sr-only'>Loading...</span>
+                </Spinner>
+              )}
+            </Col>
+          </Row>
           <br />
-          {props.patient.visitId ? 
-          <div>
-             <MatButton
+
+          <CheckedInValidation actionButton={<MatButton
             type='submit'
             variant='contained'
             color='primary'
             className={classes.button}
             startIcon={<SaveIcon />}
           >
-            Save {showLoading && (
-                <Spinner animation='border' role='status'>
-                  <span className='sr-only'>Loading...</span>
-                </Spinner>
-              )}
-          </MatButton>
+            Save
+          </MatButton>} visitId={props.patient.visitId} />
+          
           <MatButton
             variant='contained'
             color='default'
@@ -280,15 +288,6 @@ function AddVitalsPage (props) {
           >
             Cancel
           </MatButton>
-          </div> 
-          
-          
-          :
-          <Alert color='danger'> This patient does not have a current visit. You have to check in to proceed</Alert>
-  }
-          
-         
-         
         </CardBody>
       </Card>
     </Form>

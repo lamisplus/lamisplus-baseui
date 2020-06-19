@@ -2,14 +2,22 @@ import React, {useEffect} from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
-import { fetchAll, Delete as Del } from "../../actions/patients";
+import { fetchAll, Delete as Del , fetchCheckedInPatients} from "../../actions/patients";
 import "./PatientSearch.css";
 import { Dashboard } from "@material-ui/icons";
 import IconButton from '@material-ui/core/IconButton';
 
-const PatientSearch = (props) => {
+const ActivePatientSearch = (props) => {
+  const [loading, setLoading] = React.useState(true);
+
       useEffect(() => {
-        props.fetchAllPatients();
+        const onSuccess = () => {
+          setLoading(false);
+        };
+        const onError = () => {
+          setLoading(false);
+        };
+        props.fetchAllPatients(onSuccess, onError);
       }, []); //componentDidMount
 
       const calculate_age = dob => {
@@ -17,8 +25,6 @@ const PatientSearch = (props) => {
         var dateParts = dob.split("-");
         var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
         var birthDate = new Date(dateObject); // create a date object directly from `dob1` argument
-        console.log(dateObject);
-        console.log(birthDate);
         var age_now = today.getFullYear() - birthDate.getFullYear();
         var m = today.getMonth() - birthDate.getMonth();
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
@@ -28,7 +34,6 @@ const PatientSearch = (props) => {
         if (age_now === 0) {
           return m + " month(s)";
         }
-        console.log(age_now);
         return age_now + " year(s)";
       };
 
@@ -36,7 +41,7 @@ const PatientSearch = (props) => {
   return (
     <div>
       <MaterialTable
-        title="Find Patients"
+        title="Find Checked-In Patients"
         columns={[
           {
             title: "Patient Name",
@@ -44,14 +49,9 @@ const PatientSearch = (props) => {
           },
           { title: "Patient ID", field: "id" },
           { title: "Age", field: "age", filtering: false },
-          { title: "Address", field: "address", filtering: false },
-          {
-            title: "Action",
-            field: "actions",
-            filtering: false,
-          },
+          { title: "Check-In Time", field: "checkIn", filtering: false }
         ]}
-      
+        isLoading={loading}
         data={props.patientsList.map((row) => ({
           name: row.firstName +  ' ' + row.lastName,
           id: row.hospitalNumber,
@@ -61,25 +61,21 @@ const PatientSearch = (props) => {
           row.dob === "" )
             ? 0
             : calculate_age(row.dob),
-          address: row.street || '',
-          actions: 
-          <div>
-          <IconButton
-          color="primary"
-          aria-label="View Patient"
-          title="View Patient"
-        >
-          <Link
-            to={{
-              pathname: "/patient-dashboard/"+row.hospitalNumber
-            }}
-          >
-            <Dashboard title="Patient Dashboard" aria-label="View Patient" />
-          </Link>
-        </IconButton></div>
-          
+          address: row.street || ''  ,
+          patientId: row.patientId,
+          visitId: row.id,
+          checkIn: row.dateVisitStart + ' ' + (row.timeVisitStart ? row.timeVisitStart : '' ) 
         }))}
         
+        actions= {[
+          {
+            icon: 'dashboard',
+            iconProps: {color: 'primary'},
+            tooltip: 'Patient Dashboard',
+            onClick: (event, rowData) => rowData.id ? window.location.href = "/patient/"+rowData.id: ""
+          }]}
+          //overriding action menu with props.actions 
+          components={props.actions}
         options={{
           headerStyle: {
             backgroundColor: "#9F9FA5",
@@ -92,7 +88,7 @@ const PatientSearch = (props) => {
           filtering: true,
           exportButton: false,
           searchFieldAlignment: 'left',
-
+          actionsColumnIndex: -1
         }}
       />
     </div>
@@ -102,13 +98,13 @@ const PatientSearch = (props) => {
 const mapStateToProps = state => {
 
     return {
-      patientsList: state.patients.list
+      patientsList: state.patients.checkedInPatientList
     };
   };
   
   const mapActionToProps = {
-    fetchAllPatients: fetchAll,
+    fetchAllPatients: fetchCheckedInPatients,
     deletePatient: Del
   };
   
-export default connect(mapStateToProps, mapActionToProps)(PatientSearch);
+export default connect(mapStateToProps, mapActionToProps)(ActivePatientSearch);

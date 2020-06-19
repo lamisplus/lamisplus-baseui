@@ -12,10 +12,13 @@ import {
   import * as actions from "actions/patients";
   import * as encounterAction from "actions/encounter";
   import {connect} from 'react-redux';
+  import * as _ from "lodash";
+  import { Label } from 'semantic-ui-react';
 
  function PatientVitals(props) {
     const [data, setData] = useState({pulse:'', height: '', systolic: '', diastolic: '', bodyWeight: ''}); 
     const [showModal, setShowModal] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [bmiStatus, setBMIStatus] = useState();
     const [bmi, setBMI] = useState();
     const toggle = () => {
@@ -43,7 +46,7 @@ import {
    }
 
    useEffect(() => {    
-    props.fetchPatientVitalSigns(props.patientId)  
+    props.fetchPatientVitalSigns(props.patientId, ()=>{setLoading(false)}, ()=>{setLoading(false)})  
     }, [props.patient]); 
 
     useEffect(() => {
@@ -59,41 +62,49 @@ import {
   return (
     
             <Card  >
-                    <CardHeader> Recent Vital Signs  <button type="button" class="float-right ml-3" onClick={toggle}><i class="fa fa-plus"></i> Add Vitals</button></CardHeader>
+                    <CardHeader> Recent Vital Signs  <button type="button" className="float-right ml-3" onClick={toggle}><i className="fa fa-plus"></i> Add Vitals</button></CardHeader>
                         
                     <CardBody>
-                    <Row item xs='12'>
-                           <Col item xs='6'>             
+                    {_.isEmpty(data) && 
+                             <Label>
+                             No Vital Signs
+                           </Label>
+                            }   
+                    {!_.isEmpty(data) &&    
+                    <Row xs='12'>
+                           <Col xs='6'> 
+                                     
                         Pulse (bpm) :< span> <b>{data.pulse || 'N/A'}</b></span> 
                                     
                                 </Col>
                           
-                                <Col item xs='6'>
+                                <Col xs='6'>
                                             Weight (kg): <span><b>{data.bodyWeight || 'N/A'}</b></span>                                 
                                             </Col>
-                                <Col item xs='6'>
+                                <Col xs='6'>
                                             RR (bpm): <span><b>{data.respiratoryRate || 'N/A'}</b></span> 
                                 </Col>
-                                <Col item xs='6'>
+                                <Col xs='6'>
                                             Height (cm): <span><b>{data.height || 'N/A'}</b></span>  
                                 </Col>
-                                <Col item xs='6'>
+                                <Col xs='6'>
                                             Temperature (C):  <span><b>{data.temperature || 'N/A'}</b></span> 
                                 </Col>
-                                <Col item xs='6'>
+                                <Col xs='6'>
                                             BMI: <span><b>{bmi || 'N/A'}</b></span> 
                                 </Col>
-                                <Col item xs='6'>
+                                <Col xs='6'>
                                             BP (mmHg): <span><b>{data.systolic || ''} / {data.diastolic || ''}</b></span> 
                                 </Col>
-                                <Col item xs='6'>
+                                <Col xs='6'>
                                             BMI Status: <span><b>{bmiStatus || 'N/A'}</b></span> 
                                 </Col>
-                                <Col item xs='12'>
+                                <Col xs='12'>
   {props.vitalSigns ? <span>Updated on <b>{props.vitalSigns.dateEncounter || ""} {props.vitalSigns.timeCreated || ""}</b></span> : ""}
                                 </Col>
                                 </Row>
-                    </CardBody>  
+ }
+                   </CardBody>  
                     <Modal isOpen={showModal} toggle={toggle} size='lg' zIndex={"9999"}>
                       <ModalHeader toggle={toggle}>Take Patient Vitals</ModalHeader>
                       <ModalBody>

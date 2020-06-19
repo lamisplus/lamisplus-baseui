@@ -15,7 +15,6 @@ function PatientChart(props) {
   React.useEffect(() => {
     setLoading(true);
     const onSuccess = () => {
-      console.log("setting data");
       setData(props.vitalSignsList);
       setLoading(false);
     };
@@ -27,8 +26,6 @@ function PatientChart(props) {
   }, [props.patientId]);
 
   React.useEffect(() => {
-    console.log(data);
-    console.log(props.vitalSigns);
     setData(props.vitalSigns ? props.vitalSigns : []);
   }, [props.vitalSigns]);
 
@@ -63,8 +60,6 @@ function PatientChart(props) {
   };
 
   const Weight = (labels, data, otherOptions) => {
-    console.log(labels);
-    console.log(data);
     return {
       labels: labels,
       datasets: [
@@ -145,7 +140,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapActionToProps = {
-  fetchPatientVitalSigns: actions.fetchPatientLatestVitalSigns,
+  fetchPatientVitalSigns: actions.fetchPatientVitalSigns,
 };
 
 export default connect(mapStateToProps, mapActionToProps)(PatientChart);

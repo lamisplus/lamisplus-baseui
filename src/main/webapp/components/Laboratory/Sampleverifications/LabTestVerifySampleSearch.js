@@ -10,117 +10,112 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 
 const PatientSearch = (props) => {
-  const [loading, setLoading] = useState('')
-  useEffect(() => {
+    const [loading, setLoading] = useState('')
+useEffect(() => {
     setLoading('true');
-    const onSuccess = () => {
-      setLoading(false)
-    }
-    const onError = () => {
-      setLoading(false)     
-    }
-        props.fetchAllLabTestOrderToday(onSuccess, onError);
-      }, []); //componentDidMount
- 
-      function totalSampleVerified (test){
-        const  maxVal = []
-       
-        for(var i=0; i<test.length; i++){
-          for (var key in test[i]) {
-            if (test[i][key].lab_test_order_status >2 )
-              maxVal.push(test[i][key])
-          }
-         
+        const onSuccess = () => {
+            setLoading(false)
         }
-        console.log(maxVal.length)
-        return maxVal.length;
+        const onError = () => {
+            setLoading(false)     
+        }
+            props.fetchAllLabTestOrderToday(onSuccess, onError);
+    }, []); //componentDidMount
+ 
+    function totalSampleVerified (test){
+      const  maxVal = []
+      for(var i=0; i<test.length; i++){
+        for (var key in test[i]) {
+          if (test[i][key].lab_test_order_status >2 )
+            maxVal.push(test[i][key])
+        }
+        
       }
+          return maxVal.length;
+    }
 
 
 
   return (
     <div>
       <MaterialTable
-        title="Laboratory Sample Verification"
-        columns={[
-          { title: "Patient ID", field: "Id" },
-          {
-            title: "Patient Name",
-            field: "name",
-          },
+          title="Laboratory Sample Verification"
+          columns={[
+            { title: "Patient ID", field: "Id" },
+            {
+                title: "Patient Name",
+                field: "name",
+            },
           
-          { title: "Date Order", field: "date", type: "date", filtering: false },
-          {
-            title: "Total Sample ",
-            field: "count",
-            filtering: false
-          },
-          {
-            title: "Total Verified ",
-            field: "samplecount",
-            filtering: false
-          },
-          {
-            title: "Action",
-            field: "actions",
-            filtering: false,
-          },
-        ]}
+            { title: "Date Order", field: "date", type: "date", filtering: false },
+            {
+                title: "Total Sample ",
+                field: "count",
+                filtering: false
+            },
+            {
+                title: "Total Verified ",
+                field: "samplecount",
+                filtering: false
+            },
+            {
+                title: "Action",
+                field: "actions",
+                filtering: false,
+            },
+          ]}
         isLoading={loading}
         data={props.patientsTestOrderList.map((row) => ({
-          Id: row.patientId,
-          name: row.firstName +  ' ' + row.lastName,
-          
-          date: row.dateEncounter,
-          count: row.formDataObj.length,
-          samplecount: totalSampleVerified(row.formDataObj),
-          actions: <Link to ={{ 
-                              pathname: "/sample-verification",  
-                              state: { getpatientlists:{row}}, 
-                              patientName: row.firstName + ' ' + row.lastName}}  
-                              style={{ cursor: "pointer", color: "blue", fontStyle: "bold" }}>
-                              <Tooltip title="Sample Verification">
-                                  <IconButton aria-label="Sample Verification" >
-                                   
-                                    <VisibilityIcon color="primary"/>
-                                </IconButton>
+            Id: row.patientId,
+            name: row.firstName +  ' ' + row.lastName,
+            date: row.dateEncounter,
+            count: row.formDataObj.length,
+            samplecount: totalSampleVerified(row.formDataObj),
+            actions: <Link to ={{ 
+                                    pathname: "/sample-verification",  
+                                    state: { getpatientlists:{row}}, 
+                                    patientName: row.firstName + ' ' + row.lastName}}  
+                                    style={{ cursor: "pointer", color: "blue", fontStyle: "bold" 
+                                }}
+                      >
+                                <Tooltip title="Sample Verification">
+                                    <IconButton aria-label="Sample Verification" >
+                                        <VisibilityIcon color="primary"/>
+                                    </IconButton>
                                 </Tooltip>
-                  </Link>
+                      </Link>
 
-            }))}
+            })
+        )}
             options={{
         
-              headerStyle: {
-                backgroundColor: "#9F9FA5",
-                color: "#000",
-                margin: "auto"
-              },
+                headerStyle: {
+                    backgroundColor: "#9F9FA5",
+                    color: "#000",
+                    margin: "auto"
+                },
               filtering: true,
               searchFieldStyle: {
-                width : '300%',
-                margingLeft: '250px',
+                  width : '300%',
+                  margingLeft: '250px',
               },
-              
               exportButton: true,
               searchFieldAlignment: 'left',
               
             }}
-    
-        
       />
     </div>
   );
 }
 
 const mapStateToProps = state => {
-
     return {
-      patientsTestOrderList: state.laboratory.list
+        patientsTestOrderList: state.laboratory.list
     };
   };
   
   const mapActionToProps = {
-    fetchAllLabTestOrderToday: fetchAllLabTestOrder
+      fetchAllLabTestOrderToday: fetchAllLabTestOrder
   };
   
 export default connect(mapStateToProps, mapActionToProps)(PatientSearch);

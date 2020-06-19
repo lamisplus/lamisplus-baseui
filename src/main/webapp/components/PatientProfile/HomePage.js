@@ -140,7 +140,6 @@ function HomePage(props) {
           variant="scrollable"
           scrollButtons="on"
           indicatorColor="primary"
-          textColor="white"
           aria-label="scrollable force tabs example"
         >
           <Tab
@@ -179,7 +178,7 @@ function HomePage(props) {
       </AppBar>
 
       <div>
-        <PatientDashboardSubMenu />
+        <PatientDashboardSubMenu patientHospitalNumber={props.hospitalNumber}/>
 
         {/* The DashBoard Tab  */}
         <TabPanel value={value} index={0}>

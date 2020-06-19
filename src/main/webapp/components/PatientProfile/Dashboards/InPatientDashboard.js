@@ -11,7 +11,7 @@ function InPatientDashboard(props) {
         <React.Fragment>
             <CardDeck>
          <PatientVitals patientId={props.patientId}  /> 
-        <PatientAllergies addstatus={false} /> 
+        <PatientAllergies patientId={props.patientId} /> 
         {/* <PatientVitals patientId={props.patient.patientId}  />  */}
       </CardDeck>
       <br></br>

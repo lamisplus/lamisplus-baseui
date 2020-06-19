@@ -4,9 +4,9 @@ import { Alert } from 'reactstrap'
 import * as actions from "actions/patients";
 import {connect} from 'react-redux';
 import "./Style.css";
+import { Badge } from 'reactstrap';
+import {DRUG_ORDER_STATUS} from 'api/codes'
 
-const status = [{name:"Not Dispensed", id: 0},
-{name:"Dispensed", id: 1}];
 
 const columns = [
   {
@@ -49,7 +49,7 @@ const columns = [
     name: 'Prescription Status',
     selector: 'prescription_status',
     sortable: false,
-    cell: row => <span>{status.find(x => x.id == row.prescription_status).name}</span>
+    cell: row => <span><Badge  color="primary">{DRUG_ORDER_STATUS.find(x => x.id == row.prescription_status).name}</Badge></span>
   }
 ]
 function PreviousMedication (props) {
