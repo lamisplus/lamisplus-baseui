@@ -44,6 +44,8 @@ const DispatchedSamples = React.lazy(() => import("components/Laboratory/Dispatc
 const PatientsPage = React.lazy(() =>
   import("components/PatientSearch/HomePage")
 );
+const reportDashboard = React.lazy(() => import('components/Flexmonster/reportDashboard'));
+const PivotTable = React.lazy(() => import('components/Flexmonster/PivotTable'));
 const formDashboard = React.lazy(() => import('components/formBuilder/formDashboard'));
 const FormBuilder = React.lazy(() => import('components/formBuilder/FormBuilder'));
 const ViewForm = React.lazy(() => import('components/formBuilder/ViewForm'));
@@ -122,6 +124,7 @@ class Routes extends Component {
               <PrivateRoute exact path="/dispatched-sample" component={DispatchedSamples} />
               <PrivateRoute exact path="/patients" component={PatientsPage} />
 
+
               {/* Pharmacy Links */}
               <PrivateRoute exact path="/pharmacy" component={PharmacyDashboard} />
               
@@ -143,9 +146,11 @@ class Routes extends Component {
                 path="/patients/:hospitalNumber"
                 component={EnrolledPatientsDashboard}
               />
+              <PrivateRoute exact path="/report-dashboard" component={reportDashboard} />
               <PrivateRoute exact path="/form-dashboard" component={formDashboard} />
               <PrivateRoute exact path="/form-builder" component={FormBuilder} />
               <PrivateRoute exact path="/view-form" component={ViewForm} />
+              <PrivateRoute exact path="/pivot-table" component={PivotTable} />
               
               {/* The rout to that DataTabel */}
               <PrivateRoute exact path="/testpage" component={TestPage} />

@@ -69,7 +69,7 @@ const handleSubmit = e => {
                     <Input type="select" class="form-control" id="programCode" required value={programCode} onChange={e => setprogramCode(e.target.value)}>
                         {props.services.map(service => (<option key={service.name} value={service.code}>{service.name}</option>))}
                     </Input>:  <Input type="select" class="form-control" id="programCode" required value={programCode} onChange={e => setprogramCode(e.target.value)}>
-                        <option>No Services</option>
+                        <option>No Programs Found</option>
                     </Input>}
             </FormGroup></Col>
 
