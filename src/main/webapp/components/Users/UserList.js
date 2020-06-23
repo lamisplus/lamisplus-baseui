@@ -14,10 +14,10 @@ const UserList = (props) => {
       <MaterialTable
         title="Find Users"
         columns={[
-          { title: "User ID", field: "id" },
           { title: "Name", field: "name" },         
           { title: "Username", field: "userName"},
-          { title: "Authorities", field: "authorities", filtering: false },
+          { title: "Designation", field: "designation"},
+          { title: "Gender", field: "gender"},
           { title: "Action", field: "action", filtering: false },
         ]}
         data={props.userList.map((row) => ({
