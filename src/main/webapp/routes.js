@@ -15,10 +15,13 @@ import { history } from "./history";
 import { PrivateRoute } from "./PrivateRoute"
 
 const DashboardPage = React.lazy(() => import("pages/DashboardPage"));
-
+const AdministrativeDashboard = React.lazy(() => import("components/Admin/AdministrativeDashBoard"));
 /* New Page loading using easy loading */
 const PateintRegistationPage = React.lazy(() =>
-  import("components/patient/PateintRegistationPage")
+  import("components/Patient/PateintRegistationPage")
+);
+const PateintUpdate= React.lazy(() =>
+  import("components/Patient/EditPatient")
 );
 const CheckInPage = React.lazy(() => import("components/CheckIn/CheckInPage"));
 const VitalSignsPage = React.lazy(() =>
@@ -38,8 +41,9 @@ const LaboratoryPage = React.lazy(() =>
 const CollectSample = React.lazy(() =>import("components/Laboratory/Testorders/CollectSample"));
 const LaboratorySampleResultPage = React.lazy(() =>import("components/Laboratory/TestResult/CollectResult"));
 const SampleVerification = React.lazy(() => import("components/Laboratory/Sampleverifications/SampleVerification"));
+const DispatchedSamples = React.lazy(() => import("components/Laboratory/DispatchedManifest/DispatchedSamplesList"))
 const PatientsPage = React.lazy(() =>
-  import("components/patient/PatientsPage")
+  import("components/PatientSearch/HomePage")
 );
 const formDashboard = React.lazy(() => import('components/formBuilder/formDashboard'));
 const FormBuilder = React.lazy(() => import('components/formBuilder/FormBuilder'));
@@ -65,13 +69,17 @@ const TestPage = React.lazy(() => import("pages/TestPage"));
 const FormRendererPage = React.lazy(() => import("components/FormManager/FormRendererPage"));
 //Reporting components
 const ReportPage = React.lazy(() => import("components/Reports/ReportingPage"));
+const getBasename = () => {return `/${process.env.PUBLIC_URL.split("/").pop()}`;};
+
+const Prescription = React.lazy(() => import("components/Pharmacy/Prescriptions"))
+
 //Appointment
 const AppointmentPage = React.lazy(() => import("components/Appointments/HomePage"));
-const getBasename = () => {
-  return `/${process.env.PUBLIC_URL.split("/").pop()}`;
-};
+// const getBasename = () => {
+//   return `/${process.env.PUBLIC_URL.split("/").pop()}`;
+// };
 
-const Prescription = React.lazy(() => import("components/Pharmacy/prescriptions"))
+// const Prescription = React.lazy(() => import("components/Pharmacy/prescriptions"))
 
 const UsersPage = React.lazy(() => import("components/Users/UserPage"))
 const UserRegistration = React.lazy(() => import("components/Users/UserRegistration"))
@@ -96,6 +104,13 @@ class Routes extends Component {
                 path="/patient-registration"
                 component={PateintRegistationPage}
               />
+              <PrivateRoute
+                exact
+                path="/patient-update"
+                component={PateintUpdate}
+              />
+              <PrivateRoute exact path="/checkin" component={CheckInPage} />
+              <PrivateRoute exact path="/vital-signs" component={VitalSignsPage} />
               <PrivateRoute exact path="/checkin" component={CheckInPage} />
               <PrivateRoute exact path="/vital-signs" component={VitalSignsPage} />
               {/* Consultation Links */}
@@ -110,6 +125,7 @@ class Routes extends Component {
               <PrivateRoute exact path="/laboratory" component={LaboratoryPage} />
               <PrivateRoute exact path="/sample-verification" component={SampleVerification} />
               <PrivateRoute exact path="/collect-sample" component={CollectSample} />
+              <PrivateRoute exact path="/dispatched-sample" component={DispatchedSamples} />
               <PrivateRoute exact path="/patients" component={PatientsPage} />
 
               {/* Pharmacy Links */}
@@ -130,7 +146,7 @@ class Routes extends Component {
               {/* The rout to Hiv Module */}
               <PrivateRoute
                 exact
-                path="/patient-dashboard/:hospitalNumber"
+                path="/patients/:hospitalNumber"
                 component={EnrolledPatientsDashboard}
               />
               <PrivateRoute exact path="/form-dashboard" component={formDashboard} />

@@ -16,6 +16,8 @@ import * as encounterAction from "actions/encounter";
 import * as actions from "actions/patients";
 import * as CODES from "api/codes";
 import {connect} from 'react-redux';
+import CheckedInValidation from 'components/Utils/CheckedInValidation';
+
 //Dtate Picker package
 Moment.locale('en')
 momentLocalizer()
@@ -91,6 +93,8 @@ function AddVitalsPage (props) {
       }
     setShowLoading(true)
     const newDatenow = Moment(vitals.dateEncounter).format('DD-MM-YYYY')
+    const encounterDateTime = Moment(vitals.dateEncounter).format('DD-MM-YYYY hh:mm A')
+    formDataForVitals['dateEncounter'] = encounterDateTime;
     const data = {
       formCode: CODES.VITAL_SIGNS_FORM,
       patientId: props.patientId,
@@ -125,6 +129,8 @@ function AddVitalsPage (props) {
       [e.target.name]: e.target.value
     })
   }
+
+
   return (
     <Form className={classes.form} onSubmit={SaveVitals}>
       <Alert color='danger' isOpen={showErrorMsg} toggle={onDismiss}>
@@ -262,7 +268,8 @@ function AddVitalsPage (props) {
             </Col>
           </Row>
           <br />
-          <MatButton
+
+          <CheckedInValidation actionButton={<MatButton
             type='submit'
             variant='contained'
             color='primary'
@@ -270,7 +277,8 @@ function AddVitalsPage (props) {
             startIcon={<SaveIcon />}
           >
             Save
-          </MatButton>
+          </MatButton>} visitId={props.patient.visitId} />
+          
           <MatButton
             variant='contained'
             color='default'

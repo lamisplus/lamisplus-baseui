@@ -120,7 +120,7 @@ function PatientDashboardSubMenu(props) {
   }, [props.patient]);
 
   function getRelationshipName(id) {
-    return id ? props.relationships.find((x) => x.id == id).display : "";
+    return id ? ( props.relationships.find((x) => x.id == id) ? props.relationships.find((x) => x.id == id).display : "" ) : "";
   }
 
   const [anchorEl, setAnchorEl] = useState(null);

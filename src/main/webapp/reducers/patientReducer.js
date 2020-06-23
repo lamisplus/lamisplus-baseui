@@ -11,6 +11,7 @@ const initialState = {
   encounters: [],
   exclusiveEncounters: [],
   previousTestOrders: [],
+  checkedInPatientList: []
 }
 
 const patientReducer = (state = initialState, action) => {
@@ -31,8 +32,11 @@ const patientReducer = (state = initialState, action) => {
     case ACTION_TYPES.PATIENTS_UPDATE:
       return { ...state, updated: action.payload }
 
-    case ACTION_TYPES.PATIENTS_DELETE:
-      return { ...state, list: action.payload }
+    case ACTION_TYPES.PATIENT_DELETE:
+      return {
+        ...state,
+        list:state.list.filter(x => x.patientId != action.payload)
+    }
 
     case ACTION_TYPES.PATIENT_VITAL_SIGNS:
         return { ...state, vitalSignsList: action.payload }
@@ -54,9 +58,19 @@ const patientReducer = (state = initialState, action) => {
       
     case ACTION_TYPES.PATIENT_LAB_ORDERS:
       return { ...state, previousTestOrders: action.payload }
+
+      case ACTION_TYPES.CHECKEDIN_PATIENT_FETCH_ALL:
+      return { ...state, checkedInPatientList: action.payload }
     
     case ACTION_TYPES.FETCH_COUNTRIES:
         return { ...state, countries: action.payload }
+
+    case ACTION_TYPES.PATIENT_UPDATE:
+      return {
+          ...state,
+          list: state.list.map(x => x._id == action.payload._id ? action.payload : x)
+          
+      }
  
     default:
       return state
