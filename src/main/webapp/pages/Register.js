@@ -7,18 +7,14 @@ import Container from "@material-ui/core/Container";
 import logo200Image from "assets/img/logo/logo_200.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { register } from "../actions/user";
+import { initialfieldState_userRegistration } from "../_helpers/initialFieldState_UserRegistration";
 
 class Register extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      user: {
-        firstName: "",
-        lastName: "",
-        userName: "",
-        password: "",
-      },
+      user: initialfieldState_userRegistration,
       submitted: false,
     };
 
@@ -135,15 +131,130 @@ class Register extends React.Component {
                   required
                   fullWidth
                   id="userName"
-                  type="email"
-                  label="email"
-                  placeholder="your@email.com"
-                  name="userName"
+                  type="text"
+                  label="Username"
+                  placeholder="Username"
+                  name="username"
                   
                   onChange={this.handleChange}
                 />
                 {submitted && !user.userName && (
                   <div className="help-block">Username is required</div>
+                )}
+              </div>
+              <div
+                className={
+                  "form-group" +
+                  (submitted && !user.email ? " has-error" : "")
+                }
+              >
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  type="email"
+                  label="Email"
+                  placeholder="your@email.com"
+                  name="email"
+                  
+                  onChange={this.handleChange}
+                />
+                {submitted && !user.userName && (
+                  <div className="help-block">email is required</div>
+                )}
+              </div>
+              <div
+                className={
+                  "form-group" +
+                  (submitted && !user.phone ? " has-error" : "")
+                }
+              >
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="phone"
+                  type="text"
+                  label="Phone Number"
+                  placeholder="000 0000000"
+                  name="phone"
+                  
+                  onChange={this.handleChange}
+                />
+                {submitted && !user.userName && (
+                  <div className="help-block">Phone number is required</div>
+                )}
+              </div>
+              <div
+                className={
+                  "form-group" +
+                  (submitted && !user.designation ? " has-error" : "")
+                }
+              >
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="designation"
+                  type="text"
+                  label="Designation"
+                  placeholder="Designation"
+                  name="designation"
+                  
+                  onChange={this.handleChange}
+                />
+                {submitted && !user.userName && (
+                  <div className="help-block">Designation is required</div>
+                )}
+              </div>
+              <div
+                className={
+                  "form-group" +
+                  (submitted && !user.gender ? " has-error" : "")
+                }
+              >
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="gender"
+                  type="text"
+                  label="Gender"
+                  placeholder="Gender"
+                  name="gender"
+                  
+                  onChange={this.handleChange}
+                />
+                {submitted && !user.gender && (
+                  <div className="help-block">Gender is required</div>
+                )}
+              </div>
+              <div
+                className={
+                  "form-group" +
+                  (submitted && !user.dob ? " has-error" : "")
+                }
+              >
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="dob"
+                  type="text"
+                  label="Date of Birth"
+                  placeholder="Date of Birth"
+                  name="dob"
+                  
+                  onChange={this.handleChange}
+                />
+                {submitted && !user.dob && (
+                  <div className="help-block">Date of birth is required</div>
                 )}
               </div>
               <div
@@ -166,6 +277,28 @@ class Register extends React.Component {
                 />
                 {submitted && !user.password && (
                   <div className="help-block">Password is required</div>
+                )}
+              </div>
+              <div
+                className={
+                  "form-group" +
+                  (submitted && !user.confirm ? " has-error" : "")
+                }
+              >
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="confirm"
+                  type="password"
+                  label="Confirm Password"
+                  placeholder="Confirm Password"
+                  name="confirm"
+                  onChange={this.handleChange}
+                />
+                {submitted && !user.password && (
+                  <div className="help-block">Confirm Password is required</div>
                 )}
               </div>
               <div className="form-group">

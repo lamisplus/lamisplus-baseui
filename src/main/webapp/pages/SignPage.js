@@ -156,15 +156,15 @@ export default function SignIn() {
             >
               Sign In
             </Button>
-            <div className="text-center pt-1">
+            {/* <div className="text-center pt-1">
               <h6>or</h6>
               <h6>
                 <Link to="/register">Register</Link>
               </h6>
-            </div>
+            </div>  */}
             <Grid container>
               <Grid item></Grid>
-            </Grid>
+            </Grid> 
             {/* <Box mt={5}>
               <Copyright />
             </Box> */}

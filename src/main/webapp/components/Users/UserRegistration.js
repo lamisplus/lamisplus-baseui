@@ -22,7 +22,7 @@ import { connect } from "react-redux";
 // React Notification
 import Title from "components/Title/CardTitle";
 import { register } from "../../actions/user";
-import { initialfieldState_userRegistration } from "./initialFieldState_UserRegistration";
+import { initialfieldState_userRegistration } from "../../_helpers/initialFieldState_UserRegistration";
 import useForm from "../Functions/UseForm";
 import { Spinner } from "reactstrap";
 import { Link } from "react-router-dom";
