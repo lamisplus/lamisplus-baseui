@@ -1,129 +1,94 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import { fetchUsers } from "../../actions/user";
+import React, { useEffect, useState } from "react";
+import MaterialTable from "material-table";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { fetchUsers } from "../../actions/user";
+import "./UserList.css";
+import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
+import "@reach/menu-button/styles.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "react-widgets/dist/css/react-widgets.css";
 
-const useStyles = makeStyles({
-  root: {
-    width: "100%",
-  },
-  container: {
-    maxHeight: 440,
-  },
-});
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    
-  },
-  body: {
-    fontSize: 11,
-  },
-}))(TableCell);
-const StyledTableRow = withStyles((theme) => ({
-  root: {
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.background.default,
-    },
-  },
-}))(TableRow);
-
-const userList = (props) => {
-  const classes = useStyles();
-
-  const [page, setPage] = React.useState(0);
-  const [data, setData] = useState([]);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+const UserList = (props) => {
+  const [loading, setLoading] = useState("");
+  const [users, setUsers] = useState();
 
   useEffect(() => {
-    props.fetchAllPatients();
+    console.log(props.usersList);
+    setLoading("true");
+    const onSuccess = () => {
+      setLoading(false);
+    };
+    const onError = () => {
+      setLoading(false);
+    };
+    props.fetchAllUsers(onSuccess, onError);
   }, []);
 
   return (
-    <Paper className={classes.root}>
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align="center">Name</StyledTableCell>
-
-              <StyledTableCell align="center">Username</StyledTableCell>
-
-              <StyledTableCell align="center">Gender </StyledTableCell>
-
-              <StyledTableCell align="center">Designation </StyledTableCell>
-
-              <StyledTableCell align="center">Action</StyledTableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {props.usersList
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <StyledTableRow>
-                    <TableCell component="th" scope="row" align="left">
-                    {row.firstName} {row.lastName}
-                    </TableCell>
-                    <TableCell align="center">
-                      {row.username}
-                    </TableCell>
-
-                    <TableCell align="center">
-                      {row.gender}
-                    </TableCell>
-
-                    <TableCell align="center">
-                      {row.designation}
-                    </TableCell>
-
-                    <TableCell align="center">
-                      Action
-                    </TableCell>
-                  </StyledTableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <TablePagination
-        rowsPerPageOptions={[10, 20, 50]}
-        component="div"
-        count={data.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
+    <div>
+      <ToastContainer autoClose={3000} hideProgressBar />
+      <MaterialTable
+        title="User List"
+        columns={[
+          { title: "Name", field: "name" },
+          { title: "Username", field: "username", filtering: false },
+          { title: "Gender", field: "gender", filtering: false },
+          { title: "Designation", field: "designation", filtering: false },
+          { title: "", field: "actions", filtering: false },
+        ]}
+        isLoading={loading}
+        data={props.usersList.map((row) => ({
+          name: row.firstName + " " + row.lastName,
+          username: row.username,
+          gender: row.gender,
+          designation: row.designation,
+          actions: (
+            <div>
+              <Menu>
+                <MenuButton
+                  style={{
+                    backgroundColor: "#3F51B5",
+                    color: "#fff",
+                    border: "2px solid #3F51B5",
+                    borderRadius: "4px",
+                  }}
+                >
+                  Actions <span aria-hidden>▾</span>
+                </MenuButton>
+                <MenuList style={{ color: "#000 !important" }}>
+                </MenuList>
+              </Menu>
+            </div>
+          ),
+        }))}
+        options={{
+          headerStyle: {
+            backgroundColor: "#9F9FA5",
+            color: "#000",
+          },
+          searchFieldStyle: {
+            width: "300%",
+            margingLeft: "250px",
+          },
+          filtering: true,
+          exportButton: false,
+          searchFieldAlignment: "left",
+        }}
       />
-    </Paper>
+    </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  usersList: state.users.list,
-});
-
-const mapActionToProps = {
-  fetchAllPatients: fetchUsers,
+const mapStateToProps = (state) => {
+  return {
+    usersList: state.users.list,
+  };
 };
 
-export default connect(mapStateToProps, mapActionToProps)(userList);
+const mapActionToProps = {
+  fetchAllUsers: fetchUsers
+};
+
+export default connect(mapStateToProps, mapActionToProps)(UserList);
