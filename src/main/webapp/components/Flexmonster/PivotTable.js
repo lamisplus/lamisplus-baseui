@@ -29,35 +29,3 @@ class PivotTable extends Component {
     }
 }
 export default PivotTable;
-
-// function PivotTable(props) {
-//
-//     const ref = React.useRef(null);
-//
-//     console.log(ref);
-//
-//     const onReportComplete = () => {
-//         const flexMonsterRef = ref.current.flexmonster();
-//         console.log(ref);
-//         console.log(">>>>", flexMonsterRef.getReport());
-//     }
-//
-//     return (
-//         <Page title="Report Builder" >
-//             <Card >
-//                 <CardContent>
-//                     <h4>Create Report</h4>
-//                     <hr />
-//         <FlexmonsterReact.Pivot
-//             ref={ref}
-//             toolbar={true}
-//             width="100%"
-//             report="https://cdn.flexmonster.com/reports/report.json"
-//             reportcomplete={onReportComplete}/>
-//                 </CardContent>
-//             </Card>
-//         </Page>
-//     );
-// }
-//
-// export default PivotTable;
