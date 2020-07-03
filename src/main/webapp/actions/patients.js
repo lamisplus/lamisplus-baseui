@@ -26,6 +26,7 @@ export const fetchAll = (onSuccess, onError) => dispatch => {
   axios
     .get(`${baseUrl}patients/`)
     .then(response => {
+      console.log(response.data);
       if(onSuccess){
         onSuccess();
       }
@@ -33,7 +34,9 @@ export const fetchAll = (onSuccess, onError) => dispatch => {
         type: ACTION_TYPES.PATIENTS_FETCH_ALL,
         payload: response.data
       });
+      onSuccess();
     })
+
     .catch(error => {
       if(onError){
         onError();
@@ -42,7 +45,9 @@ export const fetchAll = (onSuccess, onError) => dispatch => {
         type: ACTION_TYPES.PATIENTS_ERROR,
         payload: "Something went wrong, please try again"
       })
+      onError();
     }
+    
     );
 };
 
@@ -99,59 +104,66 @@ export const create = (data,onSuccess, onError) => dispatch => {
     });
 };
 
-export const update = (id, data) => dispatch => {
-  axios
+export const update = (data, id, onSuccess, onError) => dispatch => {
+
+  console.log(`${baseUrl}patients/${id}`);
+    axios
     .put(`${baseUrl}patients/${id}`, data)
     .then(response => {
+
       dispatch({
         type: ACTION_TYPES.PATIENTS_UPDATE,
         payload: response.data
       });
+      onSuccess()
+      toast.success("Patient record was updated successfully!");
     })
     .catch(error => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_ERROR,
-        payload: "Something went wrong, please try again"
+        payload:error.response.data
       });
+      console.log(error.response.data)
+      onError()
+      if(error.response.data.apierror.message===null || error.response.data.apierror.message===""){
+        toast.error("Something went wrong");
+      }else{
+        toast.error(error.response.data.apierror.message);
+      }
+     //console.log(error.response.data.apierror.message);
     });
+
+
 };
 
-export const Delete = (id, onSuccess) => dispatch => {
+export const Delete = (id) => dispatch => {
+  console.log(`${baseUrl}patients/${id}`);
   axios
-    .delete(`${baseUrl}patients/${id}`)
-    .then(response => {
-      dispatch({
-        type: ACTION_TYPES.PATIENTS_DELETE,
-        payload: response.data
-      });
-    })
-    .catch(error => {
-      dispatch({
-        types: ACTION_TYPES.PATIENTS_ERROR,
-        payload: "Something went wrong, please try again"
-      });
+  .delete(`${baseUrl}patients/${id}`)
+  .then(response => {
+
+    dispatch({
+      type: ACTION_TYPES.PATIENT_DELETE,
+      payload: id
     });
+    
+    toast.success("Patient record was deleted successfully!");
+  })
+  .catch(error => {
+    dispatch({
+      type: ACTION_TYPES.PATIENTS_ERROR,
+      payload:error.response.data
+    });
+    //console.log(error.response.data)
+    
+    if(error.response.data.apierror.message===null || error.response.data.apierror.message===""){
+      toast.error("Something went wrong");
+    }else{
+      toast.error(error.response.data.apierror.message);
+    }
+   //console.log(error.response.data.apierror.message);
+  });
 };
-
-// export const fetchPatientAllergies = id => dispatch => {
-//   axios
-//     .get(`${baseUrl}patients/${id}/encounter/GENERAL_SERVICE/CONSULATION_FORM/`)
-//     .then(response => {
-//       dispatch({
-//         type: ACTION_TYPES.PATIENT_ALLERGIES,
-//         payload: response.data
-//       })
-//     })
-//     .catch(error =>
-//       dispatch({
-//         type: ACTION_TYPES.PATIENTS_ERROR,
-//         payload: 'Something went wrong, please try again'
-//       })
-      
-//     )
-   
-// }
-
 
 
 export const fetchPatientAllergies = (id, onSuccess, onError) => dispatch => {

@@ -11,15 +11,14 @@ const useForm = (initialFieldValues) => {
             ...values,
             ...fieldValue
         })
-        //validate(fieldValue)
+
     }
 
 
   const resetForm = () => {
-    setValues({
-      ...initialFieldValues
-    })
+    setValues(initialFieldValues)
     setErrors({})
+
   }
 
   return {

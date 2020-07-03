@@ -8,6 +8,7 @@ import "./../laboratory.css";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import Page from './../../Page'
 
 
 const PatientSearch = (props) => {
@@ -36,9 +37,12 @@ function totalSampleConllected (test){
  
     
   return (
+    <Page title='Dispatched Samples '>
+      
       <div>
+        <br/><br/>
           <MaterialTable
-              title="Laboratory Test Orders"
+              title="Dispatched samples list"
               columns={[
                   { title: "Patient ID", field: "Id" },
                   {
@@ -70,13 +74,13 @@ function totalSampleConllected (test){
                   count: row.formDataObj.length,
                   samplecount: totalSampleConllected(row.formDataObj),
                   actions:  <Link to ={{ 
-                                  pathname: "/collect-sample",  
+                                  pathname: "/dispatched-sample",  
                                   state: row
                               }} 
                                   style={{ cursor: "pointer", color: "blue", fontStyle: "bold"}}
                             >
-                                <Tooltip title="Collect Sample">
-                                    <IconButton aria-label="Collect Sample" >
+                                <Tooltip title="View Sample">
+                                    <IconButton aria-label="View Sample" >
                                         <VisibilityIcon color="primary"/>
                                     </IconButton>
                                 </Tooltip>
@@ -100,6 +104,7 @@ function totalSampleConllected (test){
 
           />
     </div>
+  </Page>
   );
 }
 
