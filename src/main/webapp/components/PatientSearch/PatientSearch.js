@@ -90,7 +90,7 @@ const PatientSearch = (props) => {
                       <MenuItem  style={{ color:"#000 !important"}}>                      
                           <Link
                               to={{
-                                pathname: "/patients/"+row.hospitalNumber
+                                pathname: "/patients/"+encodeURIComponent(row.hospitalNumber)
                               }}
                           >
                               <MdDashboard size="15" />{" "}<span style={{color: '#000'}}>Patient Dashboard</span>
