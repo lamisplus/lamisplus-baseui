@@ -3,7 +3,7 @@ import DataTable from "react-data-table-component";
 import { Alert } from "reactstrap";
 import * as actions from "actions/patients";
 import { connect } from "react-redux";
-import { Label } from "semantic-ui-react";
+import { Label, List } from "semantic-ui-react";
 import moment from "moment";
 import * as CODES from "api/codes";
 import FormRendererModal from "components/FormManager/FormRendererModal";
@@ -25,7 +25,11 @@ const columns = (editConsultation, viewConsultation) => [
     sortable: false,
     grow: 2,
     wrap: true,
-    cell: (row) => <span>{row.visitNote.length > 100 ? row.visitNote.slice(0, 100) + '...' : row.visitNote}</span>
+    cell: (row) => 
+    <div>
+    <span>{(row.visitNote && row.visitNote.length > 100) ? row.visitNote.slice(0, 100) + '...' : row.visitNote}</span>
+    <span>{(row.consulationNotes && row.consulationNotes.length > 100) ? row.consulationNotes.slice(0, 100) + '...' : row.consulationNotes}</span>
+    </div>
   },
   {
     name: "Complaints",
@@ -50,16 +54,17 @@ const columns = (editConsultation, viewConsultation) => [
     sortable: false,
     wrap: true,
     cell: (row) => (
-      <span>
-        <Label.Group size="mini" color="blue" basic>
-          {row.diagnosis.map((x) => (
-            <Label>
-              {x.condition} 
+        <List selection>
+          {row.diagnosis && row.diagnosis.map((x) => (
+            <List.Item>
+            <Label size="mini" color="blue">
+              {x.condition || x.condition1} 
               <Label.Detail> {x.certainty}</Label.Detail>
             </Label>
+            </List.Item>
           ))}
-        </Label.Group>
-      </span>
+        </List>
+   
     ),
   },
   {
