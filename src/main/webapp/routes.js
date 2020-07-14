@@ -46,6 +46,7 @@ const PatientsPage = React.lazy(() =>
 );
 const reportDashboard = React.lazy(() => import('components/Flexmonster/reportDashboard'));
 const PivotTable = React.lazy(() => import('components/Flexmonster/PivotTable'));
+const Jsreport = React.lazy(() => import('components/Jsreport/Jsreport'));
 const formDashboard = React.lazy(() => import('components/formBuilder/formDashboard'));
 const FormBuilder = React.lazy(() => import('components/formBuilder/FormBuilder'));
 const ViewForm = React.lazy(() => import('components/formBuilder/ViewForm'));
@@ -151,8 +152,9 @@ class Routes extends Component {
               <PrivateRoute exact path="/form-builder" component={FormBuilder} />
               <PrivateRoute exact path="/view-form" component={ViewForm} />
               <PrivateRoute exact path="/pivot-table" component={PivotTable} />
-              
-              {/* The rout to that DataTabel */}
+              <PrivateRoute exact path="/js-report" component={Jsreport} />
+
+                {/* The rout to that DataTabel */}
               <PrivateRoute exact path="/testpage" component={TestPage} />
               <PrivateRoute exact path="/form-renderer" component={FormRendererPage} />
               {/* The rout to Report*/}

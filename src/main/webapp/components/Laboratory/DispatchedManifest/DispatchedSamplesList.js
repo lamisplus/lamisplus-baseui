@@ -74,13 +74,13 @@ function totalSampleConllected (test){
                   count: row.formDataObj.length,
                   samplecount: totalSampleConllected(row.formDataObj),
                   actions:  <Link to ={{ 
-                                  pathname: "/collect-sample",  
+                                  pathname: "/dispatched-sample",  
                                   state: row
                               }} 
                                   style={{ cursor: "pointer", color: "blue", fontStyle: "bold"}}
                             >
-                                <Tooltip title="Collect Sample">
-                                    <IconButton aria-label="Collect Sample" >
+                                <Tooltip title="View Sample">
+                                    <IconButton aria-label="View Sample" >
                                         <VisibilityIcon color="primary"/>
                                     </IconButton>
                                 </Tooltip>

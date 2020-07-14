@@ -35,7 +35,6 @@ import useForm from "../Functions/UseForm";
 import { Spinner } from 'reactstrap';
 import EditIcon from '@material-ui/icons/Edit';
 import {initialRelative} from './InitialRealative';
-
 //Dtate Picker package
 Moment.locale("en");
 momentLocalizer();
@@ -168,7 +167,6 @@ const PatientRegistration = ({...props}) => {
       getCharacters();
     }, []);
     /* ##### End of gender parameter from the endpoint ##########*/
-
     /*# Get list of MARITAL STATUS parameter from the endpoint #*/
     useEffect(() => {
       async function getCharacters() {
@@ -193,27 +191,26 @@ const PatientRegistration = ({...props}) => {
     /**
      * Handles UI behaviour on Age Input change
      */
+
     const onAgeInputChange = e => {
         setDisplay(true);
-            setValues({ ...values, dobEstimated: 1 });
-              if (e.target.value === "" || e.target.value === null) {
-                setDisplay(false);
-              }
-            handleEstimation();
+        setValues({ ...values, dobEstimated: 1 });
+            if (e.target.value === "" || e.target.value === null) {
+                    setDisplay(false);
+            }
+        handleEstimation();
     }
-  /**
-   * Handles UI behaviour on check of Estimation box
-   */
-  const handleEstimation = () => {
-      if (display) {
-          const actualAge = document.getElementById("age").value;
-              const dateOfBirth = moment(estimatedob(actualAge)).format("MM/DD/YYYY");
+
+    /*** Handles UI behaviour on check of Estimation box*/
+    const handleEstimation = () => {
+        if (display) {
+            const actualAge = document.getElementById("age").value;
+            const dateOfBirth = moment(estimatedob(actualAge)).format("MM/DD/YYYY");
                 document.getElementById("dob").value = dateOfBirth;
                 //convert to the date format and setDob
                     const newdobdate = moment(dateOfBirth).format("DD-MM-YYYY");
                         setValues({ ...values, dob: newdobdate });
-                        console.log(values.dob)
-          }
+        }
     };
 
     //Get States from selected country
@@ -227,7 +224,7 @@ const PatientRegistration = ({...props}) => {
         async function getCharacters() {
             const response = await axios.get(apistate + getCountryId+"/states")
             const stateList = response.data;
-            setStates(stateList.map(({ name, id }) => ({ label: name, value: id })));
+                setStates(stateList.map(({ name, id }) => ({ label: name, value: id })));
         }
         getCharacters();
     }
@@ -241,9 +238,9 @@ const PatientRegistration = ({...props}) => {
                     console.log(response)
                     const provinceList =  {}; 
                     //const provinceList =  response.data;
-                            setProvinces(provinceList);
+                        setProvinces(provinceList);
                 }
-        getCharacters();
+                getCharacters();
     };
 
     const  getRelationshipName = (id) => {
@@ -290,55 +287,45 @@ const PatientRegistration = ({...props}) => {
   const onRelativeChange = e => {
       setRelative({ ...relative, [e.target.name]: e.target.value });
   };
-/****
- *  Validation 
- */
+/*****  Validation  */
 const validate = () => {
-    console.log(values)
     let temp = { ...errors }
-    temp.firstName = values.firstName ? "" : "First Name is required"
-    temp.hospitalNumber = values.hospitalNumber ? "" : "Patient Id is required."
-    temp.mobilePhoneNumber = values.mobilePhoneNumber ? "" : "Mobile numner is required."
-    temp.lastName = values.lastName ? "" : "Last Name  is required."
-    temp.genderId = values.genderId ? "" : "Gender is required."  
-    
-        setErrors({ ...temp })
-        console.log(temp)
-            return Object.values(temp).every(x => x == "")
+        temp.firstName = values.firstName ? "" : "First Name is required"
+        temp.hospitalNumber = values.hospitalNumber ? "" : "Patient Id is required."
+        temp.mobilePhoneNumber = values.mobilePhoneNumber ? "" : "Mobile numner is required."
+        temp.lastName = values.lastName ? "" : "Last Name  is required."
+        temp.genderId = values.genderId ? "" : "Gender is required."     
+            setErrors({ ...temp })
+    return Object.values(temp).every(x => x == "")
 }
-
-    /***
-    * Submit Button Processing 
-    */
-    const handleSubmit = e => {
-          e.preventDefault();
-
-                  const newRegistrationDate = moment(values.dateRegistration).format("DD-MM-YYYY");
-                  
-                  const newDateOfBirth = moment(values.dob).format("DD-MM-YYYY");
-                  values["dateRegistration"] = newRegistrationDate;
-                  values["personRelativeDTOs"] = relatives.length <= 0 ? [relative] : relatives;
-                  //values["dob"] = newDateOfBirth;
-                  
-                  if(validate()){
-                    console.log(values);
-                      setSaving(true);
-                          const onSuccess = () => {
-                              setSaving(false);
-                              resetForm() 
-                              setRelative(initialRelative)
-                              removeRelative()
-                          }
-                          const onError = () => {
-                              setSaving(false);        
-                          }
-                              console.log(values)
-                              props.create(values, onSuccess, onError);
-                   
-                  }else{
-                      toast.error("Please fill all compulsory fields");
-                  }
-    };
+/**** Submit Button Processing  */
+const handleSubmit = e => {
+    e.preventDefault();    
+        const newRegistrationDate = moment(values.dateRegistration).format("DD-MM-YYYY");        
+        const newDateOfBirth = moment(values.dob).format("DD-MM-YYYY");
+        //values["dateRegistration"] = newRegistrationDate;
+        values["personRelativeDTOs"] = relatives.length <= 0 ? [relative] : relatives;
+        //values["dob"] = newDateOfBirth;               
+            if(validate() && values["dateRegistration"]!=='Invalid date'){
+                setSaving(true);
+                const onSuccess = () => {
+                    setSaving(false);
+                    resetForm() 
+                    setRelative(initialRelative)
+                    removeRelative()
+                    setTimeout(() => {
+                        props.history.push(`/patients`)
+                    }, 1000)             
+                }
+                const onError = () => {
+                    setSaving(false);        
+                }    
+                    props.create(values, onSuccess, onError);
+            
+            }else{
+                toast.error("Please fill all compulsory fields");
+            }
+};
 
 
   return (
@@ -360,10 +347,9 @@ const validate = () => {
                             <Card className={classes.cardBottom}>
                                 <CardContent>
                                     <Title>
-                                      Basic Information <br />
-                                      
+                                        Basic Information <br />
                                     </Title>
-                                    <br />
+                                        <br />
                                         <Row form>
                                             <Col md={4}>
                                                 <FormGroup>
@@ -389,7 +375,7 @@ const validate = () => {
                                                             id="dateRegistration"
                                                             value={values.regDate}
                                                             onChange={value1 =>
-                                                              setValues({ ...values, dateRegistration: moment(value1).format("MM-DD-YYYY") })
+                                                              setValues({ ...values, dateRegistration: moment(value1).format("DD-MM-YYYY") })
                                                             }
                                                                 max={new Date()}
                                                         />
@@ -596,8 +582,7 @@ const validate = () => {
                                                 <Card className={classes.cardBottom}>
                                                     <CardContent>
                                                         <Title>
-                                                          {" "}
-                                                          Address <br />
+                                                            {" "}Address <br />
                                                         </Title>
                                                             <Row form>
                                                                 <Col md={4}>
@@ -612,7 +597,7 @@ const validate = () => {
                                                                                 onChange={handleInputChange}
                                                                                 {...(errors.mobilePhoneNumber && { invalid: true})}
                                                                                 
-                                                                              />
+                                                                            />
                                                                                   <FormFeedback>{errors.mobilePhoneNumber}</FormFeedback>
                                                                     </FormGroup>
                                                                 </Col>
@@ -846,12 +831,9 @@ const validate = () => {
                                                           type="text"
                                                           name="lastName"
                                                           id="lastName"
-                                                        
                                                           value={relative.lastName}
                                                           onChange={onRelativeChange}
-                                                      
                                                         />
-                                                      
                                                   </FormGroup>
                                               </Col>
                                         </Row>
@@ -895,7 +877,6 @@ const validate = () => {
                                                         type="text"
                                                         name="address"
                                                         id="address"
-                                                      
                                                         onChange={onRelativeChange}
                                                         value={relative.address}
                                                     />
@@ -906,17 +887,17 @@ const validate = () => {
                                             <Col md={12}>
                                                   <div className={classes.demo}>
                                                       <List>
-                                                          {relatives.map((relative, index) => (
-                                                              <RelativeList
-                                                                  key={index}
-                                                                  index={index}
-                                                                  relative={relative}
-                                                                  removeRelative={removeRelative}
-                                                                  editRelative={editRelative}
-                                                                  relationshipTypeName={getRelationshipName(
-                                                                  relative.relationshipTypeId
+                                                            {relatives.map((relative, index) => (
+                                                                <RelativeList
+                                                                    key={index}
+                                                                    index={index}
+                                                                    relative={relative}
+                                                                    removeRelative={removeRelative}
+                                                                    editRelative={editRelative}
+                                                                    relationshipTypeName={getRelationshipName(
+                                                                    relative.relationshipTypeId
                                                                   )}
-                                                              />
+                                                                />
                                                           ))}
                                                       </List>
                                                   </div>
@@ -928,12 +909,12 @@ const validate = () => {
                                             {saving ? <Spinner /> : ""}
                                                 <br/>
                                                 <MatButton
-                                                  type="submit"
-                                                  variant="contained"
-                                                  color="primary"
-                                                  className={classes.button}
-                                                  startIcon={<SaveIcon />}
-                                                  disabled={saving}
+                                                    type="submit"
+                                                    variant="contained"
+                                                    color="primary"
+                                                    className={classes.button}
+                                                    startIcon={<SaveIcon />}
+                                                    disabled={saving}
                                                 >
                                                     {!saving ?
                                                     <span style={{textTransform: 'capitalize'}}>Save</span>
@@ -941,12 +922,11 @@ const validate = () => {
                                                 </MatButton>
                                                 <Link to ={{ pathname: "/patients"}} >
                                                 <MatButton
-                                                  variant="contained"
-                                                  className={classes.button}
-                                                  startIcon={<CancelIcon />}
-                                                  onClick={resetForm}
+                                                    variant="contained"
+                                                    className={classes.button}
+                                                    startIcon={<CancelIcon />}
+                                                    onClick={resetForm}
                                                 >
-                                               
                                                     <span style={{textTransform: 'capitalize'}}>Cancel</span>
                                                 </MatButton>
                                             </Link>

@@ -78,79 +78,73 @@ const useStyles = makeStyles(theme => ({
 
 
 
-
 const PatientRegistration = props => {
-if(props.location.currentId){
-  const intialRelativesValues = props.location.currentId.personRelativeDTOs !== null ? props.location.currentId.personRelativeDTOs : []
-  const currentId = props.location.currentId!=='' ? props.location.currentId : {}
- 
-    const classes = useStyles();
-    const apicountries = url + "countries";
-    const apistate = url + "countries/";
-    const { values, setValues, handleInputChange, resetForm,setErrors, errors } = useForm(currentId);
-    /**
-     * Initializing state properties
-     */
-    const [countries, setCountries] = useState([]);
-    const [states, setStates] = useState([]);
-    const [gender, setGender] = useState([]);
-    const [occupation, setOccupation] = useState([]);
-    const [qualification, setQualification] = useState([]);
-    const [maritalStatus, setMaterialStatus] = useState([]);
-    const [provinces, setProvinces] = useState([]);
-    const [relatives, setRelatives] = useState(intialRelativesValues);
-    const [relative, setRelative] = useState([initialRelative]);
-    const [relativeButton, setRelativeButton] = useState(false) ;
-    const [relationshipTypes, setRelationshipTypes] = useState([]);
-    const [saving, setSaving] = useState(false);
-    const [display, setDisplay] = useState(false);
+    if(props.location.currentId){
+        const intialRelativesValues = props.location.currentId.personRelativeDTOs !== null ? props.location.currentId.personRelativeDTOs : []
+        const currentId = props.location.currentId!=='' ? props.location.currentId : {} 
+        const classes = useStyles();
+        const apicountries = url + "countries";
+        const apistate = url + "countries/";
+        const { values, setValues, handleInputChange, resetForm,setErrors, errors } = useForm(currentId);
+        const [countries, setCountries] = useState([]);
+        const [states, setStates] = useState([]);
+        const [gender, setGender] = useState([]);
+        const [occupation, setOccupation] = useState([]);
+        const [qualification, setQualification] = useState([]);
+        const [maritalStatus, setMaterialStatus] = useState([]);
+        const [provinces, setProvinces] = useState([]);
+        const [relatives, setRelatives] = useState(intialRelativesValues);
+        const [relative, setRelative] = useState([initialRelative]);
+        const [relativeButton, setRelativeButton] = useState(false) ;
+        const [relationshipTypes, setRelationshipTypes] = useState([]);
+        const [saving, setSaving] = useState(false);
+        const [display, setDisplay] = useState(false);
 
 
     //Get countries
     useEffect(() => {
-      async function getCharacters() {
-          try {
-              const response = await axios.get(apicountries);
-              const body = response.data;
-              setCountries(body.map(({ name, id }) => ({ label: name, value: id })));
-              const defaultCountryId = body.find(x => x.name === "Nigeria").id;
-              setValues({ ...values, countryId: defaultCountryId });
-              setStateByCountryId(defaultCountryId);
-          } catch (error) {}
-        }
-      getCharacters();
-  }, []); 
+        async function getCharacters() {
+            try {
+                const response = await axios.get(apicountries);
+                const body = response.data;
+                setCountries(body.map(({ name, id }) => ({ label: name, value: id })));
+                const defaultCountryId = body.find(x => x.name === "Nigeria").id;
+                setValues({ ...values, countryId: defaultCountryId });
+                setStateByCountryId(defaultCountryId);
+            } catch (error) {}
+            }
+        getCharacters();
+    }, []); 
     /*# Get list of RelationshipTypes parameter from the endpoint #*/
     useEffect(() => {
         async function getCharacters() {
             try {
-                const response = await axios.get('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=RELATIONSHIP');
+                const response = await axios.get(url + 'application-codesets/codesetGroup?codesetGroup=RELATIONSHIP');
                     const body = response.data;
                     
                         setRelationshipTypes(body.map(({ display, id }) => ({ name: display, id: id })));            
             } catch (error) {}
           }
         getCharacters();
-    }, []);  
-            
+    }, []);             
     /* ##### End of RelationshipTypes parameter from the endpoint ##########*/
     /*# Get list of gender parameter from the endpoint #*/
     useEffect(() => {
         async function getCharacters() {
             try {
-                const response = await axios.get('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=GENDER');
+                const response = await axios.get(url + 'application-codesets/codesetGroup?codesetGroup=GENDER');
                     const body = response.data;
                         setGender(body.map(({ display, id }) => ({ label: display, value: id })));
             } catch (error) {}
           }
-          getCharacters();
+        getCharacters();
     }, []);
     /* ##### End of gender parameter from the endpoint ##########*/
     /*# Get list of OCUUPATION parameter from the endpoint #*/
     useEffect(() => {
         async function getCharacters() {
             try {
-                const response = await axios.get('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=OCCUPATION');
+                const response = await axios.get(url +'application-codesets/codesetGroup?codesetGroup=OCCUPATION');
                   const body =  response.data;
                         setOccupation(body.map(({ display, id }) => ({ label: display, value: id })));
             } catch (error) {}
@@ -160,14 +154,14 @@ if(props.location.currentId){
 
     /*# Get list of EDUCATION parameter from the endpoint #*/
     useEffect(() => {
-      async function getCharacters() {
-        try {
-            const response = await axios.get('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=EDUCATION');
-                const body =  response.data;
-                    setQualification(body.map(({ display, id }) => ({ label: display, value: id })));
-        } catch (error) {}
-      }
-      getCharacters();
+        async function getCharacters() {
+            try {
+                const response = await axios.get(url + 'application-codesets/codesetGroup?codesetGroup=EDUCATION');
+                    const body =  response.data;
+                        setQualification(body.map(({ display, id }) => ({ label: display, value: id })));
+            } catch (error) {}
+        }
+        getCharacters();
     }, []);
     /* ##### End of gender parameter from the endpoint ##########*/
 
@@ -175,7 +169,7 @@ if(props.location.currentId){
     useEffect(() => {
       async function getCharacters() {
         try {
-            const response = await axios.get('http://lamisplus.org/base-module/api/application-codesets/codesetGroup?codesetGroup=MARITAL_STATUS');
+            const response = await axios.get(url+'application-codesets/codesetGroup?codesetGroup=MARITAL_STATUS');
                 const body =  response.data;
                     setMaterialStatus(body.map(({ display, id }) => ({ label: display, value: id })));
         } catch (error) {}
@@ -190,7 +184,7 @@ if(props.location.currentId){
             var d = new Date();
             var year = d.getFullYear();
             var c = new Date(year - newage, 6, 15);
-                return c;
+            return c;
     };
     /**
      * Handles UI behaviour on Age Input change
@@ -198,23 +192,23 @@ if(props.location.currentId){
     const onAgeInputChange = e => {
         setDisplay(true);
             setValues({ ...values, dobEstimated: 1 });
-              if (e.target.value === "" || e.target.value === null) {
-                setDisplay(false);
-              }
+                if (e.target.value === "" || e.target.value === null) {
+                    setDisplay(false);
+                }
             handleEstimation();
     }
   /**
    * Handles UI behaviour on check of Estimation box
    */
-  const handleEstimation = () => {
-      if (display) {
-          const actualAge = document.getElementById("age").value;
-              const dateOfBirth = moment(estimatedob(actualAge)).format("MM/DD/YYYY");
-                document.getElementById("dob").value = dateOfBirth;
-                //convert to the date format and setDob
-                    const newdobdate = moment(dateOfBirth).format("MM-DD-YYYY");
-                        setValues({ ...values, dob: newdobdate });
-          }
+    const handleEstimation = () => {
+        if (display) {
+            const actualAge = document.getElementById("age").value;                
+                const dateOfBirth = moment(estimatedob(actualAge)).format("MM/DD/YYYY");
+                    document.getElementById("dob").value = dateOfBirth;
+                    //convert to the date format and setDob
+                        const newdobdate = moment(dateOfBirth).format("MM-DD-YYYY");
+                            setValues({ ...values, dob: newdobdate });
+            }
     };
 
     //Get States from selected country
@@ -239,46 +233,45 @@ if(props.location.currentId){
             const stateId = e.target.value;
                 async function getCharacters() {
                     const response = await axios.get(`${url}state/` + stateId+"/provinces");
-                        const provinceList =  response.data;
+                        //const provinceList =  response.data;
+                           const provinceList = {};
                             setProvinces(provinceList);
                 }
-        getCharacters();
+                getCharacters();
     };
 
     const  getRelationshipName = (id) => {
         if(id){
-          console.log(relationshipTypes)
             const newId = parseInt(id) 
             const objectArray = Object.values(relationshipTypes);
-             const objRelatives = objectArray.find(x => x.id === newId)
-             if (objRelatives === undefined || objRelatives === null) { 
-               return null;
-              }else{
-               return objRelatives.name
-              }
+            const objRelatives = objectArray.find(x => x.id === newId)
+                if (objRelatives === undefined || objRelatives === null) { 
+                    return null;
+                }else{
+                    return objRelatives.name
+                }
         }    
     }
-
     /* Add Relative function **/
     const addRelative = value => {
         const allRelatives = [...relatives, value];
-        setRelatives(allRelatives);
-        setRelativeButton(false)
+            setRelatives(allRelatives);
+                setRelativeButton(false)
     };
 
     /* Remove Relative function **/
     const removeRelative = index => {
         relatives.splice(index, 1);
-        setRelative({...relative});
-        setRelativeButton(false)       
+            setRelative({...relative});
+                setRelativeButton(false)       
     };
 
     /* Edit Relative function **/
     const editRelative = index => {
         const allRelatives = [...relatives];
-        setRelative(allRelatives[index])
-        relatives.splice(index, 1); 
-        setRelativeButton(true) 
+            setRelative(allRelatives[index])
+                relatives.splice(index, 1); 
+                    setRelativeButton(true) 
     };
 
   const handleAddRelative = e => {
@@ -316,29 +309,34 @@ const validate = () => {
     * Submit Button Processing 
     */
     const handleSubmit = e => {
-          e.preventDefault();
-          console.log(relative)
-              if(validate()){
-                  const newRegistrationDate = moment(values.dateRegistration).format("MM-DD-YYYY");
-                  const newDateOfBirth = moment(values.dob).format("MM-DD-YYYY");
-                  values["dateRegistration"] = newRegistrationDate;
-                  values["personRelativeDTOs"] = relatives;
-                  values["dob"] = newDateOfBirth;
-                      setSaving(true);
-                          const onSuccess = () => {
-                              setSaving(false);
-                              resetForm() 
-                              //removeRelative()
-                          }
-                          const onError = () => {
-                              setSaving(false);        
-                          }
-                              console.log(values)
-                              props.update(values, currentId.patientId,onSuccess, onError);
+        e.preventDefault();
+          
+            if(validate()){
+                const newRegistrationDate = moment(values.dateRegistration).format("DD-MM-YYYY");
+                const newDateOfBirth = moment(values.dob).format("DD-MM-YYYY");
+                //values["dateRegistration"] = newRegistrationDate;
+                values["personRelativeDTOs"] = relatives;
+                //values["dob"] = newDateOfBirth;
+                console.log(values.dateRegistration)
+                console.log(values.dob)
+                setSaving(true);
+                    const onSuccess = () => {
+                        setSaving(false);
+                        resetForm() 
+                        removeRelative()
+                        setTimeout(() => {
+                            props.history.push(`/patients`)
+                        }, 1000) 
+                        
+                    }
+                    const onError = () => {
+                        setSaving(false);        
+                    }
+                        props.update(values, currentId.patientId,onSuccess, onError);
                     //toast.success("Registration Successful")
-              }else{
-                  toast.error("Please fill all compulsory fields");
-              }
+            }else{
+                toast.error("Please fill all compulsory fields");
+            }
     };
 
 
@@ -361,24 +359,23 @@ const validate = () => {
                             <Card className={classes.cardBottom}>
                                 <CardContent>
                                     <Title>
-                                      Basic Information <br />
-                                      
+                                        Basic Information <br />
                                     </Title>
-                                    <br />
+                                        <br />
                                         <Row form>
                                             <Col md={4}>
                                                 <FormGroup>
                                                     <Label for="hospitalNumber">Patient Id *</Label>
                                                         <Input
-                                                          type="text"
-                                                          name="hospitalNumber"
-                                                          id="hospitalNumber"
-                                                        
-                                                          value={values.hospitalNumber}
-                                                          onChange={handleInputChange}
-                                                          {...(errors.hospitalNumber && { invalid: true})}
+                                                            type="text"
+                                                            name="hospitalNumber"
+                                                            id="hospitalNumber"
+                                                            
+                                                            value={values.hospitalNumber}
+                                                            onChange={handleInputChange}
+                                                            {...(errors.hospitalNumber && { invalid: true})}
                                                         />
-                                                              <FormFeedback>{errors.hospitalNumber}</FormFeedback>
+                                                            <FormFeedback>{errors.hospitalNumber}</FormFeedback>
                                                   </FormGroup>
                                             </Col>
                                             <Col md={4}>
@@ -390,10 +387,10 @@ const validate = () => {
                                                             id="dateRegistration"
                                                             value={values.regDate}
                                                             onChange={value1 =>
-                                                              setValues({ ...values, dateRegistration: moment(value1).format("MM-DD-YYYY") })
+                                                                setValues({ ...values, dateRegistration: moment(value1).format("DD-MM-YYYY") })
                                                             }
                                                             defaultValue={new Date(new Date(moment(values.dateRegistration, "DD-MM-YYYY").format("MM/DD/YYYY") ))}
-                                                                max={new Date()}
+                                                            max={new Date()}
                                                         />
                                                   </FormGroup>
                                             </Col>
@@ -421,7 +418,6 @@ const validate = () => {
                                                             type="text"
                                                             name="otherNames"
                                                             id="otherNames"
-                                                          
                                                             onChange={handleInputChange}
                                                             value={values.otherNames}
                                                         />
@@ -434,7 +430,6 @@ const validate = () => {
                                                             type="text"
                                                             name="lastName"
                                                             id="lastName"
-                                                            
                                                             onChange={handleInputChange}
                                                             value={values.lastName}
                                                             {...(errors.lastName && { invalid: true})}
@@ -531,7 +526,7 @@ const validate = () => {
                                                                 dropUp
                                                                 value={values.regDate}
                                                                 onChange={value1 =>
-                                                                  setValues({ ...values, dob: value1 })
+                                                                    setValues({ ...values, dob: moment(value1).format("DD-MM-YYYY")  })
                                                                 }
                                                                 defaultValue={new Date(moment(values.dob, "DD-MM-YYYY").format("MM/DD/YYYY") )}
                                                                 max={new Date()}
@@ -592,8 +587,8 @@ const validate = () => {
                                                 <Card className={classes.cardBottom}>
                                                     <CardContent>
                                                         <Title>
-                                                          {" "}
-                                                          Address <br />
+                                                            {" "}Address 
+                                                            <br />
                                                         </Title>
                                                             <Row form>
                                                                 <Col md={4}>
@@ -608,8 +603,8 @@ const validate = () => {
                                                                                 onChange={handleInputChange}
                                                                                 {...(errors.mobilePhoneNumber && { invalid: true})}
                                                                                 
-                                                                              />
-                                                                                  <FormFeedback>{errors.mobilePhoneNumber}</FormFeedback>
+                                                                            />
+                                                                                <FormFeedback>{errors.mobilePhoneNumber}</FormFeedback>
                                                                     </FormGroup>
                                                                 </Col>
                                                                 <Col md={4}>
@@ -648,12 +643,13 @@ const validate = () => {
                                                                                 name="countryId"
                                                                                 id="countryId"
                                                                                 value={values.countryId}
-                                                                                onChange={getStates}>
-                                                                                    {countries.map(({ label, value }) => (
-                                                                                        <option key={value} value={value}>
-                                                                                          {label}
-                                                                                        </option>
-                                                                                    ))}
+                                                                                onChange={getStates}
+                                                                            >
+                                                                                {countries.map(({ label, value }) => (
+                                                                                    <option key={value} value={value}>
+                                                                                        {label}
+                                                                                    </option>
+                                                                                ))}
                                                                             </Input>
                                                                     </FormGroup>
                                                                 </Col>
@@ -956,6 +952,9 @@ const validate = () => {
       return ( 
           <Page >
               <h2>Please Slelect a patient</h2>
+                {setTimeout(() => {
+                        props.history.push(`/patients`)
+                }, 1000) }
           </Page>
        
     );

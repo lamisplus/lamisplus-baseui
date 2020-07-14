@@ -149,13 +149,18 @@ const useStyles = makeStyles({
                     Action <span aria-hidden>▾</span>
                 </MenuButton>
                     <MenuList style={{hover:"#eee"}}>
-                        
-                            <MenuItem onSelect={() => handleSample(e)}><FaPlusSquare size="15" style={{color: '#000'}}/>{" "}Collect Sample</MenuItem>
-                            <MenuItem onSelect={() => transferSample(e)}><TiArrowForward size="15" style={{color: '#000'}}/>{" "} Transfer Sample</MenuItem>             
-                                { e.data.lab_test_order_status===5 ?
-                                    <MenuItem onSelect={() => viewresult(e)}><FaRegEye size="15" style={{color: '#3F51B5'}}/>{" "}View Result</MenuItem>
-                                    :""
-                                }  
+                            { e.data.lab_test_order_status!==5 ?
+                                <MenuItem onSelect={() => handleSample(e)}><FaPlusSquare size="15" style={{color: '#000'}}/>{" "}Collect Sample</MenuItem>
+                                :""
+                            }
+                            { e.data.lab_test_order_status!==5 ?
+                                <MenuItem onSelect={() => transferSample(e)}><TiArrowForward size="15" style={{color: '#000'}}/>{" "} Transfer Sample</MenuItem>             
+                                :""
+                            }
+                            { e.data.lab_test_order_status===5 ?
+                                <MenuItem onSelect={() => viewresult(e)}><FaRegEye size="15" style={{color: '#3F51B5'}}/>{" "}View Result</MenuItem>
+                                :""
+                            }  
                     </MenuList>
             </Menu>
           )

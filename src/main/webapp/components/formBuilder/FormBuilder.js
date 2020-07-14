@@ -26,8 +26,9 @@ const Create = props => {
   const [programCode, setprogramCode] = React.useState("");
   const [name, setname] = React.useState();
   const [usageCode, setusageCode] = React.useState("");
+  const [usageOrder, setusageOrder] = React.useState("");
   const [version, setversion] = React.useState();
-    const textAreaRef = useRef(null);
+  const textAreaRef = useRef(null);
 
   useEffect (() => {
     props.fetchService()
@@ -43,6 +44,7 @@ const handleSubmit = e => {
   newdata2['name']=name;
   newdata2['version']=version;
   newdata2['usageCode']=usageCode;
+  newdata2['usageOrder']=usageOrder;
 
   e.preventDefault()
   props.createForm(newdata2);
@@ -87,6 +89,14 @@ const handleSubmit = e => {
               <Col md={4}> <FormGroup>
                   <Label class="sr-only">Freguency of Usage</Label>
                   <Input type="select"  id="usageCode" value={usageCode} onChange={e => setusageCode(e.target.value)}>
+                      <option></option>
+                      <option value="0">Once per Patient</option>
+                      <option value="1">Periodically</option></Input>
+              </FormGroup></Col>
+
+              <Col md={4}> <FormGroup>
+                  <Label class="sr-only">Usage Order</Label>
+                  <Input type="select"  id="usageOrder" value={usageOrder} onChange={e => setusageOrder(e.target.value)}>
                       <option></option>
                       <option value="0">Once per Patient</option>
                       <option value="1">Periodically</option></Input>

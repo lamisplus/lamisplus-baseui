@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import SaveIcon from '@material-ui/icons/Save'
 import CancelIcon from '@material-ui/icons/Cancel'
 import { DateTimePicker } from 'react-widgets';
+import "react-widgets/dist/css/react-widgets.css";
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
@@ -14,6 +15,7 @@ import {url} from '../../../api'
 import { Alert } from 'reactstrap';
 import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
 import { Spinner } from 'reactstrap';
+import { v4 as uuidv4 } from 'uuid';
 
 Moment.locale('en');
 momentLocalizer();
@@ -58,58 +60,57 @@ momentLocalizer();
 
 
 const ModalViewResult = (props) => {
-  const classes = useStyles()
-  const datasample = props.datasample ? props.datasample : {};
-  //console.log(datasample)
-  const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
-  const description = datasample.data ? datasample.data.description : null ;
-  console.log(lab_test_group)
-  const labId = datasample.id
-  const [loading, setLoading] = useState(false)
-  const [visible, setVisible] = useState(true);
-  const onDismiss = () => setVisible(false);
-  const [otherfields, setOtherFields] = useState({date_sample_transfered:"",sample_transfered_by:"",sample_priority:"",time_sample_transfered:"",comment:"", lab_test_order_status:""});
-  const [errors, setErrors] = useState({});
+    const classes = useStyles()
+    const manifestSamples = props.manifestSamples !==null ? props.manifestSamples : {};
+    const manifestSample= [manifestSample]
+    const labId = manifestSamples.id
+    const [loading, setLoading] = useState(false)
+    const [manifestId, setManifestId] = useState(uuidv4());
+    const [otherfields, setOtherFields] = useState({date_sample_dispatched:"",packaged_by:"",courier_phone_number:"",time_sample_dispatched:"",packaged_by_phone_number:"", courier_name:"", receiving_lab_name:""});
 
-  const handleOtherFieldInputChange = e => {
-      setOtherFields ({ ...otherfields, [e.target.name]: e.target.value });
-      console.log(otherfields)
-  }
-  const validate = () => {
-      let temp = { ...errors }
-      temp.date_sample_transfered = otherfields.date_sample_transfered ? "" : "Date is required"
-      temp.time_sample_transfered = otherfields.time_sample_transfered ? "" : "Time  is required."
-      temp.lab_test_order_status = otherfields.lab_test_order_status ? "" : "This field is required."
-      temp.sample_transfered_by = otherfields.sample_transfered_by ? "" : "This filed is required."
-      temp.comment = otherfields.comment ? "" : "Comment is required." 
-      setErrors({
-          ...temp
-      })
+    const [errors, setErrors] = useState({});
+
+    const handleOtherFieldInputChange = e => {
+        setOtherFields ({ ...otherfields, [e.target.name]: e.target.value });
+        console.log(otherfields)
+    }
+    const validate = () => {
+
+        let temp = { ...errors }
+        temp.date_sample_dispatched = otherfields.date_sample_dispatched ? "" : "Date is required"
+        temp.time_sample_dispatched = otherfields.time_sample_dispatched ? "" : "Time  is required."
+        temp.courier_name = otherfields.courier_name ? "" : "This field is required."
+        temp.packaged_by = otherfields.packaged_by ? "" : "This field is required."
+        temp.packaged_by_phone_number = otherfields.packaged_by_phone_number ? "" : "This is required." 
+        temp.courier_phone_number = otherfields.courier_phone_number ? "" : "This is required." 
+        setErrors({
+            ...temp
+            })
     
-          return Object.values(temp).every(x => x == "")
+        return Object.values(temp).every(x => x == "")
   }
 
   const saveSample = e => {
       e.preventDefault()
           if(validate()){
               setLoading(true);
-                  const newDateSampleTransfered = moment(otherfields.date_sample_transfered).format("DD-MM-YYYY");
-                  const newTimeSampleTransfered = moment(otherfields.time_sample_transfered).format("LT");
-                  datasample.data.lab_test_order_status = 2;
-              const onSuccess = () => {
-                  setLoading(false);
-                  props.togglestatus()       
-              }
-              const onError = () => {
-                  setLoading(false); 
-                  props.togglestatus()       
-              }
-                  datasample['lab_number']= props.labnumber['lab_number']
-                  datasample.data['date_sample_transfered'] = newDateSampleTransfered
-                  datasample.data['time_sample_transfered'] = newTimeSampleTransfered
-                  datasample.data['sample_transfered_by'] = otherfields['sample_transfered_by']
-                  datasample.data.comment= otherfields['comment']
-                      props.createCollectedSample(datasample, labId,onSuccess,onError)
+                const newDateSampleDispatched = moment(otherfields.date_sample_dispatched).format("DD-MM-YYYY");
+                const newTimeSampleDispatched = moment(otherfields.time_sample_dispatched).format("LT");
+                manifestSamples.data.lab_test_order_status = 2;
+                const onSuccess = () => {
+                    setLoading(false);
+                    props.togglestatus()       
+                }
+                const onError = () => {
+                    setLoading(false); 
+                    props.togglestatus()       
+                }
+                  manifestSamples['lab_number']= props.labnumber['lab_number']
+                  manifestSamples.data['date_sample_dispatched'] = newDateSampleDispatched
+                  manifestSamples.data['time_sample_dispatched'] = newTimeSampleDispatched
+                  manifestSamples.data['packaged_by'] = otherfields['packaged_by']
+                  manifestSamples.data['courier_name']= otherfields['courier_name']
+                      props.createCollectedSample(manifestSamples, labId,onSuccess,onError)
           }
   }
 
@@ -126,9 +127,20 @@ const ModalViewResult = (props) => {
                         <Card >
                             <CardBody>
                                 <Row >
+                                    <Col md={12} >
+                                        <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder', fontSize:'14px'}}>
+                                            <p style={{marginTop: '.7rem' }}>
+                                                Total Sample Shipment : &nbsp;&nbsp;&nbsp;<span style={{ fontWeight: 'bolder'}}>{manifestSample.length }</span>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                Manifest ID : &nbsp;&nbsp;&nbsp;<span style={{ fontWeight: 'bolder'}}>{'Lamis'+manifestId }</span>
+                                          
+                                            </p>
+
+                                        </Alert>
+                                    </Col>
                                     
                                     <Col md={6}>
-                                        {/* <p>Sample Type {datasample.data.description}  </p> */}
+                                        {/* <p>Sample Type {manifestSamples.data.description}  </p> */}
                                           <FormGroup>
                                               <Label for='maritalStatus'>Date Dispatch</Label>
                                           
@@ -164,31 +176,47 @@ const ModalViewResult = (props) => {
                                       </Col>
                                       <Col md={6}>
                                           <FormGroup>
-                                              <Label for="exampleSelect">Lab Transfered To</Label>
-                                                  <Input type="select" name="lab_test_order_status" id="lab_test_order_status" 
-                                                  onChange={handleOtherFieldInputChange}
-                                                    {...(errors.lab_test_order_status && { invalid: true})}
-                                                  >
-                                                      <option value=""></option>
-                                                      <option value="2">PCI Lab 1</option>
-                                                      <option value="2">PCI Lab 2</option>
-                                                      <option value="2">Turning Point Hospital Lab</option>
-                                                      <option value="2">Others</option>
-                                                  </Input>
-                                                      <FormFeedback>{errors.lab_test_order_status}</FormFeedback>
+                                              <Label for="exampleSelect">Courier Name</Label>
+                                                    <Input
+                                                        type="text"
+                                                        name="courier_name"
+                                                        id="courier_name"
+                                                        
+                                                        value={otherfields.courier_name}
+                                                        onChange={handleOtherFieldInputChange}
+                                                        {...(errors.courier_name && { invalid: true})}
+                                                        
+                                                    />
+                                                      <FormFeedback>{errors.courier_name}</FormFeedback>
                                           </FormGroup>
                                       </Col>
-                                      <Col md={5}>
+                                      <Col md={6}>
                                           <FormGroup>
-                                              <Label for="occupation">Dispatched by </Label>
+                                              <Label for="exampleSelect">Courier Phone Number</Label>
+                                                    <Input
+                                                        type="text"
+                                                        name="courier_phone_number"
+                                                        id="courier_phone_number"
+                                                        
+                                                        value={otherfields.courier_phone_number}
+                                                        onChange={handleOtherFieldInputChange}
+                                                        {...(errors.courier_phone_number && { invalid: true})}
+                                                        
+                                                    />
+                                                      <FormFeedback>{errors.courier_phone_number}</FormFeedback>
+                                          </FormGroup>
+                                      </Col>
+                                      <Col md={6}>
+                                          <FormGroup>
+                                              <Label for="occupation">Packaged by </Label>
 
                                                 <Input
                                                     type="select"
-                                                    name="sample_transfered_by"
-                                                    id="sample_transfered_by"
-                                                    vaule={otherfields.sample_transfered_by}
+                                                    name="packaged_by"
+                                                    id="packaged_by"
+                                                    vaule={otherfields.packaged_by}
                                                     onChange={handleOtherFieldInputChange}
-                                                    {...(errors.sample_transfered_by && { invalid: true})} 
+                                                    {...(errors.packaged_by && { invalid: true})} 
                                                 >
                                                       <option value=""></option>
                                                       <option value="Dorcas"> Dorcas </option>
@@ -198,22 +226,42 @@ const ModalViewResult = (props) => {
                                                     <FormFeedback>{errors.sample_transfered_by}</FormFeedback>
                                           </FormGroup>
                                       </Col>
-                                      <Col md={7}>
+                                      <Col md={6}>
                                           <FormGroup>
-                                              <Label for='maritalStatus'>Note</Label>
-                                                  <Input
-                                                      type='textarea'
-                                                      name='comment'
-                                                      id='comment'
-                                                      onChange={handleOtherFieldInputChange}
-                                                        value = {otherfields.comment}                                     
-                                                            {...(errors.comment && { invalid: true})}                                   
-                                                  >                         
-                                                   </Input>
-                                                      <FormFeedback>{errors.comment}</FormFeedback>          
-                                          </FormGroup>          
+                                              <Label for="exampleSelect">Package By Phone Number</Label>
+                                                    <Input
+                                                        type="text"
+                                                        name="packaged_by_phone_number"
+                                                        id="packaged_by_phone_number"
+                                                        
+                                                        value={otherfields.packaged_by_phone_number}
+                                                        onChange={handleOtherFieldInputChange}
+                                                        {...(errors.packaged_by_phone_number && { invalid: true})}
+                                                        
+                                                    />
+                                                      <FormFeedback>{errors.packaged_by_phone_number}</FormFeedback>
+                                          </FormGroup>
                                       </Col>
-                                      
+                                      <Col md={6}>
+                                          <FormGroup>
+                                              <Label for="occupation">Receiving Lab Name </Label>
+
+                                                <Input
+                                                    type="select"
+                                                    name="receiving_lab_name"
+                                                    id="receiving_lab_name"
+                                                    vaule={otherfields.receiving_lab_name}
+                                                    onChange={handleOtherFieldInputChange}
+                                                    {...(errors.receiving_lab_name && { invalid: true})} 
+                                                >
+                                                      <option value=""></option>
+                                                      <option value="Lab1"> FHI360 Lab </option>
+                                                      <option value="Lab2"> Abuja Teaching Hospital Lab </option>
+                                                      <option value="otherlabs"> Others </option>
+                                                </Input>
+                                                    <FormFeedback>{errors.receiving_lab_name}</FormFeedback>
+                                          </FormGroup>
+                                      </Col>                   
                                   </Row>
                                       <br/>
                                       {loading ? <Spinner /> : ""}
