@@ -140,7 +140,7 @@ class Routes extends Component {
               {/* The rout to Hiv Module */}
               <PrivateRoute
                 exact
-                path="/patients/:hospitalNumber"
+                path="/patient-dashboard"
                 component={EnrolledPatientsDashboard}
               />
               <PrivateRoute exact path="/form-dashboard" component={formDashboard} />
