@@ -27,12 +27,13 @@ const PatientSearch = (props) => {
        
         for(var i=0; i<test.length; i++){
           for (var key in test[i]) {
-            if (test[i][key].lab_test_order_status=== 5)
+            if (test[i][key]!==null && test[i][key].lab_test_order_status=== 5)
               maxVal.push(test[i][key])
           }
          
         }
         return maxVal.length;
+        //return 2
       }
  
   return (
@@ -72,8 +73,8 @@ const PatientSearch = (props) => {
           samplecount: totalResultCollected(row.formDataObj),
           actions: <Link to ={{ 
                         pathname: "/collect-result",  
-                        state: { getpatientlists:{row}}, 
-                        patientName: row.firstName + ' ' + row.lastName}} 
+                        state: row
+                      }} 
                         style={{ cursor: "pointer", color: "blue", 
                         fontStyle: "bold" }}>
                           <Tooltip title="Enter Result">

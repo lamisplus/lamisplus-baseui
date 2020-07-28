@@ -13,7 +13,7 @@ import momentLocalizer from 'react-widgets-moment';
 import moment from "moment";
 import {url} from '../../../api'
 import { Alert } from 'reactstrap';
-import { createCollectedSample, fetchFormById } from '../../../actions/laboratory';
+import { dispatchedManifestSamples } from '../../../actions/laboratory';
 import { Spinner } from 'reactstrap';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -61,13 +61,15 @@ momentLocalizer();
 
 const ModalViewResult = (props) => {
     const classes = useStyles()
-    const manifestSamples = props.manifestSamples !==null ? props.manifestSamples : {};
-    const manifestSample= [manifestSample]
+    const manifestSamples = props.manifestSamples && props.manifestSamples !==null ? props.manifestSamples : {};
+    const manifestSample= Object.values(manifestSamples);
+    const  totalSampleShipment = Object.keys(manifestSamples).length;
+    console.log(Object.values(manifestSamples));
     const labId = manifestSamples.id
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
     const [manifestId, setManifestId] = useState(uuidv4());
-    const [otherfields, setOtherFields] = useState({date_sample_dispatched:"",packaged_by:"",courier_phone_number:"",time_sample_dispatched:"",packaged_by_phone_number:"", courier_name:"", receiving_lab_name:""});
-
+    const [otherfields, setOtherFields] = useState({date_sample_dispatched:"",packaged_by:"",courier_phone_number:"",time_sample_dispatched:"",packaged_by_phone_number:"", courier_name:"", receiving_lab_name:"", manifest_status:""});
+    const [manifestObj, setManifestObj] = useState(manifestSample)
     const [errors, setErrors] = useState({});
 
     const handleOtherFieldInputChange = e => {
@@ -81,7 +83,7 @@ const ModalViewResult = (props) => {
         temp.time_sample_dispatched = otherfields.time_sample_dispatched ? "" : "Time  is required."
         temp.courier_name = otherfields.courier_name ? "" : "This field is required."
         temp.packaged_by = otherfields.packaged_by ? "" : "This field is required."
-        temp.packaged_by_phone_number = otherfields.packaged_by_phone_number ? "" : "This is required." 
+        temp.receiving_lab_name = otherfields.receiving_lab_name ? "" : "This is required." 
         temp.courier_phone_number = otherfields.courier_phone_number ? "" : "This is required." 
         setErrors({
             ...temp
@@ -92,25 +94,32 @@ const ModalViewResult = (props) => {
 
   const saveSample = e => {
       e.preventDefault()
-          if(validate()){
-              setLoading(true);
-                const newDateSampleDispatched = moment(otherfields.date_sample_dispatched).format("DD-MM-YYYY");
-                const newTimeSampleDispatched = moment(otherfields.time_sample_dispatched).format("LT");
-                manifestSamples.data.lab_test_order_status = 2;
-                const onSuccess = () => {
-                    setLoading(false);
-                    props.togglestatus()       
-                }
-                const onError = () => {
-                    setLoading(false); 
-                    props.togglestatus()       
-                }
-                  manifestSamples['lab_number']= props.labnumber['lab_number']
-                  manifestSamples.data['date_sample_dispatched'] = newDateSampleDispatched
-                  manifestSamples.data['time_sample_dispatched'] = newTimeSampleDispatched
-                  manifestSamples.data['packaged_by'] = otherfields['packaged_by']
-                  manifestSamples.data['courier_name']= otherfields['courier_name']
-                      props.createCollectedSample(manifestSamples, labId,onSuccess,onError)
+          
+                    
+            const modifyManifestSample= manifestSample.map(item => {                       
+                item.formDataObj.data['date_sample_dispatched']=otherfields['date_sample_dispatched'];
+                item.formDataObj.data['time_sample_dispatched'] = otherfields['time_sample_dispatched'];
+                item.formDataObj.data['receiving_lab_name'] =otherfields['receiving_lab_name'];
+                item.formDataObj.data['courier_name'] =otherfields['courier_name'];
+                item.formDataObj.data['sample_dispatched_by'] =otherfields['packaged_by'];
+                item.formDataObj.data['courier_phone_number'] =otherfields['courier_phone_number'];
+                item.formDataObj.data['manifest_status'] = 1;
+                
+                return item;
+            })
+            console.log(manifestObj);  
+            console.log(modifyManifestSample);
+                if(validate()){
+                    //setLoading(true);
+                    modifyManifestSample.forEach(function(value, index, array) {
+                        console.log(value.formDataObj,value.formDataObj.id);
+                        props.dispatchedManifestSamples(value.formDataObj, value.formDataObj.id)
+                            if(array.length == Object.keys(manifestSamples).length){
+                                props.togglestatus();
+                            }
+                    });
+                
+                    //props.createCollectedSample(manifestSamples, labId,'','')
           }
   }
 
@@ -130,10 +139,9 @@ const ModalViewResult = (props) => {
                                     <Col md={12} >
                                         <Alert color="dark" style={{backgroundColor:'#9F9FA5', color:"#000" , fontWeight: 'bolder', fontSize:'14px'}}>
                                             <p style={{marginTop: '.7rem' }}>
-                                                Total Sample Shipment : &nbsp;&nbsp;&nbsp;<span style={{ fontWeight: 'bolder'}}>{manifestSample.length }</span>
+                                                Total Sample Shipment : &nbsp;&nbsp;&nbsp;<span style={{ fontWeight: 'bolder'}}>{Object.keys(manifestSamples).length }</span>
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                Manifest ID : &nbsp;&nbsp;&nbsp;<span style={{ fontWeight: 'bolder'}}>{'Lamis'+manifestId }</span>
-                                          
+                                                
                                             </p>
 
                                         </Alert>
@@ -142,35 +150,35 @@ const ModalViewResult = (props) => {
                                     <Col md={6}>
                                         {/* <p>Sample Type {manifestSamples.data.description}  </p> */}
                                           <FormGroup>
-                                              <Label for='maritalStatus'>Date Dispatch</Label>
+                                              <Label >Date Dispatched</Label>
                                           
                                                   <DateTimePicker
                                                       time={false}
-                                                      name="date_sample_transfered"
-                                                      id="date_sample_transfered"
+                                                      name="date_sample_dispatched"
+                                                      id="date_sample_dispatched"
                                                       onChange={date_transfered =>
-                                                        setOtherFields({ ...otherfields, date_sample_transfered: date_transfered })
+                                                        setOtherFields({ ...otherfields, date_sample_dispatched: moment(date_transfered).format("DD-MM-YYYY") })
                                                       }
                                                       required
                                                   /> 
-                                                      {errors.date_sample_transfered !="" ? (
-                                                          <span className={classes.error}>{errors.date_sample_transfered}</span>
+                                                      {errors.date_sample_dispatched !="" ? (
+                                                          <span className={classes.error}>{errors.date_sample_dispatched}</span>
                                                       ) : "" }
                                           </FormGroup>
                                       </Col>
                                       <Col md={6}>
                                           <FormGroup> 
-                                              <Label for=''>Time Dispatch</Label>
+                                              <Label for=''>Time Dispatched</Label>
                                                   <DateTimePicker
                                                       date={false}
-                                                      name="time_sample_transfered"
-                                                      id="time_sample_transfered"
+                                                      name="time_sample_dispatched"
+                                                      id="time_sample_dispatched"
                                                       onChange={value1 =>
-                                                        setOtherFields({ ...otherfields, time_sample_transfered: value1 })
+                                                        setOtherFields({ ...otherfields, time_sample_dispatched: moment(value1).format("LT") })
                                                       }
                                                   />
-                                                      {errors.time_sample_transfered !="" ? (
-                                                        <span className={classes.error}>{errors.time_sample_transfered}</span>
+                                                      {errors.time_sample_dispatched !="" ? (
+                                                        <span className={classes.error}>{errors.time_sample_dispatched}</span>
                                                       ) : "" }      
                                           </FormGroup>
                                       </Col>
@@ -226,22 +234,7 @@ const ModalViewResult = (props) => {
                                                     <FormFeedback>{errors.sample_transfered_by}</FormFeedback>
                                           </FormGroup>
                                       </Col>
-                                      <Col md={6}>
-                                          <FormGroup>
-                                              <Label for="exampleSelect">Package By Phone Number</Label>
-                                                    <Input
-                                                        type="text"
-                                                        name="packaged_by_phone_number"
-                                                        id="packaged_by_phone_number"
-                                                        
-                                                        value={otherfields.packaged_by_phone_number}
-                                                        onChange={handleOtherFieldInputChange}
-                                                        {...(errors.packaged_by_phone_number && { invalid: true})}
-                                                        
-                                                    />
-                                                      <FormFeedback>{errors.packaged_by_phone_number}</FormFeedback>
-                                          </FormGroup>
-                                      </Col>
+                                      
                                       <Col md={6}>
                                           <FormGroup>
                                               <Label for="occupation">Receiving Lab Name </Label>
@@ -249,7 +242,7 @@ const ModalViewResult = (props) => {
                                                 <Input
                                                     type="select"
                                                     name="receiving_lab_name"
-                                                    id="receiving_lab_name"
+                                                    id="receivingLabId"
                                                     vaule={otherfields.receiving_lab_name}
                                                     onChange={handleOtherFieldInputChange}
                                                     {...(errors.receiving_lab_name && { invalid: true})} 
@@ -297,4 +290,4 @@ const ModalViewResult = (props) => {
   );
 }
 
-export default connect(null, { createCollectedSample })(ModalViewResult);
+export default connect(null, { dispatchedManifestSamples })(ModalViewResult);

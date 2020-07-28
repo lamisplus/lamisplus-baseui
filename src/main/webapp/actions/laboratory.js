@@ -63,14 +63,14 @@ export const fetchAllLabTestOrderOfPatient = (id, onSuccess, onError )=> dispatc
     );
 }
 };
-export const fetchFormDataById = (id)=> dispatch => {
+export const fetchLabTestOrdersByEncounterID = (id)=> dispatch => {
   if(id){
   axios
-    .get(`${baseUrl}encounters/form-data/${id}`)
+    .get(`${baseUrl}encounters/${id}`)
     .then(response => {
-      // console.log(response)
+       console.log(response)
       dispatch({
-        type: ACTION_TYPES.LABORATORY_TESTORDER_FOR_LAB,
+        type: ACTION_TYPES.FETCH_ALL_TESTS_BY_ENCOUNTER_ID,
         payload: response.data
       })
       //onSuccess();
@@ -107,6 +107,32 @@ export const createCollectedSample = (data, lab_id, onSuccess, onError ) => disp
       })
       onError()
       //toast.error("Something went wrong, please try again");
+      
+    });
+  }else{
+    toast.error("Something went wrong, please try again");
+  }
+};
+
+export const dispatchedManifestSamples = (data, lab_id) => dispatch => {
+
+  if(lab_id){
+    
+  axios
+    .put(`${baseUrl}form-data/${lab_id}`, data)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.CREATE_COLLECT_SAMPLE,
+        payload: response.data
+      });
+     
+    })
+    .catch(error =>{
+      
+      dispatch({
+        type: ACTION_TYPES.ERROR_CREATE_COLLECT_SAMPLE,
+        payload: error
+      })
       
     });
   }else{

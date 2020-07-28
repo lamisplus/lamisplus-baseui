@@ -26,13 +26,13 @@ useEffect(() => {
     
 function totalSampleConllected (test){
         const  maxVal = []
-          for(var i=0; i<test.length; i++){
-              for (var key in test[i]) {
-                  if (test[i][key].lab_test_order_status >=1)
-                      maxVal.push(test[i][key])
-              }
-          }
-        return maxVal.length;
+        //   for(var i=0; i<test.length; i++){
+        //       for (var key in test[i]) {
+        //           if (test[i][key].lab_test_order_status >=1)
+        //               maxVal.push(test[i][key])
+        //       }
+        //   }
+        //retur 2;
     }
  
     
@@ -93,6 +93,7 @@ function totalSampleConllected (test){
                   color: "#000",
                   margin: "auto"
                   },
+                  selection: true,
                   filtering: true,
                   searchFieldStyle: {
                       width : '300%',

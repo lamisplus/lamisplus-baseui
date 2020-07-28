@@ -77,7 +77,9 @@ const ModalSample = (props) => {
                         sample_priority:"",
                         time_sample_verified:"",
                         comment:"", 
-                        verification_status:""
+                        verification_status:"", 
+                        comment_sample_verified:""
+
                     });
 
   const [errors, setErrors] = useState({});
@@ -111,6 +113,7 @@ const ModalSample = (props) => {
           dataSample.data['time_sample_Verified'] = newTimeSampleVerified
           dataSample.data.comment = otherFields['comment']
           dataSample.data['sample_verified_by'] = otherFields.sample_verified_by
+          dataSample.data['comment_sample_verified']= otherFields.comment
           
           const onSuccess = () => {
             setLoading(false);

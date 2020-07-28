@@ -72,7 +72,7 @@ const ActivePatientSearch = (props) => {
             icon: 'dashboard',
             iconProps: {color: 'primary'},
             tooltip: 'Patient Dashboard',
-            onClick: (event, rowData) => rowData.id ? window.location.href = "/patient/"+rowData.id: ""
+            onClick: (event, rowData) => rowData.id ? window.location.href = "/patient-dashboard?hospitalNumber="+rowData.id: ""
           }]}
           //overriding action menu with props.actions 
           components={props.actions}
@@ -98,12 +98,14 @@ const ActivePatientSearch = (props) => {
 const mapStateToProps = state => {
 
     return {
-      patientsList: state.patients.checkedInPatientList
+      patientsList: state.patients.list
+      //patientsList: state.patients.checkedInPatientList
     };
   };
   
   const mapActionToProps = {
-    fetchAllPatients: fetchCheckedInPatients,
+    //fetchAllPatients: fetchCheckedInPatients,
+    fetchAllPatients: fetchAll,
     deletePatient: Del
   };
   
