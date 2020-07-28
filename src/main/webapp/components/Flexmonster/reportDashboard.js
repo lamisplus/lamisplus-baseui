@@ -17,11 +17,7 @@ import {GiFiles} from 'react-icons/gi';
 
 import {
     Card, CardBody } from 'reactstrap';
-import FormBuilder from './FormBuilder';
-import ViewForm from './ViewForm';
-import PivotTable from '../Flexmonster/PivotTable';
-import Jsreport from '../Jsreport/Jsreport'
-
+import PivotTable from './PivotTable';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -184,30 +180,27 @@ export default function ScrollableTabsButtonForce(props) {
                     indicatorColor="primary"
                     textColor="white"
                     aria-label="scrollable force tabs example">
-                    <Tab className={classes.title} label="Form Builder" icon={<MdDashboard />} {...a11yProps(0)} />
-                    <Tab className={classes.title} label="Form Update" icon={<MdContacts />} {...a11yProps(1)} />
-                    <Tab className={classes.title} label="Flexmonster Builder" icon={<GiFiles />} {...a11yProps(2)} />
-                    <Tab className={classes.title} label="JSReport Builder" icon={<GiFiles />} {...a11yProps(2)} />
-                    <Tab className={classes.title} label="Facility Setup " icon={<GiFiles />} {...a11yProps(3)} />
+                    <Tab className={classes.title} label="Report Builder" icon={<MdDashboard />} {...a11yProps(0)} />
+                    <Tab className={classes.title} label="Report Builder Update" icon={<MdContacts />} {...a11yProps(1)} />
                 </Tabs>
                 <div>
                 </div>
             </AppBar>
             {/* The DashBoad Tab  */}
             <TabPanel value={value} index={0}>
-              <FormBuilder/>
-            </TabPanel>
-
-            <TabPanel value={value} index={1}>
-            <ViewForm/>
-            </TabPanel>
-            {/* Begining of consultation  */}
-            <TabPanel value={value} index={2}>
                 <PivotTable/>
             </TabPanel>
 
+            <TabPanel value={value} index={1}>
+                {/*<ViewForm/>*/}
+            </TabPanel>
+
+            {/* Begining of consultation  */}
+            <TabPanel value={value} index={2}>
+                {/*<ViewForm/>*/}
+            </TabPanel>
+
             <TabPanel value={value} index={3}>
-            <Jsreport/>
             </TabPanel>
             {/* End of consultation */}
             <TabPanel value={value} index={4}>
@@ -269,6 +262,7 @@ export default function ScrollableTabsButtonForce(props) {
                     </Grid>
                 </Grid>
             </TabPanel>
+
         </div>
     );
 }
