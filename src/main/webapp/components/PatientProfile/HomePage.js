@@ -154,26 +154,27 @@ function HomePage(props) {
             icon={<MdContacts />}
             {...a11yProps(1)}
           />
-          <Tab
-            className={classes.title}
-            label="Service Form"
-            icon={<GiFiles />}
-            {...a11yProps(2)}
-          />
+          
           <Tab
             className={classes.title}
             label="Test Order"
             icon={<GiTestTubes />}
-            {...a11yProps(3)}
+            {...a11yProps(2)}
           />
           <Tab
             className={classes.title}
             label="Medication"
             icon={<FaBriefcaseMedical />}
-            {...a11yProps(4)}
+            {...a11yProps(3)}
           />{" "}
-          ,l
+          <Tab
+            className={classes.title}
+            label="Service Form"
+            icon={<GiFiles />}
+            {...a11yProps(4)}
+          />
         </Tabs>
+
         <div></div>
       </AppBar>
 
@@ -195,17 +196,9 @@ function HomePage(props) {
         </TabPanel>
         {/* End of consultation */}
 
-        {/* service forms */}
-        <TabPanel value={value} index={2}>
-          <ServiceForm
-            patientId={props.patient.patientId}
-            visitId={props.patient.visitId}
-          />
-        </TabPanel>
-        {/* service forms */}
-
+      
         {/* test orders */}
-        <TabPanel value={value} index={3}>
+        <TabPanel value={value} index={2}>
           <TestOrder
             patientId={props.patient.patientId}
             visitId={props.patient.visitId}
@@ -214,13 +207,23 @@ function HomePage(props) {
         {/* test orders */}
 
         {/* medication */}
-        <TabPanel value={value} index={4}>
+        <TabPanel value={value} index={3}>
           <Medication
             patientId={props.patient.patientId}
             visitId={props.patient.visitId}
           />
         </TabPanel>
         {/* medication */}
+
+          {/* service forms */}
+          <TabPanel value={value} index={4}>
+          <ServiceForm
+            patientId={props.patient.patientId}
+            visitId={props.patient.visitId}
+          />
+        </TabPanel>
+        {/* service forms */}
+
       </div>
     </div>
   );
@@ -229,7 +232,7 @@ function HomePage(props) {
 const mapStateToProps = (state, ownProps) => {
   return {
     patient: state.patients.patient,
-    hospitalNumber: ownProps.match.params.hospitalNumber,
+    hospitalNumber: decodeURIComponent(ownProps.match.params.hospitalNumber),
   };
 };
 
