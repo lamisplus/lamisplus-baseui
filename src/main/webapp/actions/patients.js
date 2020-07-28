@@ -292,7 +292,7 @@ export const fetchPatientVitalSigns = (id, onSuccess, onError) => dispatch => {
 
  export const fetchByHospitalNumber = (id, onSuccess, onError) => dispatch => {
   axios
-    .get(`${baseUrl}patients/${encodeURIComponent(id)}`)
+    .get(`${baseUrl}patients/${id}`)
     .then(response => {
       dispatch({
         type: ACTION_TYPES.PATIENTS_FETCH_BY_ID,

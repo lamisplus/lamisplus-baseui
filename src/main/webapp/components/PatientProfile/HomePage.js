@@ -67,15 +67,25 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     margin: 0,
     backgroundColor: "#eee",
-  }
+  },
 }));
 
 function HomePage(props) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const [fetchingPatient, setFetchingPatient] = useState(false);
+  const getQueryParams = (params, url) => {
+    let href = url;
+    //this expression is to get the query strings
+    let reg = new RegExp("[?&]" + params + "=([^&#]*)", "i");
+    let queryString = reg.exec(href);
+    return queryString ? queryString[1] : null;
+  };
+
   const hospitalNumber =
-    props.hospitalNumber || props.patient.hospitalNumber || "";
+    getQueryParams("hospitalNumber", props.location.search) ||
+    props.patient.hospitalNumber ||
+    "";
 
   const isEmpty = (value) => {
     if (JSON.stringify(value) === "{}") {
@@ -154,7 +164,6 @@ function HomePage(props) {
             icon={<MdContacts />}
             {...a11yProps(1)}
           />
-          
           <Tab
             className={classes.title}
             label="Test Order"
@@ -179,7 +188,9 @@ function HomePage(props) {
       </AppBar>
 
       <div>
-        <PatientDashboardSubMenu patientHospitalNumber={props.hospitalNumber}/>
+        <PatientDashboardSubMenu
+          patientHospitalNumber={props.patient.hospitalNumber}
+        />
 
         {/* The DashBoard Tab  */}
         <TabPanel value={value} index={0}>
@@ -196,7 +207,6 @@ function HomePage(props) {
         </TabPanel>
         {/* End of consultation */}
 
-      
         {/* test orders */}
         <TabPanel value={value} index={2}>
           <TestOrder
@@ -215,15 +225,14 @@ function HomePage(props) {
         </TabPanel>
         {/* medication */}
 
-          {/* service forms */}
-          <TabPanel value={value} index={4}>
+        {/* service forms */}
+        <TabPanel value={value} index={4}>
           <ServiceForm
             patientId={props.patient.patientId}
             visitId={props.patient.visitId}
           />
         </TabPanel>
         {/* service forms */}
-
       </div>
     </div>
   );
@@ -232,7 +241,7 @@ function HomePage(props) {
 const mapStateToProps = (state, ownProps) => {
   return {
     patient: state.patients.patient,
-    hospitalNumber: decodeURIComponent(ownProps.match.params.hospitalNumber),
+    // hospitalNumber: this.props.location.query.hospitalNumber,
   };
 };
 
