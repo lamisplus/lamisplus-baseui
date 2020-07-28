@@ -269,7 +269,6 @@ export default function ScrollableTabsButtonForce(props) {
                     </Grid>
                 </Grid>
             </TabPanel>
-
         </div>
     );
 }

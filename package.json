@@ -117,6 +117,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "jsreport": "jsreport-start",
     "build": "react-scripts build",
     "serve": "serve -s build",
     "run-build": "react-scripts build && serve",
