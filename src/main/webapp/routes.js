@@ -35,15 +35,16 @@ const ConsultationDashboardPage = React.lazy(() =>
 
 /* Laboratory page loading */
 const LaboratoryPage = React.lazy(() =>
-  import("components/Laboratory/LaboratoryPageDashboard")
+  import("components/Laboratory/HomePage")
 );
 const CollectSample = React.lazy(() =>import("components/Laboratory/Testorders/CollectSample"));
 const LaboratorySampleResultPage = React.lazy(() =>import("components/Laboratory/TestResult/CollectResult"));
 const SampleVerification = React.lazy(() => import("components/Laboratory/Sampleverifications/SampleVerification"));
-const DispatchedSamples = React.lazy(() => import("components/Laboratory/DispatchedManifest/DispatchedSamplesList"))
-const PatientsPage = React.lazy(() =>
-  import("components/PatientSearch/HomePage")
-);
+const DispatchedSamples = React.lazy(() => import("components/Laboratory/DispatchedManifest/DispatchedSamplesList"));
+const PrintSamples = React.lazy(() => import("components/Laboratory/DispatchedManifest/PrintSample"));
+
+
+const PatientsPage = React.lazy(() =>import("components/PatientSearch/HomePage"));
 const formDashboard = React.lazy(() => import('components/formBuilder/formDashboard'));
 const FormBuilder = React.lazy(() => import('components/formBuilder/FormBuilder'));
 const ViewForm = React.lazy(() => import('components/formBuilder/ViewForm'));
@@ -87,7 +88,7 @@ class Routes extends Component {
         <Switch>
 
         <LayoutRoute exact path="/login" layout={EmptyLayout} component={SignIn} />
-
+        <LayoutRoute exact path="/print-sample" layout={EmptyLayout} component={PrintSamples} />
           <MainLayout breakpoint={this.props.breakpoint}>
             <React.Suspense fallback={<PageSpinner />}>
               {/* The new routes are here  */}
@@ -115,13 +116,14 @@ class Routes extends Component {
                 path="/consultation-dashbaord"
                 component={ConsultationDashboardPage}
               />
+              {/* Laboratory Links */}
              <PrivateRoute exact path="/collect-result" component={LaboratorySampleResultPage} />
               <PrivateRoute exact path="/laboratory" component={LaboratoryPage} />
               <PrivateRoute exact path="/sample-verification" component={SampleVerification} />
               <PrivateRoute exact path="/collect-sample" component={CollectSample} />
               <PrivateRoute exact path="/dispatched-sample" component={DispatchedSamples} />
               <PrivateRoute exact path="/patients" component={PatientsPage} />
-
+              <PrivateRoute exact path="/print-sample" component={PrintSamples} />
               {/* Pharmacy Links */}
               <PrivateRoute exact path="/pharmacy" component={PharmacyDashboard} />
               

@@ -193,7 +193,7 @@ const ModalSampleTransfer = (props) => {
                                                       <option value=""></option>
                                                       <option value="2">PCI Lab 1</option>
                                                       <option value="2">PCI Lab 2</option>
-                                                      <option value="2">Turning Point Hospital Lab</option>
+                                                      <option value="2">LIMS Lab</option>
                                                       <option value="2">Others</option>
                                                   </Input>
                                                       <FormFeedback>{errors.lab_test_order_status}</FormFeedback>

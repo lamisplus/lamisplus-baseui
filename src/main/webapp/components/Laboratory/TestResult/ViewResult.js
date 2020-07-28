@@ -1,27 +1,11 @@
-import React, {useState} from 'react';
-import { Modal, ModalHeader, ModalBody,
-Row,
-Col,
-FormGroup,
-Label,Input,Card,CardBody
+import React, { useState }   from 'react';
+import { Modal, ModalHeader, ModalBody,Row,Col,FormGroup,Label,Card,CardBody
 } from 'reactstrap';
-import { connect } from 'react-redux';
-import { ToastContainer, toast } from "react-toastify";
-// import "../../Patient/node_modules/react-toastify/dist/ReactToastify.css";
-// import "../../Patient/node_modules/react-widgets/dist/css/react-widgets.css";
-import { DateTimePicker } from 'react-widgets';
-import Moment from 'moment';
-import momentLocalizer from 'react-widgets-moment';
-import moment from "moment";
-import {url} from '../../../api'
-import { useSelector, useDispatch } from 'react-redux';
-import { createCollectedSample, fetchFormById } from '../../../actions/laboratory'
-import MatButton from '@material-ui/core/Button'
-import { makeStyles } from '@material-ui/core/styles'
-import SaveIcon from '@material-ui/icons/Save'
-import CancelIcon from '@material-ui/icons/Cancel'
-import { Alert } from 'reactstrap';
-import { Spinner } from 'reactstrap';
+import MatButton from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+import CancelIcon from '@material-ui/icons/Cancel';
+import PrintIcon from '@material-ui/icons/Print';
+
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -57,8 +41,7 @@ const useStyles = makeStyles(theme => ({
         display: 'none'
     } 
 }))
-Moment.locale('en');
-momentLocalizer();
+
 
 
 const ModalViewResult = (props) => {
@@ -69,24 +52,15 @@ const ModalViewResult = (props) => {
     const unit_measurement = datasample.data ? datasample.data.unit_measurement : null ;
     const date_result_reported = datasample.data ? datasample.data.date_result_reported : null ;
     const test_result = datasample.data ? datasample.data.test_result : null ;
-    console.log(datasample)  
-    const [samples, setSamples] = useState({}) 
 
-    const handleInputChangeSample = e => {
-        setSamples ({ ...samples, [e.target.name]: e.target.value });
-        console.log(samples)
-    }
 
-    const textstyle = {
-        fontSize: '14px',
-        fontWeight: 'bolder'
-    };
-      
+
   return (      
       <div >
-          <ToastContainer autoClose={2000} hideProgressBar />
+          {/* <ModalViewResult ref={componentRef} /> */}
+          
               <Modal isOpen={props.modalstatus} toggle={props.togglestatus} className={props.className} size="lg">
-                  <ModalHeader toggle={props.togglestatus}>Lab test order detail</ModalHeader>
+                  <ModalHeader toggle={props.togglestatus}>Lab Test Order Detail</ModalHeader>
                       <ModalBody>
                           <Card>
                             <CardBody>
@@ -123,16 +97,25 @@ const ModalViewResult = (props) => {
                     
                                 </Row>
                             <br/>
-              
-                          <MatButton
+                            <MatButton
+                                type='submit'
+                                variant='contained'
+                                color='primary'
+                                className={classes.button}
+                                startIcon={<PrintIcon />}
+                                
+                            >
+                                Print 
+                            </MatButton>
+                            <MatButton
                               variant='contained'
                               color='default'
                               onClick={props.togglestatus}
                               className={classes.button}
                               startIcon={<CancelIcon />}
-                          >
+                            >
                               Cancel
-                          </MatButton>
+                            </MatButton>
                       </CardBody>
                 </Card>
           </ModalBody>
@@ -141,4 +124,4 @@ const ModalViewResult = (props) => {
   );
 }
 
-export default connect(null, { createCollectedSample })(ModalViewResult);
+export default ModalViewResult;

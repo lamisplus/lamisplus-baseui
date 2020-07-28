@@ -78,7 +78,7 @@ const ModalSample = (props) => {
     const onDismiss = () => setVisible(false);
     const [samples, setSamples] = useState({});
     const [optionsample, setOptionsample] = useState([]);
-    const [otherfields, setOtherFields] = useState({sample_collected_by:"",sample_ordered_by:"",sample_priority:"",time_sample_collected:""});
+    const [otherfields, setOtherFields] = useState({sample_collected_by:"",sample_ordered_by:"",sample_priority:"",time_sample_collected:"", comment_sample_collected:""});
     //This is to get SAMPLE TYPE from application Codeset
     const [errors, setErrors] = useState({});
 
@@ -164,6 +164,7 @@ const ModalSample = (props) => {
             datasample.data["lab_number"] = lab_number;
             datasample.data["time_sample_collected"] =
                 otherfields["time_sample_collected"];
+            datasample.data["comment_sample_collected"] = samples["comment"];
 
             props.createCollectedSample(datasample, labId, onSuccess, onError);
         }
@@ -236,7 +237,7 @@ const ModalSample = (props) => {
                                                         id="time_sample_collected"
 
                                                         onChange={value1 =>
-                                                            setOtherFields({ ...otherfields, time_sample_collected: value1 })
+                                                            setOtherFields({ ...otherfields, time_sample_collected: moment(value1).format("LT") })
                                                         }
                                                         required
                                                     />

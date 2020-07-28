@@ -106,6 +106,7 @@ const ModalSampleResult = (props) => {
               datasample.data.test_result = otherfields.test_result
               datasample.data['result_reported_by'] = otherfields['result_reported_by']
               datasample.data['date_asseyed'] = otherfields['date_asseyed']
+              datasample.data['comment_sample_reported'] = samples.comment
             
         const onSuccess = () => {
             setLoading(false);
