@@ -86,7 +86,7 @@ function HomePage(props) {
           <Tab className={classes.title} label="Sample Collection" icon={<GiTestTubes />} {...a11yProps(1)} />
           <Tab className={classes.title} label="Sample Verification " icon={<GiDrippingTube style={{ color:'#fff'}}/>} {...a11yProps(2)} />
           <Tab className={classes.title} label="Results Reporting" icon={<GoRepoClone />} {...a11yProps(3)} />
-          <Tab className={classes.title} label="Sample Dispatched  " icon={<GiFiles />} {...a11yProps(4)} />
+          <Tab className={classes.title} label="Sample Dispatch " icon={<GiFiles />} {...a11yProps(4)} />
       </Tabs>
       </AppBar>
 
