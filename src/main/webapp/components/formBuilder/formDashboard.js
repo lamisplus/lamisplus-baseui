@@ -19,8 +19,7 @@ import {
     Card, CardBody } from 'reactstrap';
 import FormBuilder from './FormBuilder';
 import ViewForm from './ViewForm';
-import PivotTable from '../Flexmonster/PivotTable';
-import Jsreport from '../Jsreport/Jsreport'
+
 
 
 function TabPanel(props) {
@@ -202,13 +201,9 @@ export default function ScrollableTabsButtonForce(props) {
             <ViewForm/>
             </TabPanel>
             {/* Begining of consultation  */}
-            <TabPanel value={value} index={2}>
-                <PivotTable/>
-            </TabPanel>
+            
 
-            <TabPanel value={value} index={3}>
-            <Jsreport/>
-            </TabPanel>
+       
             {/* End of consultation */}
             <TabPanel value={value} index={4}>
             </TabPanel>
