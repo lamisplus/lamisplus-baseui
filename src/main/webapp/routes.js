@@ -37,8 +37,8 @@ const SampleVerification = React.lazy(() => import("components/Laboratory/Sample
 
 const DispatchedSamples = React.lazy(() => import("components/Laboratory/DispatchedManifest/DispatchedSamplesList"))
 const PatientsPage = React.lazy(() => import("components/PatientSearch/HomePage"));
-const reportDashboard = React.lazy(() => import('components/Flexmonster/reportDashboard'));
-const PivotTable = React.lazy(() => import('components/Flexmonster/PivotTable'));
+const reportDashboard = React.lazy(() => import('components/WebDataRocks/reportDashboard'));
+const PivotTable = React.lazy(() => import('components/WebDataRocks/PivotTable'));
 const Jsreport = React.lazy(() => import('components/Jsreport/Jsreport'));
 const PrintSamples = React.lazy(() => import("components/Laboratory/DispatchedManifest/PrintSample"));
 
