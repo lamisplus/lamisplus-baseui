@@ -30,33 +30,19 @@ useEffect(() => {
       props.fetchAllLabTestOrderToday(onSuccess, onError);
     }, []); //componentDidMount
    
-    const labTestType = [];
+    const labTestType = [];    
     
-    console.log(props.testOrder);
-    console.log(props.testOrder.filter((x) =>  ( x.formDataObj.data)))
-
-
-
-
     props.testOrder.forEach(function(value, index, array) {
           const getList = value['formDataObj'].find(x => { 
-            
-            // if(x.data.lab_test_order_status===2){
-            //   labTestType.push(x);
-            //   console.log(x)
-            // }
-            //labTestType.push(x);
 
             if(x.data && x.data!==null && x.data.lab_test_order_status===2 && x.data.manifest_status==null){
-              //return console.log(x)
+              console.log(x)
               labTestType.push(x);
             }
            // return console.log(x)
           
           })         
      });
-    
-     
 
      function getDispatch (evt, data){
         console.log( data)
@@ -87,22 +73,24 @@ useEffect(() => {
     <div>
       <br/>
       <Link to={{ 
-                  pathname: "/print-sample",  
+                  pathname: "/",  
                   name: "testing"
               }}>
         <Button
           variant="contained"
           color="primary"
-          className=" float-left mr-1"
+          className=" float-right mr-1"
+          size="large"
         >
           {<GiFiles />} { " "}
-          <span style={{textTransform: 'capitalize'}}>Print Dispatched  </span>
+          <span style={{textTransform: 'capitalize'}}>Print Manifest  </span>
                           
         </Button>
       </Link>
       <Link to="/dispatched-sample">
         {/* <Link to="/dispatched-sample"> */}
             <Button
+              color="primary"
               variant="contained"
               className=" float-right mr-1"
               size="large"
@@ -110,14 +98,14 @@ useEffect(() => {
               {<GiFiles />} &nbsp;&nbsp;
               <span style={{textTransform: 'capitalize'}}>Dispatched  </span>
                   &nbsp;&nbsp;
-              <span style={{textTransform: 'lowercase'}}>samples </span>              
+              <span style={{textTransform: 'capitalize'}}>Samples </span>              
             </Button>
       </Link>
         <br/>
         <br/>
         <br/>
       <MaterialTable
-        title="List of Dispatching Samples  "
+        title="List of Samples to Dispatch "
         columns={[
         
           { title: "FormDataObj ", 
@@ -192,10 +180,11 @@ useEffect(() => {
             formDataObj:row,
             sample_type: row.data.sample_type,
             lab_order_priority: row.data.order_priority,
-            date_sample_ordered: row.dateEncounter,
+            date_sample_ordered: row.data.date_sample_ordered,
             time_sample_ordered: row.data.time_sample_collected,
             date_sample_collected: row.data.date_sample_collected,
             time_sample_collected: row.data.time_sample_collected,
+            sample_ordered_by: row.data.sample_collected_by,
             viralLoadIndication: row.data.viralLoadIndication,
             }))}
         options={{

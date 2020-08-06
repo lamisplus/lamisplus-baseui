@@ -94,7 +94,6 @@ const SampleVerification = (props) => {
         const [collectModal, setcollectModal] = useState([])//to collect array of datas into the modal and pass it as props
         const [labNum, setlabNum] = useState({lab_number:""})
 
-
         let  labNumber = "" //check if that key exist in the array
             testOrders.forEach(function(value, index, array) {
                 if(value['data']!==null &&  value['data'].hasOwnProperty("lab_number")){

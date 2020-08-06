@@ -1,169 +1,240 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory  } from "react-router-dom";
-// import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import sigInLogo from 'assets/img/signin.jpg';
-import logo200Image from 'assets/img/logo/logo_200.png';
+import React, {useEffect, useState} from 'react';
+import MaterialTable from 'material-table';
+import { Link } from 'react-router-dom'
+import { connect } from "react-redux";
+import { fetchAllLabTestOrder } from "./../../../actions/laboratory";
+import "./../laboratory.css";
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import Page from './../../Page';
+import { Badge } from 'reactstrap';
+import ModalSample from './../Testorders/CollectSampleModal';
+import ModalViewResult from './../TestResult/ViewResult';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="#">
-        LAMISPlaus
-      </Link>{' '}
-      
-    </Typography>
-  );
-}
+const PatientSearch = (props) => {
+    const [loading, setLoading] = useState('')
+    const [modal2, setModal2] = useState(false)//modal to recollect sample
+    const toggleModal2 = () => setModal2(!modal2)
+    const [modal3, setModal3] = useState(false)//modal to View Result
+    const toggleModal3 = () => setModal3(!modal3)
+    const [collectModal, setcollectModal] = useState([])//to collect array of datas into the modal and pass it as props
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    height: '100vh',
-  },
-  image: {
-    backgroundImage: `url(${sigInLogo})`,
-    backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'dark' ? theme.palette.grey[900] : theme.palette.grey[50],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-  paper: {
-    margin: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+    useEffect(() => {
+        setLoading('true');
+            const onSuccess = () => {
+                setLoading(false)
+            }
+            const onError = () => {
+                setLoading(false)     
+            }
+                props.fetchAllLabTestOrderToday(onSuccess, onError);
+    }, []); //componentDidMount
 
-export default function SignInSide() {
-  let history = useHistory();
-  const classes = useStyles();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [helperText, setHelperText] = useState('');
-  const [error, setError] = useState(false);
+    const labTestType = [];    
+    //console.log(labTestType);
+    props.patientsTestOrderList.forEach(function(value, index, array) {
+        const getList = value['formDataObj'].find(x => { 
+            //console.log(value)
+            if(x.data && x.data!==null && x.data.manifest_status===1){
+                console.log(value);
+            //return console.log(x)
+            labTestType.push(value);
+            }
+        // return console.log(x)
+        
+        })         
+    });
+        
+    const [labNum, setlabNum] = useState({lab_number:""})
 
-  useEffect(() => {
-    if (username.trim() && password.trim()) {
-      setIsButtonDisabled(false);
-    } else {
-      setIsButtonDisabled(true);
-    }
-  }, [username, password]);
-
-  const handleLogin = () => {
-    
-    if (username === 'abc@mail.com' && password === '12345') {
-      setError(false);
-      setHelperText('Login Successfully');
-      history.push("/dashboard");
-      
-      
-    } else {
-      setError(true);
-      setHelperText('Incorrect username or password')
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.keyCode === 13 || e.which === 13) {
-      isButtonDisabled || handleLogin();
-    }
-  };
-
-  return (
-    <Grid container component="main" className={classes.root}>
-      <CssBaseline />
-      <Grid item xs={false} sm={4} md={9} className={classes.image} />
-      <Grid item xs={12} sm={8} md={3} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
+    let  labNumber = "" //check if that key exist in the array
+        props.patientsTestOrderList.forEach(function(value, index, array) {
+            if(value['data']!==null &&  value['data'].hasOwnProperty("lab_number")){
+                labNumber = value['data'].lab_number
+            } 
+            //console.log(value['data']) 
           
-            
-          <br/>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-          <form className={classes.form} noValidate>
-            <TextField
-              error={error}
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              type="email"
-              label="Username"
-              placeholder="Username"
-              
-              name="email"
-              onChange={(e)=>setUsername(e.target.value)}
-              onKeyPress={(e)=>handleKeyPress(e)}
-            />
-            <TextField
-            error={error}
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="password"
-              type="password"
-              label="Password"
-              placeholder="Password"
-              helperText={helperText}
-              onChange={(e)=>setPassword(e.target.value)}
-              onKeyPress={(e)=>handleKeyPress(e)}
-              
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-              <Button
-               
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                onClick={()=>handleLogin()}
-                disabled={isButtonDisabled}
-              >
-                Sign In
-            </Button>
-            <Grid container>
+        });
 
-              <Grid item>
-              </Grid>
-            </Grid>
-            {/* <Box mt={5}>
-              <Copyright />
-            </Box> */}
-          </form>
-        </div>
-      </Grid>
-    </Grid>
+    function dateDispatched (test){
+        const  maxVal = []
+            if(test.data!==null){
+                
+                test.forEach(function(value, index, array) {
+                    if(value['data']!==null && value['data'].hasOwnProperty("manifest_status")){
+                        //console.log(value['data'])
+                        maxVal.push(value['data']);
+                    }
+                }
+                );
+                
+            }
+        return maxVal[0].date_sample_dispatched;
+            
+    }
+
+    function sampleType (test){
+        const  maxVal = []
+            if(test.data!==null){
+                
+                test.forEach(function(value, index, array) {
+                    if(value['data']!==null && value['data'].hasOwnProperty("manifest_status")){
+                        //console.log(value['data'])
+                        maxVal.push(value['data']);
+                    }
+                }
+                );
+                
+            }
+        return maxVal[0].sample_type;
+            
+    }
+
+    function sampleStatus (test){
+        const  maxVal = [];
+            if(test.data!==null){            
+                test.forEach(function(value, index, array) {
+                    if(value['data']!==null && value['data'].hasOwnProperty("manifest_status")){                   
+                        if(value['data'].lab_test_order_status==="4"){
+                            maxVal.push( <p><Badge  color="light">Sample Rejected</Badge></p>);
+                        }else if(value['data'].lab_test_order_status===5){
+                            maxVal.push( <p><Badge  color="light">Result Available</Badge></p>);
+                        }else{
+                            maxVal.push( <p>{" "}</p>);
+                        }
+                    
+                    }
+                }
+                );
+                
+            }
+        return maxVal;
+            
+    }
+
+    const handleRecollectSample = (row) => { 
+        console.log(row)
+        setcollectModal({...collectModal, ...row});
+        setModal2(!modal2) 
+    }
+
+    const SampleResult = (row) => { 
+        console.log(row)
+        setcollectModal({...collectModal, ...row});
+        setModal3(!modal3) 
+    }
+    
+    function sampleAction (test){
+        const  maxVal = [];
+            if(test.data!==null){            
+                test.forEach(function(value, index, array) {
+                    if(value['data']!==null && value['data'].hasOwnProperty("manifest_status")){                   
+                        if(value['data'].lab_test_order_status==="4"){
+                            maxVal.push( <Tooltip title="View Sample">
+                                            <IconButton aria-label="View Sample"  onClick={() => handleRecollectSample(value)}>
+                                                <VisibilityIcon color="primary"/>
+                                            </IconButton>
+                                         </Tooltip>
+                                         
+                                        );
+                        }else if(value['data'].lab_test_order_status===5){
+                            maxVal.push(    <Tooltip title="View Result">
+                                                <IconButton aria-label="View result"  onClick={() => SampleResult(value)}>
+                                                    <VisibilityIcon color="primary"/>
+                                                </IconButton>
+                                            </Tooltip>
+                            
+                                        );
+                        }else{
+                            maxVal.push( <p>{" "}</p>);
+                        }
+                    
+                    }
+                }
+                );
+                
+            }
+        return maxVal;
+            
+    }
+
+    
+  return (
+    <Page title='Dispatched Samples '>
+      
+      <div>
+        <br/><br/>
+          <MaterialTable
+              title="Dispatched samples list"
+              columns={[
+                  { title: "Patient ID", field: "Id" },
+                  {
+                    title: "Patient Name",
+                    field: "name",
+                  },
+                  { title: "Date Ordered", field: "dateOrdered", type: "date" , filtering: false},          
+                  { title: "Date dispatched", field: "dateDispatched", type: "date" , filtering: false}, 
+                  {
+                    title: "Sample Type",
+                    field: "sampleType",
+                    filtering: false
+                  },
+                  {
+                    title: "Status ",
+                    field: "sampleStatus",
+                    filtering: false
+                  },
+                  {
+                    title: "Action",
+                    field: "actions",
+                    filtering: false,
+                  },
+              ]}
+              isLoading={loading}
+              data={labTestType.map((row) => ({
+                  Id: row.patientId,
+                  name: row.firstName +  ' ' + row.lastName,
+                  dateOrdered: row.dateEncounter,
+                  dateDispatched: dateDispatched(row.formDataObj),
+                  sampleType: sampleType(row.formDataObj),
+                  sampleStatus: sampleStatus(row.formDataObj),
+                  actions: sampleAction(row.formDataObj) 
+                  
+              }))}
+              options={{
+                  headerStyle: {
+                  backgroundColor: "#9F9FA5",
+                  color: "#000",
+                  margin: "auto"
+                  },
+                  
+                  filtering: true,
+                  searchFieldStyle: {
+                      width : '300%',
+                      margingLeft: '250px',
+                  },
+                  exportButton: true,
+                  searchFieldAlignment: 'left',          
+              }}
+
+          />
+    </div>
+    <ModalSample modalstatus={modal2} togglestatus={toggleModal2} datasample={collectModal}  labnumber={labNumber}/>
+    <ModalViewResult modalstatus={modal3} togglestatus={toggleModal3} datasample={collectModal} />
+
+  </Page>
   );
 }
+
+const mapStateToProps = state => {
+    return {
+        patientsTestOrderList: state.laboratory.list
+    };
+};
+
+const mapActionToProps = {
+    fetchAllLabTestOrderToday: fetchAllLabTestOrder
+};
+  
+export default connect(mapStateToProps, mapActionToProps)(PatientSearch);

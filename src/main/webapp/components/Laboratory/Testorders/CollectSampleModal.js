@@ -65,13 +65,13 @@ const useStyles = makeStyles((theme) => ({
 
 const ModalSample = (props) => {
     const classes = useStyles()
-    const datasample = props.datasample ? props.datasample : {};
+    const datasample = props.datasample && props.datasample!==null ? props.datasample : {};
     const order_priority = datasample.data && datasample.data.order_priority && datasample.data.order_priority.display   ? datasample.data.order_priority.display : null;
     const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
     const sample_ordered_by = datasample.data ? datasample.data.sample_ordered_by : null ;
     const description = datasample.data ? datasample.data.description : null ;
     const lab_number = props.labnumber && props.labnumber["lab_number"]  ? props.labnumber["lab_number"] : null;
-    console.log(props)
+    console.log(datasample)
     const labId = datasample.id
     const [loading, setLoading] = useState(false)
     const [visible, setVisible] = useState(true);
@@ -165,7 +165,7 @@ const ModalSample = (props) => {
             datasample.data["time_sample_collected"] =
                 otherfields["time_sample_collected"];
             datasample.data["comment_sample_collected"] = samples["comment"];
-
+            datasample.data["date_sample_ordered"] = datasample.dateEncounter;
             props.createCollectedSample(datasample, labId, onSuccess, onError);
         }
     };

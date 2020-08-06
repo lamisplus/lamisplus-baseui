@@ -7,8 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import {FaPlusSquare, FaRegEye} from 'react-icons/fa';
-import {TiArrowForward} from 'react-icons/ti'
-import { toast } from 'react-toastify'
+import {TiArrowForward} from 'react-icons/ti';
 import 'react-widgets/dist/css/react-widgets.css'
 //Date Picker
 import Page from './../../Page'
@@ -273,7 +272,7 @@ return (
                                                       <th className={classes.td}>{row.data.description===""?" ":row.data.description}</th>
                                                       <td className={classes.td}>{row.data.sample_type==="" ? " ":row.data.sample_type}</td>
                                                       <td className={classes.td}> {encounterDate} </td>
-                                                      <td className={classes.td}>{sampleStatus(row.data.lab_test_order_status)}  {row.data.manifest_status===1 ? " and dispatched ":"Manifest result available"}</td>
+                                                      <td className={classes.td}>{sampleStatus(row.data.lab_test_order_status)}  </td>
                                                       <td className={classes.td}>{sampleAction(row,encounterDate)}</td>
                                                     </tr>
                                                     :

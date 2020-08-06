@@ -19,7 +19,10 @@ import {
     Card, CardBody } from 'reactstrap';
 import FormBuilder from './FormBuilder';
 import ViewForm from './ViewForm';
-import PivotTable from '../WebDataRocks/PivotTable';
+// <<<<<<< HEAD
+// import PivotTable from '../WebDataRocks/PivotTable';
+// =======
+// >>>>>>> dev
 
 
 
@@ -196,16 +199,10 @@ export default function ScrollableTabsButtonForce(props) {
             <TabPanel value={value} index={0}>
                 <FormBuilder/>
             </TabPanel>
-
             <TabPanel value={value} index={1}>
                 <ViewForm/>
             </TabPanel>
-            {/* Begining of consultation  */}
-            <TabPanel value={value} index={2}>
-                <PivotTable/>
-            </TabPanel>
-            <TabPanel value={value} index={3}>
-            </TabPanel>
+
             {/* End of consultation */}
             <TabPanel value={value} index={4}>
             </TabPanel>
