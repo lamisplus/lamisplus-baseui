@@ -65,20 +65,20 @@ const useStyles = makeStyles((theme) => ({
 
 const ModalSample = (props) => {
     const classes = useStyles()
-    const datasample = props.datasample ? props.datasample : {};
+    const datasample = props.datasample && props.datasample!==null ? props.datasample : {};
     const order_priority = datasample.data && datasample.data.order_priority && datasample.data.order_priority.display   ? datasample.data.order_priority.display : null;
     const lab_test_group = datasample.data ? datasample.data.lab_test_group : null ;
     const sample_ordered_by = datasample.data ? datasample.data.sample_ordered_by : null ;
     const description = datasample.data ? datasample.data.description : null ;
     const lab_number = props.labnumber && props.labnumber["lab_number"]  ? props.labnumber["lab_number"] : null;
-    console.log(props)
+    console.log(datasample)
     const labId = datasample.id
     const [loading, setLoading] = useState(false)
     const [visible, setVisible] = useState(true);
     const onDismiss = () => setVisible(false);
     const [samples, setSamples] = useState({});
     const [optionsample, setOptionsample] = useState([]);
-    const [otherfields, setOtherFields] = useState({sample_collected_by:"",sample_ordered_by:"",sample_priority:"",time_sample_collected:""});
+    const [otherfields, setOtherFields] = useState({sample_collected_by:"",sample_ordered_by:"",sample_priority:"",time_sample_collected:"", comment_sample_collected:""});
     //This is to get SAMPLE TYPE from application Codeset
     const [errors, setErrors] = useState({});
 
@@ -164,7 +164,8 @@ const ModalSample = (props) => {
             datasample.data["lab_number"] = lab_number;
             datasample.data["time_sample_collected"] =
                 otherfields["time_sample_collected"];
-
+            datasample.data["comment_sample_collected"] = samples["comment"];
+            datasample.data["date_sample_ordered"] = datasample.dateEncounter;
             props.createCollectedSample(datasample, labId, onSuccess, onError);
         }
     };
@@ -236,7 +237,7 @@ const ModalSample = (props) => {
                                                         id="time_sample_collected"
 
                                                         onChange={value1 =>
-                                                            setOtherFields({ ...otherfields, time_sample_collected: value1 })
+                                                            setOtherFields({ ...otherfields, time_sample_collected: moment(value1).format("LT") })
                                                         }
                                                         required
                                                     />

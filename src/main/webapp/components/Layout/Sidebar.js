@@ -22,6 +22,9 @@ const navItems = [
   { to: '/pharmacy', name: 'Pharmacy', exact: false, Icon: GiMedicines },
   { to: '/appointments', name: 'Appointments', exact: false, Icon: MdGraphicEq },
   { to: '/report', name: 'Report', exact: false, Icon: FaListUl },
+  { to: '/form-dashboard', name: 'Administration', exact: false, Icon: FaUserCog },
+  { to: '/report-dashboard', name: 'Reports', exact: false, Icon: FaListUl },
+
   { to: '/visual', name: 'Visualization', exact: false, Icon: MdGraphicEq },
   //{ to: '/admin-dashboard', name: 'Administration Module', exact: false, Icon: FaUserCog },
 ];
@@ -41,7 +44,6 @@ const bem = bn.create("sidebar");
 class Sidebar extends React.Component {
   state = {
     isOpenComponents: false,
-    isOpenAdministration: false,
   };
 
   handleClick = (name) => () => {

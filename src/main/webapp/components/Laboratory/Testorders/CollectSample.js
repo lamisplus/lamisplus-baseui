@@ -7,8 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import {FaPlusSquare, FaRegEye} from 'react-icons/fa';
-import {TiArrowForward} from 'react-icons/ti'
-import { toast } from 'react-toastify'
+import {TiArrowForward} from 'react-icons/ti';
 import 'react-widgets/dist/css/react-widgets.css'
 //Date Picker
 import Page from './../../Page'
@@ -41,38 +40,38 @@ const useStyles = makeStyles({
 
 
   const CollectSample = (props) => {
-
-    const sampleCollections = props.location.state ? props.location.state.formDataObj : {};
-    const encounterDate = props.location.state.dateEncounter
-    console.log(props.location.state)
-        const classes = useStyles()
-        const testorder = useSelector(state => state.laboratory.testorder);
-        const dispatch = useDispatch();
-        const [loading, setLoading] = useState('')
-       
+    const sampleCollections = props.location.state && props.location.state.formDataObj  ? props.location.state.formDataObj : {};
+    const encounterDate = props.location.state && props.location.state.dateEncounter ? props.location.state.dateEncounter : null ;
+    const hospitalNumber = props.location.state && props.location.state.hospitalNumber ? props.location.state.hospitalNumber: null;
+    console.log()
+    const testOrders = useSelector(state => state.laboratory.testorder);
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState('')
+    const [fetchTestOrders, setFetchTestOrders] = useState(sampleCollections)
+    const classes = useStyles()
 
     useEffect(() => {
+        
         if(props.location.state.encounterId !="" ){         
                 setLoading(true);
                     const onSuccess = () => {
                         setLoading(false)
-                        //setnewSample(samples)
                         
                     }
                     const onError = () => {
                         setLoading(false)     
                     }
             dispatch(fetchAllLabTestOrderOfPatient(props.location.state.encounterId,onSuccess,onError ));
-            dispatch(fetchById(props.location.state.hospitalNumber,onSuccess,onError));
+            dispatch(fetchById(hospitalNumber,onSuccess,onError));
         }
-    }, [props.location.state.encounterId]); //componentDidMount  
-    
-    const fetchTestOrders = testorder;
+    }, []); //componentDidMount 
+
         //Get list of test type
         const labTestType = [];
-            if(fetchTestOrders !== null || fetchTestOrders ===""){
-                fetchTestOrders.forEach(function(value, index, array) {
-                    labTestType.push(value['data'].lab_test_group);
+            if(testOrders !== null || testOrders ===""){
+                testOrders.forEach(function(value, index, array) {
+                    if(value['data']!==null)
+                        labTestType.push(value['data'].lab_test_group);
                 });
             }
 
@@ -89,11 +88,11 @@ const useStyles = makeStyles({
 
 
         let  labNumber = "" //check if that key exist in the array
-            fetchTestOrders.forEach(function(value, index, array) {
-                if(value['data'].hasOwnProperty("lab_number")){
+            testOrders.forEach(function(value, index, array) {
+                if(value['data']!==null && value['data'].hasOwnProperty("lab_number")){
                     labNumber = value['data'].lab_number
                 } 
-                console.log(value['data']) 
+                //console.log(value['data']) 
               
             });
           
@@ -103,9 +102,10 @@ const useStyles = makeStyles({
             setlabNum({ ...labNum, [e.target.name]: e.target.value })
     }
 
-    const handleSample = (row) => { 
-        setcollectModal({...collectModal, ...row});
+    const handleSample = (row,dateEncounter) => { 
+        setcollectModal({...collectModal, ...row, dateEncounter, hospitalNumber});
         setModal(!modal) 
+        console.log()
     }
 
     const transferSample = (row) => {
@@ -120,8 +120,16 @@ const useStyles = makeStyles({
 
     const getGroup = e => {
         const getValue =e.target.value;
-        const testOrders = fetchTestOrders.length >0 ? fetchTestOrders:{}
-        const getNewTestOrder = fetchTestOrders.find(x => x.lab_test_group === getValue)
+        if(getValue!=='All' || getValue ===null)
+        {
+            console.log(getValue)
+            //const testOrders = fetchTestOrders.length >0 ? fetchTestOrders:{}
+            const getNewTestOrder = testOrders.find(x => x.data!==null && x.data.lab_test_group === getValue)
+            setFetchTestOrders([getNewTestOrder]) 
+            console.log(fetchTestOrders)
+        }else{
+            setFetchTestOrders([...sampleCollections])
+        }
     };
     //This is function to check for the status of each collection to display on the tablist below 
     const sampleStatus = e =>{
@@ -141,7 +149,7 @@ const useStyles = makeStyles({
     }
 
 //This is function to check for the status of each collection to display on the tablist below 
-    const sampleAction = (e) =>{
+    const sampleAction = (e,dateEncounter) =>{
     
         return (
             <Menu>
@@ -150,7 +158,7 @@ const useStyles = makeStyles({
                 </MenuButton>
                     <MenuList style={{hover:"#eee"}}>
                             { e.data.lab_test_order_status!==5 ?
-                                <MenuItem onSelect={() => handleSample(e)}><FaPlusSquare size="15" style={{color: '#000'}}/>{" "}Collect Sample</MenuItem>
+                                <MenuItem onSelect={() => handleSample(e,dateEncounter)}><FaPlusSquare size="15" style={{color: '#000'}}/>{" "}Collect Sample</MenuItem>
                                 :""
                             }
                             { e.data.lab_test_order_status!==5 ?
@@ -169,6 +177,7 @@ const useStyles = makeStyles({
 
 return (
     <Page title='Collect Sample'>
+        <br/>
         <Row>
             <Col>
                 <div >
@@ -225,6 +234,7 @@ return (
                                                           {x}
                                                         </option>
                                                     )}
+                                                    <option value="All"> All </option>
                                               </Input>
                                         </FormGroup>
                                     </Col>
@@ -255,14 +265,18 @@ return (
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                {console.log(fetchTestOrders)}
                                                 {!loading ? fetchTestOrders.map((row) => (
+                                                    row.data!==null?
                                                     <tr key={row.id} style={{ borderBottomColor: '#fff' }}>
                                                       <th className={classes.td}>{row.data.description===""?" ":row.data.description}</th>
                                                       <td className={classes.td}>{row.data.sample_type==="" ? " ":row.data.sample_type}</td>
-                                                      <td className={classes.td}> {row.data.date_sample_collected==="" ? encounterDate:row.data.date_sample_collected} </td>
-                                                      <td className={classes.td}>{sampleStatus(row.data.lab_test_order_status)} </td>
-                                                      <td className={classes.td}>{sampleAction(row)}</td>
+                                                      <td className={classes.td}> {encounterDate} </td>
+                                                      <td className={classes.td}>{sampleStatus(row.data.lab_test_order_status)}  </td>
+                                                      <td className={classes.td}>{sampleAction(row,encounterDate)}</td>
                                                     </tr>
+                                                    :
+                                                    <tr></tr>
                                                   ))
                                                   :<p> <Spinner color="primary" /> Loading Please Wait</p>
                                                 } 

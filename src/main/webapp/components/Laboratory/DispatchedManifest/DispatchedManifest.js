@@ -19,6 +19,7 @@ const PatientSearch = (props) => {
   const [collectmodal, setcollectmodal] = useState([])//to collect array of datas into the modal and pass it as props
             
 useEffect(() => {
+  
     setLoading('true');
   const onSuccess = () => {
      setLoading(false)
@@ -29,17 +30,19 @@ useEffect(() => {
       props.fetchAllLabTestOrderToday(onSuccess, onError);
     }, []); //componentDidMount
    
-    const labTestType = [];
+    const labTestType = [];    
+    
     props.testOrder.forEach(function(value, index, array) {
           const getList = value['formDataObj'].find(x => { 
-            if(x.data.lab_test_order_status == 2){
-              labTestType.push(x.data);
-            }})         
+
+            if(x.data && x.data!==null && x.data.lab_test_order_status===2 && x.data.manifest_status==null){
+              console.log(x)
+              labTestType.push(x);
+            }
+           // return console.log(x)
+          
+          })         
      });
-    
-     function removeData (evt, data){
-        alert('You want to delete ' + evt + data)
-     }
 
      function getDispatch (evt, data){
         console.log( data)
@@ -64,24 +67,30 @@ useEffect(() => {
           return (<p>{" "}</p>)
       }
   }
-
+  //console.log(labTestType)
 
   return (
     <div>
       <br/>
-      
-        {/* <Button
+      <Link to={{ 
+                  pathname: "/",  
+                  name: "testing"
+              }}>
+        <Button
           variant="contained"
           color="primary"
-          className=" float-left mr-1"
+          className=" float-right mr-1"
+          size="large"
         >
           {<GiFiles />} { " "}
-          <span style={{textTransform: 'capitalize'}}>Dispatched  </span>
+          <span style={{textTransform: 'capitalize'}}>Print Manifest  </span>
                           
-        </Button> */}
-
+        </Button>
+      </Link>
       <Link to="/dispatched-sample">
+        {/* <Link to="/dispatched-sample"> */}
             <Button
+              color="primary"
               variant="contained"
               className=" float-right mr-1"
               size="large"
@@ -89,35 +98,94 @@ useEffect(() => {
               {<GiFiles />} &nbsp;&nbsp;
               <span style={{textTransform: 'capitalize'}}>Dispatched  </span>
                   &nbsp;&nbsp;
-              <span style={{textTransform: 'lowercase'}}>samples </span>              
+              <span style={{textTransform: 'capitalize'}}>Samples </span>              
             </Button>
       </Link>
         <br/>
         <br/>
         <br/>
       <MaterialTable
-        title="List of Dispatching Samples  "
+        title="List of Samples to Dispatch "
         columns={[
-          { title: "Lab  Test", field: "LabTest" },
+        
+          { title: "FormDataObj ", 
+            field: "formDataObj",
+            hidden: true 
+          },
+          
           {
               title: "Sample Type",
-              field: "SampleType",
+              field: "sample_type",
           },
-          { title: "Date Sample Collected", field: "dateSampleCollected", type: "date" , filtering: false},                  
+
           {
-              title: "Sample Status ",
-              field: "samplestatus",
-              filtering: false
+            title: "Date Sample Ordered ",
+            field: "date_sample_ordered",
+          },
+          { 
+            title: "Time Sample Ordered", 
+            field: "time_sample_ordered"
+          },
+          { 
+            title: "Date Sample Collected", 
+            field: "date_sample_collected", 
+            type: "date" , 
+            filtering: false
+          },
+          {
+            title: "Time Sample Collected",
+            field: "time_sample_collected",
+          },
+
+          { 
+            title: "Sample Ordered By", 
+            field: "sample_ordered_by"
+          },   
+          { 
+            title: "Sample Transferred By", 
+            field: "sample_transferred_by",
+            hidden: true
+          },    
+          { 
+            title: "Date Sample Transferred", 
+            field: "date_sample_transferred",
+            hidden: true
+          },
+           
+          { 
+            title: "Time Sample Transferred", 
+            field: "time_sample_transferred",
+            hidden: true
+          }, 
+          { 
+            title: "Vira Load Indication", 
+            field: "viral_load_indication",
+            hidden: true
+          },
+          { 
+            title: "Lab Order Priority", 
+            field: "lab_order_priority",
+            hidden: true
+          },
+                  
+          {
+              title: "Viral Load Indication",
+              field: "viralLoadIndication",
+              hidden: true
           },
           
         ]}
         isLoading={loading}
         data={labTestType.map((row) => ({
-            LabTest: row.description,
-            SampleType: row.sample_type,
-            
-            dateSampleCollected: row.date_sample_collected,
-            samplestatus: sampleStatus(row.lab_test_order_status),
+            formDataObj:row,
+            sample_type: row.data.sample_type,
+            lab_order_priority: row.data.order_priority,
+            date_sample_ordered: row.data.date_sample_ordered,
+            time_sample_ordered: row.data.time_sample_collected,
+            date_sample_collected: row.data.date_sample_collected,
+            time_sample_collected: row.data.time_sample_collected,
+            sample_ordered_by: row.data.sample_collected_by,
+            viralLoadIndication: row.data.viralLoadIndication,
             }))}
         options={{
             search: false,

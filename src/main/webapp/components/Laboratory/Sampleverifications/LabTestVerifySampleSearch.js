@@ -26,7 +26,7 @@ useEffect(() => {
       const  maxVal = []
       for(var i=0; i<test.length; i++){
         for (var key in test[i]) {
-          if (test[i][key].lab_test_order_status >2 )
+          if (test[i][key]!==null && test[i][key].lab_test_order_status >2 )
             maxVal.push(test[i][key])
         }
         
@@ -73,8 +73,8 @@ useEffect(() => {
             samplecount: totalSampleVerified(row.formDataObj),
             actions: <Link to ={{ 
                                     pathname: "/sample-verification",  
-                                    state: { getpatientlists:{row}}, 
-                                    patientName: row.firstName + ' ' + row.lastName}}  
+                                    state: row
+                                }}  
                                     style={{ cursor: "pointer", color: "blue", fontStyle: "bold" 
                                 }}
                       >

@@ -87,14 +87,10 @@ const PatientSearch = (props) => {
                 Actions <span aria-hidden>▾</span>
               </MenuButton>
                   <MenuList style={{ color:"#000 !important"}} >
-                      <MenuItem  style={{ color:"#000 !important"}}>                      
-                          <Link
-                              to={{
-                                pathname: "/patients/"+row.hospitalNumber
-                              }}
-                          >
-                              <MdDashboard size="15" />{" "}<span style={{color: '#000'}}>Patient Dashboard</span>
-                        </Link>                               
+                      <MenuItem  style={{ color:"#000 !important"}} onClick={() => window.location.href = "/patient-dashboard?hospitalNumber="+row.hospitalNumber}>                      
+                        
+                              <MdDashboard size="15" color="blue" />{" "}<span style={{color: '#000'}}>Patient Dashboard</span>
+                                                  
                         </MenuItem>
                         <MenuItem style={{ color:"#000 !important"}}>
                               <Link
@@ -103,14 +99,14 @@ const PatientSearch = (props) => {
                                     currentId: row
                                   }}
                                 >
-                              <MdModeEdit size="15" />{" "}<span style={{color: '#000'}}>Edit Patient </span>                   
+                              <MdModeEdit size="15" color="blue" />{" "}<span style={{color: '#000'}}>Edit Patient </span>                   
                             </Link>
                         </MenuItem>                                      
                         <MenuItem style={{ color:"#000 !important"}}>
                             <Link
                                 onClick={() => onDelete(row.patientId)}
                             >
-                              <MdDeleteForever size="15"  />{" "}
+                              <MdDeleteForever size="15" color="blue" />{" "}
                               <span style={{color: '#000'}}>Delete Patient</span>
                           </Link>                                  
                         </MenuItem>
